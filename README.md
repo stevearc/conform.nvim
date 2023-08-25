@@ -263,7 +263,7 @@ Format a buffer
 |       | lsp_fallback | `nil\|boolean`  | Attempt LSP formatting if no formatters are available. Defaults to false.                  |
 
 Returns:
-| Type | Desc |
+| Type    | Desc                                  |
 | ------- | ------------------------------------- |
 | boolean | True if any formatters were attempted |
 
