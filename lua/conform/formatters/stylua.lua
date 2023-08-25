@@ -1,3 +1,4 @@
+local util = require("conform.util")
 ---@type conform.FormatterConfig
 return {
   meta = {
@@ -6,4 +7,8 @@ return {
   },
   command = "stylua",
   args = { "--search-parent-directories", "--stdin-filepath", "$FILENAME", "-" },
+  cwd = util.root_file({
+    ".stylua.toml",
+    "stylua.toml",
+  }),
 }
