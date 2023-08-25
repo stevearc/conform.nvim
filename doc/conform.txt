@@ -1,0 +1,39 @@
+*conform.txt*
+*Conform* *conform* *conform.nvim*
+--------------------------------------------------------------------------------
+CONTENTS                                                        *conform-contents*
+
+  1. Api                                                         |conform-api|
+
+--------------------------------------------------------------------------------
+API                                                                  *conform-api*
+
+format({opts}): boolean                                           *conform.format*
+    Format a buffer
+
+    Parameters:
+      {opts} `nil|table`
+          {timeout_ms}   `nil|integer` Time in milliseconds to block for
+                         formatting. Defaults to 1000. No effect if async =
+                         true.
+          {bufnr}        `nil|integer` Format this buffer (default 0)
+          {async}        `nil|boolean` If true the method won't block. Defaults
+                         to false.
+          {formatters}   `nil|string[]` List of formatters to run. Defaults to
+                         all formatters for the buffer filetype.
+          {lsp_fallback} `nil|boolean` Attempt LSP formatting if no formatters
+                         are available. Defaults to false.
+    Returns:
+      `boolean` True if any formatters were attempted
+
+list_formatters({bufnr}): conform.FormatterInfo[]        *conform.list_formatters*
+    Retried the available formatters for a buffer
+
+    Parameters:
+      {bufnr} `nil|integer`
+
+list_all_formatters(): conform.FormatterInfo[]       *conform.list_all_formatters*
+    List information about all filetype-configured formatters
+
+================================================================================
+vim:tw=80:ts=2:ft=help:norl:syntax=help:

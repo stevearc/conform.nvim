@@ -1,0 +1,7 @@
+#!/bin/bash
+set -e
+luacheck lua tests
+
+stylua --check .
+
+lua-typecheck lua

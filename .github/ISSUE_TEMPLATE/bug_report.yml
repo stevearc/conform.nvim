@@ -1,0 +1,112 @@
+name: Bug Report
+description: File a bug/issue
+title: "bug: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before reporting a bug, make sure to search [existing issues](https://github.com/stevearc/conform.nvim/issues)
+  - type: input
+    attributes:
+      label: "Neovim version (nvim -v)"
+      placeholder: "0.8.0 commit db1b0ee3b30f"
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: "Operating system/version"
+      placeholder: "MacOS 11.5"
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: "Output of :checkhealth conform"
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Describe the bug
+      description: A clear and concise description of what the bug is.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Steps To Reproduce
+      description: Steps to reproduce the behavior.
+      placeholder: |
+        1. nvim -u repro.lua
+        2. 
+        3.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Expected Behavior
+      description: A concise description of what you expected to happen.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Minimal example file
+      description: A small example file you are editing that produces the issue
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: Minimal init.lua
+      description:
+        Minimal `init.lua` to reproduce this issue. Save as `repro.lua` and run with `nvim -u repro.lua`
+        This uses lazy.nvim (a plugin manager).
+      value: |
+        -- DO NOT change the paths and don't remove the colorscheme
+        local root = vim.fn.fnamemodify("./.repro", ":p")
+
+        -- set stdpaths to use .repro
+        for _, name in ipairs({ "config", "data", "state", "cache" }) do
+          vim.env[("XDG_%s_HOME"):format(name:upper())] = root .. "/" .. name
+        end
+
+        -- bootstrap lazy
+        local lazypath = root .. "/plugins/lazy.nvim"
+        if not vim.loop.fs_stat(lazypath) then
+          vim.fn.system({
+            "git",
+            "clone",
+            "--filter=blob:none",
+            "--single-branch",
+            "https://github.com/folke/lazy.nvim.git",
+            lazypath,
+          })
+        end
+        vim.opt.runtimepath:prepend(lazypath)
+
+        -- install plugins
+        local plugins = {
+          "folke/tokyonight.nvim",
+          {
+            "stevearc/conform.nvim",
+            config = function()
+              require("conform").setup({
+                log_level = vim.log.levels.DEBUG,
+                -- add your config here
+              })
+            end,
+          },
+          -- add any other plugins here
+        }
+        require("lazy").setup(plugins, {
+          root = root .. "/plugins",
+        })
+
+        vim.cmd.colorscheme("tokyonight")
+        -- add anything else here
+      render: Lua
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: Additional context
+      description: Any additional information or screenshots you would like to provide
+    validations:
+      required: false
