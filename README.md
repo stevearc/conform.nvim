@@ -228,9 +228,8 @@ require("conform").setup({
             -- When cwd is not found, don't run the formatter (default false)
             require_cwd = true
             -- When returns false, the formatter will not be used
-            condition = function(bufnr)
-                local basename = vim.api.nvim_buf_get_name(bufnr)
-                return vim.fs.basename(bufname) ~= "README.md"
+            condition = function(ctx)
+                return vim.fs.basename(ctx.filename) ~= "README.md"
             end,
             -- Exit codes that indicate success (default {0})
             exit_codes = { 0, 1 },
@@ -264,7 +263,7 @@ Format a buffer
 |       | lsp_fallback | `nil\|boolean`  | Attempt LSP formatting if no formatters are available. Defaults to false.                  |
 
 Returns:
-| Type    | Desc                                  |
+| Type | Desc |
 | ------- | ------------------------------------- |
 | boolean | True if any formatters were attempted |
 
