@@ -115,22 +115,24 @@ M.format = function(opts)
     end
   end
 
-  if not any_formatters and opts.lsp_fallback then
-    local supports_lsp_formatting = false
-    for _, client in ipairs(vim.lsp.get_active_clients({ bufnr = opts.bufnr })) do
-      if client.server_capabilities.documentFormattingProvider then
-        supports_lsp_formatting = true
-        break
+  if not any_formatters then
+    if opts.lsp_fallback then
+      local supports_lsp_formatting = false
+      for _, client in ipairs(vim.lsp.get_active_clients({ bufnr = opts.bufnr })) do
+        if client.server_capabilities.documentFormattingProvider then
+          supports_lsp_formatting = true
+          break
+        end
       end
-    end
 
-    if supports_lsp_formatting then
-      local restore = require("conform.util").save_win_positions(opts.bufnr)
-      vim.lsp.buf.format(opts)
-      restore()
+      if supports_lsp_formatting then
+        local restore = require("conform.util").save_win_positions(opts.bufnr)
+        vim.lsp.buf.format(opts)
+        restore()
+      end
+    else
+      vim.notify("No formatters found for buffer. See :checkhealth conform", vim.log.levels.WARN)
     end
-  else
-    vim.notify("No formatters found for buffer. See :checkhealth conform", vim.log.levels.WARN)
   end
 
   return any_formatters
