@@ -37,6 +37,11 @@ local function apply_format(bufnr, original_lines, new_lines)
   local restore = util.save_win_positions(bufnr)
 
   local original_text = table.concat(original_lines, "\n")
+  -- Trim off the final newline because the original lines won't have it
+  -- and we want the diffs to agree if the file is unchanged
+  if new_lines[#new_lines] == "" then
+    new_lines[#new_lines] = nil
+  end
   local new_text = table.concat(new_lines, "\n")
   local indices = vim.diff(original_text, new_text, {
     result_type = "indices",
