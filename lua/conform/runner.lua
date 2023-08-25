@@ -187,6 +187,9 @@ end
 ---@param formatters conform.FormatterInfo[]
 ---@param callback? fun(err?: string)
 M.format_async = function(bufnr, formatters, callback)
+  if bufnr == 0 then
+    bufnr = vim.api.nvim_get_current_buf()
+  end
   local idx = 1
   local changedtick = vim.b[bufnr].changedtick
   local original_lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
@@ -239,6 +242,9 @@ end
 ---@param formatters conform.FormatterInfo[]
 ---@param timeout_ms integer
 M.format_sync = function(bufnr, formatters, timeout_ms)
+  if bufnr == 0 then
+    bufnr = vim.api.nvim_get_current_buf()
+  end
   local start = uv.hrtime() / 1e6
   local original_lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
   local input_lines = original_lines
