@@ -259,6 +259,10 @@ M.format_sync = function(bufnr, formatters, timeout_ms)
 
   for _, formatter in ipairs(formatters) do
     local remaining = timeout_ms - (uv.hrtime() / 1e6 - start)
+    if remaining <= 0 then
+      vim.notify(string.format("Formatter '%s' timed out", formatter.name), vim.log.levels.WARN)
+      return
+    end
     local done = false
     local result = nil
     run_formatter(bufnr, formatter, input_lines, function(err, output)
