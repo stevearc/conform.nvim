@@ -6,7 +6,7 @@ local M = {}
 
 ---@param ctx conform.Context
 ---@param config conform.FormatterConfig
-local function build_cmd(ctx, config)
+M.build_cmd = function(ctx, config)
   local command = config.command
   if type(command) == "function" then
     command = command(ctx)
@@ -22,7 +22,7 @@ local function build_cmd(ctx, config)
       if v == "$FILENAME" then
         v = ctx.filename
       elseif v == "$DIRNAME" then
-        v = vim.fs.dirname(ctx.filename)
+        v = ctx.dirname
       end
       table.insert(cmd, v)
     end
@@ -37,22 +37,37 @@ local function apply_format(bufnr, original_lines, new_lines)
   local restore = util.save_win_positions(bufnr)
 
   local original_text = table.concat(original_lines, "\n")
-  -- Trim off the final newline because the original lines won't have it
-  -- and we want the diffs to agree if the file is unchanged
+  -- Trim off the final newline from the formatted text because that is baked in to
+  -- the vim lines representation
   if new_lines[#new_lines] == "" then
     new_lines[#new_lines] = nil
   end
   local new_text = table.concat(new_lines, "\n")
   local indices = vim.diff(original_text, new_text, {
     result_type = "indices",
-    algorithm = "minimal",
+    algorithm = "histogram",
   })
   assert(indices)
   for i = #indices, 1, -1 do
     local start_a, count_a, start_b, count_b = unpack(indices[i])
     -- When count_a is 0, the diff is an insert after the line
     if count_a == 0 then
+      -- This happens when the first line is blank and we're inserting text after it
+      if start_a == 0 then
+        count_a = 1
+      end
       start_a = start_a + 1
+    end
+
+    -- If this diff range goes *up to* the last line in the original file, *and* the last line
+    -- after that is just an empty space, then the diff range here was calculated to include that
+    -- final newline, so we should bump up the count_a to include it
+    if (start_a + count_a) == #original_lines and original_lines[#original_lines] == "" then
+      count_a = count_a + 1
+    end
+    -- Same logic for the new lines
+    if (start_b + count_b) == #new_lines and new_lines[#new_lines] == "" then
+      count_b = count_b + 1
     end
     local replacement = util.tbl_slice(new_lines, start_b, start_b + count_b - 1)
     vim.api.nvim_buf_set_lines(bufnr, start_a - 1, start_a - 1 + count_a, true, replacement)
@@ -69,7 +84,7 @@ end
 local function run_formatter(bufnr, formatter, input_lines, callback)
   local config = assert(require("conform").get_formatter_config(formatter.name))
   local ctx = M.build_context(bufnr, config)
-  local cmd = build_cmd(ctx, config)
+  local cmd = M.build_cmd(ctx, config)
   local cwd = nil
   if config.cwd then
     cwd = config.cwd(ctx)
@@ -125,9 +140,11 @@ local function run_formatter(bufnr, formatter, input_lines, callback)
         log.error("Formatter %s exited with code %d", formatter.name, code)
         log.warn("Formatter %s stdout:", formatter.name, stdout)
         log.warn("Formatter %s stderr:", formatter.name, stderr)
-        callback(
-          string.format("Formatter '%s' error: %s", formatter.name, table.concat(stderr, "\n"))
-        )
+        local stderr_str
+        if stderr then
+          stderr_str = table.concat(stderr, "\n")
+        end
+        callback(string.format("Formatter '%s' error: %s", formatter.name, stderr_str))
       end
     end,
   })
@@ -223,7 +240,7 @@ M.format_async = function(bufnr, formatters, callback)
     jid = run_formatter(bufnr, formatter, input_lines, function(err, output)
       if err then
         -- Only display the error if the job wasn't canceled
-        if jid == vim.b[bufnr].conform_jid then
+        if vim.api.nvim_buf_is_valid(bufnr) and jid == vim.b[bufnr].conform_jid then
           vim.notify(err, vim.log.levels.ERROR)
         end
         if callback then

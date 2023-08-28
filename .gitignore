@@ -42,3 +42,5 @@ luac.out
 .direnv/
 .testenv/
 doc/tags
+tests/testfile.txt
+tests/fake_formatter_output

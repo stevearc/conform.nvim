@@ -174,7 +174,7 @@ M.list_formatters = function(bufnr)
   for formatter in pairs(formatters) do
     local info = M.get_formatter_info(formatter)
     if info.available then
-      table.insert(all_info, assert(info))
+      table.insert(all_info, info)
       if not run_options.run_all_formatters then
         break
       end

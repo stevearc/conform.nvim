@@ -1,0 +1,243 @@
+require("plenary.async").tests.add_to_env()
+local test_util = require("tests.test_util")
+local conform = require("conform")
+local runner = require("conform.runner")
+
+describe("runner", function()
+  after_each(function()
+    test_util.reset_editor()
+  end)
+
+  it("resolves config function", function()
+    conform.formatters.test = function()
+      return {
+        meta = { url = "", description = "" },
+        command = "echo",
+      }
+    end
+    local config = assert(conform.get_formatter_config("test"))
+    assert.are.same({
+      meta = { url = "", description = "" },
+      command = "echo",
+      stdin = true,
+    }, config)
+  end)
+
+  describe("build_context", function()
+    it("sets the filename and dirname", function()
+      vim.cmd.edit({ args = { "README.md" } })
+      local bufnr = vim.api.nvim_get_current_buf()
+      conform.formatters.test = {
+        meta = { url = "", description = "" },
+        command = "echo",
+      }
+      local config = assert(conform.get_formatter_config("test"))
+      local ctx = runner.build_context(0, config)
+      local filename = vim.api.nvim_buf_get_name(bufnr)
+      assert.are.same({
+        buf = bufnr,
+        filename = filename,
+        dirname = vim.fs.dirname(filename),
+      }, ctx)
+    end)
+
+    it("sets temp file when stdin = false", function()
+      vim.cmd.edit({ args = { "README.md" } })
+      local bufnr = vim.api.nvim_get_current_buf()
+      conform.formatters.test = {
+        meta = { url = "", description = "" },
+        command = "echo",
+        stdin = false,
+      }
+      local config = assert(conform.get_formatter_config("test"))
+      local ctx = runner.build_context(0, config)
+      local bufname = vim.api.nvim_buf_get_name(bufnr)
+      local dirname = vim.fs.dirname(bufname)
+      assert.equal(bufnr, ctx.buf)
+      assert.equal(dirname, ctx.dirname)
+      assert.truthy(ctx.filename:match(dirname .. "/.conform.%d+.README.md$"))
+    end)
+  end)
+
+  describe("build_cmd", function()
+    it("replaces $FILENAME in args", function()
+      vim.cmd.edit({ args = { "README.md" } })
+      local bufnr = vim.api.nvim_get_current_buf()
+      conform.formatters.test = {
+        meta = { url = "", description = "" },
+        command = "echo",
+        args = { "$FILENAME" },
+      }
+      local config = assert(conform.get_formatter_config("test"))
+      local ctx = runner.build_context(0, config)
+      local cmd = runner.build_cmd(ctx, config)
+      assert.are.same({ "echo", vim.api.nvim_buf_get_name(bufnr) }, cmd)
+    end)
+
+    it("replaces $DIRNAME in args", function()
+      vim.cmd.edit({ args = { "README.md" } })
+      local bufnr = vim.api.nvim_get_current_buf()
+      conform.formatters.test = {
+        meta = { url = "", description = "" },
+        command = "echo",
+        args = { "$DIRNAME" },
+      }
+      local config = assert(conform.get_formatter_config("test"))
+      local ctx = runner.build_context(0, config)
+      local cmd = runner.build_cmd(ctx, config)
+      assert.are.same({ "echo", vim.fs.dirname(vim.api.nvim_buf_get_name(bufnr)) }, cmd)
+    end)
+
+    it("resolves arg function", function()
+      vim.cmd.edit({ args = { "README.md" } })
+      local bufnr = vim.api.nvim_get_current_buf()
+      conform.formatters.test = {
+        meta = { url = "", description = "" },
+        command = "echo",
+        args = function()
+          return { "--stdin" }
+        end,
+      }
+      local config = assert(conform.get_formatter_config("test"))
+      local ctx = runner.build_context(0, config)
+      local cmd = runner.build_cmd(ctx, config)
+      assert.are.same({ "echo", "--stdin" }, cmd)
+    end)
+  end)
+
+  describe("e2e", function()
+    before_each(function()
+      conform.formatters.test = {
+        meta = { url = "", description = "" },
+        command = "tests/fake_formatter.sh",
+      }
+    end)
+
+    ---@param buf_content string
+    ---@param expected string
+    ---@param opts? table
+    local function run_formatter(buf_content, expected, opts)
+      local bufnr = vim.fn.bufadd("testfile")
+      vim.fn.bufload(bufnr)
+      vim.api.nvim_set_current_buf(bufnr)
+      local lines = vim.split(buf_content, "\n", { plain = true })
+      vim.api.nvim_buf_set_lines(bufnr, 0, -1, true, lines)
+      vim.bo[bufnr].modified = false
+      local expected_lines = vim.split(expected, "\n", { plain = true })
+      test_util.set_formatter_output(expected_lines)
+      conform.format(vim.tbl_extend("force", opts or {}, { formatters = { "test" } }))
+      return expected_lines
+    end
+
+    ---@param buf_content string
+    ---@param new_content string
+    ---@param expected? string[]
+    local function run_formatter_test(buf_content, new_content, expected)
+      local lines = run_formatter(buf_content, new_content)
+      assert.are.same(expected or lines, vim.api.nvim_buf_get_lines(0, 0, -1, false))
+    end
+
+    it("sets the correct output", function()
+      run_formatter_test(
+        [[
+        if true {
+        print("hello")
+      }]],
+        [[
+      if true {
+        print("hello")
+      }]]
+      )
+      run_formatter_test(
+        [[
+      if true {
+        print("hello")
+      }]],
+        [[
+      if true {
+        print("goodbye")
+      }]]
+      )
+      run_formatter_test(
+        [[
+      if true {
+        print("hello")
+      }]],
+        [[
+      if true {
+        print("hello world")
+        print("hello world")
+        print("hello world")
+      }]]
+      )
+      run_formatter_test(
+        [[
+print("a")
+print("b")
+print("c")
+      ]],
+        [[
+print("c")
+print("b")
+print("a")
+      ]]
+      )
+      run_formatter_test("hello\ngoodbye", "hello\n\n\ngoodbye", { "hello", "", "", "goodbye" })
+      run_formatter_test("hello", "hello\ngoodbye", { "hello", "goodbye" })
+      run_formatter_test("", "hello", { "hello" })
+      run_formatter_test("\nfoo", "\nhello\nfoo", { "", "hello", "foo" })
+      run_formatter_test("hello", "hello\n\n", { "hello", "" })
+      run_formatter_test("hello", "hello\n", { "hello" })
+      assert.falsy(vim.bo.modified)
+      run_formatter_test("hello\n", "hello", { "hello" })
+      run_formatter_test("hello\n ", "hello", { "hello" })
+    end)
+
+    it("does not change output if formatter fails", function()
+      conform.formatters.test.args = { "--fail" }
+      run_formatter("hello", "goodbye")
+      assert.are.same({ "hello" }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
+    end)
+
+    it("allows nonzero exit codes", function()
+      conform.formatters.test.args = { "--fail" }
+      conform.formatters.test.exit_codes = { 0, 1 }
+      run_formatter_test("hello", "goodbye")
+    end)
+
+    it("does not format if it times out", function()
+      conform.formatters.test.args = { "--timeout" }
+      run_formatter("hello", "goodbye", { timeout_ms = 10 })
+      assert.are.same({ "hello" }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
+    end)
+
+    it("can format async", function()
+      run_formatter("hello", "goodbye", { async = true })
+      assert.are.same({ "hello" }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
+      vim.wait(100)
+      assert.are.same({ "goodbye" }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
+    end)
+
+    it("discards formatting changes if buffer has been concurrently modified", function()
+      run_formatter("hello", "goodbye", { async = true })
+      assert.are.same({ "hello" }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
+      vim.api.nvim_buf_set_lines(0, 0, -1, true, { "newcontent" })
+      vim.wait(100)
+      assert.are.same({ "newcontent" }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
+    end)
+
+    it("formats on save", function()
+      conform.setup({
+        formatters_by_ft = { ["*"] = { "test" } },
+        format_on_save = true,
+      })
+      vim.cmd.edit({ args = { "tests/testfile.txt" } })
+      vim.api.nvim_buf_set_lines(0, 0, -1, true, { "hello" })
+      test_util.set_formatter_output({ "goodbye" })
+      vim.cmd.write()
+      local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+      vim.fn.delete("tests/testfile.txt")
+      assert.are.same({ "goodbye" }, lines)
+    end)
+  end)
+end)
