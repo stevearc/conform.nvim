@@ -5,7 +5,7 @@ local uv = vim.uv or vim.loop
 local M = {}
 
 ---@param ctx conform.Context
----@param config conform.FormatterConfig
+---@param config conform.StaticFormatterConfig
 M.build_cmd = function(ctx, config)
   local command = config.command
   if type(command) == "function" then
@@ -159,7 +159,7 @@ local function run_formatter(bufnr, formatter, input_lines, callback)
 end
 
 ---@param bufnr integer
----@param config conform.FormatterConfig
+---@param config conform.StaticFormatterConfig
 ---@return conform.Context
 M.build_context = function(bufnr, config)
   if bufnr == 0 then

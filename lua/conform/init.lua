@@ -219,7 +219,7 @@ end
 
 ---@private
 ---@param formatter string
----@return nil|conform.FormatterConfig
+---@return nil|conform.StaticFormatterConfig
 M.get_formatter_config = function(formatter)
   local config = M.formatters[formatter]
   if not config then
