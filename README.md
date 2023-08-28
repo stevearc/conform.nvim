@@ -283,6 +283,7 @@ Format a buffer
 |       | async        | `nil\|boolean`  | If true the method won't block. Defaults to false.                                         |
 |       | formatters   | `nil\|string[]` | List of formatters to run. Defaults to all formatters for the buffer filetype.             |
 |       | lsp_fallback | `nil\|boolean`  | Attempt LSP formatting if no formatters are available. Defaults to false.                  |
+|       | quiet        | `nil\|boolean`  | Don't show any notifications for warnings or failures. Defaults to false.                  |
 
 Returns:
 
