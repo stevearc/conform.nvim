@@ -98,76 +98,10 @@ local function supports_lsp_format(bufnr)
   return false
 end
 
----Format a buffer
----@param opts? table
----    timeout_ms nil|integer Time in milliseconds to block for formatting. Defaults to 1000. No effect if async = true.
----    bufnr nil|integer Format this buffer (default 0)
----    async nil|boolean If true the method won't block. Defaults to false.
----    formatters nil|string[] List of formatters to run. Defaults to all formatters for the buffer filetype.
----    lsp_fallback nil|boolean Attempt LSP formatting if no formatters are available. Defaults to false.
----    quiet nil|boolean Don't show any notifications for warnings or failures. Defaults to false.
----@return boolean True if any formatters were attempted
-M.format = function(opts)
-  ---@type {timeout_ms: integer, bufnr: integer, async: boolean, lsp_fallback: boolean, quiet: boolean, formatters?: string[]}
-  opts = vim.tbl_extend("keep", opts or {}, {
-    timeout_ms = 1000,
-    bufnr = 0,
-    async = false,
-    lsp_fallback = false,
-    quiet = false,
-  })
-  local log = require("conform.log")
-
-  local formatters = {}
-  if opts.formatters then
-    for _, formatter in ipairs(opts.formatters) do
-      local info = M.get_formatter_info(formatter)
-      if info.available then
-        table.insert(formatters, info)
-      else
-        if opts.quiet then
-          log.warn("Formatter '%s' unavailable: %s", info.name, info.available_msg)
-        else
-          vim.notify(
-            string.format("Formatter '%s' unavailable: %s", info.name, info.available_msg),
-            vim.log.levels.WARN
-          )
-        end
-      end
-    end
-  else
-    formatters = M.list_formatters(opts.bufnr)
-  end
-  local formatter_names = vim.tbl_map(function(f)
-    return f.name
-  end, formatters)
-  log.debug("Running formatters on %s: %s", vim.api.nvim_buf_get_name(opts.bufnr), formatter_names)
-
-  local any_formatters = not vim.tbl_isempty(formatters)
-  if any_formatters then
-    if opts.async then
-      require("conform.runner").format_async(opts.bufnr, formatters)
-    else
-      require("conform.runner").format_sync(opts.bufnr, formatters, opts.timeout_ms, opts.quiet)
-    end
-  elseif opts.lsp_fallback and supports_lsp_format(opts.bufnr) then
-    log.debug("Running LSP formatter on %s", vim.api.nvim_buf_get_name(opts.bufnr))
-    local restore = require("conform.util").save_win_positions(opts.bufnr)
-    vim.lsp.buf.format(opts)
-    if not opts.async then
-      restore()
-    end
-  elseif not opts.quiet then
-    vim.notify("No formatters found for buffer. See :checkhealth conform", vim.log.levels.WARN)
-  end
-
-  return any_formatters
-end
-
----Retried the available formatters for a buffer
 ---@param bufnr? integer
 ---@return conform.FormatterInfo[]
-M.list_formatters = function(bufnr)
+---@return conform.RunOptions
+local function list_formatters_for_buffer(bufnr)
   if not bufnr or bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
   end
@@ -199,6 +133,19 @@ M.list_formatters = function(bufnr)
   local all_info = {}
   for formatter in pairs(formatters) do
     local info = M.get_formatter_info(formatter)
+    table.insert(all_info, info)
+  end
+
+  return all_info, run_options
+end
+
+---@param formatters conform.FormatterInfo[]
+---@param run_options conform.RunOptions
+---@return conform.FormatterInfo[]
+local function filter_formatters(formatters, run_options)
+  ---@type conform.FormatterInfo[]
+  local all_info = {}
+  for _, info in ipairs(formatters) do
     if info.available then
       table.insert(all_info, info)
       if not run_options.run_all_formatters then
@@ -208,6 +155,87 @@ M.list_formatters = function(bufnr)
   end
 
   return all_info
+end
+
+---Format a buffer
+---@param opts? table
+---    timeout_ms nil|integer Time in milliseconds to block for formatting. Defaults to 1000. No effect if async = true.
+---    bufnr nil|integer Format this buffer (default 0)
+---    async nil|boolean If true the method won't block. Defaults to false.
+---    formatters nil|string[] List of formatters to run. Defaults to all formatters for the buffer filetype.
+---    lsp_fallback nil|boolean Attempt LSP formatting if no formatters are available. Defaults to false.
+---    quiet nil|boolean Don't show any notifications for warnings or failures. Defaults to false.
+---@return boolean True if any formatters were attempted
+M.format = function(opts)
+  ---@type {timeout_ms: integer, bufnr: integer, async: boolean, lsp_fallback: boolean, quiet: boolean, formatters?: string[]}
+  opts = vim.tbl_extend("keep", opts or {}, {
+    timeout_ms = 1000,
+    bufnr = 0,
+    async = false,
+    lsp_fallback = false,
+    quiet = false,
+  })
+  local log = require("conform.log")
+
+  local formatters = {}
+  local any_formatters_configured
+  if opts.formatters then
+    any_formatters_configured = true
+    for _, formatter in ipairs(opts.formatters) do
+      local info = M.get_formatter_info(formatter)
+      if info.available then
+        table.insert(formatters, info)
+      else
+        if opts.quiet then
+          log.warn("Formatter '%s' unavailable: %s", info.name, info.available_msg)
+        else
+          vim.notify(
+            string.format("Formatter '%s' unavailable: %s", info.name, info.available_msg),
+            vim.log.levels.WARN
+          )
+        end
+      end
+    end
+  else
+    local run_info
+    formatters, run_info = list_formatters_for_buffer(opts.bufnr)
+    any_formatters_configured = not vim.tbl_isempty(formatters)
+    formatters = filter_formatters(formatters, run_info)
+  end
+  local formatter_names = vim.tbl_map(function(f)
+    return f.name
+  end, formatters)
+  log.debug("Running formatters on %s: %s", vim.api.nvim_buf_get_name(opts.bufnr), formatter_names)
+
+  local any_formatters = not vim.tbl_isempty(formatters)
+  if any_formatters then
+    if opts.async then
+      require("conform.runner").format_async(opts.bufnr, formatters)
+    else
+      require("conform.runner").format_sync(opts.bufnr, formatters, opts.timeout_ms, opts.quiet)
+    end
+  elseif opts.lsp_fallback and supports_lsp_format(opts.bufnr) then
+    log.debug("Running LSP formatter on %s", vim.api.nvim_buf_get_name(opts.bufnr))
+    local restore = require("conform.util").save_win_positions(opts.bufnr)
+    vim.lsp.buf.format(opts)
+    if not opts.async then
+      restore()
+    end
+  elseif any_formatters_configured and not opts.quiet then
+    vim.notify("No formatters found for buffer. See :checkhealth conform", vim.log.levels.WARN)
+  else
+    log.debug("No formatters found for %s", vim.api.nvim_buf_get_name(opts.bufnr))
+  end
+
+  return any_formatters
+end
+
+---Retrieve the available formatters for a buffer
+---@param bufnr? integer
+---@return conform.FormatterInfo[]
+M.list_formatters = function(bufnr)
+  local formatters, run_options = list_formatters_for_buffer(bufnr)
+  return filter_formatters(formatters, run_options)
 end
 
 ---List information about all filetype-configured formatters
