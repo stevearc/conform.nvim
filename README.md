@@ -294,7 +294,7 @@ Returns:
 ### list_formatters(bufnr)
 
 `list_formatters(bufnr): conform.FormatterInfo[]` \
-Retried the available formatters for a buffer
+Retrieve the available formatters for a buffer
 
 | Param | Type           | Desc |
 | ----- | -------------- | ---- |
