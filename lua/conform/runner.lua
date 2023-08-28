@@ -34,8 +34,6 @@ end
 ---@param original_lines string[]
 ---@param new_lines string[]
 local function apply_format(bufnr, original_lines, new_lines)
-  local restore = util.save_win_positions(bufnr)
-
   local original_text = table.concat(original_lines, "\n")
   -- Trim off the final newline from the formatted text because that is baked in to
   -- the vim lines representation
@@ -72,8 +70,6 @@ local function apply_format(bufnr, original_lines, new_lines)
     local replacement = util.tbl_slice(new_lines, start_b, start_b + count_b - 1)
     vim.api.nvim_buf_set_lines(bufnr, start_a - 1, start_a - 1 + count_a, true, replacement)
   end
-
-  restore()
 end
 
 ---@param bufnr integer
