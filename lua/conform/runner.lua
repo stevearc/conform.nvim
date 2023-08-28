@@ -85,7 +85,7 @@ local function run_formatter(bufnr, formatter, input_lines, callback)
   if config.cwd then
     cwd = config.cwd(ctx)
   end
-  log.info("Running formatter %s on buffer %d", formatter.name, bufnr)
+  log.info("Run %s on %s", formatter.name, vim.api.nvim_buf_get_name(bufnr))
   if not config.stdin then
     log.debug("Creating temp file %s", ctx.filename)
     local fd = assert(uv.fs_open(ctx.filename, "w", 448)) -- 0700
@@ -98,9 +98,9 @@ local function run_formatter(bufnr, formatter, input_lines, callback)
       final_cb(...)
     end
   end
-  log.debug("Running command: %s", cmd)
+  log.debug("Run command: %s", cmd)
   if cwd then
-    log.debug("Running in CWD: %s", cwd)
+    log.debug("Run CWD: %s", cwd)
   end
   local stdout
   local stderr
@@ -130,12 +130,12 @@ local function run_formatter(bufnr, formatter, input_lines, callback)
         output = stdout
       end
       if vim.tbl_contains(exit_codes, code) then
-        log.debug("Formatter %s exited with code %d", formatter.name, code)
+        log.debug("%s exited with code %d", formatter.name, code)
         callback(nil, output)
       else
-        log.error("Formatter %s exited with code %d", formatter.name, code)
-        log.warn("Formatter %s stdout:", formatter.name, stdout)
-        log.warn("Formatter %s stderr:", formatter.name, stderr)
+        log.error("%s exited with code %d", formatter.name, code)
+        log.warn("%s stdout: %s", formatter.name, stdout)
+        log.warn("%s stderr: %s", formatter.name, stderr)
         local stderr_str
         if stderr then
           stderr_str = table.concat(stderr, "\n")
@@ -212,7 +212,7 @@ M.format_async = function(bufnr, formatters, callback)
   local prev_jid = vim.b[bufnr].conform_jid
   if prev_jid then
     if vim.fn.jobstop(prev_jid) == 1 then
-      log.info("Canceled previous format job for buffer %d", bufnr)
+      log.info("Canceled previous format job for %s", vim.api.nvim_buf_get_name(bufnr))
     end
   end
 
@@ -223,7 +223,10 @@ M.format_async = function(bufnr, formatters, callback)
       if vim.b[bufnr].changedtick == changedtick then
         apply_format(bufnr, original_lines, input_lines)
       else
-        log.warn("Async formatter discarding changes for buffer %d: concurrent modification", bufnr)
+        log.info(
+          "Async formatter discarding changes for %s: concurrent modification",
+          vim.api.nvim_buf_get_name(bufnr)
+        )
       end
       if callback then
         callback()
@@ -235,9 +238,9 @@ M.format_async = function(bufnr, formatters, callback)
     local jid
     jid = run_formatter(bufnr, formatter, input_lines, function(err, output)
       if err then
-        -- Only display the error if the job wasn't canceled
+        -- Only log the error if the job wasn't canceled
         if vim.api.nvim_buf_is_valid(bufnr) and jid == vim.b[bufnr].conform_jid then
-          vim.notify(err, vim.log.levels.ERROR)
+          log.error(err)
         end
         if callback then
           callback(err)
@@ -254,7 +257,8 @@ end
 ---@param bufnr integer
 ---@param formatters conform.FormatterInfo[]
 ---@param timeout_ms integer
-M.format_sync = function(bufnr, formatters, timeout_ms)
+---@param quiet boolean
+M.format_sync = function(bufnr, formatters, timeout_ms, quiet)
   if bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
   end
@@ -266,21 +270,25 @@ M.format_sync = function(bufnr, formatters, timeout_ms)
   local prev_jid = vim.b[bufnr].conform_jid
   if prev_jid then
     if vim.fn.jobstop(prev_jid) == 1 then
-      log.info("Canceled previous format job for buffer %d", bufnr)
+      log.info("Canceled previous format job for %s", vim.api.nvim_buf_get_name(bufnr))
     end
   end
 
   for _, formatter in ipairs(formatters) do
     local remaining = timeout_ms - (uv.hrtime() / 1e6 - start)
     if remaining <= 0 then
-      vim.notify(string.format("Formatter '%s' timed out", formatter.name), vim.log.levels.WARN)
+      if quiet then
+        log.warn("Formatter '%s' timed out", formatter.name)
+      else
+        vim.notify(string.format("Formatter '%s' timed out", formatter.name), vim.log.levels.WARN)
+      end
       return
     end
     local done = false
     local result = nil
     run_formatter(bufnr, formatter, input_lines, function(err, output)
       if err then
-        vim.notify(err, vim.log.levels.ERROR)
+        log.error(err)
       end
       done = true
       result = output
@@ -292,7 +300,11 @@ M.format_sync = function(bufnr, formatters, timeout_ms)
 
     if not wait_result then
       if wait_reason == -1 then
-        vim.notify(string.format("Formatter '%s' timed out", formatter.name), vim.log.levels.WARN)
+        if quiet then
+          log.warn("Formatter '%s' timed out", formatter.name)
+        else
+          vim.notify(string.format("Formatter '%s' timed out", formatter.name), vim.log.levels.WARN)
+        end
       end
       return
     end
