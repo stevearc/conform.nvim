@@ -8,7 +8,7 @@ Formatter plugin for Neovim
 - [Installation](#installation)
 - [Setup](#setup)
 - [Formatters](#formatters)
-- [Custom formatters](#custom-formatters)
+- [Options](#options)
 - [API](#api)
   - [format(opts)](#formatopts)
   - [list_formatters(bufnr)](#list_formattersbufnr)
@@ -121,12 +121,6 @@ require("conform").setup({
 })
 ```
 
-You can also modify `formatters_by_ft` directly
-
-```lua
-require("conform").formatters_by_ft.lua = { "stylua" }
-```
-
 Then you can use `conform.format()` just like you would `vim.lsp.buf.format()`. For example, to format on save:
 
 ```lua
@@ -142,22 +136,15 @@ As a shortcut, conform will optionally set up this format-on-save autocmd for yo
 
 ```lua
 require("conform").setup({
-    format_on_save = true,
-})
-```
-
-You can also use an option table and it will get passed to `conform.format()`
-
-```lua
-require("conform").setup({
     format_on_save = {
+        -- These options will be passed to conform.format()
         timeout_ms = 500,
         lsp_fallback = true,
     },
 })
 ```
 
-See [conform.format()](#formatopts) for more details about capabilities and parameters.
+See [conform.format()](#formatopts) for more details about the parameters.
 
 To view configured and available formatters, as well as to see the path to the log file, run `:checkhealth conform`
 
@@ -207,43 +194,77 @@ To view configured and available formatters, as well as to see the path to the l
 - [zigfmt](https://github.com/ziglang/zig) - Reformat Zig source into canonical form.
 <!-- /FORMATTERS -->
 
-## Custom formatters
+## Options
 
-You can create your own custom formatters
+A complete list of all configuration options
+
+<!-- OPTIONS -->
 
 ```lua
 require("conform").setup({
-    formatters = {
-        my_formatter = {
-            -- This can be a string or a function that returns a string
-            command = 'my_cmd',
-            -- OPTIONAL - all fields below this are optional
-            -- A list of strings, or a function that returns a list of strings
-            args = { "--stdin-from-filename", "$FILENAME" },
-            -- Send file contents to stdin, read new contents from stdout (default true)
-            -- When false, will create a temp file (will appear in "$FILENAME" args). The temp
-            -- file is assumed to be modified in-place by the format command.
-            stdin = true,
-            -- A function the calculates the directory to run the command in
-            cwd = require("conform.util").root_file({ ".editorconfig", "package.json" }),
-            -- When cwd is not found, don't run the formatter (default false)
-            require_cwd = true,
-            -- When returns false, the formatter will not be used
-            condition = function(ctx)
-                return vim.fs.basename(ctx.filename) ~= "README.md"
-            end,
-            -- Exit codes that indicate success (default {0})
-            exit_codes = { 0, 1 },
-        }
-    }
+  -- Map of filetype to formatters
+  formatters_by_ft = {
+    lua = { "stylua" },
+    -- Conform will use the first available formatter in the list
+    javascript = { "prettier_d", "prettier" },
+    -- Formatters can also be specified with additional options
+    python = {
+      formatters = { "isort", "black" },
+      -- Run formatters one after another instead of stopping at the first success
+      run_all_formatters = true,
+      -- Don't run these formatters as part of the format_on_save autocmd (see below)
+      format_on_save = false,
+    },
+  },
+  -- If this is set, Conform will run the formatter on save.
+  -- It will pass the table to conform.format().
+  format_on_save = {
+    -- I recommend these options. See :help conform.format for details.
+    lsp_fallback = true,
+    timeout_ms = 500,
+  },
+  -- Set the log level. Use `:checkhealth conform` to see the location of the log file.
+  log_level = vim.log.levels.ERROR,
+  -- Define custom formatters here
+  formatters = {
+    my_formatter = {
+      -- This can be a string or a function that returns a string
+      command = "my_cmd",
+      -- OPTIONAL - all fields below this are optional
+      -- A list of strings, or a function that returns a list of strings
+      args = { "--stdin-from-filename", "$FILENAME" },
+      -- Send file contents to stdin, read new contents from stdout (default true)
+      -- When false, will create a temp file (will appear in "$FILENAME" args). The temp
+      -- file is assumed to be modified in-place by the format command.
+      stdin = true,
+      -- A function the calculates the directory to run the command in
+      cwd = require("conform.util").root_file({ ".editorconfig", "package.json" }),
+      -- When cwd is not found, don't run the formatter (default false)
+      require_cwd = true,
+      -- When returns false, the formatter will not be used
+      condition = function(ctx)
+        return vim.fs.basename(ctx.filename) ~= "README.md"
+      end,
+      -- Exit codes that indicate success (default {0})
+      exit_codes = { 0, 1 },
+    },
+    -- These can also be a function that returns the formatter
+    other_formatter = function()
+      return {
+        command = "my_cmd",
+      }
+    end,
+  },
 })
+
+-- You can set formatters_by_ft and formatters directly
+require("conform").formatters_by_ft.lua = { "stylua" }
+require("conform").formatters.my_formatter = {
+  command = "my_cmd",
+}
 ```
 
-Again, you can also set these directly
-
-```lua
-require("conform").formatters.my_formatter = { ... }
-```
+<!-- /OPTIONS -->
 
 ## API
 
@@ -264,6 +285,7 @@ Format a buffer
 |       | lsp_fallback | `nil\|boolean`  | Attempt LSP formatting if no formatters are available. Defaults to false.                  |
 
 Returns:
+
 | Type    | Desc                                  |
 | ------- | ------------------------------------- |
 | boolean | True if any formatters were attempted |

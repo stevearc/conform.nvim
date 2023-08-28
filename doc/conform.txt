@@ -3,7 +3,76 @@
 --------------------------------------------------------------------------------
 CONTENTS                                                        *conform-contents*
 
-  1. Api                                                         |conform-api|
+  1. Options                                                 |conform-options|
+  2. Api                                                         |conform-api|
+  3. Formatters                                           |conform-formatters|
+
+--------------------------------------------------------------------------------
+OPTIONS                                                          *conform-options*
+
+>lua
+    require("conform").setup({
+      -- Map of filetype to formatters
+      formatters_by_ft = {
+        lua = { "stylua" },
+        -- Conform will use the first available formatter in the list
+        javascript = { "prettier_d", "prettier" },
+        -- Formatters can also be specified with additional options
+        python = {
+          formatters = { "isort", "black" },
+          -- Run formatters one after another instead of stopping at the first success
+          run_all_formatters = true,
+          -- Don't run these formatters as part of the format_on_save autocmd (see below)
+          format_on_save = false,
+        },
+      },
+      -- If this is set, Conform will run the formatter on save.
+      -- It will pass the table to conform.format().
+      format_on_save = {
+        -- I recommend these options. See :help conform.format for details.
+        lsp_fallback = true,
+        timeout_ms = 500,
+      },
+      -- Set the log level. Use `:checkhealth conform` to see the location of the log file.
+      log_level = vim.log.levels.ERROR,
+      -- Define custom formatters here
+      formatters = {
+        my_formatter = {
+          -- This can be a string or a function that returns a string
+          command = "my_cmd",
+          -- OPTIONAL - all fields below this are optional
+          -- A list of strings, or a function that returns a list of strings
+          args = { "--stdin-from-filename", "$FILENAME" },
+          -- Send file contents to stdin, read new contents from stdout (default true)
+          -- When false, will create a temp file (will appear in "$FILENAME" args). The temp
+          -- file is assumed to be modified in-place by the format command.
+          stdin = true,
+          -- A function the calculates the directory to run the command in
+          cwd = require("conform.util").root_file({ ".editorconfig", "package.json" }),
+          -- When cwd is not found, don't run the formatter (default false)
+          require_cwd = true,
+          -- When returns false, the formatter will not be used
+          condition = function(ctx)
+            return vim.fs.basename(ctx.filename) ~= "README.md"
+          end,
+          -- Exit codes that indicate success (default {0})
+          exit_codes = { 0, 1 },
+        },
+        -- These can also be a function that returns the formatter
+        other_formatter = function()
+          return {
+            command = "my_cmd",
+          }
+        end,
+      },
+    })
+
+    -- You can set formatters_by_ft and formatters directly
+    require("conform").formatters_by_ft.lua = { "stylua" }
+    require("conform").formatters.my_formatter = {
+      command = "my_cmd",
+    }
+<
 
 --------------------------------------------------------------------------------
 API                                                                  *conform-api*
@@ -34,6 +103,72 @@ list_formatters({bufnr}): conform.FormatterInfo[]        *conform.list_formatter
 
 list_all_formatters(): conform.FormatterInfo[]       *conform.list_all_formatters*
     List information about all filetype-configured formatters
+
+--------------------------------------------------------------------------------
+FORMATTERS                                                    *conform-formatters*
+
+`autoflake` - Removes unused imports and unused variables as reported by
+            pyflakes.
+`autopep8` - A tool that automatically formats Python code to conform to the PEP
+           8 style guide.
+`black` - The uncompromising Python code formatter.
+`clang_format` - Tool to format C/C++/… code according to a set of rules and
+               heuristics.
+`cljstyle` - Formatter for Clojure code.
+`cmake_format` - Parse cmake listfiles and format them nicely.
+`dart_format` - Replace the whitespace in your program with formatting that
+              follows Dart guidelines.
+`dfmt` - Formatter for D source code.
+`elm_format` - elm-format formats Elm source code according to a standard set of
+             rules based on the official [Elm Style Guide](https://elm-
+             lang.org/docs/style-guide).
+`erb_format` - Format ERB files with speed and precision.
+`eslint_d` - Like ESLint, but faster.
+`fish_indent` - Indent or otherwise prettify a piece of fish code.
+`gdformat` - A formatter for Godot's gdscript.
+`gofmt` - Formats go programs.
+`gofumpt` - Enforce a stricter format than gofmt, while being backwards
+          compatible. That is, gofumpt is happy with a subset of the formats
+          that gofmt is happy with.
+`goimports` - Updates your Go import lines, adding missing ones and removing
+            unreferenced ones.
+`htmlbeautifier` - A normaliser/beautifier for HTML that also understands
+                 embedded Ruby. Ideal for tidying up Rails templates.
+`isort` - Python utility / library to sort imports alphabetically and
+        automatically separate them into sections and by type.
+`jq` - Command-line JSON processor.
+`nixfmt` - nixfmt is a formatter for Nix code, intended to apply a uniform
+         style.
+`nixpkgs_fmt` - nixpkgs-fmt is a Nix code formatter for nixpkgs.
+`ocamlformat` - Auto-formatter for OCaml code.
+`pg_format` - PostgreSQL SQL syntax beautifier.
+`prettier` - Prettier is an opinionated code formatter. It enforces a consistent
+           style by parsing your code and re-printing it with its own rules that
+           take the maximum line length into account, wrapping code when
+           necessary.
+`prettierd` - prettier, as a daemon, for ludicrous formatting speed.
+`rubocop` - Ruby static code analyzer and formatter, based on the community Ruby
+          style guide.
+`rustfmt` - A tool for formatting rust code according to style guidelines.
+`scalafmt` - Code formatter for Scala.
+`shfmt` - A shell parser, formatter, and interpreter with `bash` support.
+`sql_formatter` - A whitespace formatter for different query languages.
+`stylua` - An opinionated code formatter for Lua.
+`swift_format` - Swift formatter from apple. Requires building from source with
+               `swift build`.
+`swiftformat` - SwiftFormat is a code library and command-line tool for
+              reformatting `swift` code on macOS or Linux.
+`terraform_fmt` - The terraform-fmt command rewrites `terraform` configuration
+                files to a canonical format and style.
+`uncrustify` - A source code beautifier for C, C++, C#, ObjectiveC, D, Java,
+             Pawn and Vala.
+`xmlformat` - xmlformatter is an Open Source Python package, which provides
+            formatting of XML documents.
+`yamlfix` - A configurable YAML formatter that keeps comments.
+`yamlfmt` - yamlfmt is an extensible command line tool or library to format yaml
+          files.
+`yapf` - Yet Another Python Formatter.
+`zigfmt` - Reformat Zig source into canonical form.
 
 ================================================================================
 vim:tw=80:ts=2:ft=help:norl:syntax=help:

@@ -1,44 +1,68 @@
 import os
 import os.path
 import re
-from typing import List
+from dataclasses import dataclass
+from functools import lru_cache
+from typing import Dict, List
 
-from nvim_doc_tools import (
-    Vimdoc,
-    VimdocSection,
-    generate_md_toc,
-    parse_functions,
-    read_nvim_json,
-    render_md_api,
-    render_vimdoc_api,
-    replace_section,
-)
+from nvim_doc_tools import (Vimdoc, VimdocSection, generate_md_toc, indent,
+                            parse_functions, read_nvim_json, render_md_api,
+                            render_vimdoc_api, replace_section, wrap)
 
 HERE = os.path.dirname(__file__)
 ROOT = os.path.abspath(os.path.join(HERE, os.path.pardir))
 README = os.path.join(ROOT, "README.md")
 DOC = os.path.join(ROOT, "doc")
 VIMDOC = os.path.join(DOC, "conform.txt")
+OPTIONS = os.path.join(ROOT, "tests", "options_doc.lua")
 
 
-def update_formatter_list():
-    formatters = sorted(
+@dataclass
+class Formatter:
+    name: str
+    description: str
+    url: str
+
+
+@lru_cache
+def get_all_formatters() -> List[Formatter]:
+    names = sorted(
         [
             os.path.splitext(file)[0]
             for file in os.listdir(os.path.join(ROOT, "lua", "conform", "formatters"))
         ]
     )
+    formatters = []
+    for name in names:
+        meta = read_nvim_json(f'require("conform.formatters.{name}").meta')
+        formatters.append(Formatter(name, **meta))
+    return formatters
+
+
+def update_formatter_list():
     formatter_lines = ["\n"]
-    for formatter in formatters:
-        meta = read_nvim_json(f'require("conform.formatters.{formatter}").meta')
+    for formatter in get_all_formatters():
         formatter_lines.append(
-            f"- [{formatter}]({meta['url']}) - {meta['description']}\n"
+            f"- [{formatter.name}]({formatter.url}) - {formatter.description}\n"
         )
     replace_section(
         README,
         r"^<!-- FORMATTERS -->$",
         r"^<!-- /FORMATTERS -->$",
         formatter_lines,
+    )
+
+
+def update_options():
+    option_lines = ["\n", "```lua\n"]
+    with open(OPTIONS, "r", encoding="utf-8") as f:
+        option_lines.extend(f.readlines())
+    option_lines.extend(["```\n", "\n"])
+    replace_section(
+        README,
+        r"^<!-- OPTIONS -->$",
+        r"^<!-- /OPTIONS -->$",
+        option_lines,
     )
 
 
@@ -70,12 +94,30 @@ def update_readme_toc():
     )
 
 
+def gen_options_vimdoc() -> VimdocSection:
+    section = VimdocSection("Options", "conform-options", ["\n", ">lua\n"])
+    with open(OPTIONS, "r", encoding="utf-8") as f:
+        section.body.extend(indent(f.readlines(), 4))
+    section.body.append("<\n")
+    return section
+
+
+def gen_formatter_vimdoc() -> VimdocSection:
+    section = VimdocSection("Formatters", "conform-formatters", ["\n"])
+    for formatter in get_all_formatters():
+        line = f"`{formatter.name}` - {formatter.description}\n"
+        section.body.extend(wrap(line, sub_indent=len(formatter.name) + 3))
+    return section
+
+
 def generate_vimdoc():
     doc = Vimdoc("conform.txt", "conform")
     funcs = parse_functions(os.path.join(ROOT, "lua", "conform", "init.lua"))
     doc.sections.extend(
         [
+            gen_options_vimdoc(),
             VimdocSection("API", "conform-api", render_vimdoc_api("conform", funcs)),
+            gen_formatter_vimdoc(),
         ]
     )
 
@@ -86,6 +128,7 @@ def generate_vimdoc():
 def main() -> None:
     """Update the README"""
     update_formatter_list()
+    update_options()
     update_md_api()
     update_readme_toc()
     generate_vimdoc()

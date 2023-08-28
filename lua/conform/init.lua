@@ -7,8 +7,7 @@ local M = {}
 ---@field available boolean
 ---@field available_msg? string
 
----@class (exact) conform.FormatterConfig
----@field meta conform.FormatterMeta
+---@class (exact) conform.StaticFormatterConfig
 ---@field command string|fun(ctx: conform.Context): string
 ---@field args? string[]|fun(ctx: conform.Context): string[]
 ---@field cwd? fun(ctx: conform.Context): nil|string
@@ -16,6 +15,9 @@ local M = {}
 ---@field stdin? boolean Send buffer contents to stdin (default true)
 ---@field condition? fun(ctx: conform.Context): boolean
 ---@field exit_codes? integer[] Exit codes that indicate success (default {0})
+
+---@class (exact) conform.FormatterConfig : conform.StaticFormatterConfig
+---@field meta conform.FormatterMeta
 
 ---@class (exact) conform.FormatterMeta
 ---@field url string
@@ -36,7 +38,7 @@ local M = {}
 ---@type table<string, string[]|conform.FormatterList>
 M.formatters_by_ft = {}
 
----@type table<string, conform.FormatterConfig|fun(): conform.FormatterConfig>
+---@type table<string, conform.StaticFormatterConfig|fun(): conform.StaticFormatterConfig>
 M.formatters = {}
 
 M.setup = function(opts)
