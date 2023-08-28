@@ -74,6 +74,17 @@ M.setup = function(opts)
       end,
     })
   end
+
+  ---@diagnostic disable-next-line: duplicate-set-field
+  vim.lsp.handlers["textDocument/formatting"] = function(_, result, ctx, _)
+    if not result then
+      return
+    end
+    local client = vim.lsp.get_client_by_id(ctx.client_id)
+    local restore = require("conform.util").save_win_positions(ctx.bufnr)
+    vim.lsp.util.apply_text_edits(result, ctx.bufnr, client.offset_encoding)
+    restore()
+  end
 end
 
 ---Format a buffer
@@ -130,7 +141,9 @@ M.format = function(opts)
       if supports_lsp_formatting then
         local restore = require("conform.util").save_win_positions(opts.bufnr)
         vim.lsp.buf.format(opts)
-        restore()
+        if not opts.async then
+          restore()
+        end
       end
     else
       vim.notify("No formatters found for buffer. See :checkhealth conform", vim.log.levels.WARN)

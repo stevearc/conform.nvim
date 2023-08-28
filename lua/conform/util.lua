@@ -46,9 +46,14 @@ M.save_win_positions = function(bufnr)
 
   return function()
     for winid, view in pairs(win_positions) do
-      vim.api.nvim_win_call(winid, function()
-        pcall(vim.fn.winrestview, view)
-      end)
+      if
+        vim.api.nvim_win_is_valid(winid)
+        and vim.deep_equal(vim.api.nvim_win_get_cursor(winid), { 1, 0 })
+      then
+        vim.api.nvim_win_call(winid, function()
+          pcall(vim.fn.winrestview, view)
+        end)
+      end
     end
   end
 end
