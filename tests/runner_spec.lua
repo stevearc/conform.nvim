@@ -90,7 +90,6 @@ describe("runner", function()
 
     it("resolves arg function", function()
       vim.cmd.edit({ args = { "README.md" } })
-      local bufnr = vim.api.nvim_get_current_buf()
       conform.formatters.test = {
         meta = { url = "", description = "" },
         command = "echo",
