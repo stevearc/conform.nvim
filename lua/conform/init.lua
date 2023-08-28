@@ -193,11 +193,6 @@ M.list_formatters = function(bufnr)
       if not run_options.run_all_formatters then
         break
       end
-    else
-      vim.notify_once(
-        string.format("conform.nvim: missing configuration for formatter '%s'", formatter),
-        vim.log.levels.WARN
-      )
     end
   end
 
