@@ -104,6 +104,10 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, callbac
   if config.cwd then
     cwd = config.cwd(ctx)
   end
+  local env = config.env
+  if type(env) == "function" then
+    env = env(ctx)
+  end
   log.info("Run %s on %s", formatter.name, vim.api.nvim_buf_get_name(bufnr))
   if not config.stdin then
     log.debug("Creating temp file %s", ctx.filename)
@@ -121,11 +125,15 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, callbac
   if cwd then
     log.debug("Run CWD: %s", cwd)
   end
+  if env then
+    log.debug("Run ENV: %s", env)
+  end
   local stdout
   local stderr
   local exit_codes = config.exit_codes or { 0 }
   local jid = vim.fn.jobstart(cmd, {
     cwd = cwd,
+    env = env,
     stdout_buffered = true,
     stderr_buffered = true,
     stdin = config.stdin and "pipe" or "null",

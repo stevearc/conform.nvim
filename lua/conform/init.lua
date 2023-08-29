@@ -16,6 +16,7 @@ local M = {}
 ---@field stdin? boolean Send buffer contents to stdin (default true)
 ---@field condition? fun(ctx: conform.Context): boolean
 ---@field exit_codes? integer[] Exit codes that indicate success (default {0})
+---@field env? table<string, any>|fun(ctx: conform.Context): table<string, any>
 
 ---@class (exact) conform.FileFormatterConfig : conform.FormatterConfig
 ---@field meta conform.FormatterMeta
