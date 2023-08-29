@@ -30,7 +30,6 @@ local M = {}
 
 ---@class (exact) conform.RunOptions
 ---@field run_all_formatters nil|boolean Run all listed formatters instead of stopping at the first one.
----@field format_on_save nil|boolean Run these formatters in the built-in format_on_save autocmd.
 
 ---@class (exact) conform.FormatterList : conform.RunOptions
 ---@field formatters string[]
@@ -51,6 +50,20 @@ M.setup = function(opts)
     require("conform.log").level = opts.log_level
   end
 
+  for ft, formatters in pairs(M.formatters_by_ft) do
+    ---@diagnostic disable-next-line: undefined-field
+    if formatters.format_on_save ~= nil then
+      vim.notify(
+        string.format(
+          'The "format_on_save" option for filetype "%s" is deprecated. It is recommended to create your own autocmd for fine grained control, see :help conform-autoformat',
+          ft
+        ),
+        vim.log.levels.WARN
+      )
+      break
+    end
+  end
+
   if opts.format_on_save then
     if type(opts.format_on_save) == "boolean" then
       opts.format_on_save = {}
@@ -63,13 +76,6 @@ M.setup = function(opts)
         local format_opts = vim.tbl_deep_extend("keep", opts.format_on_save, {
           buf = args.buf,
         })
-        local filetypes = vim.split(vim.bo[args.buf].filetype, ".", { plain = true })
-        for _, ft in ipairs(filetypes) do
-          local ft_formatters = M.formatters_by_ft[ft]
-          if ft_formatters and ft_formatters.format_on_save == false then
-            return
-          end
-        end
         M.format(format_opts)
       end,
     })
