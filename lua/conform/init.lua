@@ -87,6 +87,7 @@ M.setup = function(opts)
       return
     end
     local client = vim.lsp.get_client_by_id(ctx.client_id)
+    assert(client)
     local restore = require("conform.util").save_win_positions(ctx.bufnr)
     vim.lsp.util.apply_text_edits(result, ctx.bufnr, client.offset_encoding)
     restore()
@@ -96,6 +97,7 @@ end
 ---@param bufnr integer
 ---@return boolean
 local function supports_lsp_format(bufnr)
+  ---@diagnostic disable-next-line: deprecated
   for _, client in ipairs(vim.lsp.get_active_clients({ bufnr = bufnr })) do
     if client.supports_method("textDocument/formatting", { bufnr = bufnr }) then
       return true
@@ -112,6 +114,7 @@ local function list_formatters_for_buffer(bufnr)
     bufnr = vim.api.nvim_get_current_buf()
   end
   local formatters = {}
+  local seen = {}
   local run_options = {
     run_all_formatters = false,
     format_on_save = true,
@@ -130,17 +133,18 @@ local function list_formatters_for_buffer(bufnr)
         ft_formatters = ft_formatters.formatters
       end
       for _, formatter in ipairs(ft_formatters) do
-        formatters[formatter] = true
+        if not seen[formatter] then
+          table.insert(formatters, formatter)
+          seen[formatter] = true
+        end
       end
     end
   end
 
   ---@type conform.FormatterInfo[]
-  local all_info = {}
-  for formatter in pairs(formatters) do
-    local info = M.get_formatter_info(formatter)
-    table.insert(all_info, info)
-  end
+  local all_info = vim.tbl_map(function(f)
+    return M.get_formatter_info(f, bufnr)
+  end, formatters)
 
   return all_info, run_options
 end
