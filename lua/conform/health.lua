@@ -1,5 +1,21 @@
 local M = {}
 
+---@param name string
+---@return string[]
+local function get_formatter_filetypes(name)
+  local conform = require("conform")
+  local filetypes = {}
+  for filetype, formatters in pairs(conform.formatters_by_ft) do
+    if not vim.tbl_islist(formatters) then
+      formatters = formatters.formatters
+    end
+    if vim.tbl_contains(formatters, name) then
+      table.insert(filetypes, filetype)
+    end
+  end
+  return filetypes
+end
+
 M.check = function()
   local conform = require("conform")
   vim.health.report_start("conform.nvim report")
@@ -14,20 +30,89 @@ M.check = function()
         string.format("%s unavailable: %s", formatter.name, formatter.available_msg)
       )
     else
-      local filetypes = {}
-      for filetype, formatters in pairs(conform.formatters_by_ft) do
-        if not vim.tbl_islist(formatters) then
-          formatters = formatters.formatters
-        end
-        if vim.tbl_contains(formatters, formatter.name) then
-          table.insert(filetypes, filetype)
-        end
-      end
-
+      local filetypes = get_formatter_filetypes(formatter.name)
       vim.health.report_ok(
         string.format("%s ready (%s)", formatter.name, table.concat(filetypes, ", "))
       )
     end
+  end
+end
+
+M.show_window = function()
+  local conform = require("conform")
+  local lines = {}
+  local highlights = {}
+  local log = require("conform.log")
+  table.insert(lines, string.format("Log file: %s", log.get_logfile()))
+  table.insert(lines, "")
+
+  ---@param formatters conform.FormatterInfo[]
+  local function append_formatters(formatters)
+    for _, formatter in ipairs(formatters) do
+      if not formatter.available then
+        local line = string.format("%s unavailable: %s", formatter.name, formatter.available_msg)
+        table.insert(lines, line)
+        table.insert(
+          highlights,
+          { "DiagnosticWarn", #lines, formatter.name:len(), formatter.name:len() + 12 }
+        )
+      else
+        local filetypes = get_formatter_filetypes(formatter.name)
+        local line = string.format("%s ready (%s)", formatter.name, table.concat(filetypes, ", "))
+        table.insert(lines, line)
+        table.insert(
+          highlights,
+          { "DiagnosticInfo", #lines, formatter.name:len(), formatter.name:len() + 6 }
+        )
+      end
+    end
+  end
+
+  table.insert(lines, "Formatters for this buffer:")
+  local seen = {}
+  local buf_formatters = conform.list_formatters_for_buffer()
+  for _, formatter in ipairs(buf_formatters) do
+    seen[formatter.name] = true
+  end
+  append_formatters(buf_formatters)
+
+  table.insert(lines, "")
+  table.insert(lines, "Other formatters:")
+  local all_formatters = vim.tbl_filter(function(f)
+    return not seen[f.name]
+  end, conform.list_all_formatters())
+  append_formatters(all_formatters)
+
+  local bufnr = vim.api.nvim_create_buf(false, true)
+  local winid = vim.api.nvim_open_win(bufnr, true, {
+    relative = "editor",
+    border = "rounded",
+    width = vim.o.columns - 6,
+    height = vim.o.lines - 6,
+    col = 2,
+    row = 2,
+    style = "minimal",
+  })
+  vim.api.nvim_buf_set_lines(bufnr, 0, -1, true, lines)
+  vim.bo[bufnr].modifiable = false
+  vim.bo[bufnr].modified = false
+  vim.bo[bufnr].bufhidden = "wipe"
+  vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = bufnr })
+  vim.keymap.set("n", "<C-c>", "<cmd>close<cr>", { buffer = bufnr })
+  vim.api.nvim_create_autocmd("BufLeave", {
+    desc = "Close info window when leaving buffer",
+    buffer = bufnr,
+    once = true,
+    nested = true,
+    callback = function()
+      if vim.api.nvim_win_is_valid(winid) then
+        vim.api.nvim_win_close(winid, true)
+      end
+    end,
+  })
+  local ns = vim.api.nvim_create_namespace("conform")
+  for _, hl in ipairs(highlights) do
+    vim.api.nvim_buf_add_highlight(bufnr, ns, hl[1], hl[2] - 1, hl[3], hl[4])
   end
 end
 

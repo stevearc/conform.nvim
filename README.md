@@ -145,7 +145,7 @@ require("conform").setup({
 
 See [conform.format()](#formatopts) for more details about the parameters.
 
-To view configured and available formatters, as well as to see the path to the log file, run `:checkhealth conform`
+To view configured and available formatters, as well as to see the path to the log file, run `:ConformInfo`
 
 ## Formatters
 
@@ -222,7 +222,7 @@ require("conform").setup({
     lsp_fallback = true,
     timeout_ms = 500,
   },
-  -- Set the log level. Use `:checkhealth conform` to see the location of the log file.
+  -- Set the log level. Use `:ConformInfo` to see the location of the log file.
   log_level = vim.log.levels.ERROR,
   -- Define custom formatters here
   formatters = {

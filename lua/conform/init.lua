@@ -90,6 +90,10 @@ M.setup = function(opts)
     })
   end
 
+  vim.api.nvim_create_user_command("ConformInfo", function()
+    require("conform.health").show_window()
+  end, { desc = "Show information about Conform formatters" })
+
   ---@diagnostic disable-next-line: duplicate-set-field
   vim.lsp.handlers["textDocument/formatting"] = function(_, result, ctx, _)
     if not result then
@@ -115,10 +119,11 @@ local function supports_lsp_format(bufnr)
   return false
 end
 
+---@private
 ---@param bufnr? integer
 ---@return conform.FormatterInfo[]
 ---@return conform.RunOptions
-local function list_formatters_for_buffer(bufnr)
+M.list_formatters_for_buffer = function(bufnr)
   if not bufnr or bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
   end
@@ -249,7 +254,7 @@ M.format = function(opts)
     end
   else
     local run_info
-    formatters, run_info = list_formatters_for_buffer(opts.bufnr)
+    formatters, run_info = M.list_formatters_for_buffer(opts.bufnr)
     any_formatters_configured = not vim.tbl_isempty(formatters)
     formatters = filter_formatters(formatters, run_info)
   end
@@ -284,7 +289,7 @@ M.format = function(opts)
       restore()
     end
   elseif any_formatters_configured and not opts.quiet then
-    vim.notify("No formatters found for buffer. See :checkhealth conform", vim.log.levels.WARN)
+    vim.notify("No formatters found for buffer. See :ConformInfo", vim.log.levels.WARN)
   else
     log.debug("No formatters found for %s", vim.api.nvim_buf_get_name(opts.bufnr))
   end
@@ -296,7 +301,7 @@ end
 ---@param bufnr? integer
 ---@return conform.FormatterInfo[]
 M.list_formatters = function(bufnr)
-  local formatters, run_options = list_formatters_for_buffer(bufnr)
+  local formatters, run_options = M.list_formatters_for_buffer(bufnr)
   return filter_formatters(formatters, run_options)
 end
 

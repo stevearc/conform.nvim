@@ -20,7 +20,7 @@ require("conform").setup({
     lsp_fallback = true,
     timeout_ms = 500,
   },
-  -- Set the log level. Use `:checkhealth conform` to see the location of the log file.
+  -- Set the log level. Use `:ConformInfo` to see the location of the log file.
   log_level = vim.log.levels.ERROR,
   -- Define custom formatters here
   formatters = {

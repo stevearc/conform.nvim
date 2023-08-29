@@ -21,7 +21,7 @@ body:
       required: true
   - type: textarea
     attributes:
-      label: "Output of :checkhealth conform"
+      label: "Output of :ConformInfo"
     validations:
       required: true
   - type: textarea
