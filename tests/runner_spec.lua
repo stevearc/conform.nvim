@@ -124,16 +124,21 @@ describe("runner", function()
       vim.bo[bufnr].modified = false
       local expected_lines = vim.split(expected, "\n", { plain = true })
       test_util.set_formatter_output(expected_lines)
-      conform.format(vim.tbl_extend("force", opts or {}, { formatters = { "test" } }))
+      conform.format(vim.tbl_extend("force", opts or {}, { formatters = { "test" }, quiet = true }))
+      -- We expect the last newline to be effectively "swallowed" by the formatter
+      -- because vim will use that as the EOL at the end of the file. The exception is that we always
+      -- expect at least one line in the output
+      if #expected_lines > 1 and expected_lines[#expected_lines] == "" then
+        table.remove(expected_lines)
+      end
       return expected_lines
     end
 
     ---@param buf_content string
     ---@param new_content string
-    ---@param expected? string[]
-    local function run_formatter_test(buf_content, new_content, expected)
+    local function run_formatter_test(buf_content, new_content)
       local lines = run_formatter(buf_content, new_content)
-      assert.are.same(expected or lines, vim.api.nvim_buf_get_lines(0, 0, -1, false))
+      assert.are.same(lines, vim.api.nvim_buf_get_lines(0, 0, -1, false))
     end
 
     it("sets the correct output", function()
@@ -181,15 +186,18 @@ print("b")
 print("a")
       ]]
       )
-      run_formatter_test("hello\ngoodbye", "hello\n\n\ngoodbye", { "hello", "", "", "goodbye" })
-      run_formatter_test("hello", "hello\ngoodbye", { "hello", "goodbye" })
-      run_formatter_test("", "hello", { "hello" })
-      run_formatter_test("\nfoo", "\nhello\nfoo", { "", "hello", "foo" })
-      run_formatter_test("hello", "hello\n\n", { "hello", "" })
-      run_formatter_test("hello", "hello\n", { "hello" })
+      run_formatter_test("hello\ngoodbye", "hello\n\n\ngoodbye")
+      run_formatter_test("hello", "hello\ngoodbye")
+      run_formatter_test("hello\ngoodbye", "hello")
+      run_formatter_test("", "hello")
+      run_formatter_test("\nfoo", "\nhello\nfoo")
+      run_formatter_test("hello", "hello\n")
+      run_formatter_test("hello", "hello\n\n")
+      run_formatter_test("hello", "hello\n")
+      -- This should generate no changes to the buffer
       assert.falsy(vim.bo.modified)
-      run_formatter_test("hello\n", "hello", { "hello" })
-      run_formatter_test("hello\n ", "hello", { "hello" })
+      run_formatter_test("hello\n", "hello")
+      run_formatter_test("hello\n ", "hello")
     end)
 
     it("does not change output if formatter fails", function()
@@ -237,6 +245,44 @@ print("a")
       local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
       vim.fn.delete("tests/testfile.txt")
       assert.are.same({ "goodbye" }, lines)
+    end)
+
+    describe("range formatting", function()
+      it("applies edits that overlap the range start", function()
+        run_formatter(
+          "a\nb\nc",
+          "d\nb\nd",
+          { range = {
+            start = { 1, 0 },
+            ["end"] = { 2, 0 },
+          } }
+        )
+        assert.are.same({ "d", "b", "c" }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
+      end)
+
+      it("applies edits that overlap the range end", function()
+        run_formatter(
+          "a\nb\nc",
+          "d\nb\nd",
+          { range = {
+            start = { 3, 0 },
+            ["end"] = { 3, 1 },
+          } }
+        )
+        assert.are.same({ "a", "b", "d" }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
+      end)
+
+      it("applies edits that are completely contained by the range", function()
+        run_formatter(
+          "a\nb\nc",
+          "a\nd\nc",
+          { range = {
+            start = { 1, 0 },
+            ["end"] = { 3, 0 },
+          } }
+        )
+        assert.are.same({ "a", "d", "c" }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
+      end)
     end)
   end)
 end)
