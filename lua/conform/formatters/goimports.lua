@@ -1,4 +1,4 @@
----@type conform.FormatterConfig
+---@type conform.FileFormatterConfig
 return {
   meta = {
     url = "https://pkg.go.dev/golang.org/x/tools/cmd/goimports",

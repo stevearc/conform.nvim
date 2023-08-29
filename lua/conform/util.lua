@@ -58,6 +58,20 @@ M.save_win_positions = function(bufnr)
   end
 end
 
+---@param bufnr integer
+---@param range conform.Range
+---@return integer start_offset
+---@return integer end_offset
+M.get_offsets_from_range = function(bufnr, range)
+  local row = range.start[1] - 1
+  local end_row = range["end"][1] - 1
+  local col = range.start[2]
+  local end_col = range["end"][2]
+  local start_offset = vim.api.nvim_buf_get_offset(bufnr, row) + col
+  local end_offset = vim.api.nvim_buf_get_offset(bufnr, end_row) + end_col
+  return start_offset, end_offset
+end
+
 ---@generic T : any
 ---@param tbl T[]
 ---@param start_idx? number

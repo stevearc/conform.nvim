@@ -1,4 +1,4 @@
----@type conform.FormatterConfig
+---@type conform.FileFormatterConfig
 return {
   meta = {
     url = "https://www.terraform.io/docs/cli/commands/fmt.html",

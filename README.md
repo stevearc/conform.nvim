@@ -232,6 +232,10 @@ require("conform").setup({
       -- OPTIONAL - all fields below this are optional
       -- A list of strings, or a function that returns a list of strings
       args = { "--stdin-from-filename", "$FILENAME" },
+      -- If the formatter supports range formatting, create the range arguments here
+      range_args = function(ctx)
+        return { "--line-start", ctx.range.start[1], "--line-end", ctx.range["end"][1] }
+      end,
       -- Send file contents to stdin, read new contents from stdout (default true)
       -- When false, will create a temp file (will appear in "$FILENAME" args). The temp
       -- file is assumed to be modified in-place by the format command.
@@ -306,15 +310,16 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 `format(opts): boolean` \
 Format a buffer
 
-| Param | Type         | Desc            |                                                                                            |
-| ----- | ------------ | --------------- | ------------------------------------------------------------------------------------------ |
-| opts  | `nil\|table` |                 |                                                                                            |
-|       | timeout_ms   | `nil\|integer`  | Time in milliseconds to block for formatting. Defaults to 1000. No effect if async = true. |
-|       | bufnr        | `nil\|integer`  | Format this buffer (default 0)                                                             |
-|       | async        | `nil\|boolean`  | If true the method won't block. Defaults to false.                                         |
-|       | formatters   | `nil\|string[]` | List of formatters to run. Defaults to all formatters for the buffer filetype.             |
-|       | lsp_fallback | `nil\|boolean`  | Attempt LSP formatting if no formatters are available. Defaults to false.                  |
-|       | quiet        | `nil\|boolean`  | Don't show any notifications for warnings or failures. Defaults to false.                  |
+| Param | Type         | Desc            |                                                                                                                                                      |
+| ----- | ------------ | --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| opts  | `nil\|table` |                 |                                                                                                                                                      |
+|       | timeout_ms   | `nil\|integer`  | Time in milliseconds to block for formatting. Defaults to 1000. No effect if async = true.                                                           |
+|       | bufnr        | `nil\|integer`  | Format this buffer (default 0)                                                                                                                       |
+|       | async        | `nil\|boolean`  | If true the method won't block. Defaults to false.                                                                                                   |
+|       | formatters   | `nil\|string[]` | List of formatters to run. Defaults to all formatters for the buffer filetype.                                                                       |
+|       | lsp_fallback | `nil\|boolean`  | Attempt LSP formatting if no formatters are available. Defaults to false.                                                                            |
+|       | quiet        | `nil\|boolean`  | Don't show any notifications for warnings or failures. Defaults to false.                                                                            |
+|       | range        | `nil\|table`    | Range to format. Table must contain `start` and `end` keys with {row, col} tuples using (1,0) indexing. Defaults to current selection in visual mode |
 
 Returns:
 

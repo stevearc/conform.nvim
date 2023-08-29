@@ -1,5 +1,5 @@
 local util = require("conform.util")
----@type conform.FormatterConfig
+---@type conform.FileFormatterConfig
 return {
   meta = {
     url = "https://github.com/psf/black",

@@ -1,4 +1,4 @@
----@type conform.FormatterConfig
+---@type conform.FileFormatterConfig
 return {
   meta = {
     url = "https://github.com/hhatto/autopep8",
@@ -6,4 +6,7 @@ return {
   },
   command = "autopep8",
   args = { "-" },
+  range_args = function(ctx)
+    return { "-", "--line-range", tostring(ctx.range.start[1]), tostring(ctx.range["end"][1]) }
+  end,
 }

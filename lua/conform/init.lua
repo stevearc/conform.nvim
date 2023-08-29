@@ -7,26 +7,35 @@ local M = {}
 ---@field available boolean
 ---@field available_msg? string
 
----@class (exact) conform.StaticFormatterConfig
+---@class (exact) conform.FormatterConfig
 ---@field command string|fun(ctx: conform.Context): string
 ---@field args? string[]|fun(ctx: conform.Context): string[]
+---@field range_args? fun(ctx: conform.RangeContext): string[]
 ---@field cwd? fun(ctx: conform.Context): nil|string
 ---@field require_cwd? boolean When cwd is not found, don't run the formatter (default false)
 ---@field stdin? boolean Send buffer contents to stdin (default true)
 ---@field condition? fun(ctx: conform.Context): boolean
 ---@field exit_codes? integer[] Exit codes that indicate success (default {0})
 
----@class (exact) conform.FormatterConfig : conform.StaticFormatterConfig
+---@class (exact) conform.FileFormatterConfig : conform.FormatterConfig
 ---@field meta conform.FormatterMeta
 
 ---@class (exact) conform.FormatterMeta
 ---@field url string
 ---@field description string
----
+
 ---@class (exact) conform.Context
 ---@field buf integer
 ---@field filename string
 ---@field dirname string
+---@field range? conform.Range
+
+---@class (exact) conform.RangeContext : conform.Context
+---@field range conform.Range
+
+---@class (exact) conform.Range
+---@field start integer[]
+---@field end integer[]
 
 ---@class (exact) conform.RunOptions
 ---@field run_all_formatters nil|boolean Run all listed formatters instead of stopping at the first one.
@@ -37,7 +46,7 @@ local M = {}
 ---@type table<string, string[]|conform.FormatterList>
 M.formatters_by_ft = {}
 
----@type table<string, conform.StaticFormatterConfig|fun(): conform.StaticFormatterConfig>
+---@type table<string, conform.FormatterConfig|fun(): conform.FormatterConfig>
 M.formatters = {}
 
 M.setup = function(opts)
@@ -167,6 +176,37 @@ local function filter_formatters(formatters, run_options)
   return all_info
 end
 
+---@param bufnr integer
+---@param mode "v"|"V"
+---@return table {start={row,col}, end={row,col}} using (1, 0) indexing
+local function range_from_selection(bufnr, mode)
+  -- [bufnum, lnum, col, off]; both row and column 1-indexed
+  local start = vim.fn.getpos("v")
+  local end_ = vim.fn.getpos(".")
+  local start_row = start[2]
+  local start_col = start[3]
+  local end_row = end_[2]
+  local end_col = end_[3]
+
+  -- A user can start visual selection at the end and move backwards
+  -- Normalize the range to start < end
+  if start_row == end_row and end_col < start_col then
+    end_col, start_col = start_col, end_col
+  elseif end_row < start_row then
+    start_row, end_row = end_row, start_row
+    start_col, end_col = end_col, start_col
+  end
+  if mode == "V" then
+    start_col = 1
+    local lines = vim.api.nvim_buf_get_lines(bufnr, end_row - 1, end_row, true)
+    end_col = #lines[1]
+  end
+  return {
+    ["start"] = { start_row, start_col - 1 },
+    ["end"] = { end_row, end_col - 1 },
+  }
+end
+
 ---Format a buffer
 ---@param opts? table
 ---    timeout_ms nil|integer Time in milliseconds to block for formatting. Defaults to 1000. No effect if async = true.
@@ -175,9 +215,10 @@ end
 ---    formatters nil|string[] List of formatters to run. Defaults to all formatters for the buffer filetype.
 ---    lsp_fallback nil|boolean Attempt LSP formatting if no formatters are available. Defaults to false.
 ---    quiet nil|boolean Don't show any notifications for warnings or failures. Defaults to false.
+---    range nil|table Range to format. Table must contain `start` and `end` keys with {row, col} tuples using (1,0) indexing. Defaults to current selection in visual mode
 ---@return boolean True if any formatters were attempted
 M.format = function(opts)
-  ---@type {timeout_ms: integer, bufnr: integer, async: boolean, lsp_fallback: boolean, quiet: boolean, formatters?: string[]}
+  ---@type {timeout_ms: integer, bufnr: integer, async: boolean, lsp_fallback: boolean, quiet: boolean, formatters?: string[], range?: conform.Range}
   opts = vim.tbl_extend("keep", opts or {}, {
     timeout_ms = 1000,
     bufnr = 0,
@@ -219,10 +260,21 @@ M.format = function(opts)
 
   local any_formatters = not vim.tbl_isempty(formatters)
   if any_formatters then
+    local mode = vim.api.nvim_get_mode().mode
+    if not opts.range and mode == "v" or mode == "V" then
+      opts.range = range_from_selection(opts.bufnr, mode)
+    end
+
     if opts.async then
-      require("conform.runner").format_async(opts.bufnr, formatters)
+      require("conform.runner").format_async(opts.bufnr, formatters, opts.range)
     else
-      require("conform.runner").format_sync(opts.bufnr, formatters, opts.timeout_ms, opts.quiet)
+      require("conform.runner").format_sync(
+        opts.bufnr,
+        formatters,
+        opts.timeout_ms,
+        opts.quiet,
+        opts.range
+      )
     end
   elseif opts.lsp_fallback and supports_lsp_format(opts.bufnr) then
     log.debug("Running LSP formatter on %s", vim.api.nvim_buf_get_name(opts.bufnr))
@@ -276,7 +328,7 @@ end
 
 ---@private
 ---@param formatter string
----@return nil|conform.StaticFormatterConfig
+---@return nil|conform.FormatterConfig
 M.get_formatter_config = function(formatter)
   local config = M.formatters[formatter]
   if not config then

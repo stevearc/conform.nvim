@@ -30,6 +30,10 @@ require("conform").setup({
       -- OPTIONAL - all fields below this are optional
       -- A list of strings, or a function that returns a list of strings
       args = { "--stdin-from-filename", "$FILENAME" },
+      -- If the formatter supports range formatting, create the range arguments here
+      range_args = function(ctx)
+        return { "--line-start", ctx.range.start[1], "--line-end", ctx.range["end"][1] }
+      end,
       -- Send file contents to stdin, read new contents from stdout (default true)
       -- When false, will create a temp file (will appear in "$FILENAME" args). The temp
       -- file is assumed to be modified in-place by the format command.
