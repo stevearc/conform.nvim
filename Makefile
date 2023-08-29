@@ -1,4 +1,6 @@
-.PHONY: doc test lint fastlint
+.PHONY: doc test lint fastlint all
+
+all: doc lint test
 
 doc: scripts/nvim_doc_tools
 	python scripts/main.py generate
