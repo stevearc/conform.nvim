@@ -47,7 +47,7 @@ local M = {}
 ---@type table<string, string[]|conform.FormatterList>
 M.formatters_by_ft = {}
 
----@type table<string, conform.FormatterConfig|fun(): conform.FormatterConfig>
+---@type table<string, conform.FormatterConfig|fun(bufnr: integer): nil|conform.FormatterConfig>
 M.formatters = {}
 
 M.setup = function(opts)
@@ -334,18 +334,23 @@ end
 
 ---@private
 ---@param formatter string
+---@param bufnr? integer
 ---@return nil|conform.FormatterConfig
-M.get_formatter_config = function(formatter)
+M.get_formatter_config = function(formatter, bufnr)
+  if not bufnr or bufnr == 0 then
+    bufnr = vim.api.nvim_get_current_buf()
+  end
+  ---@type nil|conform.FormatterConfig|fun(bufnr: integer): nil|conform.FormatterConfig
   local config = M.formatters[formatter]
+  if type(config) == "function" then
+    config = config(bufnr)
+  end
   if not config then
     local ok
     ok, config = pcall(require, "conform.formatters." .. formatter)
     if not ok then
       return nil
     end
-  end
-  if type(config) == "function" then
-    config = config()
   end
 
   if config.stdin == nil then
@@ -362,7 +367,7 @@ M.get_formatter_info = function(formatter, bufnr)
   if not bufnr or bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
   end
-  local config = M.get_formatter_config(formatter)
+  local config = M.get_formatter_config(formatter, bufnr)
   if not config then
     return {
       name = formatter,

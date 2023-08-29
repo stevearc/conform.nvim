@@ -266,7 +266,7 @@ M.format_async = function(bufnr, formatters, range, callback)
     end
     idx = idx + 1
 
-    local config = assert(require("conform").get_formatter_config(formatter.name))
+    local config = assert(require("conform").get_formatter_config(formatter.name, bufnr))
     local ctx = M.build_context(bufnr, config, range)
     local jid
     jid = run_formatter(bufnr, formatter, config, ctx, input_lines, function(err, output)
@@ -322,7 +322,7 @@ M.format_sync = function(bufnr, formatters, timeout_ms, quiet, range)
     end
     local done = false
     local result = nil
-    local config = assert(require("conform").get_formatter_config(formatter.name))
+    local config = assert(require("conform").get_formatter_config(formatter.name, bufnr))
     local ctx = M.build_context(bufnr, config, range)
     local jid = run_formatter(bufnr, formatter, config, ctx, input_lines, function(err, output)
       if err then
