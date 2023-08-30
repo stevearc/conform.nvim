@@ -134,6 +134,7 @@ end
 ---@param range? conform.Range
 ---@param only_apply_range boolean
 M.apply_format = function(bufnr, original_lines, new_lines, range, only_apply_range)
+  local bufname = vim.api.nvim_buf_get_name(bufnr)
   -- If the formatter output didn't have a trailing newline, add one
   if new_lines[#new_lines] ~= "" then
     table.insert(new_lines, "")
@@ -145,12 +146,14 @@ M.apply_format = function(bufnr, original_lines, new_lines, range, only_apply_ra
   end
   local original_text = table.concat(original_lines, "\n")
   local new_text = table.concat(new_lines, "\n")
+  log.trace("Creating diff for %s", bufname)
   local indices = vim.diff(original_text, new_text, {
     result_type = "indices",
     algorithm = "histogram",
   })
   assert(indices)
   local text_edits = {}
+  log.trace("Creating TextEdits for %s", bufname)
   for _, idx in ipairs(indices) do
     local orig_line_start, orig_line_count, new_line_start, new_line_count = unpack(idx)
     local is_insert = orig_line_count == 0
@@ -184,7 +187,9 @@ M.apply_format = function(bufnr, original_lines, new_lines, range, only_apply_ra
     end
   end
 
+  log.trace("Applying text edits for %s", bufname)
   vim.lsp.util.apply_text_edits(text_edits, bufnr, "utf-8")
+  log.trace("Done formatting %s", bufname)
 end
 
 local last_run_errored = {}
