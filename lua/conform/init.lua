@@ -50,6 +50,8 @@ M.formatters_by_ft = {}
 ---@type table<string, conform.FormatterConfig|fun(bufnr: integer): nil|conform.FormatterConfig>
 M.formatters = {}
 
+M.notify_on_error = true
+
 M.setup = function(opts)
   opts = opts or {}
 
@@ -58,6 +60,9 @@ M.setup = function(opts)
 
   if opts.log_level then
     require("conform.log").level = opts.log_level
+  end
+  if opts.notify_on_error ~= nil then
+    M.notify_on_error = opts.notify_on_error
   end
 
   for ft, formatters in pairs(M.formatters_by_ft) do
@@ -272,7 +277,7 @@ M.format = function(opts)
     end
 
     if opts.async then
-      require("conform.runner").format_async(opts.bufnr, formatters, opts.range)
+      require("conform.runner").format_async(opts.bufnr, formatters, opts.quiet, opts.range)
     else
       require("conform.runner").format_sync(
         opts.bufnr,
