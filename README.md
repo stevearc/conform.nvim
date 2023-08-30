@@ -167,6 +167,7 @@ To view configured and available formatters, as well as to see the path to the l
 - [gofmt](https://pkg.go.dev/cmd/gofmt) - Formats go programs.
 - [gofumpt](https://github.com/mvdan/gofumpt) - Enforce a stricter format than gofmt, while being backwards compatible. That is, gofumpt is happy with a subset of the formats that gofmt is happy with.
 - [goimports](https://pkg.go.dev/golang.org/x/tools/cmd/goimports) - Updates your Go import lines, adding missing ones and removing unreferenced ones.
+- [golines](https://github.com/segmentio/golines) - A golang formatter that fixes long lines
 - [htmlbeautifier](https://github.com/threedaymonk/htmlbeautifier) - A normaliser/beautifier for HTML that also understands embedded Ruby. Ideal for tidying up Rails templates.
 - [isort](https://github.com/PyCQA/isort) - Python utility / library to sort imports alphabetically and automatically separate them into sections and by type.
 - [jq](https://github.com/stedolan/jq) - Command-line JSON processor.
