@@ -91,4 +91,14 @@ M.tbl_slice = function(tbl, start_idx, end_idx)
   return ret
 end
 
+---@param cb fun(...)
+---@param wrapper fun(...)
+---@return fun(...)
+M.wrap_callback = function(cb, wrapper)
+  return function(...)
+    wrapper(...)
+    cb(...)
+  end
+end
+
 return M

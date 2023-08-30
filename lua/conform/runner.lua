@@ -91,14 +91,17 @@ local function apply_format(bufnr, original_lines, new_lines, range, only_apply_
   end
 end
 
+local last_run_errored = {}
+
 ---@param bufnr integer
 ---@param formatter conform.FormatterInfo
 ---@param config conform.FormatterConfig
 ---@param ctx conform.Context
+---@param quiet boolean
 ---@param input_lines string[]
 ---@param callback fun(err?: string, output?: string[])
 ---@return integer job_id
-local function run_formatter(bufnr, formatter, config, ctx, input_lines, callback)
+local function run_formatter(bufnr, formatter, config, ctx, quiet, input_lines, callback)
   local cmd = M.build_cmd(ctx, config)
   local cwd = nil
   if config.cwd then
@@ -108,18 +111,34 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, callbac
   if type(env) == "function" then
     env = env(ctx)
   end
+  callback = util.wrap_callback(callback, function(err)
+    if err then
+      if
+        not last_run_errored[formatter.name]
+        and not quiet
+        and require("conform").notify_on_error
+      then
+        vim.notify(
+          string.format("Formatter '%s' failed. See :ConformInfo for details", formatter.name),
+          vim.log.levels.ERROR
+        )
+      end
+      last_run_errored[formatter.name] = true
+    else
+      last_run_errored[formatter.name] = false
+    end
+  end)
+
   log.info("Run %s on %s", formatter.name, vim.api.nvim_buf_get_name(bufnr))
   if not config.stdin then
     log.debug("Creating temp file %s", ctx.filename)
     local fd = assert(uv.fs_open(ctx.filename, "w", 448)) -- 0700
     uv.fs_write(fd, table.concat(input_lines, "\n"))
     uv.fs_close(fd)
-    local final_cb = callback
-    callback = function(...)
+    callback = util.wrap_callback(callback, function()
       log.debug("Cleaning up temp file %s", ctx.filename)
       uv.fs_unlink(ctx.filename)
-      final_cb(...)
-    end
+    end)
   end
   log.debug("Run command: %s", cmd)
   if cwd then
@@ -229,9 +248,10 @@ end
 
 ---@param bufnr integer
 ---@param formatters conform.FormatterInfo[]
+---@param quiet boolean
 ---@param range? conform.Range
 ---@param callback? fun(err?: string)
-M.format_async = function(bufnr, formatters, range, callback)
+M.format_async = function(bufnr, formatters, quiet, range, callback)
   if bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
   end
@@ -271,7 +291,7 @@ M.format_async = function(bufnr, formatters, range, callback)
     local config = assert(require("conform").get_formatter_config(formatter.name, bufnr))
     local ctx = M.build_context(bufnr, config, range)
     local jid
-    jid = run_formatter(bufnr, formatter, config, ctx, input_lines, function(err, output)
+    jid = run_formatter(bufnr, formatter, config, ctx, quiet, input_lines, function(err, output)
       if err then
         -- Only log the error if the job wasn't canceled
         if vim.api.nvim_buf_is_valid(bufnr) and jid == vim.b[bufnr].conform_jid then
@@ -326,13 +346,21 @@ M.format_sync = function(bufnr, formatters, timeout_ms, quiet, range)
     local result = nil
     local config = assert(require("conform").get_formatter_config(formatter.name, bufnr))
     local ctx = M.build_context(bufnr, config, range)
-    local jid = run_formatter(bufnr, formatter, config, ctx, input_lines, function(err, output)
-      if err then
-        log.error(err)
+    local jid = run_formatter(
+      bufnr,
+      formatter,
+      config,
+      ctx,
+      quiet,
+      input_lines,
+      function(err, output)
+        if err then
+          log.error(err)
+        end
+        done = true
+        result = output
       end
-      done = true
-      result = output
-    end)
+    )
     all_support_range_formatting = all_support_range_formatting and config.range_args ~= nil
 
     local wait_result, wait_reason = vim.wait(remaining, function()
