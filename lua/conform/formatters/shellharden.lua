@@ -5,5 +5,5 @@ return {
     description = "The corrective bash syntax highlighter",
   },
   command = "shellharden",
-  args = { "--transform", "''" },
+  args = { "--transform", "" },
 }
