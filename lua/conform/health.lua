@@ -43,7 +43,21 @@ M.show_window = function()
   local lines = {}
   local highlights = {}
   local log = require("conform.log")
-  table.insert(lines, string.format("Log file: %s", log.get_logfile()))
+  local logfile = log.get_logfile()
+  table.insert(lines, string.format("Log file: %s", logfile))
+  table.insert(highlights, { "Title", #lines, 0, 10 })
+  if vim.fn.filereadable(logfile) == 1 then
+    local f = io.open(logfile, "r")
+    if f then
+      f:seek("end", -1024)
+      local text = f:read("*a")
+      f:close()
+      local log_lines = vim.split(text, "\n", { plain = true, trimempty = true })
+      for i = 2, #log_lines do
+        table.insert(lines, string.rep(" ", 10) .. log_lines[i])
+      end
+    end
+  end
   table.insert(lines, "")
 
   ---@param formatters conform.FormatterInfo[]
@@ -69,6 +83,7 @@ M.show_window = function()
   end
 
   table.insert(lines, "Formatters for this buffer:")
+  table.insert(highlights, { "Title", #lines, 0, -1 })
   local seen = {}
   local buf_formatters = conform.list_formatters_for_buffer()
   for _, formatter in ipairs(buf_formatters) do
@@ -78,6 +93,7 @@ M.show_window = function()
 
   table.insert(lines, "")
   table.insert(lines, "Other formatters:")
+  table.insert(highlights, { "Title", #lines, 0, -1 })
   local all_formatters = vim.tbl_filter(function(f)
     return not seen[f.name]
   end, conform.list_all_formatters())

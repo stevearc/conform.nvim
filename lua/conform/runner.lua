@@ -160,14 +160,16 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, callbac
         log.debug("%s exited with code %d", formatter.name, code)
         callback(nil, output)
       else
-        log.error("%s exited with code %d", formatter.name, code)
-        log.warn("%s stdout: %s", formatter.name, stdout)
-        log.warn("%s stderr: %s", formatter.name, stderr)
-        local stderr_str
-        if stderr then
-          stderr_str = table.concat(stderr, "\n")
+        log.info("%s exited with code %d", formatter.name, code)
+        log.debug("%s stdout: %s", formatter.name, stdout)
+        log.debug("%s stderr: %s", formatter.name, stderr)
+        local err_str
+        if stderr and not vim.tbl_isempty(stderr) then
+          err_str = table.concat(stderr, "\n")
+        elseif stdout and not vim.tbl_isempty(stdout) then
+          err_str = table.concat(stdout, "\n")
         end
-        callback(string.format("Formatter '%s' error: %s", formatter.name, stderr_str))
+        callback(string.format("Formatter '%s' error: %s", formatter.name, err_str))
       end
     end,
   })
