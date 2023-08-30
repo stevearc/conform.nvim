@@ -167,6 +167,7 @@ FORMATTERS                                                    *conform-formatter
           style guide.
 `rustfmt` - A tool for formatting rust code according to style guidelines.
 `scalafmt` - Code formatter for Scala.
+`shellharden` - The corrective bash syntax highlighter
 `shfmt` - A shell parser, formatter, and interpreter with `bash` support.
 `sql_formatter` - A whitespace formatter for different query languages.
 `stylua` - An opinionated code formatter for Lua.
