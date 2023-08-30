@@ -155,6 +155,7 @@ FORMATTERS                                                    *conform-formatter
          style.
 `nixpkgs_fmt` - nixpkgs-fmt is a Nix code formatter for nixpkgs.
 `ocamlformat` - Auto-formatter for OCaml code.
+`perlimports` - Make implicit Perl imports explicit
 `pg_format` - PostgreSQL SQL syntax beautifier.
 `prettier` - Prettier is an opinionated code formatter. It enforces a consistent
            style by parsing your code and re-printing it with its own rules that
