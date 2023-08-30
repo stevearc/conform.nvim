@@ -64,6 +64,7 @@ jobs:
 
   update_docs:
     name: Update docs
+    if: ${{ github.ref == 'refs/heads/master' }}
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
