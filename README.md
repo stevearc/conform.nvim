@@ -173,6 +173,7 @@ To view configured and available formatters, as well as to see the path to the l
 - [nixfmt](https://github.com/serokell/nixfmt) - nixfmt is a formatter for Nix code, intended to apply a uniform style.
 - [nixpkgs_fmt](https://github.com/nix-community/nixpkgs-fmt) - nixpkgs-fmt is a Nix code formatter for nixpkgs.
 - [ocamlformat](https://github.com/ocaml-ppx/ocamlformat) - Auto-formatter for OCaml code.
+- [perlimports](https://github.com/perl-ide/App-perlimports) - Make implicit Perl imports explicit
 - [pg_format](https://github.com/darold/pgFormatter) - PostgreSQL SQL syntax beautifier.
 - [prettier](https://github.com/prettier/prettier) - Prettier is an opinionated code formatter. It enforces a consistent style by parsing your code and re-printing it with its own rules that take the maximum line length into account, wrapping code when necessary.
 - [prettierd](https://github.com/fsouza/prettierd) - prettier, as a daemon, for ludicrous formatting speed.
