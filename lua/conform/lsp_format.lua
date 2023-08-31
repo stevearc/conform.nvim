@@ -73,9 +73,10 @@ function M.format(options, callback)
       local params = set_range(client, util.make_formatting_params(options.formatting_options))
       client.request(method, params, function(err, result, ctx, _)
         if not result then
-          return callback(err)
-        end
-        if vim.b[bufnr].changedtick ~= changedtick then
+          return callback(err or "No result returned from LSP formatter")
+        elseif not vim.api.nvim_buf_is_valid(bufnr) then
+          return callback("buffer was deleted")
+        elseif vim.b[bufnr].changedtick ~= changedtick then
           return
             callback(
             string.format(
