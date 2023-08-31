@@ -52,25 +52,6 @@ M.formatters = {}
 
 M.notify_on_error = true
 
----@private
-M.original_apply_text_edits = vim.lsp.util.apply_text_edits
-
-local function apply_text_edits(text_edits, bufnr, offset_encoding)
-  if
-    #text_edits == 1
-    and text_edits[1].range.start.line == 0
-    and text_edits[1].range.start.character == 0
-    and text_edits[1].range["end"].line == vim.api.nvim_buf_line_count(bufnr) + 1
-    and text_edits[1].range["end"].character == 0
-  then
-    local original_lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, true)
-    local new_lines = vim.split(text_edits[1].newText, "\n", { plain = true })
-    require("conform.runner").apply_format(bufnr, original_lines, new_lines, nil, false)
-  else
-    M.original_apply_text_edits(text_edits, bufnr, offset_encoding)
-  end
-end
-
 M.setup = function(opts)
   opts = opts or {}
 
@@ -118,22 +99,6 @@ M.setup = function(opts)
   vim.api.nvim_create_user_command("ConformInfo", function()
     require("conform.health").show_window()
   end, { desc = "Show information about Conform formatters" })
-
-  -- Monkey patch lsp.util.apply_text_edits to handle LSP clients that replace the entire buffer
-  -- during formatting. This is unfortunately the best place to shim that logic in.
-  vim.lsp.util.apply_text_edits = apply_text_edits
-end
-
----@param bufnr integer
----@return boolean
-local function supports_lsp_format(bufnr)
-  ---@diagnostic disable-next-line: deprecated
-  for _, client in ipairs(vim.lsp.get_active_clients({ bufnr = bufnr })) do
-    if client.supports_method("textDocument/formatting", { bufnr = bufnr }) then
-      return true
-    end
-  end
-  return false
 end
 
 ---@private
@@ -238,8 +203,9 @@ end
 ---    lsp_fallback nil|boolean Attempt LSP formatting if no formatters are available. Defaults to false.
 ---    quiet nil|boolean Don't show any notifications for warnings or failures. Defaults to false.
 ---    range nil|table Range to format. Table must contain `start` and `end` keys with {row, col} tuples using (1,0) indexing. Defaults to current selection in visual mode
+---@param callback? fun(err: nil|string) Called once formatting has completed
 ---@return boolean True if any formatters were attempted
-M.format = function(opts)
+M.format = function(opts, callback)
   ---@type {timeout_ms: integer, bufnr: integer, async: boolean, lsp_fallback: boolean, quiet: boolean, formatters?: string[], range?: conform.Range}
   opts = vim.tbl_extend("keep", opts or {}, {
     timeout_ms = 1000,
@@ -248,7 +214,10 @@ M.format = function(opts)
     lsp_fallback = false,
     quiet = false,
   })
+  callback = callback or function(_err) end
   local log = require("conform.log")
+  local lsp_format = require("conform.lsp_format")
+  local runner = require("conform.runner")
 
   local formatters = {}
   local any_formatters_configured
@@ -287,20 +256,38 @@ M.format = function(opts)
       opts.range = range_from_selection(opts.bufnr, mode)
     end
 
-    if opts.async then
-      require("conform.runner").format_async(opts.bufnr, formatters, opts.quiet, opts.range)
-    else
-      require("conform.runner").format_sync(
-        opts.bufnr,
-        formatters,
-        opts.timeout_ms,
-        opts.quiet,
-        opts.range
-      )
+    ---@param err? conform.Error
+    local function handle_err(err)
+      if err then
+        local level = runner.level_for_code(err.code)
+        log.log(level, err.message)
+        local should_notify = not opts.quiet and level >= vim.log.levels.WARN
+        -- Execution errors have special handling. Maybe should reconsider this.
+        local notify_msg = err.message
+        if runner.is_execution_error(err.code) then
+          should_notify = should_notify and M.notify_on_error and not err.debounce_message
+          notify_msg = "Formatter failed. See :ConformInfo for details"
+        end
+        if should_notify then
+          vim.notify(notify_msg, level)
+        end
+      end
+      local err_message = err and err.message
+      if not err_message and not vim.api.nvim_buf_is_valid(opts.bufnr) then
+        err_message = "buffer was deleted"
+      end
+      callback(err_message)
     end
-  elseif opts.lsp_fallback and supports_lsp_format(opts.bufnr) then
+
+    if opts.async then
+      runner.format_async(opts.bufnr, formatters, opts.range, handle_err)
+    else
+      local err = runner.format_sync(opts.bufnr, formatters, opts.timeout_ms, opts.range)
+      handle_err(err)
+    end
+  elseif opts.lsp_fallback and not vim.tbl_isempty(lsp_format.get_format_clients(opts)) then
     log.debug("Running LSP formatter on %s", vim.api.nvim_buf_get_name(opts.bufnr))
-    vim.lsp.buf.format(opts)
+    lsp_format.format(opts, callback)
   elseif any_formatters_configured and not opts.quiet then
     vim.notify("No formatters found for buffer. See :ConformInfo", vim.log.levels.WARN)
   else

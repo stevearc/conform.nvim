@@ -11,7 +11,7 @@ Lightweight yet powerful formatter plugin for Neovim
 - [Options](#options)
 - [Autoformat on save](#autoformat-on-save)
 - [API](#api)
-  - [format(opts)](#formatopts)
+  - [format(opts, callback)](#formatopts-callback)
   - [list_formatters(bufnr)](#list_formattersbufnr)
   - [list_all_formatters()](#list_all_formatters)
 - [Acknowledgements](#acknowledgements)
@@ -143,7 +143,7 @@ require("conform").setup({
 })
 ```
 
-See [conform.format()](#formatopts) for more details about the parameters.
+See [conform.format()](#formatopts-callback) for more details about the parameters.
 
 To view configured and available formatters, as well as to see the path to the log file, run `:ConformInfo`
 
@@ -287,6 +287,7 @@ using your own autocmd. For example:
 <!-- AUTOFORMAT -->
 
 ```lua
+-- Format synchronously on save
 vim.api.nvim_create_autocmd("BufWritePre", {
   pattern = "*",
   callback = function(args)
@@ -307,6 +308,20 @@ vim.api.nvim_create_autocmd("BufWritePre", {
     require("conform").format({ timeout_ms = 500, lsp_fallback = true, buf = args.buf })
   end,
 })
+
+-- Format asynchronously on save
+vim.api.nvim_create_autocmd("BufWritePost", {
+  pattern = "*",
+  callback = function(args)
+    require("conform").format({ async = true, lsp_fallback = true, buf = args.buf }, function(err)
+      if not err then
+        vim.api.nvim_buf_call(args.buf, function()
+          vim.cmd.update()
+        end)
+      end
+    end)
+  end,
+})
 ```
 
 <!-- /AUTOFORMAT -->
@@ -315,21 +330,22 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 
 <!-- API -->
 
-### format(opts)
+### format(opts, callback)
 
-`format(opts): boolean` \
+`format(opts, callback): boolean` \
 Format a buffer
 
-| Param | Type         | Desc            |                                                                                                                                                      |
-| ----- | ------------ | --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| opts  | `nil\|table` |                 |                                                                                                                                                      |
-|       | timeout_ms   | `nil\|integer`  | Time in milliseconds to block for formatting. Defaults to 1000. No effect if async = true.                                                           |
-|       | bufnr        | `nil\|integer`  | Format this buffer (default 0)                                                                                                                       |
-|       | async        | `nil\|boolean`  | If true the method won't block. Defaults to false.                                                                                                   |
-|       | formatters   | `nil\|string[]` | List of formatters to run. Defaults to all formatters for the buffer filetype.                                                                       |
-|       | lsp_fallback | `nil\|boolean`  | Attempt LSP formatting if no formatters are available. Defaults to false.                                                                            |
-|       | quiet        | `nil\|boolean`  | Don't show any notifications for warnings or failures. Defaults to false.                                                                            |
-|       | range        | `nil\|table`    | Range to format. Table must contain `start` and `end` keys with {row, col} tuples using (1,0) indexing. Defaults to current selection in visual mode |
+| Param    | Type                         | Desc                                 |                                                                                                                                                      |
+| -------- | ---------------------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| opts     | `nil\|table`                 |                                      |                                                                                                                                                      |
+|          | timeout_ms                   | `nil\|integer`                       | Time in milliseconds to block for formatting. Defaults to 1000. No effect if async = true.                                                           |
+|          | bufnr                        | `nil\|integer`                       | Format this buffer (default 0)                                                                                                                       |
+|          | async                        | `nil\|boolean`                       | If true the method won't block. Defaults to false.                                                                                                   |
+|          | formatters                   | `nil\|string[]`                      | List of formatters to run. Defaults to all formatters for the buffer filetype.                                                                       |
+|          | lsp_fallback                 | `nil\|boolean`                       | Attempt LSP formatting if no formatters are available. Defaults to false.                                                                            |
+|          | quiet                        | `nil\|boolean`                       | Don't show any notifications for warnings or failures. Defaults to false.                                                                            |
+|          | range                        | `nil\|table`                         | Range to format. Table must contain `start` and `end` keys with {row, col} tuples using (1,0) indexing. Defaults to current selection in visual mode |
+| callback | `nil\|fun(err: nil\|string)` | Called once formatting has completed |                                                                                                                                                      |
 
 Returns:
 

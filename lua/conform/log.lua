@@ -5,7 +5,7 @@ vim.tbl_add_reverse_lookup(levels)
 local Log = {}
 
 ---@type integer
-Log.level = vim.log.levels.ERROR
+Log.level = vim.log.levels.WARN
 
 ---@return string
 Log.get_logfile = function()
@@ -33,11 +33,17 @@ local function format(level, msg, ...)
     end
   end
   local ok, text = pcall(string.format, msg, vim.F.unpack_len(args))
+  local timestr = vim.fn.strftime("%H:%M:%S")
   if ok then
     local str_level = levels[level]
-    return string.format("%s[%s] %s", vim.fn.strftime("%H:%M:%S"), str_level, text)
+    return string.format("%s[%s] %s", timestr, str_level, text)
   else
-    return string.format("[ERROR] error formatting log line: '%s' args %s", msg, vim.inspect(args))
+    return string.format(
+      "%s[ERROR] error formatting log line: '%s' args %s",
+      timestr,
+      vim.inspect(msg),
+      vim.inspect(args)
+    )
   end
 end
 

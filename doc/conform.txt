@@ -88,11 +88,11 @@ OPTIONS                                                          *conform-option
 --------------------------------------------------------------------------------
 API                                                                  *conform-api*
 
-format({opts}): boolean                                           *conform.format*
+format({opts}, {callback}): boolean                               *conform.format*
     Format a buffer
 
     Parameters:
-      {opts} `nil|table`
+      {opts}     `nil|table`
           {timeout_ms}   `nil|integer` Time in milliseconds to block for
                          formatting. Defaults to 1000. No effect if async =
                          true.
@@ -108,6 +108,7 @@ format({opts}): boolean                                           *conform.forma
           {range}        `nil|table` Range to format. Table must contain `start`
                          and `end` keys with {row, col} tuples using (1,0)
                          indexing. Defaults to current selection in visual mode
+      {callback} `nil|fun(err: nil|string)` Called once formatting has completed
     Returns:
       `boolean` True if any formatters were attempted
 
@@ -196,6 +197,7 @@ AUTOFORMAT                                                    *conform-autoforma
 If you want more complex logic than the `format_on_save` option allows, you can
 write it yourself using your own autocmd. For example:
 >lua
+    -- Format synchronously on save
     vim.api.nvim_create_autocmd("BufWritePre", {
       pattern = "*",
       callback = function(args)
@@ -214,6 +216,20 @@ write it yourself using your own autocmd. For example:
           return
         end
         require("conform").format({ timeout_ms = 500, lsp_fallback = true, buf = args.buf })
+      end,
+    })
+
+    -- Format asynchronously on save
+    vim.api.nvim_create_autocmd("BufWritePost", {
+      pattern = "*",
+      callback = function(args)
+        require("conform").format({ async = true, lsp_fallback = true, buf = args.buf }, function(err)
+          if not err then
+            vim.api.nvim_buf_call(args.buf, function()
+              vim.cmd.update()
+            end)
+          end
+        end)
       end,
     })
 <
