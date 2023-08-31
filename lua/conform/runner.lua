@@ -28,7 +28,7 @@ M.ERROR_CODE = {
 ---@param code conform.ERROR_CODE
 ---@return integer
 M.level_for_code = function(code)
-  if code == M.CONCURRENT_MODIFICATION then
+  if code == M.ERROR_CODE.CONCURRENT_MODIFICATION then
     return vim.log.levels.INFO
   elseif code == M.ERROR_CODE.TIMEOUT or code == M.ERROR_CODE.INTERRUPTED then
     return vim.log.levels.WARN
