@@ -188,7 +188,7 @@ M.apply_format = function(bufnr, original_lines, new_lines, range, only_apply_ra
   end
 
   log.trace("Applying text edits for %s", bufname)
-  require("conform").original_apply_text_edits(text_edits, bufnr, "utf-8")
+  vim.lsp.util.apply_text_edits(text_edits, bufnr, "utf-8")
   log.trace("Done formatting %s", bufname)
 end
 

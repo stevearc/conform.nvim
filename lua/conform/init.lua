@@ -52,25 +52,6 @@ M.formatters = {}
 
 M.notify_on_error = true
 
----@private
-M.original_apply_text_edits = vim.lsp.util.apply_text_edits
-
-local function apply_text_edits(text_edits, bufnr, offset_encoding)
-  if
-    #text_edits == 1
-    and text_edits[1].range.start.line == 0
-    and text_edits[1].range.start.character == 0
-    and text_edits[1].range["end"].line == vim.api.nvim_buf_line_count(bufnr) + 1
-    and text_edits[1].range["end"].character == 0
-  then
-    local original_lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, true)
-    local new_lines = vim.split(text_edits[1].newText, "\n", { plain = true })
-    require("conform.runner").apply_format(bufnr, original_lines, new_lines, nil, false)
-  else
-    M.original_apply_text_edits(text_edits, bufnr, offset_encoding)
-  end
-end
-
 M.setup = function(opts)
   opts = opts or {}
 
@@ -118,10 +99,6 @@ M.setup = function(opts)
   vim.api.nvim_create_user_command("ConformInfo", function()
     require("conform.health").show_window()
   end, { desc = "Show information about Conform formatters" })
-
-  -- Monkey patch lsp.util.apply_text_edits to handle LSP clients that replace the entire buffer
-  -- during formatting. This is unfortunately the best place to shim that logic in.
-  vim.lsp.util.apply_text_edits = apply_text_edits
 end
 
 ---@param bufnr integer
@@ -300,7 +277,7 @@ M.format = function(opts)
     end
   elseif opts.lsp_fallback and supports_lsp_format(opts.bufnr) then
     log.debug("Running LSP formatter on %s", vim.api.nvim_buf_get_name(opts.bufnr))
-    vim.lsp.buf.format(opts)
+    require("conform.lsp_format").format(opts, function() end)
   elseif any_formatters_configured and not opts.quiet then
     vim.notify("No formatters found for buffer. See :ConformInfo", vim.log.levels.WARN)
   else
