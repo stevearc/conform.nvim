@@ -290,8 +290,10 @@ M.format = function(opts, callback)
     lsp_format.format(opts, callback)
   elseif any_formatters_configured and not opts.quiet then
     vim.notify("No formatters found for buffer. See :ConformInfo", vim.log.levels.WARN)
+    callback("No formatters found for buffer")
   else
     log.debug("No formatters found for %s", vim.api.nvim_buf_get_name(opts.bufnr))
+    callback("No formatters found for buffer")
   end
 
   return any_formatters
