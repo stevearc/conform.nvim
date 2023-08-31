@@ -282,7 +282,11 @@ M.format = function(opts, callback)
           vim.notify(err.message, level)
         end
       end
-      callback(err and err.message)
+      local err_message = err and err.message
+      if not err_message and not vim.api.nvim_buf_is_valid(opts.bufnr) then
+        err_message = "buffer was deleted"
+      end
+      callback(err_message)
     end
 
     if opts.async then
