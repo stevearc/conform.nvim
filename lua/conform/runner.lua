@@ -298,7 +298,8 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, callbac
   local stdout
   local stderr
   local exit_codes = config.exit_codes or { 0 }
-  local jid = vim.fn.jobstart(cmd, {
+  local jid
+  jid = vim.fn.jobstart(cmd, {
     cwd = cwd,
     env = env,
     stdout_buffered = true,
@@ -336,10 +337,17 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, callbac
         elseif stdout and not vim.tbl_isempty(stdout) then
           err_str = table.concat(stdout, "\n")
         end
-        callback({
-          code = M.ERROR_CODE.RUNTIME,
-          message = string.format("Formatter '%s' error: %s", formatter.name, err_str),
-        })
+        if jid ~= vim.b[bufnr].conform_jid then
+          callback({
+            code = M.ERROR_CODE.INTERRUPTED,
+            message = string.format("Formatter '%s' was interrupted", formatter.name),
+          })
+        else
+          callback({
+            code = M.ERROR_CODE.RUNTIME,
+            message = string.format("Formatter '%s' error: %s", formatter.name, err_str),
+          })
+        end
       end
     end,
   })
