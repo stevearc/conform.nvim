@@ -274,12 +274,13 @@ M.format = function(opts, callback)
         log.log(level, err.message)
         local should_notify = not opts.quiet and level >= vim.log.levels.WARN
         -- Execution errors have special handling. Maybe should reconsider this.
+        local notify_msg = err.message
         if runner.is_execution_error(err.code) then
           should_notify = should_notify and M.notify_on_error and not err.debounce_message
-          err.message = "Formatter failed. See :ConformInfo for details"
+          notify_msg = "Formatter failed. See :ConformInfo for details"
         end
         if should_notify then
-          vim.notify(err.message, level)
+          vim.notify(notify_msg, level)
         end
       end
       local err_message = err and err.message
