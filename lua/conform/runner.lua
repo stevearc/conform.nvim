@@ -44,51 +44,152 @@ local function indices_in_range(range, start_a, end_a)
   return not range or (start_a <= range["end"][1] and range["start"][1] <= end_a)
 end
 
+---@param a? string
+---@param b? string
+---@return integer
+local function common_prefix_len(a, b)
+  if not a or not b then
+    return 0
+  end
+  local min_len = math.min(#a, #b)
+  for i = 1, min_len do
+    if string.byte(a, i) ~= string.byte(b, i) then
+      return i - 1
+    end
+  end
+  return min_len
+end
+
+---@param a string
+---@param b string
+---@return integer
+local function common_suffix_len(a, b)
+  local a_len = #a
+  local b_len = #b
+  local min_len = math.min(a_len, b_len)
+  for i = 0, min_len - 1 do
+    if string.byte(a, a_len - i) ~= string.byte(b, b_len - i) then
+      return i
+    end
+  end
+  return min_len
+end
+
+local function create_text_edit(
+  original_lines,
+  replacement,
+  is_insert,
+  is_replace,
+  orig_line_start,
+  orig_line_end
+)
+  local start_line, end_line = orig_line_start - 1, orig_line_end - 1
+  local start_char, end_char = 0, 0
+  if is_replace then
+    -- If we're replacing text, see if we can avoid replacing the entire line
+    start_char = common_prefix_len(original_lines[orig_line_start], replacement[1])
+    if start_char > 0 then
+      replacement[1] = replacement[1]:sub(start_char + 1)
+    end
+
+    if original_lines[orig_line_end] then
+      local last_line = replacement[#replacement]
+      local suffix = common_suffix_len(original_lines[orig_line_end], last_line)
+      -- If we're only replacing one line, make sure the prefix/suffix calculations don't overlap
+      if orig_line_end == orig_line_start then
+        suffix = math.min(suffix, original_lines[orig_line_end]:len() - start_char)
+      end
+      end_char = original_lines[orig_line_end]:len() - suffix
+      if suffix > 0 then
+        replacement[#replacement] = last_line:sub(1, last_line:len() - suffix)
+      end
+    end
+  end
+  -- If we're inserting text, make sure the text includes a newline at the end.
+  -- The one exception is if we're inserting at the end of the file, in which case the newline is
+  -- implicit
+  if is_insert and start_line < #original_lines - 1 then
+    table.insert(replacement, "")
+  end
+  local new_text = table.concat(replacement, "\n")
+
+  return {
+    newText = new_text,
+    range = {
+      start = {
+        line = start_line,
+        character = start_char,
+      },
+      ["end"] = {
+        line = end_line,
+        character = end_char,
+      },
+    },
+  }
+end
+
 ---@param bufnr integer
 ---@param original_lines string[]
 ---@param new_lines string[]
 ---@param range? conform.Range
 ---@param only_apply_range boolean
-local function apply_format(bufnr, original_lines, new_lines, range, only_apply_range)
-  local original_text = table.concat(original_lines, "\n")
-  -- Trim off the final newline from the formatted text because that is baked in to
-  -- the vim lines representation
-  if new_lines[#new_lines] == "" then
-    new_lines[#new_lines] = nil
+M.apply_format = function(bufnr, original_lines, new_lines, range, only_apply_range)
+  local bufname = vim.api.nvim_buf_get_name(bufnr)
+  -- If the formatter output didn't have a trailing newline, add one
+  if new_lines[#new_lines] ~= "" then
+    table.insert(new_lines, "")
   end
+
+  -- Vim buffers end with an implicit newline, so append an empty line to stand in for that
+  if vim.bo[bufnr].eol then
+    table.insert(original_lines, "")
+  end
+  local original_text = table.concat(original_lines, "\n")
   local new_text = table.concat(new_lines, "\n")
+  log.trace("Creating diff for %s", bufname)
   local indices = vim.diff(original_text, new_text, {
     result_type = "indices",
     algorithm = "histogram",
   })
   assert(indices)
-  for i = #indices, 1, -1 do
-    local start_a, count_a, start_b, count_b = unpack(indices[i])
-    -- When count_a is 0, the diff is an insert after the line
-    if count_a == 0 then
-      -- This happens when the first line is blank and we're inserting text after it
-      if start_a == 0 then
-        count_a = 1
-      end
-      start_a = start_a + 1
+  local text_edits = {}
+  log.trace("Creating TextEdits for %s", bufname)
+  for _, idx in ipairs(indices) do
+    local orig_line_start, orig_line_count, new_line_start, new_line_count = unpack(idx)
+    local is_insert = orig_line_count == 0
+    local is_delete = new_line_count == 0
+    local is_replace = not is_insert and not is_delete
+    local orig_line_end = orig_line_start + orig_line_count
+    local new_line_end = new_line_start + new_line_count
+
+    if is_insert then
+      -- When the diff is an insert, it actually means to insert after the mentioned line
+      orig_line_start = orig_line_start + 1
+      orig_line_end = orig_line_end + 1
     end
 
-    -- If this diff range goes *up to* the last line in the original file, *and* the last line
-    -- after that is just an empty space, then the diff range here was calculated to include that
-    -- final newline, so we should bump up the count_a to include it
-    if (start_a + count_a) == #original_lines and original_lines[#original_lines] == "" then
-      count_a = count_a + 1
+    local replacement = util.tbl_slice(new_lines, new_line_start, new_line_end - 1)
+
+    -- For replacement edits, convert the end line to be inclusive
+    if is_replace then
+      orig_line_end = orig_line_end - 1
     end
-    -- Same logic for the new lines
-    if (start_b + count_b) == #new_lines and new_lines[#new_lines] == "" then
-      count_b = count_b + 1
-    end
-    local replacement = util.tbl_slice(new_lines, start_b, start_b + count_b - 1)
-    local end_a = start_a + count_a
-    if not only_apply_range or indices_in_range(range, start_a, end_a) then
-      vim.api.nvim_buf_set_lines(bufnr, start_a - 1, end_a - 1, true, replacement)
+    if not only_apply_range or indices_in_range(range, orig_line_start, orig_line_end) then
+      local text_edit = create_text_edit(
+        original_lines,
+        replacement,
+        is_insert,
+        is_replace,
+        orig_line_start,
+        orig_line_end
+      )
+      table.insert(text_edits, text_edit)
     end
   end
+
+  log.trace("Applying text edits for %s", bufname)
+  require("conform").original_apply_text_edits(text_edits, bufnr, "utf-8")
+  log.trace("Done formatting %s", bufname)
 end
 
 local last_run_errored = {}
@@ -130,16 +231,27 @@ local function run_formatter(bufnr, formatter, config, ctx, quiet, input_lines, 
   end)
 
   log.info("Run %s on %s", formatter.name, vim.api.nvim_buf_get_name(bufnr))
+  local buffer_text
+  -- If the buffer has a newline at the end, make sure we include that in the input to the formatter
+  if vim.bo[bufnr].eol then
+    table.insert(input_lines, "")
+    buffer_text = table.concat(input_lines, "\n")
+    table.remove(input_lines)
+  else
+    buffer_text = table.concat(input_lines, "\n")
+  end
+
   if not config.stdin then
     log.debug("Creating temp file %s", ctx.filename)
     local fd = assert(uv.fs_open(ctx.filename, "w", 448)) -- 0700
-    uv.fs_write(fd, table.concat(input_lines, "\n"))
+    uv.fs_write(fd, buffer_text)
     uv.fs_close(fd)
     callback = util.wrap_callback(callback, function()
       log.debug("Cleaning up temp file %s", ctx.filename)
       uv.fs_unlink(ctx.filename)
     end)
   end
+
   log.debug("Run command: %s", cmd)
   if cwd then
     log.debug("Run CWD: %s", cwd)
@@ -197,8 +309,7 @@ local function run_formatter(bufnr, formatter, config, ctx, quiet, input_lines, 
   elseif jid == -1 then
     callback(string.format("Formatter '%s' command is not executable", formatter.name))
   elseif config.stdin then
-    local text = table.concat(input_lines, "\n")
-    vim.api.nvim_chan_send(jid, text)
+    vim.api.nvim_chan_send(jid, buffer_text)
     vim.fn.chanclose(jid, "stdin")
   end
   vim.b[bufnr].conform_jid = jid
@@ -274,7 +385,7 @@ M.format_async = function(bufnr, formatters, quiet, range, callback)
     if not formatter then
       -- discard formatting if buffer has changed
       if vim.b[bufnr].changedtick == changedtick then
-        apply_format(bufnr, original_lines, input_lines, range, not all_support_range_formatting)
+        M.apply_format(bufnr, original_lines, input_lines, range, not all_support_range_formatting)
       else
         log.info(
           "Async formatter discarding changes for %s: concurrent modification",
@@ -387,7 +498,7 @@ M.format_sync = function(bufnr, formatters, timeout_ms, quiet, range)
   end
 
   local final_result = input_lines
-  apply_format(bufnr, original_lines, final_result, range, not all_support_range_formatting)
+  M.apply_format(bufnr, original_lines, final_result, range, not all_support_range_formatting)
 end
 
 return M

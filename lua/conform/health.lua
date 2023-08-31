@@ -90,6 +90,9 @@ M.show_window = function()
     seen[formatter.name] = true
   end
   append_formatters(buf_formatters)
+  if vim.tbl_isempty(buf_formatters) then
+    table.insert(lines, "<none>")
+  end
 
   table.insert(lines, "")
   table.insert(lines, "Other formatters:")

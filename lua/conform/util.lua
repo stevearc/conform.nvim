@@ -28,36 +28,6 @@ M.root_file = function(files)
   end
 end
 
----@param bufnr? integer
----@return fun() Function that restores the window positions
-M.save_win_positions = function(bufnr)
-  if bufnr == nil or bufnr == 0 then
-    bufnr = vim.api.nvim_get_current_buf()
-  end
-  local win_positions = {}
-  for _, winid in ipairs(vim.api.nvim_list_wins()) do
-    if vim.api.nvim_win_get_buf(winid) == bufnr then
-      vim.api.nvim_win_call(winid, function()
-        local view = vim.fn.winsaveview()
-        win_positions[winid] = view
-      end)
-    end
-  end
-
-  return function()
-    for winid, view in pairs(win_positions) do
-      if
-        vim.api.nvim_win_is_valid(winid)
-        and vim.deep_equal(vim.api.nvim_win_get_cursor(winid), { 1, 0 })
-      then
-        vim.api.nvim_win_call(winid, function()
-          pcall(vim.fn.winrestview, view)
-        end)
-      end
-    end
-  end
-end
-
 ---@param bufnr integer
 ---@param range conform.Range
 ---@return integer start_offset
