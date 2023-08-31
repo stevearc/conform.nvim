@@ -20,24 +20,35 @@ local function apply_text_edits(text_edits, bufnr, offset_encoding)
 end
 
 ---@param options table
----@param callback fun(err?: string)
-function M.format(options, callback)
-  options = options or {}
-  local bufnr = options.bufnr or vim.api.nvim_get_current_buf()
-  local range = options.range
-  local method = range and "textDocument/rangeFormatting" or "textDocument/formatting"
+---@return table[] clients
+function M.get_format_clients(options)
+  local method = options.range and "textDocument/rangeFormatting" or "textDocument/formatting"
 
   local clients = vim.lsp.get_active_clients({
     id = options.id,
-    bufnr = bufnr,
+    bufnr = options.bufnr,
     name = options.name,
   })
   if options.filter then
     clients = vim.tbl_filter(options.filter, clients)
   end
-  clients = vim.tbl_filter(function(client)
-    return client.supports_method(method, { bufnr = bufnr })
+  return vim.tbl_filter(function(client)
+    return client.supports_method(method, { bufnr = options.bufnr })
   end, clients)
+end
+
+---@param options table
+---@param callback fun(err?: string)
+function M.format(options, callback)
+  options = options or {}
+  if not options.bufnr or options.bufnr == 0 then
+    options.bufnr = vim.api.nvim_get_current_buf()
+  end
+  local bufnr = options.bufnr
+  local range = options.range
+  local method = range and "textDocument/rangeFormatting" or "textDocument/formatting"
+
+  local clients = M.get_format_clients(options)
 
   if #clients == 0 then
     return callback("[LSP] Format request failed, no matching language servers.")

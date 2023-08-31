@@ -101,18 +101,6 @@ M.setup = function(opts)
   end, { desc = "Show information about Conform formatters" })
 end
 
----@param bufnr integer
----@return boolean
-local function supports_lsp_format(bufnr)
-  ---@diagnostic disable-next-line: deprecated
-  for _, client in ipairs(vim.lsp.get_active_clients({ bufnr = bufnr })) do
-    if client.supports_method("textDocument/formatting", { bufnr = bufnr }) then
-      return true
-    end
-  end
-  return false
-end
-
 ---@private
 ---@param bufnr? integer
 ---@return conform.FormatterInfo[]
@@ -228,6 +216,8 @@ M.format = function(opts, callback)
   })
   callback = callback or function(_err) end
   local log = require("conform.log")
+  local lsp_format = require("conform.lsp_format")
+  local runner = require("conform.runner")
 
   local formatters = {}
   local any_formatters_configured
@@ -261,7 +251,6 @@ M.format = function(opts, callback)
 
   local any_formatters = not vim.tbl_isempty(formatters)
   if any_formatters then
-    local runner = require("conform.runner")
     local mode = vim.api.nvim_get_mode().mode
     if not opts.range and mode == "v" or mode == "V" then
       opts.range = range_from_selection(opts.bufnr, mode)
@@ -296,9 +285,9 @@ M.format = function(opts, callback)
       local err = runner.format_sync(opts.bufnr, formatters, opts.timeout_ms, opts.range)
       handle_err(err)
     end
-  elseif opts.lsp_fallback and supports_lsp_format(opts.bufnr) then
+  elseif opts.lsp_fallback and not vim.tbl_isempty(lsp_format.get_format_clients(opts)) then
     log.debug("Running LSP formatter on %s", vim.api.nvim_buf_get_name(opts.bufnr))
-    require("conform.lsp_format").format(opts, callback)
+    lsp_format.format(opts, callback)
   elseif any_formatters_configured and not opts.quiet then
     vim.notify("No formatters found for buffer. See :ConformInfo", vim.log.levels.WARN)
   else
