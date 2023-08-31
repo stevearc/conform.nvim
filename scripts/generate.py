@@ -23,8 +23,8 @@ ROOT = os.path.abspath(os.path.join(HERE, os.path.pardir))
 README = os.path.join(ROOT, "README.md")
 DOC = os.path.join(ROOT, "doc")
 VIMDOC = os.path.join(DOC, "conform.txt")
-OPTIONS = os.path.join(ROOT, "tests", "options_doc.lua")
-AUTOFORMAT = os.path.join(ROOT, "tests", "autoformat_doc.lua")
+OPTIONS = os.path.join(ROOT, "scripts", "options_doc.lua")
+AUTOFORMAT = os.path.join(ROOT, "scripts", "autoformat_doc.lua")
 
 
 @dataclass

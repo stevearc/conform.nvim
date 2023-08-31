@@ -1,3 +1,4 @@
+-- Format synchronously on save
 vim.api.nvim_create_autocmd("BufWritePre", {
   pattern = "*",
   callback = function(args)
@@ -16,5 +17,19 @@ vim.api.nvim_create_autocmd("BufWritePre", {
       return
     end
     require("conform").format({ timeout_ms = 500, lsp_fallback = true, buf = args.buf })
+  end,
+})
+
+-- Format asynchronously on save
+vim.api.nvim_create_autocmd("BufWritePost", {
+  pattern = "*",
+  callback = function(args)
+    require("conform").format({ async = true, lsp_fallback = true, buf = args.buf }, function(err)
+      if not err then
+        vim.api.nvim_buf_call(args.buf, function()
+          vim.cmd.update()
+        end)
+      end
+    end)
   end,
 })
