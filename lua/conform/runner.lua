@@ -454,15 +454,9 @@ M.format_async = function(bufnr, formatters, range, callback)
 
     local config = assert(require("conform").get_formatter_config(formatter.name, bufnr))
     local ctx = M.build_context(bufnr, config, range)
-    local jid
-    jid = run_formatter(bufnr, formatter, config, ctx, input_lines, function(err, output)
+    run_formatter(bufnr, formatter, config, ctx, input_lines, function(err, output)
       if err then
-        -- If the job was canceled, change the code to INTERRUPTED
-        if not vim.api.nvim_buf_is_valid(bufnr) or jid ~= vim.b[bufnr].conform_jid then
-          err.code = M.ERROR_CODE.INTERRUPTED
-        end
-        callback(err)
-        return
+        return callback(err)
       end
       input_lines = output
       run_next_formatter()
