@@ -176,6 +176,9 @@ end
 ---@param range? conform.Range
 ---@param only_apply_range boolean
 M.apply_format = function(bufnr, original_lines, new_lines, range, only_apply_range)
+  if not vim.api.nvim_buf_is_valid(bufnr) then
+    return
+  end
   local bufname = vim.api.nvim_buf_get_name(bufnr)
   -- If the formatter output didn't have a trailing newline, add one
   if new_lines[#new_lines] ~= "" then
@@ -337,7 +340,7 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, callbac
         elseif stdout and not vim.tbl_isempty(stdout) then
           err_str = table.concat(stdout, "\n")
         end
-        if jid ~= vim.b[bufnr].conform_jid then
+        if vim.api.nvim_buf_is_valid(bufnr) and jid ~= vim.b[bufnr].conform_jid then
           callback({
             code = M.ERROR_CODE.INTERRUPTED,
             message = string.format("Formatter '%s' was interrupted", formatter.name),
@@ -436,10 +439,7 @@ M.format_async = function(bufnr, formatters, range, callback)
     local formatter = formatters[idx]
     if not formatter then
       -- discard formatting if buffer has changed
-      if vim.b[bufnr].changedtick == changedtick then
-        M.apply_format(bufnr, original_lines, input_lines, range, not all_support_range_formatting)
-        callback()
-      else
+      if not vim.api.nvim_buf_is_valid(bufnr) or vim.b[bufnr].changedtick ~= changedtick then
         callback({
           code = M.ERROR_CODE.CONCURRENT_MODIFICATION,
           message = string.format(
@@ -447,6 +447,9 @@ M.format_async = function(bufnr, formatters, range, callback)
             vim.api.nvim_buf_get_name(bufnr)
           ),
         })
+      else
+        M.apply_format(bufnr, original_lines, input_lines, range, not all_support_range_formatting)
+        callback()
       end
       return
     end
