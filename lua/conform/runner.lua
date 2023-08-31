@@ -449,9 +449,9 @@ M.format_async = function(bufnr, formatters, range, callback)
     local jid
     jid = run_formatter(bufnr, formatter, config, ctx, input_lines, function(err, output)
       if err then
-        -- Only log the error if the job wasn't canceled
-        if vim.api.nvim_buf_is_valid(bufnr) and jid == vim.b[bufnr].conform_jid then
-          log.error(err)
+        -- If the job was canceled, change the code to INTERRUPTED
+        if not vim.api.nvim_buf_is_valid(bufnr) or jid ~= vim.b[bufnr].conform_jid then
+          err.code = M.ERROR_CODE.INTERRUPTED
         end
         callback(err)
         return

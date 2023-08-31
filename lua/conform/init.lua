@@ -271,7 +271,7 @@ M.format = function(opts, callback)
     local function handle_err(err)
       if err then
         local level = runner.level_for_code(err.code)
-        log.log(level, err)
+        log.log(level, err.message)
         local should_notify = not opts.quiet and level >= vim.log.levels.WARN
         -- Execution errors have special handling. Maybe should reconsider this.
         if runner.is_execution_error(err.code) then
