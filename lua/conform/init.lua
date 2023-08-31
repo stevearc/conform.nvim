@@ -215,8 +215,9 @@ end
 ---    lsp_fallback nil|boolean Attempt LSP formatting if no formatters are available. Defaults to false.
 ---    quiet nil|boolean Don't show any notifications for warnings or failures. Defaults to false.
 ---    range nil|table Range to format. Table must contain `start` and `end` keys with {row, col} tuples using (1,0) indexing. Defaults to current selection in visual mode
+---@param callback? fun(err: nil|string) Called once formatting has completed
 ---@return boolean True if any formatters were attempted
-M.format = function(opts)
+M.format = function(opts, callback)
   ---@type {timeout_ms: integer, bufnr: integer, async: boolean, lsp_fallback: boolean, quiet: boolean, formatters?: string[], range?: conform.Range}
   opts = vim.tbl_extend("keep", opts or {}, {
     timeout_ms = 1000,
@@ -225,6 +226,7 @@ M.format = function(opts)
     lsp_fallback = false,
     quiet = false,
   })
+  callback = callback or function(_err) end
   local log = require("conform.log")
 
   local formatters = {}
@@ -259,25 +261,39 @@ M.format = function(opts)
 
   local any_formatters = not vim.tbl_isempty(formatters)
   if any_formatters then
+    local runner = require("conform.runner")
     local mode = vim.api.nvim_get_mode().mode
     if not opts.range and mode == "v" or mode == "V" then
       opts.range = range_from_selection(opts.bufnr, mode)
     end
 
+    ---@param err? conform.Error
+    local function handle_err(err)
+      if err then
+        local level = runner.level_for_code(err.code)
+        log.log(level, err)
+        local should_notify = not opts.quiet and level >= vim.log.levels.WARN
+        -- Execution errors have special handling. Maybe should reconsider this.
+        if runner.is_execution_error(err.code) then
+          should_notify = should_notify and M.notify_on_error and not err.debounce_message
+          err.message = "Formatter failed. See :ConformInfo for details"
+        end
+        if should_notify then
+          vim.notify(err.message, level)
+        end
+      end
+      callback(err and err.message)
+    end
+
     if opts.async then
-      require("conform.runner").format_async(opts.bufnr, formatters, opts.quiet, opts.range)
+      runner.format_async(opts.bufnr, formatters, opts.range, handle_err)
     else
-      require("conform.runner").format_sync(
-        opts.bufnr,
-        formatters,
-        opts.timeout_ms,
-        opts.quiet,
-        opts.range
-      )
+      local err = runner.format_sync(opts.bufnr, formatters, opts.timeout_ms, opts.range)
+      handle_err(err)
     end
   elseif opts.lsp_fallback and supports_lsp_format(opts.bufnr) then
     log.debug("Running LSP formatter on %s", vim.api.nvim_buf_get_name(opts.bufnr))
-    require("conform.lsp_format").format(opts, function() end)
+    require("conform.lsp_format").format(opts, callback)
   elseif any_formatters_configured and not opts.quiet then
     vim.notify("No formatters found for buffer. See :ConformInfo", vim.log.levels.WARN)
   else
