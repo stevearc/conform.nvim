@@ -15,7 +15,7 @@ local function apply_text_edits(text_edits, bufnr, offset_encoding)
     local new_lines = vim.split(text_edits[1].newText, "\n", { plain = true })
     require("conform.runner").apply_format(bufnr, original_lines, new_lines, nil, false)
   else
-    M.original_apply_text_edits(text_edits, bufnr, offset_encoding)
+    vim.lsp.util.apply_text_edits(text_edits, bufnr, offset_encoding)
   end
 end
 
@@ -53,6 +53,7 @@ function M.format(options, callback)
   end
 
   if options.async then
+    local changedtick = vim.b[bufnr].changedtick
     local do_format
     do_format = function(idx, client)
       if not client then
@@ -63,9 +64,20 @@ function M.format(options, callback)
         if not result then
           return callback(err)
         end
-        apply_text_edits(result, ctx.bufnr, client.offset_encoding)
+        if vim.b[bufnr].changedtick ~= changedtick then
+          return
+            callback(
+            string.format(
+              "Async LSP formatter discarding changes for %s: concurrent modification",
+              vim.api.nvim_buf_get_name(bufnr)
+            )
+          )
+        else
+          apply_text_edits(result, ctx.bufnr, client.offset_encoding)
+          changedtick = vim.b[bufnr].changedtick
 
-        do_format(next(clients, idx))
+          do_format(next(clients, idx))
+        end
       end, bufnr)
     end
     do_format(next(clients))
