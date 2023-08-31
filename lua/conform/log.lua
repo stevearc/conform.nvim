@@ -5,7 +5,7 @@ vim.tbl_add_reverse_lookup(levels)
 local Log = {}
 
 ---@type integer
-Log.level = vim.log.levels.ERROR
+Log.level = vim.log.levels.WARN
 
 ---@return string
 Log.get_logfile = function()
