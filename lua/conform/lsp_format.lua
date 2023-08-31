@@ -1,5 +1,4 @@
 ---This module replaces the default vim.lsp.buf.format() so that we can inject our own logic
-local ms = require("vim.lsp.protocol").Methods
 local util = require("vim.lsp.util")
 
 local M = {}
@@ -26,17 +25,19 @@ function M.format(options, callback)
   options = options or {}
   local bufnr = options.bufnr or vim.api.nvim_get_current_buf()
   local range = options.range
-  local method = range and ms.textDocument_rangeFormatting or ms.textDocument_formatting
+  local method = range and "textDocument/rangeFormatting" or "textDocument/formatting"
 
-  local clients = vim.lsp.get_clients({
+  local clients = vim.lsp.get_active_clients({
     id = options.id,
     bufnr = bufnr,
     name = options.name,
-    method = method,
   })
   if options.filter then
     clients = vim.tbl_filter(options.filter, clients)
   end
+  clients = vim.tbl_filter(function(client)
+    return client.supports_method(method, { bufnr = bufnr })
+  end, clients)
 
   if #clients == 0 then
     return callback("[LSP] Format request failed, no matching language servers.")
@@ -76,6 +77,7 @@ function M.format(options, callback)
       if result and result.result then
         apply_text_edits(result.result, bufnr, client.offset_encoding)
       elseif err then
+        vim.notify(string.format("[LSP][%s] %s", client.name, err), vim.log.levels.WARN)
         return callback(string.format("[LSP][%s] %s", client.name, err))
       end
     end
