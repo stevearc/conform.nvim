@@ -1,4 +1,4 @@
-.PHONY: doc test lint fastlint all
+.PHONY: all doc test lint fastlint clean
 
 all: doc lint test
 
@@ -22,3 +22,6 @@ scripts/nvim_doc_tools:
 
 scripts/nvim-typecheck-action:
 	git clone https://github.com/stevearc/nvim-typecheck-action scripts/nvim-typecheck-action
+
+clean:
+	rm -rf scripts/nvim_doc_tools scripts/nvim-typecheck-action
