@@ -10,7 +10,7 @@ test:
 	./run_tests.sh
 
 lint: scripts/nvim-typecheck-action fastlint
-	./scripts/nvim-typecheck-action/typecheck.sh lua
+	./scripts/nvim-typecheck-action/typecheck.sh --workdir scripts/nvim-typecheck-action lua
 
 fastlint: scripts/nvim_doc_tools
 	python scripts/main.py lint
