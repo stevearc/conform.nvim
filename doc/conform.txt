@@ -17,7 +17,7 @@ OPTIONS                                                          *conform-option
       formatters_by_ft = {
         lua = { "stylua" },
         -- Conform will use the first available formatter in the list
-        javascript = { "prettier_d", "prettier" },
+        javascript = { "prettierd", "prettier" },
         -- Formatters can also be specified with additional options
         python = {
           formatters = { "isort", "black" },
