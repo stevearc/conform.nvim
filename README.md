@@ -109,7 +109,7 @@ require("conform").setup({
     formatters_by_ft = {
         lua = { "stylua" },
         -- Conform will use the first available formatter in the list
-        javascript = { "prettierd", "prettier" },
+        javascript = { "prettier_d", "prettier" },
         -- Formatters can also be specified with additional options
         python = {
             formatters = { "isort", "black" },
@@ -146,17 +146,6 @@ require("conform").setup({
 See [conform.format()](#formatopts-callback) for more details about the parameters.
 
 To view configured and available formatters, as well as to see the path to the log file, run `:ConformInfo`
-
-To see all preset configurations, you can see [here](https://github.com/stevearc/conform.nvim/tree/master/lua/conform/formatters), you just need add filename to your config for `conform`, like this:
-
-```lua
--- for prettier_d
-require("conform").setup({
-    formatters_by_ft = {
-        javascript = { "prettierd"},
-    },
-})
-```
 
 ## Formatters
 
@@ -220,7 +209,7 @@ require("conform").setup({
   formatters_by_ft = {
     lua = { "stylua" },
     -- Conform will use the first available formatter in the list
-    javascript = { "prettierd", "prettier" },
+    javascript = { "prettier_d", "prettier" },
     -- Formatters can also be specified with additional options
     python = {
       formatters = { "isort", "black" },
