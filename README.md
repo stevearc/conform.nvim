@@ -305,7 +305,7 @@ vim.api.nvim_create_autocmd("BufWritePre", {
     if bufname:match("/node_modules/") then
       return
     end
-    require("conform").format({ timeout_ms = 500, lsp_fallback = true, buf = args.buf })
+    require("conform").format({ timeout_ms = 500, lsp_fallback = true, bufnr = args.buf })
   end,
 })
 
@@ -313,7 +313,7 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 vim.api.nvim_create_autocmd("BufWritePost", {
   pattern = "*",
   callback = function(args)
-    require("conform").format({ async = true, lsp_fallback = true, buf = args.buf }, function(err)
+    require("conform").format({ async = true, lsp_fallback = true, bufnr = args.buf }, function(err)
       if not err then
         vim.api.nvim_buf_call(args.buf, function()
           vim.cmd.update()
