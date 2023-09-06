@@ -127,7 +127,7 @@ Then you can use `conform.format()` just like you would `vim.lsp.buf.format()`. 
 vim.api.nvim_create_autocmd("BufWritePre", {
     pattern = "*",
     callback = function(args)
-        require("conform").format({ buf = args.buf })
+        require("conform").format({ bufnr = args.buf })
     end,
 })
 ```
