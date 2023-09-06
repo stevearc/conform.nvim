@@ -9,6 +9,7 @@ Lightweight yet powerful formatter plugin for Neovim
 - [Setup](#setup)
 - [Formatters](#formatters)
 - [Options](#options)
+- [Customizing formatters](#customizing-formatters)
 - [Autoformat on save](#autoformat-on-save)
 - [API](#api)
   - [format(opts, callback)](#formatopts-callback)
@@ -246,7 +247,7 @@ require("conform").setup({
       -- When false, will create a temp file (will appear in "$FILENAME" args). The temp
       -- file is assumed to be modified in-place by the format command.
       stdin = true,
-      -- A function the calculates the directory to run the command in
+      -- A function that calculates the directory to run the command in
       cwd = require("conform.util").root_file({ ".editorconfig", "package.json" }),
       -- When cwd is not found, don't run the formatter (default false)
       require_cwd = true,
@@ -278,6 +279,25 @@ require("conform").formatters.my_formatter = {
 ```
 
 <!-- /OPTIONS -->
+
+## Customizing formatters
+
+If you want to customize how a formatter runs (for example, to pass in environment variables or
+change the command arguments), you can either edit the formatter directly or create one yourself.
+
+```lua
+-- Directly change the values on the built-in configuration
+require("conform.formatters.yamlfix").env = {
+  YAMLFIX_SEQUENCE_STYLE = "block_style",
+}
+
+-- Or create your own formatter that overrides certain values
+require("conform").formatters.yamlfix = vim.tbl_deep_extend("force", require("conform.formatters.yamlfix"), {
+  env = {
+    YAMLFIX_SEQUENCE_STYLE = "block_style",
+  },
+})
+```
 
 ## Autoformat on save
 
