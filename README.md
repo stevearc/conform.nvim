@@ -193,6 +193,7 @@ To view configured and available formatters, as well as to see the path to the l
 - [taplo](https://github.com/tamasfe/taplo) - A TOML toolkit written in Rust
 - [terraform_fmt](https://www.terraform.io/docs/cli/commands/fmt.html) - The terraform-fmt command rewrites `terraform` configuration files to a canonical format and style.
 - [trim_newlines](https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/lua/null-ls/builtins/formatting/trim_newlines.lua) - Trim new lines
+- [trim_whitespace](https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/lua/null-ls/builtins/formatting/trim_whitespace.lua) - Trim whitespace
 - [uncrustify](https://github.com/uncrustify/uncrustify) - A source code beautifier for C, C++, C#, ObjectiveC, D, Java, Pawn and Vala.
 - [xmlformat](https://github.com/pamoller/xmlformatter) - xmlformatter is an Open Source Python package, which provides formatting of XML documents.
 - [yamlfix](https://github.com/lyz-code/yamlfix) - A configurable YAML formatter that keeps comments.
