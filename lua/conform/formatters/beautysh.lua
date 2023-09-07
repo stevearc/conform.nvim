@@ -5,5 +5,5 @@ return {
     description = "A Bash beautifier for the masses.",
   },
   command = "beautysh",
-  args = { "-" }
+  args = { "-" },
 }
