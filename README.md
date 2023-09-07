@@ -154,6 +154,7 @@ To view configured and available formatters, as well as to see the path to the l
 
 - [autoflake](https://github.com/PyCQA/autoflake) - Removes unused imports and unused variables as reported by pyflakes.
 - [autopep8](https://github.com/hhatto/autopep8) - A tool that automatically formats Python code to conform to the PEP 8 style guide.
+- [beautysh](https://github.com/lovesegfault/beautysh) - A Bash beautifier for the masses.
 - [black](https://github.com/psf/black) - The uncompromising Python code formatter.
 - [clang_format](https://www.kernel.org/doc/html/latest/process/clang-format.html) - Tool to format C/C++/… code according to a set of rules and heuristics.
 - [cljstyle](https://github.com/greglook/cljstyle) - Formatter for Clojure code.
@@ -189,7 +190,10 @@ To view configured and available formatters, as well as to see the path to the l
 - [stylua](https://github.com/JohnnyMorganz/StyLua) - An opinionated code formatter for Lua.
 - [swift_format](https://github.com/apple/swift-format) - Swift formatter from apple. Requires building from source with `swift build`.
 - [swiftformat](https://github.com/nicklockwood/SwiftFormat) - SwiftFormat is a code library and command-line tool for reformatting `swift` code on macOS or Linux.
+- [taplo](https://github.com/tamasfe/taplo) - A TOML toolkit written in Rust
 - [terraform_fmt](https://www.terraform.io/docs/cli/commands/fmt.html) - The terraform-fmt command rewrites `terraform` configuration files to a canonical format and style.
+- [trim_newlines](https://www.gnu.org/software/gawk/manual/gawk.html) - Trim new lines with `awk`
+- [trim_whitespace](https://www.gnu.org/software/gawk/manual/gawk.html) - Trim whitespaces with `awk`
 - [uncrustify](https://github.com/uncrustify/uncrustify) - A source code beautifier for C, C++, C#, ObjectiveC, D, Java, Pawn and Vala.
 - [xmlformat](https://github.com/pamoller/xmlformatter) - xmlformatter is an Open Source Python package, which provides formatting of XML documents.
 - [yamlfix](https://github.com/lyz-code/yamlfix) - A configurable YAML formatter that keeps comments.
