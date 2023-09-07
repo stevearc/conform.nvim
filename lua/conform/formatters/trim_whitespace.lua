@@ -1,8 +1,8 @@
 ---@type conform.FileFormatterConfig
 return {
   meta = {
-    url = "https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/lua/null-ls/builtins/formatting/trim_whitespace.lua",
-    description = "Trim whitespace",
+    url = "https://www.gnu.org/software/gawk/manual/gawk.html",
+    description = "Trim whitespaces with awk",
   },
   command = "awk",
   args = { '{ sub(/[ \t]+$/, ""); print }' },
