@@ -128,6 +128,7 @@ FORMATTERS                                                    *conform-formatter
             pyflakes.
 `autopep8` - A tool that automatically formats Python code to conform to the PEP
            8 style guide.
+`beautysh` - A Bash beautifier for the masses.
 `black` - The uncompromising Python code formatter.
 `clang_format` - Tool to format C/C++/… code according to a set of rules and
                heuristics.
@@ -179,8 +180,11 @@ FORMATTERS                                                    *conform-formatter
                `swift build`.
 `swiftformat` - SwiftFormat is a code library and command-line tool for
               reformatting `swift` code on macOS or Linux.
+`taplo` - A TOML toolkit written in Rust
 `terraform_fmt` - The terraform-fmt command rewrites `terraform` configuration
                 files to a canonical format and style.
+`trim_newlines` - Trim new lines with awk
+`trim_whitespace` - Trim whitespaces with awk
 `uncrustify` - A source code beautifier for C, C++, C#, ObjectiveC, D, Java,
              Pawn and Vala.
 `xmlformat` - xmlformatter is an Open Source Python package, which provides

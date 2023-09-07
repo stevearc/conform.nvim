@@ -192,8 +192,8 @@ To view configured and available formatters, as well as to see the path to the l
 - [swiftformat](https://github.com/nicklockwood/SwiftFormat) - SwiftFormat is a code library and command-line tool for reformatting `swift` code on macOS or Linux.
 - [taplo](https://github.com/tamasfe/taplo) - A TOML toolkit written in Rust
 - [terraform_fmt](https://www.terraform.io/docs/cli/commands/fmt.html) - The terraform-fmt command rewrites `terraform` configuration files to a canonical format and style.
-- [trim_newlines](https://www.gnu.org/software/gawk/manual/gawk.html) - Trim new lines with `awk`
-- [trim_whitespace](https://www.gnu.org/software/gawk/manual/gawk.html) - Trim whitespaces with `awk`
+- [trim_newlines](https://www.gnu.org/software/gawk/manual/gawk.html) - Trim new lines with awk
+- [trim_whitespace](https://www.gnu.org/software/gawk/manual/gawk.html) - Trim whitespaces with awk
 - [uncrustify](https://github.com/uncrustify/uncrustify) - A source code beautifier for C, C++, C#, ObjectiveC, D, Java, Pawn and Vala.
 - [xmlformat](https://github.com/pamoller/xmlformatter) - xmlformatter is an Open Source Python package, which provides formatting of XML documents.
 - [yamlfix](https://github.com/lyz-code/yamlfix) - A configurable YAML formatter that keeps comments.
