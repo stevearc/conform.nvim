@@ -213,13 +213,13 @@ end
 ---    bufnr nil|integer Format this buffer (default 0)
 ---    async nil|boolean If true the method won't block. Defaults to false.
 ---    formatters nil|string[] List of formatters to run. Defaults to all formatters for the buffer filetype.
----    lsp_fallback nil|boolean Attempt LSP formatting if no formatters are available. Defaults to false.
+---    lsp_fallback nil|boolean|"always" Attempt LSP formatting if no formatters are available. Defaults to false. If "always", will attempt LSP formatting even if formatters are available (useful if you set formatters for the "*" filetype)
 ---    quiet nil|boolean Don't show any notifications for warnings or failures. Defaults to false.
 ---    range nil|table Range to format. Table must contain `start` and `end` keys with {row, col} tuples using (1,0) indexing. Defaults to current selection in visual mode
 ---@param callback? fun(err: nil|string) Called once formatting has completed
 ---@return boolean True if any formatters were attempted
 M.format = function(opts, callback)
-  ---@type {timeout_ms: integer, bufnr: integer, async: boolean, lsp_fallback: boolean, quiet: boolean, formatters?: string[], range?: conform.Range}
+  ---@type {timeout_ms: integer, bufnr: integer, async: boolean, lsp_fallback: boolean|"always", quiet: boolean, formatters?: string[], range?: conform.Range}
   opts = vim.tbl_extend("keep", opts or {}, {
     timeout_ms = 1000,
     bufnr = 0,
@@ -269,7 +269,18 @@ M.format = function(opts, callback)
       if not err_message and not vim.api.nvim_buf_is_valid(opts.bufnr) then
         err_message = "buffer was deleted"
       end
-      callback(err_message)
+      if err_message then
+        return callback(err_message)
+      end
+
+      if
+        opts.lsp_fallback == "always" and not vim.tbl_isempty(lsp_format.get_format_clients(opts))
+      then
+        log.debug("Running LSP formatter on %s", vim.api.nvim_buf_get_name(opts.bufnr))
+        lsp_format.format(opts, callback)
+      else
+        callback()
+      end
     end
 
     if opts.async then

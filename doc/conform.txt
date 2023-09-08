@@ -99,8 +99,11 @@ format({opts}, {callback}): boolean                               *conform.forma
                          to false.
           {formatters}   `nil|string[]` List of formatters to run. Defaults to
                          all formatters for the buffer filetype.
-          {lsp_fallback} `nil|boolean` Attempt LSP formatting if no formatters
-                         are available. Defaults to false.
+          {lsp_fallback} `nil|boolean|"always"` Attempt LSP formatting if no
+                         formatters are available. Defaults to false. If
+                         "always", will attempt LSP formatting even if
+                         formatters are available (useful if you set formatters
+                         for the "*" filetype)
           {quiet}        `nil|boolean` Don't show any notifications for warnings
                          or failures. Defaults to false.
           {range}        `nil|table` Range to format. Table must contain `start`
