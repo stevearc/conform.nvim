@@ -6,11 +6,24 @@ local function get_formatter_filetypes(name)
   local conform = require("conform")
   local filetypes = {}
   for filetype, formatters in pairs(conform.formatters_by_ft) do
+    -- support the old structure where formatters could be a subkey
     if not vim.tbl_islist(formatters) then
+      ---@diagnostic disable-next-line: undefined-field
       formatters = formatters.formatters
     end
-    if vim.tbl_contains(formatters, name) then
-      table.insert(filetypes, filetype)
+
+    for _, ft_name in ipairs(formatters) do
+      if type(ft_name) == "string" then
+        if ft_name == name then
+          table.insert(filetypes, filetype)
+          break
+        end
+      else
+        if vim.tbl_contains(ft_name, name) then
+          table.insert(filetypes, filetype)
+          break
+        end
+      end
     end
   end
   return filetypes
@@ -38,6 +51,22 @@ M.check = function()
   end
 end
 
+---@param formatters conform.FormatterUnit[]
+---@return string[]
+local function flatten_formatters(formatters)
+  local flat = {}
+  for _, name in ipairs(formatters) do
+    if type(name) == "string" then
+      table.insert(flat, name)
+    else
+      for _, f in ipairs(flatten_formatters(name)) do
+        table.insert(flat, f)
+      end
+    end
+  end
+  return flat
+end
+
 M.show_window = function()
   local conform = require("conform")
   local lines = {}
@@ -60,35 +89,43 @@ M.show_window = function()
   end
   table.insert(lines, "")
 
-  ---@param formatters conform.FormatterInfo[]
+  ---@param formatter conform.FormatterInfo
+  local function append_formatter_info(formatter)
+    if not formatter.available then
+      local line = string.format("%s unavailable: %s", formatter.name, formatter.available_msg)
+      table.insert(lines, line)
+      table.insert(
+        highlights,
+        { "DiagnosticWarn", #lines, formatter.name:len(), formatter.name:len() + 12 }
+      )
+    else
+      local filetypes = get_formatter_filetypes(formatter.name)
+      local line = string.format("%s ready (%s)", formatter.name, table.concat(filetypes, ", "))
+      table.insert(lines, line)
+      table.insert(
+        highlights,
+        { "DiagnosticInfo", #lines, formatter.name:len(), formatter.name:len() + 6 }
+      )
+    end
+  end
+
+  local seen = {}
+  ---@param formatters string[]
   local function append_formatters(formatters)
-    for _, formatter in ipairs(formatters) do
-      if not formatter.available then
-        local line = string.format("%s unavailable: %s", formatter.name, formatter.available_msg)
-        table.insert(lines, line)
-        table.insert(
-          highlights,
-          { "DiagnosticWarn", #lines, formatter.name:len(), formatter.name:len() + 12 }
-        )
+    for _, name in ipairs(formatters) do
+      if type(name) == "table" then
+        append_formatters(name)
       else
-        local filetypes = get_formatter_filetypes(formatter.name)
-        local line = string.format("%s ready (%s)", formatter.name, table.concat(filetypes, ", "))
-        table.insert(lines, line)
-        table.insert(
-          highlights,
-          { "DiagnosticInfo", #lines, formatter.name:len(), formatter.name:len() + 6 }
-        )
+        seen[name] = true
+        local formatter = conform.get_formatter_info(name)
+        append_formatter_info(formatter)
       end
     end
   end
 
   table.insert(lines, "Formatters for this buffer:")
   table.insert(highlights, { "Title", #lines, 0, -1 })
-  local seen = {}
-  local buf_formatters = conform.list_formatters_for_buffer()
-  for _, formatter in ipairs(buf_formatters) do
-    seen[formatter.name] = true
-  end
+  local buf_formatters = flatten_formatters(conform.list_formatters_for_buffer())
   append_formatters(buf_formatters)
   if vim.tbl_isempty(buf_formatters) then
     table.insert(lines, "<none>")
@@ -97,10 +134,11 @@ M.show_window = function()
   table.insert(lines, "")
   table.insert(lines, "Other formatters:")
   table.insert(highlights, { "Title", #lines, 0, -1 })
-  local all_formatters = vim.tbl_filter(function(f)
-    return not seen[f.name]
-  end, conform.list_all_formatters())
-  append_formatters(all_formatters)
+  for _, formatter in ipairs(conform.list_all_formatters()) do
+    if not seen[formatter.name] then
+      append_formatter_info(formatter)
+    end
+  end
 
   local bufnr = vim.api.nvim_create_buf(false, true)
   local winid = vim.api.nvim_open_win(bufnr, true, {

@@ -99,7 +99,7 @@ end
 
 ---@private
 ---@param bufnr? integer
----@return conform.FormatterInfo[]
+---@return conform.FormatterUnit[]
 M.list_formatters_for_buffer = function(bufnr)
   if not bufnr or bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
@@ -107,8 +107,25 @@ M.list_formatters_for_buffer = function(bufnr)
   local formatters = {}
   local seen = {}
   local filetypes = vim.split(vim.bo[bufnr].filetype, ".", { plain = true })
+
+  local function dedupe_formatters(names, collect)
+    for _, name in ipairs(names) do
+      if type(name) == "table" then
+        local alternation = {}
+        dedupe_formatters(name, alternation)
+        if not vim.tbl_isempty(alternation) then
+          table.insert(collect, alternation)
+        end
+      elseif not seen[name] then
+        table.insert(collect, name)
+        seen[name] = true
+      end
+    end
+  end
+
   table.insert(filetypes, "*")
   for _, filetype in ipairs(filetypes) do
+    ---@type conform.FormatterUnit[]
     local ft_formatters = M.formatters_by_ft[filetype]
     if ft_formatters then
       -- support the old structure where formatters could be a subkey
@@ -117,35 +134,11 @@ M.list_formatters_for_buffer = function(bufnr)
         ft_formatters = ft_formatters.formatters
       end
 
-      for _, formatter in ipairs(ft_formatters) do
-        if not seen[formatter] then
-          table.insert(formatters, formatter)
-          seen[formatter] = true
-        end
-      end
+      dedupe_formatters(ft_formatters, formatters)
     end
   end
 
-  ---@type conform.FormatterInfo[]
-  local all_info = vim.tbl_map(function(f)
-    return M.get_formatter_info(f, bufnr)
-  end, formatters)
-
-  return all_info
-end
-
----@param formatters conform.FormatterInfo[]
----@return conform.FormatterInfo[]
-local function filter_formatters(formatters)
-  ---@type conform.FormatterInfo[]
-  local all_info = {}
-  for _, info in ipairs(formatters) do
-    if info.available then
-      table.insert(all_info, info)
-    end
-  end
-
-  return all_info
+  return formatters
 end
 
 ---@param bufnr integer
@@ -179,6 +172,41 @@ local function range_from_selection(bufnr, mode)
   }
 end
 
+---@param names conform.FormatterUnit[]
+---@param bufnr integer
+---@param warn_on_missing boolean
+---@return conform.FormatterInfo[]
+local function resolve_formatters(names, bufnr, warn_on_missing)
+  local all_info = {}
+  local function add_info(info, warn)
+    if info.available then
+      table.insert(all_info, info)
+    elseif warn then
+      vim.notify(
+        string.format("Formatter '%s' unavailable: %s", info.name, info.available_msg),
+        vim.log.levels.WARN
+      )
+    end
+    return info.available
+  end
+
+  for _, name in ipairs(names) do
+    if type(name) == "string" then
+      local info = M.get_formatter_info(name, bufnr)
+      add_info(info, warn_on_missing)
+    else
+      -- If this is an alternation, take the first one that's available
+      for i, v in ipairs(name) do
+        local info = M.get_formatter_info(v, bufnr)
+        if add_info(info, i == #name) then
+          break
+        end
+      end
+    end
+  end
+  return all_info
+end
+
 ---Format a buffer
 ---@param opts? table
 ---    timeout_ms nil|integer Time in milliseconds to block for formatting. Defaults to 1000. No effect if async = true.
@@ -204,34 +232,15 @@ M.format = function(opts, callback)
   local lsp_format = require("conform.lsp_format")
   local runner = require("conform.runner")
 
-  local formatters = {}
-  local any_formatters_configured
-  if opts.formatters then
-    any_formatters_configured = true
-    for _, formatter in ipairs(opts.formatters) do
-      local info = M.get_formatter_info(formatter)
-      if info.available then
-        table.insert(formatters, info)
-      else
-        if opts.quiet then
-          log.warn("Formatter '%s' unavailable: %s", info.name, info.available_msg)
-        else
-          vim.notify(
-            string.format("Formatter '%s' unavailable: %s", info.name, info.available_msg),
-            vim.log.levels.WARN
-          )
-        end
-      end
-    end
-  else
-    formatters = M.list_formatters_for_buffer(opts.bufnr)
-    any_formatters_configured = not vim.tbl_isempty(formatters)
-    formatters = filter_formatters(formatters)
-  end
-  local formatter_names = vim.tbl_map(function(f)
+  local formatter_names = opts.formatters or M.list_formatters_for_buffer(opts.bufnr)
+  local any_formatters_configured = formatter_names ~= nil and not vim.tbl_isempty(formatter_names)
+  local formatters =
+    resolve_formatters(formatter_names, opts.bufnr, not opts.quiet and opts.formatters ~= nil)
+
+  local resolved_names = vim.tbl_map(function(f)
     return f.name
   end, formatters)
-  log.debug("Running formatters on %s: %s", vim.api.nvim_buf_get_name(opts.bufnr), formatter_names)
+  log.debug("Running formatters on %s: %s", vim.api.nvim_buf_get_name(opts.bufnr), resolved_names)
 
   local any_formatters = not vim.tbl_isempty(formatters)
   if any_formatters then
@@ -287,8 +296,11 @@ end
 ---@param bufnr? integer
 ---@return conform.FormatterInfo[]
 M.list_formatters = function(bufnr)
+  if not bufnr or bufnr == 0 then
+    bufnr = vim.api.nvim_get_current_buf()
+  end
   local formatters = M.list_formatters_for_buffer(bufnr)
-  return filter_formatters(formatters)
+  return resolve_formatters(formatters, bufnr, false)
 end
 
 ---List information about all filetype-configured formatters
@@ -303,7 +315,13 @@ M.list_all_formatters = function()
     end
 
     for _, formatter in ipairs(ft_formatters) do
-      formatters[formatter] = true
+      if type(formatter) == "table" then
+        for _, v in ipairs(formatter) do
+          formatters[v] = true
+        end
+      else
+        formatters[formatter] = true
+      end
     end
   end
 
@@ -348,7 +366,7 @@ M.get_formatter_config = function(formatter, bufnr)
 end
 
 ---Get information about a formatter (including availability)
----@param formatter string
+---@param formatter string The name of the formatter
 ---@param bufnr? integer
 ---@return conform.FormatterInfo
 M.get_formatter_info = function(formatter, bufnr)

@@ -18,6 +18,8 @@ OPTIONS                                                          *conform-option
         lua = { "stylua" },
         -- Conform will run multiple formatters sequentially
         python = { "isort", "black" },
+        -- Use a sub-list to run only the first available formatter
+        javascript = { { "prettierd", "prettier" } },
       },
       -- If this is set, Conform will run the formatter on save.
       -- It will pass the table to conform.format().
@@ -118,7 +120,7 @@ get_formatter_info({formatter}, {bufnr}): conform.FormatterInfo *conform.get_for
     Get information about a formatter (including availability)
 
     Parameters:
-      {formatter} `string`
+      {formatter} `string` The name of the formatter
       {bufnr}     `nil|integer`
 
 --------------------------------------------------------------------------------

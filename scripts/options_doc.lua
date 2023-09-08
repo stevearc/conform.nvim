@@ -4,6 +4,8 @@ require("conform").setup({
     lua = { "stylua" },
     -- Conform will run multiple formatters sequentially
     python = { "isort", "black" },
+    -- Use a sub-list to run only the first available formatter
+    javascript = { { "prettierd", "prettier" } },
   },
   -- If this is set, Conform will run the formatter on save.
   -- It will pass the table to conform.format().

@@ -110,8 +110,10 @@ At a minimum, you will need to set up some formatters by filetype
 require("conform").setup({
     formatters_by_ft = {
         lua = { "stylua" },
-    -- Conform will run multiple formatters sequentially
+        -- Conform will run multiple formatters sequentially
         python = { "isort", "black" },
+        -- Use a sub-list to run only the first available formatter
+        javascript = { { "prettierd", "prettier" } },
     },
 })
 ```
@@ -210,6 +212,8 @@ require("conform").setup({
     lua = { "stylua" },
     -- Conform will run multiple formatters sequentially
     python = { "isort", "black" },
+    -- Use a sub-list to run only the first available formatter
+    javascript = { { "prettierd", "prettier" } },
   },
   -- If this is set, Conform will run the formatter on save.
   -- It will pass the table to conform.format().
@@ -384,10 +388,10 @@ List information about all filetype-configured formatters
 `get_formatter_info(formatter, bufnr): conform.FormatterInfo` \
 Get information about a formatter (including availability)
 
-| Param     | Type           | Desc |
-| --------- | -------------- | ---- |
-| formatter | `string`       |      |
-| bufnr     | `nil\|integer` |      |
+| Param     | Type           | Desc                      |
+| --------- | -------------- | ------------------------- |
+| formatter | `string`       | The name of the formatter |
+| bufnr     | `nil\|integer` |                           |
 <!-- /API -->
 
 ## Acknowledgements
