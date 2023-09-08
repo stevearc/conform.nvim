@@ -121,6 +121,14 @@ list_formatters({bufnr}): conform.FormatterInfo[]        *conform.list_formatter
 list_all_formatters(): conform.FormatterInfo[]       *conform.list_all_formatters*
     List information about all filetype-configured formatters
 
+
+get_formatter_info({formatter}, {bufnr}): conform.FormatterInfo *conform.get_formatter_info*
+    Get information about a formatter (including availability)
+
+    Parameters:
+      {formatter} `string`
+      {bufnr}     `nil|integer`
+
 --------------------------------------------------------------------------------
 FORMATTERS                                                    *conform-formatters*
 

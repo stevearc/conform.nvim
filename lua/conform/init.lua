@@ -360,7 +360,7 @@ M.get_formatter_config = function(formatter, bufnr)
   return config
 end
 
----@private
+---Get information about a formatter (including availability)
 ---@param formatter string
 ---@param bufnr? integer
 ---@return conform.FormatterInfo

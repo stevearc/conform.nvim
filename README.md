@@ -15,6 +15,7 @@ Lightweight yet powerful formatter plugin for Neovim
   - [format(opts, callback)](#formatopts-callback)
   - [list_formatters(bufnr)](#list_formattersbufnr)
   - [list_all_formatters()](#list_all_formatters)
+  - [get_formatter_info(formatter, bufnr)](#get_formatter_infoformatter-bufnr)
 - [Acknowledgements](#acknowledgements)
 
 <!-- /TOC -->
@@ -391,6 +392,16 @@ Retrieve the available formatters for a buffer
 `list_all_formatters(): conform.FormatterInfo[]` \
 List information about all filetype-configured formatters
 
+
+### get_formatter_info(formatter, bufnr)
+
+`get_formatter_info(formatter, bufnr): conform.FormatterInfo` \
+Get information about a formatter (including availability)
+
+| Param     | Type           | Desc |
+| --------- | -------------- | ---- |
+| formatter | `string`       |      |
+| bufnr     | `nil\|integer` |      |
 <!-- /API -->
 
 ## Acknowledgements
