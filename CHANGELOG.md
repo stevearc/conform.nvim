@@ -1,5 +1,23 @@
 # Changelog
 
+## [3.0.0](https://github.com/stevearc/conform.nvim/compare/v2.3.0...v3.0.0) (2023-09-08)
+
+
+### ⚠ BREAKING CHANGES
+
+* remove run_all_formatters config option
+
+### Features
+
+* add beautysh, taplo, trim_newlines and trim_whitespace ([#29](https://github.com/stevearc/conform.nvim/issues/29)) ([37a2d65](https://github.com/stevearc/conform.nvim/commit/37a2d65bd2ee41540cc426d2cffef6d6f8648357))
+* format() can always fall back to LSP formatting ([c3028b3](https://github.com/stevearc/conform.nvim/commit/c3028b327bc44335cc2b5c3014cd6d5c12a54ee4))
+* syntax for using first available formatter ([2568d74](https://github.com/stevearc/conform.nvim/commit/2568d746abbadf66a03c62b568ee73d874cd8617))
+
+
+### Code Refactoring
+
+* remove run_all_formatters config option ([bd1aa02](https://github.com/stevearc/conform.nvim/commit/bd1aa02ef191410b2ea0b3ef5caabe06592d9c51))
+
 ## [2.3.0](https://github.com/stevearc/conform.nvim/compare/v2.2.0...v2.3.0) (2023-09-06)
 
 
