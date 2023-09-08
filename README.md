@@ -15,6 +15,7 @@ Lightweight yet powerful formatter plugin for Neovim
   - [format(opts, callback)](#formatopts-callback)
   - [list_formatters(bufnr)](#list_formattersbufnr)
   - [list_all_formatters()](#list_all_formatters)
+  - [get_formatter_info(formatter, bufnr)](#get_formatter_infoformatter-bufnr)
 - [Acknowledgements](#acknowledgements)
 
 <!-- /TOC -->
@@ -109,14 +110,10 @@ At a minimum, you will need to set up some formatters by filetype
 require("conform").setup({
     formatters_by_ft = {
         lua = { "stylua" },
-        -- Conform will use the first available formatter in the list
-        javascript = { "prettier_d", "prettier" },
-        -- Formatters can also be specified with additional options
-        python = {
-            formatters = { "isort", "black" },
-            -- Run formatters one after another instead of stopping at the first success
-            run_all_formatters = true,
-        },
+        -- Conform will run multiple formatters sequentially
+        python = { "isort", "black" },
+        -- Use a sub-list to run only the first available formatter
+        javascript = { { "prettierd", "prettier" } },
     },
 })
 ```
@@ -213,16 +210,14 @@ require("conform").setup({
   -- Map of filetype to formatters
   formatters_by_ft = {
     lua = { "stylua" },
-    -- Conform will use the first available formatter in the list
-    javascript = { "prettierd", "prettier" },
-    -- Formatters can also be specified with additional options
-    python = {
-      formatters = { "isort", "black" },
-      -- Run formatters one after another instead of stopping at the first success
-      run_all_formatters = true,
-      -- Don't run these formatters as part of the format_on_save autocmd (see below)
-      format_on_save = false,
-    },
+    -- Conform will run multiple formatters sequentially
+    python = { "isort", "black" },
+    -- Use a sub-list to run only the first available formatter
+    javascript = { { "prettierd", "prettier" } },
+    -- Use the "*" filetype to run formatters on all files.
+    -- Note that if you use this, you may want to set lsp_fallback = "always"
+    -- (see :help conform.format)
+    ["*"] = { "trim_whitespace" },
   },
   -- If this is set, Conform will run the formatter on save.
   -- It will pass the table to conform.format().
@@ -359,17 +354,17 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 `format(opts, callback): boolean` \
 Format a buffer
 
-| Param    | Type                         | Desc                                 |                                                                                                                                                      |
-| -------- | ---------------------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| opts     | `nil\|table`                 |                                      |                                                                                                                                                      |
-|          | timeout_ms                   | `nil\|integer`                       | Time in milliseconds to block for formatting. Defaults to 1000. No effect if async = true.                                                           |
-|          | bufnr                        | `nil\|integer`                       | Format this buffer (default 0)                                                                                                                       |
-|          | async                        | `nil\|boolean`                       | If true the method won't block. Defaults to false.                                                                                                   |
-|          | formatters                   | `nil\|string[]`                      | List of formatters to run. Defaults to all formatters for the buffer filetype.                                                                       |
-|          | lsp_fallback                 | `nil\|boolean`                       | Attempt LSP formatting if no formatters are available. Defaults to false.                                                                            |
-|          | quiet                        | `nil\|boolean`                       | Don't show any notifications for warnings or failures. Defaults to false.                                                                            |
-|          | range                        | `nil\|table`                         | Range to format. Table must contain `start` and `end` keys with {row, col} tuples using (1,0) indexing. Defaults to current selection in visual mode |
-| callback | `nil\|fun(err: nil\|string)` | Called once formatting has completed |                                                                                                                                                      |
+| Param    | Type                         | Desc                                 |                                                                                                                                                                                                         |
+| -------- | ---------------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| opts     | `nil\|table`                 |                                      |                                                                                                                                                                                                         |
+|          | timeout_ms                   | `nil\|integer`                       | Time in milliseconds to block for formatting. Defaults to 1000. No effect if async = true.                                                                                                              |
+|          | bufnr                        | `nil\|integer`                       | Format this buffer (default 0)                                                                                                                                                                          |
+|          | async                        | `nil\|boolean`                       | If true the method won't block. Defaults to false.                                                                                                                                                      |
+|          | formatters                   | `nil\|string[]`                      | List of formatters to run. Defaults to all formatters for the buffer filetype.                                                                                                                          |
+|          | lsp_fallback                 | `nil\|boolean\|"always"`             | Attempt LSP formatting if no formatters are available. Defaults to false. If "always", will attempt LSP formatting even if formatters are available (useful if you set formatters for the "*" filetype) |
+|          | quiet                        | `nil\|boolean`                       | Don't show any notifications for warnings or failures. Defaults to false.                                                                                                                               |
+|          | range                        | `nil\|table`                         | Range to format. Table must contain `start` and `end` keys with {row, col} tuples using (1,0) indexing. Defaults to current selection in visual mode                                                    |
+| callback | `nil\|fun(err: nil\|string)` | Called once formatting has completed |                                                                                                                                                                                                         |
 
 Returns:
 
@@ -391,6 +386,16 @@ Retrieve the available formatters for a buffer
 `list_all_formatters(): conform.FormatterInfo[]` \
 List information about all filetype-configured formatters
 
+
+### get_formatter_info(formatter, bufnr)
+
+`get_formatter_info(formatter, bufnr): conform.FormatterInfo` \
+Get information about a formatter (including availability)
+
+| Param     | Type           | Desc                      |
+| --------- | -------------- | ------------------------- |
+| formatter | `string`       | The name of the formatter |
+| bufnr     | `nil\|integer` |                           |
 <!-- /API -->
 
 ## Acknowledgements

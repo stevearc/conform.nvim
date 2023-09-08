@@ -16,16 +16,14 @@ OPTIONS                                                          *conform-option
       -- Map of filetype to formatters
       formatters_by_ft = {
         lua = { "stylua" },
-        -- Conform will use the first available formatter in the list
-        javascript = { "prettierd", "prettier" },
-        -- Formatters can also be specified with additional options
-        python = {
-          formatters = { "isort", "black" },
-          -- Run formatters one after another instead of stopping at the first success
-          run_all_formatters = true,
-          -- Don't run these formatters as part of the format_on_save autocmd (see below)
-          format_on_save = false,
-        },
+        -- Conform will run multiple formatters sequentially
+        python = { "isort", "black" },
+        -- Use a sub-list to run only the first available formatter
+        javascript = { { "prettierd", "prettier" } },
+        -- Use the "*" filetype to run formatters on all files.
+        -- Note that if you use this, you may want to set lsp_fallback = "always"
+        -- (see :help conform.format)
+        ["*"] = { "trim_whitespace" },
       },
       -- If this is set, Conform will run the formatter on save.
       -- It will pass the table to conform.format().
@@ -101,8 +99,11 @@ format({opts}, {callback}): boolean                               *conform.forma
                          to false.
           {formatters}   `nil|string[]` List of formatters to run. Defaults to
                          all formatters for the buffer filetype.
-          {lsp_fallback} `nil|boolean` Attempt LSP formatting if no formatters
-                         are available. Defaults to false.
+          {lsp_fallback} `nil|boolean|"always"` Attempt LSP formatting if no
+                         formatters are available. Defaults to false. If
+                         "always", will attempt LSP formatting even if
+                         formatters are available (useful if you set formatters
+                         for the "*" filetype)
           {quiet}        `nil|boolean` Don't show any notifications for warnings
                          or failures. Defaults to false.
           {range}        `nil|table` Range to format. Table must contain `start`
@@ -120,6 +121,14 @@ list_formatters({bufnr}): conform.FormatterInfo[]        *conform.list_formatter
 
 list_all_formatters(): conform.FormatterInfo[]       *conform.list_all_formatters*
     List information about all filetype-configured formatters
+
+
+get_formatter_info({formatter}, {bufnr}): conform.FormatterInfo *conform.get_formatter_info*
+    Get information about a formatter (including availability)
+
+    Parameters:
+      {formatter} `string` The name of the formatter
+      {bufnr}     `nil|integer`
 
 --------------------------------------------------------------------------------
 FORMATTERS                                                    *conform-formatters*
