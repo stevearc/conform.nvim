@@ -2,16 +2,8 @@ require("conform").setup({
   -- Map of filetype to formatters
   formatters_by_ft = {
     lua = { "stylua" },
-    -- Conform will use the first available formatter in the list
-    javascript = { "prettierd", "prettier" },
-    -- Formatters can also be specified with additional options
-    python = {
-      formatters = { "isort", "black" },
-      -- Run formatters one after another instead of stopping at the first success
-      run_all_formatters = true,
-      -- Don't run these formatters as part of the format_on_save autocmd (see below)
-      format_on_save = false,
-    },
+    -- Conform will run multiple formatters sequentially
+    python = { "isort", "black" },
   },
   -- If this is set, Conform will run the formatter on save.
   -- It will pass the table to conform.format().

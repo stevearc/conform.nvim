@@ -38,13 +38,9 @@ local M = {}
 ---@field start integer[]
 ---@field end integer[]
 
----@class (exact) conform.RunOptions
----@field run_all_formatters nil|boolean Run all listed formatters instead of stopping at the first one.
+---@alias conform.FormatterUnit string|string[]
 
----@class (exact) conform.FormatterList : conform.RunOptions
----@field formatters string[]
-
----@type table<string, string[]|conform.FormatterList>
+---@type table<string, conform.FormatterUnit[]>
 M.formatters_by_ft = {}
 
 ---@type table<string, conform.FormatterConfig|fun(bufnr: integer): nil|conform.FormatterConfig>
@@ -104,30 +100,23 @@ end
 ---@private
 ---@param bufnr? integer
 ---@return conform.FormatterInfo[]
----@return conform.RunOptions
 M.list_formatters_for_buffer = function(bufnr)
   if not bufnr or bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
   end
   local formatters = {}
   local seen = {}
-  local run_options = {
-    run_all_formatters = false,
-    format_on_save = true,
-  }
   local filetypes = vim.split(vim.bo[bufnr].filetype, ".", { plain = true })
   table.insert(filetypes, "*")
   for _, filetype in ipairs(filetypes) do
     local ft_formatters = M.formatters_by_ft[filetype]
     if ft_formatters then
+      -- support the old structure where formatters could be a subkey
       if not vim.tbl_islist(ft_formatters) then
-        for k, v in pairs(ft_formatters) do
-          if k ~= "formatters" then
-            run_options[k] = v
-          end
-        end
+        ---@diagnostic disable-next-line: undefined-field
         ft_formatters = ft_formatters.formatters
       end
+
       for _, formatter in ipairs(ft_formatters) do
         if not seen[formatter] then
           table.insert(formatters, formatter)
@@ -142,21 +131,17 @@ M.list_formatters_for_buffer = function(bufnr)
     return M.get_formatter_info(f, bufnr)
   end, formatters)
 
-  return all_info, run_options
+  return all_info
 end
 
 ---@param formatters conform.FormatterInfo[]
----@param run_options conform.RunOptions
 ---@return conform.FormatterInfo[]
-local function filter_formatters(formatters, run_options)
+local function filter_formatters(formatters)
   ---@type conform.FormatterInfo[]
   local all_info = {}
   for _, info in ipairs(formatters) do
     if info.available then
       table.insert(all_info, info)
-      if not run_options.run_all_formatters then
-        break
-      end
     end
   end
 
@@ -239,10 +224,9 @@ M.format = function(opts, callback)
       end
     end
   else
-    local run_info
-    formatters, run_info = M.list_formatters_for_buffer(opts.bufnr)
+    formatters = M.list_formatters_for_buffer(opts.bufnr)
     any_formatters_configured = not vim.tbl_isempty(formatters)
-    formatters = filter_formatters(formatters, run_info)
+    formatters = filter_formatters(formatters)
   end
   local formatter_names = vim.tbl_map(function(f)
     return f.name
@@ -303,8 +287,8 @@ end
 ---@param bufnr? integer
 ---@return conform.FormatterInfo[]
 M.list_formatters = function(bufnr)
-  local formatters, run_options = M.list_formatters_for_buffer(bufnr)
-  return filter_formatters(formatters, run_options)
+  local formatters = M.list_formatters_for_buffer(bufnr)
+  return filter_formatters(formatters)
 end
 
 ---List information about all filetype-configured formatters
@@ -312,9 +296,12 @@ end
 M.list_all_formatters = function()
   local formatters = {}
   for _, ft_formatters in pairs(M.formatters_by_ft) do
+    -- support the old structure where formatters could be a subkey
     if not vim.tbl_islist(ft_formatters) then
+      ---@diagnostic disable-next-line: undefined-field
       ft_formatters = ft_formatters.formatters
     end
+
     for _, formatter in ipairs(ft_formatters) do
       formatters[formatter] = true
     end
