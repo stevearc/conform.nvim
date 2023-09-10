@@ -18,6 +18,11 @@ require("conform").setup({
     lsp_fallback = true,
     timeout_ms = 500,
   },
+  -- If this is set, Conform will run the formatter asynchronously after save.
+  -- It will pass the table to conform.format().
+  format_after_save = {
+    lsp_fallback = true,
+  },
   -- Set the log level. Use `:ConformInfo` to see the location of the log file.
   log_level = vim.log.levels.ERROR,
   -- Conform will notify you when a formatter errors

@@ -20,16 +20,26 @@ vim.api.nvim_create_autocmd("BufWritePre", {
   end,
 })
 
--- Format asynchronously on save
-vim.api.nvim_create_autocmd("BufWritePost", {
-  pattern = "*",
-  callback = function(args)
-    require("conform").format({ async = true, lsp_fallback = true, bufnr = args.buf }, function(err)
-      if not err then
-        vim.api.nvim_buf_call(args.buf, function()
-          vim.cmd.update()
-        end)
-      end
-    end)
+-- To eliminate the boilerplate, you can pass a function to format_on_save
+-- and it will be called during the BufWritePre callback.
+require("conform").setup({
+  format_on_save = function(bufnr)
+    if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
+      return
+    end
+    -- ...additional logic...
+    return { timeout_ms = 500, lsp_fallback = true }
+  end,
+})
+
+-- There is a similar affordance for format_after_save, which uses BufWritePost.
+-- This is good for formatters that are too slow to run synchronously.
+require("conform").setup({
+  format_after_save = function(bufnr)
+    if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
+      return
+    end
+    -- ...additional logic...
+    return { lsp_fallback = true }
   end,
 })

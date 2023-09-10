@@ -226,6 +226,11 @@ require("conform").setup({
     lsp_fallback = true,
     timeout_ms = 500,
   },
+  -- If this is set, Conform will run the formatter asynchronously after save.
+  -- It will pass the table to conform.format().
+  format_after_save = {
+    lsp_fallback = true,
+  },
   -- Set the log level. Use `:ConformInfo` to see the location of the log file.
   log_level = vim.log.levels.ERROR,
   -- Conform will notify you when a formatter errors
@@ -301,7 +306,7 @@ require("conform").formatters.yamlfix = vim.tbl_deep_extend("force", require("co
 ## Autoformat on save
 
 If you want more complex logic than the `format_on_save` option allows, you can write it yourself
-using your own autocmd. For example:
+using an autocmd. For example:
 
 <!-- AUTOFORMAT -->
 
@@ -328,17 +333,27 @@ vim.api.nvim_create_autocmd("BufWritePre", {
   end,
 })
 
--- Format asynchronously on save
-vim.api.nvim_create_autocmd("BufWritePost", {
-  pattern = "*",
-  callback = function(args)
-    require("conform").format({ async = true, lsp_fallback = true, bufnr = args.buf }, function(err)
-      if not err then
-        vim.api.nvim_buf_call(args.buf, function()
-          vim.cmd.update()
-        end)
-      end
-    end)
+-- To eliminate the boilerplate, you can pass a function to format_on_save
+-- and it will be called during the BufWritePre callback.
+require("conform").setup({
+  format_on_save = function(bufnr)
+    if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
+      return
+    end
+    -- ...additional logic...
+    return { timeout_ms = 500, lsp_fallback = true }
+  end,
+})
+
+-- There is a similar affordance for format_after_save, which uses BufWritePost.
+-- This is good for formatters that are too slow to run synchronously.
+require("conform").setup({
+  format_after_save = function(bufnr)
+    if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
+      return
+    end
+    -- ...additional logic...
+    return { lsp_fallback = true }
   end,
 })
 ```
@@ -359,7 +374,7 @@ Format a buffer
 | opts     | `nil\|table`                 |                                      |                                                                                                                                                                                                         |
 |          | timeout_ms                   | `nil\|integer`                       | Time in milliseconds to block for formatting. Defaults to 1000. No effect if async = true.                                                                                                              |
 |          | bufnr                        | `nil\|integer`                       | Format this buffer (default 0)                                                                                                                                                                          |
-|          | async                        | `nil\|boolean`                       | If true the method won't block. Defaults to false.                                                                                                                                                      |
+|          | async                        | `nil\|boolean`                       | If true the method won't block. Defaults to false. If the buffer is modified before the formatter completes, the formatting will be discarded.                                                          |
 |          | formatters                   | `nil\|string[]`                      | List of formatters to run. Defaults to all formatters for the buffer filetype.                                                                                                                          |
 |          | lsp_fallback                 | `nil\|boolean\|"always"`             | Attempt LSP formatting if no formatters are available. Defaults to false. If "always", will attempt LSP formatting even if formatters are available (useful if you set formatters for the "*" filetype) |
 |          | quiet                        | `nil\|boolean`                       | Don't show any notifications for warnings or failures. Defaults to false.                                                                                                                               |

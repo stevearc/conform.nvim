@@ -75,19 +75,61 @@ M.setup = function(opts)
     end
   end
 
+  local aug = vim.api.nvim_create_augroup("Conform", { clear = true })
   if opts.format_on_save then
     if type(opts.format_on_save) == "boolean" then
       opts.format_on_save = {}
     end
-    local aug = vim.api.nvim_create_augroup("Conform", { clear = true })
     vim.api.nvim_create_autocmd("BufWritePre", {
       pattern = "*",
       group = aug,
       callback = function(args)
-        local format_opts = vim.tbl_deep_extend("keep", opts.format_on_save, {
-          buf = args.buf,
-        })
-        M.format(format_opts)
+        local format_args = opts.format_on_save
+        if type(format_args) == "function" then
+          format_args = format_args(args.buf)
+        end
+        if format_args then
+          M.format(vim.tbl_deep_extend("force", format_args, {
+            buf = args.buf,
+            async = false,
+          }))
+        end
+      end,
+    })
+  end
+
+  if opts.format_after_save then
+    if type(opts.format_after_save) == "boolean" then
+      opts.format_after_save = {}
+    end
+    vim.api.nvim_create_autocmd("BufWritePost", {
+      pattern = "*",
+      group = aug,
+      callback = function(args)
+        if vim.b[args.buf].conform_applying_formatting then
+          return
+        end
+        local format_args = opts.format_after_save
+        if type(format_args) == "function" then
+          format_args = format_args(args.buf)
+        end
+        if format_args then
+          M.format(
+            vim.tbl_deep_extend("force", format_args, {
+              buf = args.buf,
+              async = true,
+            }),
+            function(err)
+              if not err and vim.api.nvim_buf_is_valid(args.buf) then
+                vim.api.nvim_buf_call(args.buf, function()
+                  vim.b[args.buf].conform_applying_formatting = true
+                  vim.cmd.update()
+                  vim.b[args.buf].conform_applying_formatting = false
+                end)
+              end
+            end
+          )
+        end
       end,
     })
   end
@@ -211,7 +253,7 @@ end
 ---@param opts? table
 ---    timeout_ms nil|integer Time in milliseconds to block for formatting. Defaults to 1000. No effect if async = true.
 ---    bufnr nil|integer Format this buffer (default 0)
----    async nil|boolean If true the method won't block. Defaults to false.
+---    async nil|boolean If true the method won't block. Defaults to false. If the buffer is modified before the formatter completes, the formatting will be discarded.
 ---    formatters nil|string[] List of formatters to run. Defaults to all formatters for the buffer filetype.
 ---    lsp_fallback nil|boolean|"always" Attempt LSP formatting if no formatters are available. Defaults to false. If "always", will attempt LSP formatting even if formatters are available (useful if you set formatters for the "*" filetype)
 ---    quiet nil|boolean Don't show any notifications for warnings or failures. Defaults to false.
