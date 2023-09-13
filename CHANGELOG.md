@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.1.0](https://github.com/stevearc/conform.nvim/compare/v3.0.0...v3.1.0) (2023-09-13)
+
+
+### Features
+
+* format_on_save and format_after_save can be functions ([dd5b2f2](https://github.com/stevearc/conform.nvim/commit/dd5b2f2f7ca01c2f28239cbbc7f97e6f9024cd94))
+
+
+### Bug Fixes
+
+* modify diff calculation to handle end-of-file newlines better ([#35](https://github.com/stevearc/conform.nvim/issues/35)) ([00a5288](https://github.com/stevearc/conform.nvim/commit/00a528818463b10d84699b2e0f4a960d5a4aeb5c))
+
 ## [3.0.0](https://github.com/stevearc/conform.nvim/compare/v2.3.0...v3.0.0) (2023-09-08)
 
 
