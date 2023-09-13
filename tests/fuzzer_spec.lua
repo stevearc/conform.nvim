@@ -1,6 +1,7 @@
 require("plenary.async").tests.add_to_env()
 local test_util = require("tests.test_util")
 local conform = require("conform")
+local log = require("conform.log")
 local runner = require("conform.runner")
 
 describe("fuzzer", function()
@@ -25,12 +26,6 @@ describe("fuzzer", function()
     vim.api.nvim_buf_set_lines(bufnr, 0, -1, true, buf_content)
     vim.bo[bufnr].modified = false
     runner.apply_format(0, buf_content, expected, nil, false)
-    -- We expect the last newline to be effectively "swallowed" by the formatter
-    -- because vim will use that as the EOL at the end of the file. The exception is that we always
-    -- expect at least one line in the output
-    if #expected > 1 and expected[#expected] == "" then
-      table.remove(expected)
-    end
     assert.are.same(expected, vim.api.nvim_buf_get_lines(0, 0, -1, false))
   end
 
@@ -95,6 +90,10 @@ describe("fuzzer", function()
     for _ = 1, num_lines do
       table.remove(lines, idx)
     end
+    -- vim will never let the lines be empty. An empty file has a single blank line.
+    if #lines == 0 then
+      table.insert(lines, "")
+    end
   end
 
   local function make_edits(lines)
@@ -112,8 +111,10 @@ describe("fuzzer", function()
   end
 
   it("formats correctly", function()
+    -- log.level = vim.log.levels.TRACE
     for i = 1, 50000 do
       math.randomseed(i)
+      log.info("Fuzz testing with seed %d", i)
       local content = make_file(20)
       local formatted = make_edits(content)
       run_formatter(content, formatted)

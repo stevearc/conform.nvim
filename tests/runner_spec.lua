@@ -125,12 +125,6 @@ describe("runner", function()
       local expected_lines = vim.split(expected, "\n", { plain = true })
       test_util.set_formatter_output(expected_lines)
       conform.format(vim.tbl_extend("force", opts or {}, { formatters = { "test" }, quiet = true }))
-      -- We expect the last newline to be effectively "swallowed" by the formatter
-      -- because vim will use that as the EOL at the end of the file. The exception is that we always
-      -- expect at least one line in the output
-      if #expected_lines > 1 and expected_lines[#expected_lines] == "" then
-        table.remove(expected_lines)
-      end
       return expected_lines
     end
 
@@ -193,11 +187,14 @@ print("a")
       run_formatter_test("\nfoo", "\nhello\nfoo")
       run_formatter_test("hello", "hello\n")
       run_formatter_test("hello", "hello\n\n")
-      run_formatter_test("hello", "hello\n")
-      -- This should generate no changes to the buffer
-      assert.falsy(vim.bo.modified)
       run_formatter_test("hello\n", "hello")
       run_formatter_test("hello\n ", "hello")
+
+      -- These should generate no changes to the buffer
+      run_formatter_test("hello\n", "hello\n")
+      assert.falsy(vim.bo.modified)
+      run_formatter_test("hello", "hello")
+      assert.falsy(vim.bo.modified)
     end)
 
     it("does not change output if formatter fails", function()

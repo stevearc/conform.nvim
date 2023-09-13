@@ -1,5 +1,6 @@
 require("plenary.async").tests.add_to_env()
 local conform = require("conform")
+local log = require("conform.log")
 local M = {}
 
 local OUTPUT_FILE = "tests/fake_formatter_output"
@@ -21,6 +22,8 @@ M.reset_editor = function()
   if vim.fn.filereadable(OUTPUT_FILE) == 1 then
     vim.fn.delete(OUTPUT_FILE)
   end
+  log.level = vim.log.levels.ERROR
+  log.set_handler(print)
 end
 
 ---@param lines string[]
@@ -28,6 +31,8 @@ M.set_formatter_output = function(lines)
   local content = table.concat(lines, "\n")
   local fd = assert(vim.loop.fs_open(OUTPUT_FILE, "w", 420)) -- 0644
   vim.loop.fs_write(fd, content)
+  -- Make sure we add the final newline
+  vim.loop.fs_write(fd, "\n")
   vim.loop.fs_close(fd)
 end
 

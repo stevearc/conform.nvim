@@ -83,6 +83,13 @@ local function initialize()
   end
 end
 
+---Override the file handler e.g. for tests
+---@param handler fun(line: string)
+function Log.set_handler(handler)
+  write = handler
+  initialized = true
+end
+
 function Log.log(level, msg, ...)
   if Log.level <= level then
     initialize()

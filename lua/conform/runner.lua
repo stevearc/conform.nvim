@@ -150,7 +150,7 @@ local function create_text_edit(
   -- If we're inserting text, make sure the text includes a newline at the end.
   -- The one exception is if we're inserting at the end of the file, in which case the newline is
   -- implicit
-  if is_insert and start_line < #original_lines - 1 then
+  if is_insert and start_line < #original_lines then
     table.insert(replacement, "")
   end
   local new_text = table.concat(replacement, "\n")
@@ -180,25 +180,26 @@ M.apply_format = function(bufnr, original_lines, new_lines, range, only_apply_ra
     return
   end
   local bufname = vim.api.nvim_buf_get_name(bufnr)
-  -- If the formatter output didn't have a trailing newline, add one
-  if new_lines[#new_lines] ~= "" then
-    table.insert(new_lines, "")
-  end
-
-  -- Vim buffers end with an implicit newline, so append an empty line to stand in for that
-  if vim.bo[bufnr].eol then
-    table.insert(original_lines, "")
-  end
+  log.trace("Applying formatting to %s", bufname)
+  -- The vim.diff algorithm doesn't handle changes in newline-at-end-of-file well. The unified
+  -- result_type has some text to indicate that the eol changed, but the indices result_type has no
+  -- such indication. To work around this, we just add a trailing newline to the end of both the old
+  -- and the new text.
+  table.insert(original_lines, "")
+  table.insert(new_lines, "")
   local original_text = table.concat(original_lines, "\n")
   local new_text = table.concat(new_lines, "\n")
-  log.trace("Creating diff for %s", bufname)
+  table.remove(original_lines)
+  table.remove(new_lines)
+
+  log.trace("Comparing lines %s and %s", original_lines, new_lines)
   local indices = vim.diff(original_text, new_text, {
     result_type = "indices",
     algorithm = "histogram",
   })
   assert(indices)
+  log.trace("Diff indices %s", indices)
   local text_edits = {}
-  log.trace("Creating TextEdits for %s", bufname)
   for _, idx in ipairs(indices) do
     local orig_line_start, orig_line_count, new_line_start, new_line_count = unpack(idx)
     local is_insert = orig_line_count == 0
@@ -232,7 +233,7 @@ M.apply_format = function(bufnr, original_lines, new_lines, range, only_apply_ra
     end
   end
 
-  log.trace("Applying text edits for %s", bufname)
+  log.trace("Applying text edits: %s", text_edits)
   vim.lsp.util.apply_text_edits(text_edits, bufnr, "utf-8")
   log.trace("Done formatting %s", bufname)
 end
@@ -272,12 +273,14 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, callbac
   log.info("Run %s on %s", formatter.name, vim.api.nvim_buf_get_name(bufnr))
   local buffer_text
   -- If the buffer has a newline at the end, make sure we include that in the input to the formatter
-  if vim.bo[bufnr].eol then
+  local add_extra_newline = vim.bo[bufnr].eol
+  if add_extra_newline then
     table.insert(input_lines, "")
-    buffer_text = table.concat(input_lines, "\n")
+  end
+  log.trace("Input lines: %s", input_lines)
+  buffer_text = table.concat(input_lines, "\n")
+  if add_extra_newline then
     table.remove(input_lines)
-  else
-    buffer_text = table.concat(input_lines, "\n")
   end
 
   if not config.stdin then
@@ -317,18 +320,27 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, callbac
       stderr = data
     end,
     on_exit = function(_, code)
-      local output
-      if not config.stdin then
-        local fd = assert(uv.fs_open(ctx.filename, "r", 448)) -- 0700
-        local stat = assert(uv.fs_fstat(fd))
-        local content = assert(uv.fs_read(fd, stat.size))
-        uv.fs_close(fd)
-        output = vim.split(content, "\n", { plain = true })
-      else
-        output = stdout
-      end
       if vim.tbl_contains(exit_codes, code) then
+        local output
+        if not config.stdin then
+          local fd = assert(uv.fs_open(ctx.filename, "r", 448)) -- 0700
+          local stat = assert(uv.fs_fstat(fd))
+          local content = assert(uv.fs_read(fd, stat.size))
+          uv.fs_close(fd)
+          output = vim.split(content, "\n", { plain = true })
+        else
+          output = stdout
+        end
+        -- Remove the trailing newline from the output to convert back to vim lines representation
+        if add_extra_newline and output[#output] == "" then
+          table.remove(output)
+        end
+        -- Vim will never let the lines array be empty. An empty file will still look like { "" }
+        if #output == 0 then
+          table.insert(output, "")
+        end
         log.debug("%s exited with code %d", formatter.name, code)
+        log.trace("Output lines: %s", output)
         callback(nil, output)
       else
         log.info("%s exited with code %d", formatter.name, code)
