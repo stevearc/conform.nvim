@@ -5,6 +5,7 @@ Lightweight yet powerful formatter plugin for Neovim
 <!-- TOC -->
 
 - [Requirements](#requirements)
+- [Features](#features)
 - [Installation](#installation)
 - [Setup](#setup)
 - [Formatters](#formatters)
@@ -23,6 +24,13 @@ Lightweight yet powerful formatter plugin for Neovim
 ## Requirements
 
 - Neovim 0.8+
+
+## Features
+
+- **Preserves extmarks and folds** - Most formatters replace the entire buffer, which clobbers extmarks and folds, and can cause the viewport and cursor to jump unexpectedly. Conform calculates minimal diffs and applies them using the built-in LSP format utilities.
+- **Fixes bad-behaving LSP formatters** - Some LSP servers are lazy and simply replace the entire buffer, leading to the problems mentioned above. Conform hooks into the LSP handler and turns these responses into proper piecewise changes.
+- **Enables range formatting for all formatters** - Since conform calculates minimal diffs, it can perform range formatting even if the underlying formatter doesn't support it.
+- **Simple API** - Conform exposes a simple, imperative API modeled after `vim.lsp.buf.format()`.
 
 ## Installation
 
