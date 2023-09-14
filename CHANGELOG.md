@@ -1,5 +1,22 @@
 # Changelog
 
+## [3.2.0](https://github.com/stevearc/conform.nvim/compare/v3.1.0...v3.2.0) (2023-09-14)
+
+
+### Features
+
+* add `markdownlint`, `stylelint`, `codespell`, and `biome` ([#45](https://github.com/stevearc/conform.nvim/issues/45)) ([580ab18](https://github.com/stevearc/conform.nvim/commit/580ab1880e740f4aebbc72a05350461f3cdef53d))
+* add buf as protobuf linter ([#43](https://github.com/stevearc/conform.nvim/issues/43)) ([2b73887](https://github.com/stevearc/conform.nvim/commit/2b73887fd75e1f6efc352cec6bd7e39157c3732e))
+* add deno fmt ([#46](https://github.com/stevearc/conform.nvim/issues/46)) ([db7461a](https://github.com/stevearc/conform.nvim/commit/db7461afcf751023adeb346d833f2e5d40a420c4))
+* add djlint ([#47](https://github.com/stevearc/conform.nvim/issues/47)) ([ead0257](https://github.com/stevearc/conform.nvim/commit/ead025784c8e31b8e45016e620c2f17a13ff741a))
+* latexindent ([#42](https://github.com/stevearc/conform.nvim/issues/42)) ([502a358](https://github.com/stevearc/conform.nvim/commit/502a3583663ede11c8db1e9980db342b117d79f2))
+* ruff ([#41](https://github.com/stevearc/conform.nvim/issues/41)) ([fdc4a0f](https://github.com/stevearc/conform.nvim/commit/fdc4a0f05c21012f2445a993ebdad700380dcfbf))
+
+
+### Bug Fixes
+
+* extra trailing newline for LSP formatters that replace entire file ([e18cdaf](https://github.com/stevearc/conform.nvim/commit/e18cdaf529b94465592d0c2afe1b62bc26155070))
+
 ## [3.1.0](https://github.com/stevearc/conform.nvim/compare/v3.0.0...v3.1.0) (2023-09-13)
 
 
