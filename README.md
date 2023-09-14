@@ -187,6 +187,7 @@ To view configured and available formatters, as well as to see the path to the l
 - [prettierd](https://github.com/fsouza/prettierd) - prettier, as a daemon, for ludicrous formatting speed.
 - [rubocop](https://github.com/rubocop/rubocop) - Ruby static code analyzer and formatter, based on the community Ruby style guide.
 - [rustfmt](https://github.com/rust-lang/rustfmt) - A tool for formatting rust code according to style guidelines.
+- [ruff](https://github.com/astral-sh/ruff) - An extremely fast Python linter, written in Rust.
 - [scalafmt](https://github.com/scalameta/scalafmt) - Code formatter for Scala.
 - [shellharden](https://github.com/anordal/shellharden) - The corrective bash syntax highlighter
 - [shfmt](https://github.com/mvdan/sh) - A shell parser, formatter, and interpreter with `bash` support.
