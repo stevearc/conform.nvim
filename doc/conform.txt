@@ -115,6 +115,12 @@ format({opts}, {callback}): boolean                               *conform.forma
           {range}        `nil|table` Range to format. Table must contain `start`
                          and `end` keys with {row, col} tuples using (1,0)
                          indexing. Defaults to current selection in visual mode
+          {id}           `nil|integer` Passed to |vim.lsp.buf.format| when
+                         lsp_fallback = true
+          {name}         `nil|string` Passed to |vim.lsp.buf.format| when
+                         lsp_fallback = true
+          {filter}       `nil|fun(client: table): boolean` Passed to
+                         |vim.lsp.buf.format| when lsp_fallback = true
       {callback} `nil|fun(err: nil|string)` Called once formatting has completed
     Returns:
       `boolean` True if any formatters were attempted

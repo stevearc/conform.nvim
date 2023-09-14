@@ -258,6 +258,9 @@ end
 ---    lsp_fallback nil|boolean|"always" Attempt LSP formatting if no formatters are available. Defaults to false. If "always", will attempt LSP formatting even if formatters are available (useful if you set formatters for the "*" filetype)
 ---    quiet nil|boolean Don't show any notifications for warnings or failures. Defaults to false.
 ---    range nil|table Range to format. Table must contain `start` and `end` keys with {row, col} tuples using (1,0) indexing. Defaults to current selection in visual mode
+---    id nil|integer Passed to |vim.lsp.buf.format| when lsp_fallback = true
+---    name nil|string Passed to |vim.lsp.buf.format| when lsp_fallback = true
+---    filter nil|fun(client: table): boolean Passed to |vim.lsp.buf.format| when lsp_fallback = true
 ---@param callback? fun(err: nil|string) Called once formatting has completed
 ---@return boolean True if any formatters were attempted
 M.format = function(opts, callback)
