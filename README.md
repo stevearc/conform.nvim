@@ -10,8 +10,7 @@ Lightweight yet powerful formatter plugin for Neovim
 - [Setup](#setup)
 - [Formatters](#formatters)
 - [Options](#options)
-- [Customizing formatters](#customizing-formatters)
-- [Autoformat on save](#autoformat-on-save)
+- [Recipes](#recipes)
 - [API](#api)
   - [format(opts, callback)](#formatopts-callback)
   - [list_formatters(bufnr)](#list_formattersbufnr)
@@ -229,6 +228,7 @@ require("conform").setup({
   },
   -- If this is set, Conform will run the formatter on save.
   -- It will pass the table to conform.format().
+  -- This can also be a function that returns the table.
   format_on_save = {
     -- I recommend these options. See :help conform.format for details.
     lsp_fallback = true,
@@ -236,6 +236,7 @@ require("conform").setup({
   },
   -- If this is set, Conform will run the formatter asynchronously after save.
   -- It will pass the table to conform.format().
+  -- This can also be a function that returns the table.
   format_after_save = {
     lsp_fallback = true,
   },
@@ -292,81 +293,16 @@ require("conform").formatters.my_formatter = {
 
 <!-- /OPTIONS -->
 
-## Customizing formatters
+## Recipes
 
-If you want to customize how a formatter runs (for example, to pass in environment variables or
-change the command arguments), you can either edit the formatter directly or create one yourself.
+<!-- RECIPES -->
 
-```lua
--- Directly change the values on the built-in configuration
-require("conform.formatters.yamlfix").env = {
-  YAMLFIX_SEQUENCE_STYLE = "block_style",
-}
+- [Format command](doc/recipes.md#format-command)
+- [Customizing formatters](doc/recipes.md#customizing-formatters)
+- [Autoformat with extra features](doc/recipes.md#autoformat-with-extra-features)
+- [Command to toggle format-on-save](doc/recipes.md#command-to-toggle-format-on-save)
 
--- Or create your own formatter that overrides certain values
-require("conform").formatters.yamlfix = vim.tbl_deep_extend("force", require("conform.formatters.yamlfix"), {
-  env = {
-    YAMLFIX_SEQUENCE_STYLE = "block_style",
-  },
-})
-```
-
-## Autoformat on save
-
-If you want more complex logic than the `format_on_save` option allows, you can write it yourself
-using an autocmd. For example:
-
-<!-- AUTOFORMAT -->
-
-```lua
--- Format synchronously on save
-vim.api.nvim_create_autocmd("BufWritePre", {
-  pattern = "*",
-  callback = function(args)
-    -- Disable autoformat on certain filetypes
-    local ignore_filetypes = { "sql", "java" }
-    if vim.tbl_contains(ignore_filetypes, vim.bo[args.buf].filetype) then
-      return
-    end
-    -- Disable with a global or buffer-local variable
-    if vim.g.disable_autoformat or vim.b[args.buf].disable_autoformat then
-      return
-    end
-    -- Disable autoformat for files in a certain path
-    local bufname = vim.api.nvim_buf_get_name(args.buf)
-    if bufname:match("/node_modules/") then
-      return
-    end
-    require("conform").format({ timeout_ms = 500, lsp_fallback = true, bufnr = args.buf })
-  end,
-})
-
--- To eliminate the boilerplate, you can pass a function to format_on_save
--- and it will be called during the BufWritePre callback.
-require("conform").setup({
-  format_on_save = function(bufnr)
-    if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
-      return
-    end
-    -- ...additional logic...
-    return { timeout_ms = 500, lsp_fallback = true }
-  end,
-})
-
--- There is a similar affordance for format_after_save, which uses BufWritePost.
--- This is good for formatters that are too slow to run synchronously.
-require("conform").setup({
-  format_after_save = function(bufnr)
-    if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
-      return
-    end
-    -- ...additional logic...
-    return { lsp_fallback = true }
-  end,
-})
-```
-
-<!-- /AUTOFORMAT -->
+<!-- /RECIPES -->
 
 ## API
 

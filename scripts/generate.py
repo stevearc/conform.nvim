@@ -3,7 +3,7 @@ import os.path
 import re
 from dataclasses import dataclass
 from functools import lru_cache
-from typing import Dict, List
+from typing import List
 
 from nvim_doc_tools import (
     Vimdoc,
@@ -22,6 +22,7 @@ HERE = os.path.dirname(__file__)
 ROOT = os.path.abspath(os.path.join(HERE, os.path.pardir))
 README = os.path.join(ROOT, "README.md")
 DOC = os.path.join(ROOT, "doc")
+RECIPES = os.path.join(DOC, "recipes.md")
 VIMDOC = os.path.join(DOC, "conform.txt")
 OPTIONS = os.path.join(ROOT, "scripts", "options_doc.lua")
 AUTOFORMAT = os.path.join(ROOT, "scripts", "autoformat_doc.lua")
@@ -82,7 +83,7 @@ def update_autocmd_md():
         example_lines.extend(f.readlines())
     example_lines.extend(["```\n", "\n"])
     replace_section(
-        README,
+        RECIPES,
         r"^<!-- AUTOFORMAT -->$",
         r"^<!-- /AUTOFORMAT -->$",
         example_lines,
@@ -115,6 +116,13 @@ def update_readme_toc():
         r"^<!-- /TOC -->$",
         toc,
     )
+
+
+def update_recipes_toc():
+    toc = ["\n"] + generate_md_toc(RECIPES) + ["\n"]
+    replace_section(RECIPES, r"^<!-- TOC -->$", r"^<!-- /TOC -->$", toc)
+    subtoc = add_md_link_path("doc/recipes.md", toc)
+    replace_section(README, r"^<!-- RECIPES -->$", r"^<!-- /RECIPES -->$", subtoc)
 
 
 def gen_options_vimdoc() -> VimdocSection:
@@ -169,5 +177,6 @@ def main() -> None:
     update_options()
     update_autocmd_md()
     update_md_api()
+    update_recipes_toc()
     update_readme_toc()
     generate_vimdoc()
