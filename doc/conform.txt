@@ -153,13 +153,18 @@ FORMATTERS                                                    *conform-formatter
            8 style guide.
 `beautysh` - A Bash beautifier for the masses.
 `black` - The uncompromising Python code formatter.
+`buf` - A new way of working with Protocol Buffers
 `clang_format` - Tool to format C/C++/… code according to a set of rules and
                heuristics.
 `cljstyle` - Formatter for Clojure code.
 `cmake_format` - Parse cmake listfiles and format them nicely.
 `dart_format` - Replace the whitespace in your program with formatting that
               follows Dart guidelines.
+`deno_fmt` - Use [Deno](https://deno.land/) to format TypeScript,
+           JavaScript/JSON and markdown.
 `dfmt` - Formatter for D source code.
+`djlint` - ✨ HTML Template Linter and Formatter. Django - Jinja - Nunjucks -
+         Handlebars - GoLang.
 `elm_format` - elm-format formats Elm source code according to a standard set of
              rules based on the official [Elm Style Guide](https://elm-
              lang.org/docs/style-guide).
