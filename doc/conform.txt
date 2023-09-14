@@ -153,6 +153,7 @@ FORMATTERS                                                    *conform-formatter
            8 style guide.
 `beautysh` - A Bash beautifier for the masses.
 `black` - The uncompromising Python code formatter.
+`buf` - A new way of working with Protocol Buffers
 `clang_format` - Tool to format C/C++/… code according to a set of rules and
                heuristics.
 `cljstyle` - Formatter for Clojure code.
