@@ -151,6 +151,8 @@ FORMATTERS                                                    *conform-formatter
 `cmake_format` - Parse cmake listfiles and format them nicely.
 `dart_format` - Replace the whitespace in your program with formatting that
               follows Dart guidelines.
+`deno_fmt` - Use [Deno](https://deno.land/) to format TypeScript,
+           JavaScript/JSON and markdown.
 `dfmt` - Formatter for D source code.
 `elm_format` - elm-format formats Elm source code according to a standard set of
              rules based on the official [Elm Style Guide](https://elm-
