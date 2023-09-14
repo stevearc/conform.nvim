@@ -161,7 +161,8 @@ FORMATTERS                                                    *conform-formatter
 `dart_format` - Replace the whitespace in your program with formatting that
               follows Dart guidelines.
 `dfmt` - Formatter for D source code.
-`djlint` - HTML Template Linter and Formatter.
+`djlint` - ✨ HTML Template Linter and Formatter. Django - Jinja - Nunjucks -
+         Handlebars - GoLang.
 `elm_format` - elm-format formats Elm source code according to a standard set of
              rules based on the official [Elm Style Guide](https://elm-
              lang.org/docs/style-guide).

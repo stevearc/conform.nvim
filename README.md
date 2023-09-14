@@ -166,6 +166,7 @@ To view configured and available formatters, as well as to see the path to the l
 - [cmake_format](https://github.com/cheshirekow/cmake_format) - Parse cmake listfiles and format them nicely.
 - [dart_format](https://dart.dev/tools/dart-format) - Replace the whitespace in your program with formatting that follows Dart guidelines.
 - [dfmt](https://github.com/dlang-community/dfmt) - Formatter for D source code.
+- [djlint](https://github.com/Riverside-Healthcare/djLint) - ✨ HTML Template Linter and Formatter. Django - Jinja - Nunjucks - Handlebars - GoLang.
 - [elm_format](https://github.com/avh4/elm-format) - elm-format formats Elm source code according to a standard set of rules based on the official [Elm Style Guide](https://elm-lang.org/docs/style-guide).
 - [erb_format](https://github.com/nebulab/erb-formatter) - Format ERB files with speed and precision.
 - [eslint_d](https://github.com/mantoni/eslint_d.js/) - Like ESLint, but faster.
