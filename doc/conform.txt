@@ -179,6 +179,8 @@ FORMATTERS                                                    *conform-formatter
 `isort` - Python utility / library to sort imports alphabetically and
         automatically separate them into sections and by type.
 `jq` - Command-line JSON processor.
+`latexindent` - A perl script for formatting LaTeX files that is generally
+              included in major TeX distributions.
 `nixfmt` - nixfmt is a formatter for Nix code, intended to apply a uniform
          style.
 `nixpkgs_fmt` - nixpkgs-fmt is a Nix code formatter for nixpkgs.
@@ -193,6 +195,7 @@ FORMATTERS                                                    *conform-formatter
 `prettierd` - prettier, as a daemon, for ludicrous formatting speed.
 `rubocop` - Ruby static code analyzer and formatter, based on the community Ruby
           style guide.
+`ruff` - An extremely fast Python linter, written in Rust.
 `rustfmt` - A tool for formatting rust code according to style guidelines.
 `scalafmt` - Code formatter for Scala.
 `shellharden` - The corrective bash syntax highlighter
