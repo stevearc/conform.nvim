@@ -1,30 +1,18 @@
--- Format synchronously on save
-vim.api.nvim_create_autocmd("BufWritePre", {
-  pattern = "*",
-  callback = function(args)
+-- if format_on_save is a function, it will be called during BufWritePre
+require("conform").setup({
+  format_on_save = function(bufnr)
     -- Disable autoformat on certain filetypes
     local ignore_filetypes = { "sql", "java" }
-    if vim.tbl_contains(ignore_filetypes, vim.bo[args.buf].filetype) then
+    if vim.tbl_contains(ignore_filetypes, vim.bo[bufnr].filetype) then
       return
     end
     -- Disable with a global or buffer-local variable
-    if vim.g.disable_autoformat or vim.b[args.buf].disable_autoformat then
+    if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
       return
     end
     -- Disable autoformat for files in a certain path
-    local bufname = vim.api.nvim_buf_get_name(args.buf)
+    local bufname = vim.api.nvim_buf_get_name(bufnr)
     if bufname:match("/node_modules/") then
-      return
-    end
-    require("conform").format({ timeout_ms = 500, lsp_fallback = true, bufnr = args.buf })
-  end,
-})
-
--- To eliminate the boilerplate, you can pass a function to format_on_save
--- and it will be called during the BufWritePre callback.
-require("conform").setup({
-  format_on_save = function(bufnr)
-    if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
       return
     end
     -- ...additional logic...

@@ -10,8 +10,7 @@ Lightweight yet powerful formatter plugin for Neovim
 - [Setup](#setup)
 - [Formatters](#formatters)
 - [Options](#options)
-- [Customizing formatters](#customizing-formatters)
-- [Autoformat on save](#autoformat-on-save)
+- [Recipes](#recipes)
 - [API](#api)
   - [format(opts, callback)](#formatopts-callback)
   - [list_formatters(bufnr)](#list_formattersbufnr)
@@ -181,6 +180,7 @@ To view configured and available formatters, as well as to see the path to the l
 - [isort](https://github.com/PyCQA/isort) - Python utility / library to sort imports alphabetically and automatically separate them into sections and by type.
 - [jq](https://github.com/stedolan/jq) - Command-line JSON processor.
 - [markdownlint](https://github.com/DavidAnson/markdownlint) - A Node.js style checker and lint tool for Markdown/CommonMark files.
+- [latexindent](https://github.com/cmhughes/latexindent.pl) - A perl script for formatting LaTeX files that is generally included in major TeX distributions.
 - [nixfmt](https://github.com/serokell/nixfmt) - nixfmt is a formatter for Nix code, intended to apply a uniform style.
 - [nixpkgs_fmt](https://github.com/nix-community/nixpkgs-fmt) - nixpkgs-fmt is a Nix code formatter for nixpkgs.
 - [ocamlformat](https://github.com/ocaml-ppx/ocamlformat) - Auto-formatter for OCaml code.
@@ -190,6 +190,7 @@ To view configured and available formatters, as well as to see the path to the l
 - [prettier](https://github.com/prettier/prettier) - Prettier is an opinionated code formatter. It enforces a consistent style by parsing your code and re-printing it with its own rules that take the maximum line length into account, wrapping code when necessary.
 - [prettierd](https://github.com/fsouza/prettierd) - prettier, as a daemon, for ludicrous formatting speed.
 - [rubocop](https://github.com/rubocop/rubocop) - Ruby static code analyzer and formatter, based on the community Ruby style guide.
+- [ruff](https://beta.ruff.rs/docs/) - An extremely fast Python linter, written in Rust.
 - [rustfmt](https://github.com/rust-lang/rustfmt) - A tool for formatting rust code according to style guidelines.
 - [scalafmt](https://github.com/scalameta/scalafmt) - Code formatter for Scala.
 - [shellharden](https://github.com/anordal/shellharden) - The corrective bash syntax highlighter
@@ -233,6 +234,7 @@ require("conform").setup({
   },
   -- If this is set, Conform will run the formatter on save.
   -- It will pass the table to conform.format().
+  -- This can also be a function that returns the table.
   format_on_save = {
     -- I recommend these options. See :help conform.format for details.
     lsp_fallback = true,
@@ -240,6 +242,7 @@ require("conform").setup({
   },
   -- If this is set, Conform will run the formatter asynchronously after save.
   -- It will pass the table to conform.format().
+  -- This can also be a function that returns the table.
   format_after_save = {
     lsp_fallback = true,
   },
@@ -296,81 +299,16 @@ require("conform").formatters.my_formatter = {
 
 <!-- /OPTIONS -->
 
-## Customizing formatters
+## Recipes
 
-If you want to customize how a formatter runs (for example, to pass in environment variables or
-change the command arguments), you can either edit the formatter directly or create one yourself.
+<!-- RECIPES -->
 
-```lua
--- Directly change the values on the built-in configuration
-require("conform.formatters.yamlfix").env = {
-  YAMLFIX_SEQUENCE_STYLE = "block_style",
-}
+- [Format command](doc/recipes.md#format-command)
+- [Customizing formatters](doc/recipes.md#customizing-formatters)
+- [Autoformat with extra features](doc/recipes.md#autoformat-with-extra-features)
+- [Command to toggle format-on-save](doc/recipes.md#command-to-toggle-format-on-save)
 
--- Or create your own formatter that overrides certain values
-require("conform").formatters.yamlfix = vim.tbl_deep_extend("force", require("conform.formatters.yamlfix"), {
-  env = {
-    YAMLFIX_SEQUENCE_STYLE = "block_style",
-  },
-})
-```
-
-## Autoformat on save
-
-If you want more complex logic than the `format_on_save` option allows, you can write it yourself
-using an autocmd. For example:
-
-<!-- AUTOFORMAT -->
-
-```lua
--- Format synchronously on save
-vim.api.nvim_create_autocmd("BufWritePre", {
-  pattern = "*",
-  callback = function(args)
-    -- Disable autoformat on certain filetypes
-    local ignore_filetypes = { "sql", "java" }
-    if vim.tbl_contains(ignore_filetypes, vim.bo[args.buf].filetype) then
-      return
-    end
-    -- Disable with a global or buffer-local variable
-    if vim.g.disable_autoformat or vim.b[args.buf].disable_autoformat then
-      return
-    end
-    -- Disable autoformat for files in a certain path
-    local bufname = vim.api.nvim_buf_get_name(args.buf)
-    if bufname:match("/node_modules/") then
-      return
-    end
-    require("conform").format({ timeout_ms = 500, lsp_fallback = true, bufnr = args.buf })
-  end,
-})
-
--- To eliminate the boilerplate, you can pass a function to format_on_save
--- and it will be called during the BufWritePre callback.
-require("conform").setup({
-  format_on_save = function(bufnr)
-    if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
-      return
-    end
-    -- ...additional logic...
-    return { timeout_ms = 500, lsp_fallback = true }
-  end,
-})
-
--- There is a similar affordance for format_after_save, which uses BufWritePost.
--- This is good for formatters that are too slow to run synchronously.
-require("conform").setup({
-  format_after_save = function(bufnr)
-    if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
-      return
-    end
-    -- ...additional logic...
-    return { lsp_fallback = true }
-  end,
-})
-```
-
-<!-- /AUTOFORMAT -->
+<!-- /RECIPES -->
 
 ## API
 

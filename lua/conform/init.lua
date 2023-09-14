@@ -66,7 +66,7 @@ M.setup = function(opts)
     if formatters.format_on_save ~= nil then
       vim.notify(
         string.format(
-          'The "format_on_save" option for filetype "%s" is deprecated. It is recommended to create your own autocmd for fine grained control, see :help conform-autoformat',
+          'The "format_on_save" option for filetype "%s" is deprecated. It is recommended to put this logic in the autocmd, see :help conform-autoformat',
           ft
         ),
         vim.log.levels.WARN
