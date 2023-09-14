@@ -7,8 +7,8 @@ return {
   command = "codespell",
   stdin = false,
   args = {
-  	"$FILENAME",
-  	"--write-changes",
-  	"--check-hidden", -- conform's temp file is hidden
+    "$FILENAME",
+    "--write-changes",
+    "--check-hidden", -- conform's temp file is hidden
   },
 }
