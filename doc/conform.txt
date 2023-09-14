@@ -152,12 +152,15 @@ FORMATTERS                                                    *conform-formatter
 `autopep8` - A tool that automatically formats Python code to conform to the PEP
            8 style guide.
 `beautysh` - A Bash beautifier for the masses.
+`biome` - A toolchain for web projects, aimed to provide functionalities to
+        maintain them.
 `black` - The uncompromising Python code formatter.
 `buf` - A new way of working with Protocol Buffers
 `clang_format` - Tool to format C/C++/… code according to a set of rules and
                heuristics.
 `cljstyle` - Formatter for Clojure code.
 `cmake_format` - Parse cmake listfiles and format them nicely.
+`codespell` - Check code for common misspellings.
 `dart_format` - Replace the whitespace in your program with formatting that
               follows Dart guidelines.
 `deno_fmt` - Use [Deno](https://deno.land/) to format TypeScript,
@@ -186,6 +189,8 @@ FORMATTERS                                                    *conform-formatter
 `jq` - Command-line JSON processor.
 `latexindent` - A perl script for formatting LaTeX files that is generally
               included in major TeX distributions.
+`markdownlint` - A Node.js style checker and lint tool for Markdown/CommonMark
+               files.
 `nixfmt` - nixfmt is a formatter for Nix code, intended to apply a uniform
          style.
 `nixpkgs_fmt` - nixpkgs-fmt is a Nix code formatter for nixpkgs.
@@ -206,6 +211,8 @@ FORMATTERS                                                    *conform-formatter
 `shellharden` - The corrective bash syntax highlighter
 `shfmt` - A shell parser, formatter, and interpreter with `bash` support.
 `sql_formatter` - A whitespace formatter for different query languages.
+`stylelint` - A mighty CSS linter that helps you avoid errors and enforce
+            conventions.
 `stylua` - An opinionated code formatter for Lua.
 `swift_format` - Swift formatter from apple. Requires building from source with
                `swift build`.
