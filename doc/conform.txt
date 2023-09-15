@@ -147,7 +147,7 @@ get_formatter_info({formatter}, {bufnr}): conform.FormatterInfo *conform.get_for
 --------------------------------------------------------------------------------
 FORMATTERS                                                    *conform-formatters*
 
-alejandra - The Uncompromising Nix Code Formatter.
+`alejandra` - The Uncompromising Nix Code Formatter.
 `autoflake` - Removes unused imports and unused variables as reported by
             pyflakes.
 `autopep8` - A tool that automatically formats Python code to conform to the PEP

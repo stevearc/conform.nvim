@@ -156,7 +156,7 @@ To view configured and available formatters, as well as to see the path to the l
 
 <!-- FORMATTERS -->
 
-- [alejandra](kamadorueda.github.io/alejandra/) - The Uncompromising Nix Code Formatter.
+- [alejandra](https://kamadorueda.com/alejandra/) - The Uncompromising Nix Code Formatter.
 - [autoflake](https://github.com/PyCQA/autoflake) - Removes unused imports and unused variables as reported by pyflakes.
 - [autopep8](https://github.com/hhatto/autopep8) - A tool that automatically formats Python code to conform to the PEP 8 style guide.
 - [beautysh](https://github.com/lovesegfault/beautysh) - A Bash beautifier for the masses.
