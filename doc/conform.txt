@@ -186,6 +186,7 @@ FORMATTERS                                                    *conform-formatter
 `golines` - A golang formatter that fixes long lines
 `htmlbeautifier` - A normaliser/beautifier for HTML that also understands
                  embedded Ruby. Ideal for tidying up Rails templates.
+`indent` - GNU Indent
 `isort` - Python utility / library to sort imports alphabetically and
         automatically separate them into sections and by type.
 `jq` - Command-line JSON processor.

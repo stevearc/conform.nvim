@@ -181,6 +181,7 @@ To view configured and available formatters, as well as to see the path to the l
 - [goimports](https://pkg.go.dev/golang.org/x/tools/cmd/goimports) - Updates your Go import lines, adding missing ones and removing unreferenced ones.
 - [golines](https://github.com/segmentio/golines) - A golang formatter that fixes long lines
 - [htmlbeautifier](https://github.com/threedaymonk/htmlbeautifier) - A normaliser/beautifier for HTML that also understands embedded Ruby. Ideal for tidying up Rails templates.
+- [indent](https://www.gnu.org/software/indent/) - GNU Indent
 - [isort](https://github.com/PyCQA/isort) - Python utility / library to sort imports alphabetically and automatically separate them into sections and by type.
 - [jq](https://github.com/stedolan/jq) - Command-line JSON processor.
 - [latexindent](https://github.com/cmhughes/latexindent.pl) - A perl script for formatting LaTeX files that is generally included in major TeX distributions.
