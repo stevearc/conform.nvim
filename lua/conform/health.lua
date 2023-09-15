@@ -156,7 +156,7 @@ M.show_window = function()
   vim.bo[bufnr].modifiable = false
   vim.bo[bufnr].modified = false
   vim.bo[bufnr].bufhidden = "wipe"
-  vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = bufnr })
+  vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = bufnr, nowait = true })
   vim.keymap.set("n", "<C-c>", "<cmd>close<cr>", { buffer = bufnr })
   vim.api.nvim_create_autocmd("BufLeave", {
     desc = "Close info window when leaving buffer",
