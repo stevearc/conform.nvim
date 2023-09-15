@@ -197,6 +197,7 @@ To view configured and available formatters, as well as to see the path to the l
 - [ruff](https://beta.ruff.rs/docs/) - An extremely fast Python linter, written in Rust.
 - [rustfmt](https://github.com/rust-lang/rustfmt) - A tool for formatting rust code according to style guidelines.
 - [scalafmt](https://github.com/scalameta/scalafmt) - Code formatter for Scala.
+- [shellcheck](https://github.com/koalaman/shellcheck) - A static analysis tool for shell scripts.
 - [shellharden](https://github.com/anordal/shellharden) - The corrective bash syntax highlighter
 - [shfmt](https://github.com/mvdan/sh) - A shell parser, formatter, and interpreter with `bash` support.
 - [sql_formatter](https://github.com/sql-formatter-org/sql-formatter) - A whitespace formatter for different query languages.
