@@ -343,6 +343,7 @@ M.format = function(opts, callback)
   elseif opts.lsp_fallback and not vim.tbl_isempty(lsp_format.get_format_clients(opts)) then
     log.debug("Running LSP formatter on %s", vim.api.nvim_buf_get_name(opts.bufnr))
     lsp_format.format(opts, callback)
+    any_formatters = true
   elseif any_formatters_configured and not opts.quiet then
     vim.notify("No formatters found for buffer. See :ConformInfo", vim.log.levels.WARN)
     callback("No formatters found for buffer")
@@ -478,6 +479,42 @@ M.get_formatter_info = function(formatter, bufnr)
     available = available,
     available_msg = available_msg,
   }
+end
+
+M.formatexpr = function(opts)
+  -- Change the defaults slightly from conform.format
+  opts = vim.tbl_deep_extend("keep", opts or {}, {
+    timeout_ms = 500,
+    lsp_fallback = true,
+  })
+  -- Force async = false
+  opts.async = false
+  if vim.tbl_contains({ "i", "R", "ic", "ix" }, vim.fn.mode()) then
+    -- `formatexpr` is also called when exceeding `textwidth` in insert mode
+    -- fall back to internal formatting
+    return 1
+  end
+
+  local start_lnum = vim.v.lnum
+  local end_lnum = start_lnum + vim.v.count - 1
+
+  if start_lnum <= 0 or end_lnum <= 0 then
+    return 0
+  end
+  local end_line = vim.fn.getline(end_lnum)
+  local end_col = end_line:len()
+  opts.range = {
+    start = { start_lnum, 0 },
+    ["end"] = { end_lnum, end_col },
+  }
+  if M.format(opts) then
+    return 0
+  elseif opts.lsp_fallback then
+    -- No formatters were available; fall back to lsp formatter
+    return vim.lsp.formatexpr({ timeout_ms = opts.timeout_ms })
+  else
+    return 1
+  end
 end
 
 return M

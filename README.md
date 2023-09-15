@@ -150,7 +150,13 @@ require("conform").setup({
 
 See [conform.format()](#formatopts-callback) for more details about the parameters.
 
-To view configured and available formatters, as well as to see the path to the log file, run `:ConformInfo`
+Conform also provides a formatexpr, same as the LSP client:
+
+```lua
+vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+```
+
+To view configured and available formatters, as well as to see the log file, run `:ConformInfo`
 
 ## Formatters
 
