@@ -311,6 +311,7 @@ require("conform").formatters.my_formatter = {
 - [Customizing formatters](doc/recipes.md#customizing-formatters)
 - [Autoformat with extra features](doc/recipes.md#autoformat-with-extra-features)
 - [Command to toggle format-on-save](doc/recipes.md#command-to-toggle-format-on-save)
+- [Automatically run slow formatters async](doc/recipes.md#automatically-run-slow-formatters-async)
 
 <!-- /RECIPES -->
 

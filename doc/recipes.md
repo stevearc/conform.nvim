@@ -6,6 +6,7 @@
 - [Customizing formatters](#customizing-formatters)
 - [Autoformat with extra features](#autoformat-with-extra-features)
 - [Command to toggle format-on-save](#command-to-toggle-format-on-save)
+- [Automatically run slow formatters async](#automatically-run-slow-formatters-async)
 
 <!-- /TOC -->
 
