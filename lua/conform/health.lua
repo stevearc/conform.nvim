@@ -1,5 +1,11 @@
 local M = {}
 
+-- The "report_" functions have been deprecated, so use the new ones if defined.
+local health_start = vim.health.start or vim.health.report_start
+local health_warn = vim.health.warn or vim.health.report_warn
+local health_info = vim.health.info or vim.health.report_info
+local health_ok = vim.health.ok or vim.health.report_ok
+
 ---@param name string
 ---@return string[]
 local function get_formatter_filetypes(name)
@@ -31,22 +37,18 @@ end
 
 M.check = function()
   local conform = require("conform")
-  vim.health.report_start("conform.nvim report")
+  health_start("conform.nvim report")
 
   local log = require("conform.log")
-  vim.health.info(string.format("Log file: %s", log.get_logfile()))
+  health_info(string.format("Log file: %s", log.get_logfile()))
 
   local all_formatters = conform.list_all_formatters()
   for _, formatter in ipairs(all_formatters) do
     if not formatter.available then
-      vim.health.report_warn(
-        string.format("%s unavailable: %s", formatter.name, formatter.available_msg)
-      )
+      health_warn(string.format("%s unavailable: %s", formatter.name, formatter.available_msg))
     else
       local filetypes = get_formatter_filetypes(formatter.name)
-      vim.health.report_ok(
-        string.format("%s ready (%s)", formatter.name, table.concat(filetypes, ", "))
-      )
+      health_ok(string.format("%s ready (%s)", formatter.name, table.concat(filetypes, ", ")))
     end
   end
 end
