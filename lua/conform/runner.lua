@@ -48,12 +48,13 @@ end
 
 ---@param ctx conform.Context
 ---@param config conform.FormatterConfig
+---@return string|string[]
 M.build_cmd = function(ctx, config)
   local command = config.command
   if type(command) == "function" then
     command = command(ctx)
   end
-  local cmd = { command }
+  ---@type string|string[]
   local args = {}
   if ctx.range and config.range_args then
     ---@cast ctx conform.RangeContext
@@ -67,16 +68,22 @@ M.build_cmd = function(ctx, config)
     end
   end
 
-  ---@diagnostic disable-next-line: param-type-mismatch
-  for _, v in ipairs(args) do
-    if v == "$FILENAME" then
-      v = ctx.filename
-    elseif v == "$DIRNAME" then
-      v = ctx.dirname
+  if type(args) == "string" then
+    local interpolated = args:gsub("$FILENAME", ctx.filename):gsub("$DIRNAME", ctx.dirname)
+    return command .. " " .. interpolated
+  else
+    local cmd = { command }
+    ---@diagnostic disable-next-line: param-type-mismatch
+    for _, v in ipairs(args) do
+      if v == "$FILENAME" then
+        v = ctx.filename
+      elseif v == "$DIRNAME" then
+        v = ctx.dirname
+      end
+      table.insert(cmd, v)
     end
-    table.insert(cmd, v)
+    return cmd
   end
-  return cmd
 end
 
 ---@param range? conform.Range

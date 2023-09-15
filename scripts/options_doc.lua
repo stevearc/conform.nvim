@@ -36,6 +36,7 @@ require("conform").setup({
       command = "my_cmd",
       -- OPTIONAL - all fields below this are optional
       -- A list of strings, or a function that returns a list of strings
+      -- Return a single string instead to run the command in a shell
       args = { "--stdin-from-filename", "$FILENAME" },
       -- If the formatter supports range formatting, create the range arguments here
       range_args = function(ctx)
