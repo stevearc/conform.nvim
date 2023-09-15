@@ -84,15 +84,18 @@ M.setup = function(opts)
       pattern = "*",
       group = aug,
       callback = function(args)
-        local format_args = opts.format_on_save
+        local format_args, callback = opts.format_on_save, nil
         if type(format_args) == "function" then
-          format_args = format_args(args.buf)
+          format_args, callback = format_args(args.buf)
         end
         if format_args then
-          M.format(vim.tbl_deep_extend("force", format_args, {
-            buf = args.buf,
-            async = false,
-          }))
+          M.format(
+            vim.tbl_deep_extend("force", format_args, {
+              buf = args.buf,
+              async = false,
+            }),
+            callback
+          )
         end
       end,
     })
@@ -109,9 +112,9 @@ M.setup = function(opts)
         if vim.b[args.buf].conform_applying_formatting then
           return
         end
-        local format_args = opts.format_after_save
+        local format_args, callback = opts.format_after_save, nil
         if type(format_args) == "function" then
-          format_args = format_args(args.buf)
+          format_args, callback = format_args(args.buf)
         end
         if format_args then
           M.format(
@@ -126,6 +129,9 @@ M.setup = function(opts)
                   vim.cmd.update()
                   vim.b[args.buf].conform_applying_formatting = false
                 end)
+              end
+              if callback then
+                callback(err)
               end
             end
           )
