@@ -9,8 +9,8 @@ local M = {}
 
 ---@class (exact) conform.FormatterConfig
 ---@field command string|fun(ctx: conform.Context): string
----@field args? string[]|fun(ctx: conform.Context): string[]
----@field range_args? fun(ctx: conform.RangeContext): string[]
+---@field args? string|string[]|fun(ctx: conform.Context): string|string[]
+---@field range_args? fun(ctx: conform.RangeContext): string|string[]
 ---@field cwd? fun(ctx: conform.Context): nil|string
 ---@field require_cwd? boolean When cwd is not found, don't run the formatter (default false)
 ---@field stdin? boolean Send buffer contents to stdin (default true)
