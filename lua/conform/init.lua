@@ -171,7 +171,7 @@ M.list_formatters_for_buffer = function(bufnr)
     end
   end
 
-  table.insert(filetypes, "*")
+  table.insert(filetypes, "_")
   for _, filetype in ipairs(filetypes) do
     ---@type conform.FormatterUnit[]
     local ft_formatters = M.formatters_by_ft[filetype]
@@ -183,7 +183,18 @@ M.list_formatters_for_buffer = function(bufnr)
       end
 
       dedupe_formatters(ft_formatters, formatters)
+      break
     end
+  end
+
+  local ft_formatters = M.formatters_by_ft["*"]
+  if ft_formatters then
+    -- support the old structure where formatters could be a subkey
+    if not vim.tbl_islist(ft_formatters) then
+      ---@diagnostic disable-next-line: undefined-field
+      ft_formatters = ft_formatters.formatters
+    end
+    dedupe_formatters(ft_formatters, formatters)
   end
 
   return formatters

@@ -20,10 +20,14 @@ OPTIONS                                                          *conform-option
         python = { "isort", "black" },
         -- Use a sub-list to run only the first available formatter
         javascript = { { "prettierd", "prettier" } },
-        -- Use the "*" filetype to run formatters on all files.
+        -- Use the "*" filetype to run formatters on all filetypes.
         -- Note that if you use this, you may want to set lsp_fallback = "always"
         -- (see :help conform.format)
-        ["*"] = { "trim_whitespace" },
+        ["*"] = { "codespell" },
+        -- Use the "_" filetype to run formatters on all filetypes
+        -- that don't have other formatters configured. Again, you may want to
+        -- set lsp_fallback = "always" when using this value.
+        ["_"] = { "trim_whitespace" },
       },
       -- If this is set, Conform will run the formatter on save.
       -- It will pass the table to conform.format().
