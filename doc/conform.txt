@@ -210,7 +210,7 @@ FORMATTERS                                                    *conform-formatter
           style guide.
 `ruff` - An extremely fast Python linter, written in Rust.
 `rustfmt` - A tool for formatting rust code according to style guidelines.
-rustywind - A tool for formatting Tailwind CSS classes.
+`rustywind` - A tool for formatting Tailwind CSS classes.
 `scalafmt` - Code formatter for Scala.
 `shellcheck` - A static analysis tool for shell scripts.
 `shellharden` - The corrective bash syntax highlighter
