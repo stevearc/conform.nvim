@@ -72,4 +72,46 @@ M.wrap_callback = function(cb, wrapper)
   end
 end
 
+---Helper function to add to the default args of a formatter.
+---@param args string|string[]|fun(ctx: conform.Context): string|string[]
+---@param extra_args string|string[]|fun(ctx: conform.Context): string|string[]
+---@param opts? { append?: boolean }
+---@example
+--- local util = require("conform.util")
+--- local prettier = require("conform.formatters.prettier")
+--- require("conform").formatters.prettier = vim.tbl_deep_extend("force", prettier, {
+---   args = util.extend_args(prettier.args, { "--tab", "--indent", "2" }),
+---   range_args = util.extend_args(prettier.range_args, { "--tab", "--indent", "2" }),
+--- })
+M.extend_args = function(args, extra_args, opts)
+  opts = opts or {}
+  return function(ctx)
+    if type(args) == "function" then
+      args = args(ctx)
+    end
+    if type(extra_args) == "function" then
+      extra_args = extra_args(ctx)
+    end
+    if type(args) == "string" then
+      if type(extra_args) ~= "string" then
+        extra_args = table.concat(extra_args, " ")
+      end
+      if opts.append then
+        return args .. " " .. extra_args
+      else
+        return extra_args .. " " .. args
+      end
+    else
+      if type(extra_args) == "string" then
+        error("extra_args must be a table when args is a table")
+      end
+      if opts.append then
+        return vim.tbl_flatten({ args, extra_args })
+      else
+        return vim.tbl_flatten({ extra_args, args })
+      end
+    end
+  end
+end
+
 return M

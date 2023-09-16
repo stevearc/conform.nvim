@@ -7,6 +7,7 @@
 - [Autoformat with extra features](#autoformat-with-extra-features)
 - [Command to toggle format-on-save](#command-to-toggle-format-on-save)
 - [Automatically run slow formatters async](#automatically-run-slow-formatters-async)
+- [Add extra arguments to a formatter command](#add-extra-arguments-to-a-formatter-command)
 
 <!-- /TOC -->
 
@@ -162,5 +163,32 @@ require("conform").setup({
     end
     return { lsp_fallback = true }
   end,
+})
+```
+
+## Add extra arguments to a formatter command
+
+The official recommended way to change the arguments of a formatter is to just copy the default
+values and mutate them however you like. For example:
+
+```lua
+require("conform.formatters.shfmt").args = { "-i", "4", "-filename", "$FILENAME" }
+```
+
+But if you really want to _add_ arguments instead of replacing them, there is a utility function to
+make this easier:
+
+```lua
+local util = require("conform.util")
+local prettier = require("conform.formatters.prettier")
+require("conform").formatters.prettier = vim.tbl_deep_extend("force", prettier, {
+  args = util.extend_args(prettier.args, { "--tab", "--indent", "2" }),
+  range_args = util.extend_args(prettier.range_args, { "--tab", "--indent", "2" }),
+})
+
+-- Pass append=true to append the extra arguments to the end
+local deno_fmt = require("conform.formatters.deno_fmt")
+require("conform").formatters.deno_fmt = vim.tbl_deep_extend('force', deno_fmt, {
+  args = util.extend_args(deno_fmt.args, { "--use-tabs" }, { append = true })
 })
 ```
