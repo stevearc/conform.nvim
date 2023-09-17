@@ -1,5 +1,29 @@
 # Changelog
 
+## [3.3.0](https://github.com/stevearc/conform.nvim/compare/v3.2.0...v3.3.0) (2023-09-17)
+
+
+### Features
+
+* '_' filetype to define fallback formatters ([a589750](https://github.com/stevearc/conform.nvim/commit/a589750635fcc5bb52c7e572cd853446c2c63855))
+* add GNU/BSD indent ([#54](https://github.com/stevearc/conform.nvim/issues/54)) ([5abf6c2](https://github.com/stevearc/conform.nvim/commit/5abf6c2c89ff6ed7d17285ec1da759013463bfc7))
+* Add rustywind formatter ([#56](https://github.com/stevearc/conform.nvim/issues/56)) ([a839ed1](https://github.com/stevearc/conform.nvim/commit/a839ed1384c21cbd8861f2850b552a4db10ead2f))
+* add shellcheck ([#44](https://github.com/stevearc/conform.nvim/issues/44)) ([508ec8a](https://github.com/stevearc/conform.nvim/commit/508ec8a899e039a56f9110011125ab56284db1fa))
+* alejandra formatter ([#52](https://github.com/stevearc/conform.nvim/issues/52)) ([e6552b5](https://github.com/stevearc/conform.nvim/commit/e6552b5c9b3a2b12bacb476b00c80c736b9f7963))
+* allow running commands in a shell ([#49](https://github.com/stevearc/conform.nvim/issues/49)) ([fbb18a5](https://github.com/stevearc/conform.nvim/commit/fbb18a5b92e2f11aaaef379d74d4a1132a138cb3))
+* format_on_save functions can return a callback as the second value ([1a568c6](https://github.com/stevearc/conform.nvim/commit/1a568c66f16650290fffcfbf5aefebe2d8254b83))
+* provide a formatexpr ([#55](https://github.com/stevearc/conform.nvim/issues/55)) ([aa38b05](https://github.com/stevearc/conform.nvim/commit/aa38b05575dab57b813ddcd14780f65ff20a6d49))
+* utility function to extend the built-in formatter args ([#50](https://github.com/stevearc/conform.nvim/issues/50)) ([cb5f939](https://github.com/stevearc/conform.nvim/commit/cb5f939ab27b2c2ef2e1d4ac6fe16c5ba6332f39))
+
+
+### Bug Fixes
+
+* `q` keymap in ConformInfo and `codespell` exit codes ([#53](https://github.com/stevearc/conform.nvim/issues/53)) ([d3fe431](https://github.com/stevearc/conform.nvim/commit/d3fe43167c7d96036c8c037ef1b4e03b448efbe7))
+* ConformInfo shows available LSP formatters ([3aa2fd5](https://github.com/stevearc/conform.nvim/commit/3aa2fd5f828f8fcabd65605a41953aba1f0f5cb0))
+* LSP formatter respects quiet = true ([5e4d258](https://github.com/stevearc/conform.nvim/commit/5e4d258f8eba4090b9a515ee9b77d8647394b2cd))
+* unify timeout error message format with LSP ([0d963f8](https://github.com/stevearc/conform.nvim/commit/0d963f82add9ca4faf49b54fc28f57038742ded3))
+* use non-deprecated health report functions if available ([#48](https://github.com/stevearc/conform.nvim/issues/48)) ([b436902](https://github.com/stevearc/conform.nvim/commit/b43690264ebcb152365d5b46faa6561f12ea062a))
+
 ## [3.2.0](https://github.com/stevearc/conform.nvim/compare/v3.1.0...v3.2.0) (2023-09-14)
 
 
