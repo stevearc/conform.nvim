@@ -145,6 +145,24 @@ M.setup = function(opts)
   end, { desc = "Show information about Conform formatters" })
 end
 
+---Get the configured formatter filetype for a buffer
+---@param bufnr? integer
+---@return nil|string filetype or nil if no formatter is configured
+local function get_matching_filetype(bufnr)
+  if not bufnr or bufnr == 0 then
+    bufnr = vim.api.nvim_get_current_buf()
+  end
+  local filetypes = vim.split(vim.bo[bufnr].filetype, ".", { plain = true })
+  table.insert(filetypes, "_")
+  for _, filetype in ipairs(filetypes) do
+    ---@type conform.FormatterUnit[]
+    local ft_formatters = M.formatters_by_ft[filetype]
+    if ft_formatters then
+      return filetype
+    end
+  end
+end
+
 ---@private
 ---@param bufnr? integer
 ---@return conform.FormatterUnit[]
@@ -154,7 +172,6 @@ M.list_formatters_for_buffer = function(bufnr)
   end
   local formatters = {}
   local seen = {}
-  local filetypes = vim.split(vim.bo[bufnr].filetype, ".", { plain = true })
 
   local function dedupe_formatters(names, collect)
     for _, name in ipairs(names) do
@@ -171,10 +188,15 @@ M.list_formatters_for_buffer = function(bufnr)
     end
   end
 
-  table.insert(filetypes, "_")
-  for _, filetype in ipairs(filetypes) do
+  local filetypes = {}
+  local matching_filetype = get_matching_filetype(bufnr)
+  if matching_filetype then
+    table.insert(filetypes, matching_filetype)
+  end
+  table.insert(filetypes, "*")
+  for _, ft in ipairs(filetypes) do
     ---@type conform.FormatterUnit[]
-    local ft_formatters = M.formatters_by_ft[filetype]
+    local ft_formatters = M.formatters_by_ft[ft]
     if ft_formatters then
       -- support the old structure where formatters could be a subkey
       if not vim.tbl_islist(ft_formatters) then
@@ -183,18 +205,7 @@ M.list_formatters_for_buffer = function(bufnr)
       end
 
       dedupe_formatters(ft_formatters, formatters)
-      break
     end
-  end
-
-  local ft_formatters = M.formatters_by_ft["*"]
-  if ft_formatters then
-    -- support the old structure where formatters could be a subkey
-    if not vim.tbl_islist(ft_formatters) then
-      ---@diagnostic disable-next-line: undefined-field
-      ft_formatters = ft_formatters.formatters
-    end
-    dedupe_formatters(ft_formatters, formatters)
   end
 
   return formatters
@@ -294,17 +305,23 @@ M.format = function(opts, callback)
   local lsp_format = require("conform.lsp_format")
   local runner = require("conform.runner")
 
+  local explicit_formatters = opts.formatters ~= nil
   local formatter_names = opts.formatters or M.list_formatters_for_buffer(opts.bufnr)
   local any_formatters_configured = formatter_names ~= nil and not vim.tbl_isempty(formatter_names)
   local formatters =
     resolve_formatters(formatter_names, opts.bufnr, not opts.quiet and opts.formatters ~= nil)
 
-  local resolved_names = vim.tbl_map(function(f)
-    return f.name
-  end, formatters)
-  log.debug("Running formatters on %s: %s", vim.api.nvim_buf_get_name(opts.bufnr), resolved_names)
-
   local any_formatters = not vim.tbl_isempty(formatters)
+  if not explicit_formatters and opts.lsp_fallback == true and M.will_fallback_lsp(opts) then
+    -- use the LSP formatter when the configured formatters are from the fallback "_" filetype
+    any_formatters = false
+  else
+    local resolved_names = vim.tbl_map(function(f)
+      return f.name
+    end, formatters)
+    log.debug("Running formatters on %s: %s", vim.api.nvim_buf_get_name(opts.bufnr), resolved_names)
+  end
+
   if any_formatters then
     local mode = vim.api.nvim_get_mode().mode
     if not opts.range and mode == "v" or mode == "V" then
@@ -490,6 +507,20 @@ M.get_formatter_info = function(formatter, bufnr)
     available = available,
     available_msg = available_msg,
   }
+end
+
+---Check if the buffer will use LSP formatting when lsp_fallback = true
+---@param options? table Options passed to |vim.lsp.buf.format|
+---@return boolean
+M.will_fallback_lsp = function(options)
+  options = options or {}
+  if not options.bufnr or options.bufnr == 0 then
+    options.bufnr = vim.api.nvim_get_current_buf()
+  end
+  local matching_filetype = get_matching_filetype(options.bufnr)
+  local has_primary_formatters = matching_filetype and matching_filetype ~= "_"
+  local lsp_clients = require("conform.lsp_format").get_format_clients(options)
+  return not has_primary_formatters and not vim.tbl_isempty(lsp_clients)
 end
 
 M.formatexpr = function(opts)

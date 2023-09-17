@@ -21,12 +21,9 @@ OPTIONS                                                          *conform-option
         -- Use a sub-list to run only the first available formatter
         javascript = { { "prettierd", "prettier" } },
         -- Use the "*" filetype to run formatters on all filetypes.
-        -- Note that if you use this, you may want to set lsp_fallback = "always"
-        -- (see :help conform.format)
         ["*"] = { "codespell" },
-        -- Use the "_" filetype to run formatters on all filetypes
-        -- that don't have other formatters configured. Again, you may want to
-        -- set lsp_fallback = "always" when using this value.
+        -- Use the "_" filetype to run formatters on filetypes that don't
+        -- have other formatters configured.
         ["_"] = { "trim_whitespace" },
       },
       -- If this is set, Conform will run the formatter on save.
@@ -148,6 +145,12 @@ get_formatter_info({formatter}, {bufnr}): conform.FormatterInfo *conform.get_for
     Parameters:
       {formatter} `string` The name of the formatter
       {bufnr}     `nil|integer`
+
+will_fallback_lsp({options}): boolean                  *conform.will_fallback_lsp*
+    Check if the buffer will use LSP formatting when lsp_fallback = true
+
+    Parameters:
+      {options} `nil|table` Options passed to |vim.lsp.buf.format|
 
 --------------------------------------------------------------------------------
 FORMATTERS                                                    *conform-formatters*

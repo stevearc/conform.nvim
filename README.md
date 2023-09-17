@@ -16,6 +16,7 @@ Lightweight yet powerful formatter plugin for Neovim
   - [list_formatters(bufnr)](#list_formattersbufnr)
   - [list_all_formatters()](#list_all_formatters)
   - [get_formatter_info(formatter, bufnr)](#get_formatter_infoformatter-bufnr)
+  - [will_fallback_lsp(options)](#will_fallback_lspoptions)
 - [Acknowledgements](#acknowledgements)
 
 <!-- /TOC -->
@@ -241,12 +242,9 @@ require("conform").setup({
     -- Use a sub-list to run only the first available formatter
     javascript = { { "prettierd", "prettier" } },
     -- Use the "*" filetype to run formatters on all filetypes.
-    -- Note that if you use this, you may want to set lsp_fallback = "always"
-    -- (see :help conform.format)
     ["*"] = { "codespell" },
-    -- Use the "_" filetype to run formatters on all filetypes
-    -- that don't have other formatters configured. Again, you may want to
-    -- set lsp_fallback = "always" when using this value.
+    -- Use the "_" filetype to run formatters on filetypes that don't
+    -- have other formatters configured.
     ["_"] = { "trim_whitespace" },
   },
   -- If this is set, Conform will run the formatter on save.
@@ -384,6 +382,15 @@ Get information about a formatter (including availability)
 | --------- | -------------- | ------------------------- |
 | formatter | `string`       | The name of the formatter |
 | bufnr     | `nil\|integer` |                           |
+
+### will_fallback_lsp(options)
+
+`will_fallback_lsp(options): boolean` \
+Check if the buffer will use LSP formatting when lsp_fallback = true
+
+| Param   | Type         | Desc                                 |
+| ------- | ------------ | ------------------------------------ |
+| options | `nil\|table` | Options passed to vim.lsp.buf.format |
 <!-- /API -->
 
 ## Acknowledgements
