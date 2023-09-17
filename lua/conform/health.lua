@@ -71,9 +71,10 @@ end
 
 M.show_window = function()
   local conform = require("conform")
+  local log = require("conform.log")
+  local lsp_format = require("conform.lsp_format")
   local lines = {}
   local highlights = {}
-  local log = require("conform.log")
   local logfile = log.get_logfile()
   table.insert(lines, string.format("Log file: %s", logfile))
   table.insert(highlights, { "Title", #lines, 0, 10 })
@@ -127,9 +128,19 @@ M.show_window = function()
 
   table.insert(lines, "Formatters for this buffer:")
   table.insert(highlights, { "Title", #lines, 0, -1 })
+  local lsp_clients = lsp_format.get_format_clients({ bufnr = vim.api.nvim_get_current_buf() })
+  local has_lsp_formatter = not vim.tbl_isempty(lsp_clients)
+  if has_lsp_formatter then
+    table.insert(lines, "LSP: " .. table.concat(
+      vim.tbl_map(function(c)
+        return c.name
+      end, lsp_clients),
+      ", "
+    ))
+  end
   local buf_formatters = flatten_formatters(conform.list_formatters_for_buffer())
   append_formatters(buf_formatters)
-  if vim.tbl_isempty(buf_formatters) then
+  if vim.tbl_isempty(buf_formatters) and not has_lsp_formatter then
     table.insert(lines, "<none>")
   end
 
