@@ -515,7 +515,7 @@ M.format_sync = function(bufnr, formatters, timeout_ms, range)
     if remaining <= 0 then
       return {
         code = M.ERROR_CODE.TIMEOUT,
-        message = string.format("Formatter '%s' timed out", formatter.name),
+        message = string.format("Formatter '%s' timeout", formatter.name),
       }
     end
     local done = false
@@ -539,7 +539,7 @@ M.format_sync = function(bufnr, formatters, timeout_ms, range)
       if wait_reason == -1 then
         return {
           code = M.ERROR_CODE.TIMEOUT,
-          message = string.format("Formatter '%s' timed out", formatter.name),
+          message = string.format("Formatter '%s' timeout", formatter.name),
         }
       else
         return {
