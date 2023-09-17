@@ -105,7 +105,9 @@ function M.format(options, callback)
       if result and result.result then
         apply_text_edits(result.result, bufnr, client.offset_encoding)
       elseif err then
-        vim.notify(string.format("[LSP][%s] %s", client.name, err), vim.log.levels.WARN)
+        if not options.quiet then
+          vim.notify(string.format("[LSP][%s] %s", client.name, err), vim.log.levels.WARN)
+        end
         return callback(string.format("[LSP][%s] %s", client.name, err))
       end
     end
