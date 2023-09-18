@@ -223,6 +223,8 @@ FORMATTERS                                                    *conform-formatter
 `shellharden` - The corrective bash syntax highlighter
 `shfmt` - A shell parser, formatter, and interpreter with `bash` support.
 `sql_formatter` - A whitespace formatter for different query languages.
+`squeeze_blanks` - Squeeze repeated blank lines into a single blank line via
+                 `cat -s`.
 `stylelint` - A mighty CSS linter that helps you avoid errors and enforce
             conventions.
 `stylua` - An opinionated code formatter for Lua.

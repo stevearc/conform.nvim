@@ -210,6 +210,7 @@ To view configured and available formatters, as well as to see the log file, run
 - [shellharden](https://github.com/anordal/shellharden) - The corrective bash syntax highlighter
 - [shfmt](https://github.com/mvdan/sh) - A shell parser, formatter, and interpreter with `bash` support.
 - [sql_formatter](https://github.com/sql-formatter-org/sql-formatter) - A whitespace formatter for different query languages.
+- [squeeze_blanks](https://www.gnu.org/software/coreutils/manual/html_node/cat-invocation.html#cat-invocation) - Squeeze repeated blank lines into a single blank line via `cat -s`.
 - [stylelint](https://github.com/stylelint/stylelint) - A mighty CSS linter that helps you avoid errors and enforce conventions.
 - [stylua](https://github.com/JohnnyMorganz/StyLua) - An opinionated code formatter for Lua.
 - [swift_format](https://github.com/apple/swift-format) - Swift formatter from apple. Requires building from source with `swift build`.
