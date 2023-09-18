@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.4.0](https://github.com/stevearc/conform.nvim/compare/v3.3.0...v3.4.0) (2023-09-18)
+
+
+### Features
+
+* add `squeeze_blanks` ([#62](https://github.com/stevearc/conform.nvim/issues/62)) ([3fa2a7b](https://github.com/stevearc/conform.nvim/commit/3fa2a7be8d91c3f0d7b79dde70d7849518cdc5bf))
+* make lsp_fallback behavior more intuitive ([#59](https://github.com/stevearc/conform.nvim/issues/59)) ([1abbb82](https://github.com/stevearc/conform.nvim/commit/1abbb82bb8e519e652d8b31b12a311872e9090d1))
+
 ## [3.3.0](https://github.com/stevearc/conform.nvim/compare/v3.2.0...v3.3.0) (2023-09-17)
 
 
