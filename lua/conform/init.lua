@@ -300,6 +300,10 @@ M.format = function(opts, callback)
     lsp_fallback = false,
     quiet = false,
   })
+  local mode = vim.api.nvim_get_mode().mode
+  if not opts.range and mode == "v" or mode == "V" then
+    opts.range = range_from_selection(opts.bufnr, mode)
+  end
   callback = callback or function(_err) end
   local log = require("conform.log")
   local lsp_format = require("conform.lsp_format")
@@ -323,11 +327,6 @@ M.format = function(opts, callback)
   end
 
   if any_formatters then
-    local mode = vim.api.nvim_get_mode().mode
-    if not opts.range and mode == "v" or mode == "V" then
-      opts.range = range_from_selection(opts.bufnr, mode)
-    end
-
     ---@param err? conform.Error
     local function handle_err(err)
       if err then
