@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.4.1](https://github.com/stevearc/conform.nvim/compare/v3.4.0...v3.4.1) (2023-09-19)
+
+
+### Bug Fixes
+
+* range formatting for LSP formatters ([#63](https://github.com/stevearc/conform.nvim/issues/63)) ([52280f0](https://github.com/stevearc/conform.nvim/commit/52280f032653e98dd6ecbb61488afcca39671964))
+
 ## [3.4.0](https://github.com/stevearc/conform.nvim/compare/v3.3.0...v3.4.0) (2023-09-18)
 
 
