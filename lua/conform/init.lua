@@ -283,7 +283,7 @@ end
 ---    bufnr nil|integer Format this buffer (default 0)
 ---    async nil|boolean If true the method won't block. Defaults to false. If the buffer is modified before the formatter completes, the formatting will be discarded.
 ---    formatters nil|string[] List of formatters to run. Defaults to all formatters for the buffer filetype.
----    lsp_fallback nil|boolean|"always" Attempt LSP formatting if no formatters are available. Defaults to false. If "always", will attempt LSP formatting even if formatters are available (useful if you set formatters for the "*" filetype)
+---    lsp_fallback nil|boolean|"always" Attempt LSP formatting if no formatters are available. Defaults to false. If "always", will attempt LSP formatting even if formatters are available.
 ---    quiet nil|boolean Don't show any notifications for warnings or failures. Defaults to false.
 ---    range nil|table Range to format. Table must contain `start` and `end` keys with {row, col} tuples using (1,0) indexing. Defaults to current selection in visual mode
 ---    id nil|integer Passed to |vim.lsp.buf.format| when lsp_fallback = true
