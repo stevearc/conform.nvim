@@ -169,7 +169,7 @@ To view configured and available formatters, as well as to see the log file, run
 - [beautysh](https://github.com/lovesegfault/beautysh) - A Bash beautifier for the masses.
 - [biome](https://github.com/biomejs/biome) - A toolchain for web projects, aimed to provide functionalities to maintain them.
 - [black](https://github.com/psf/black) - The uncompromising Python code formatter.
-- [buf](https://buf.build/docs/lint/overview) - A new way of working with Protocol Buffers
+- [buf](https://buf.build/docs/reference/cli/buf/format) - A new way of working with Protocol Buffers
 - [clang_format](https://www.kernel.org/doc/html/latest/process/clang-format.html) - Tool to format C/C++/… code according to a set of rules and heuristics.
 - [cljstyle](https://github.com/greglook/cljstyle) - Formatter for Clojure code.
 - [cmake_format](https://github.com/cheshirekow/cmake_format) - Parse cmake listfiles and format them nicely.
