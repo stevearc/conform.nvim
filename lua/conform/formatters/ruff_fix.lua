@@ -2,11 +2,13 @@
 return {
   meta = {
     url = "https://beta.ruff.rs/docs/",
-    description = "An extremely fast Python linter, written in Rust. Formatter subcommand.",
+    description = "An extremely fast Python linter, written in Rust. Fix lint errors.",
   },
   command = "ruff",
   args = {
-    "format",
+    "--fix",
+    "-e",
+    "-n",
     "--stdin-filename",
     "$FILENAME",
     "-",

@@ -1,20 +1,4 @@
-return {
-  meta = {
-    url = "https://beta.ruff.rs/docs/",
-    description = "An extremely fast Python linter, written in Rust.",
-  },
-  command = "ruff",
-  args = {
-    "--fix",
-    "-e",
-    "-n",
-    "--stdin-filename",
-    "$FILENAME",
-    "-",
-  },
-  stdin = true,
-  cwd = require("conform.util").root_file({
-    "pyproject.toml",
-    "ruff.conf",
-  }),
-}
+-- This was renamed to ruff_fix
+local conf = vim.deepcopy(require("conform.formatters.ruff_fix"))
+conf.meta.deprecated = true
+return conf

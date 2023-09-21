@@ -46,7 +46,8 @@ def get_all_formatters() -> List[Formatter]:
     formatters = []
     for name in names:
         meta = read_nvim_json(f'require("conform.formatters.{name}").meta')
-        formatters.append(Formatter(name, **meta))
+        if not meta.get("deprecated"):
+            formatters.append(Formatter(name, **meta))
     return formatters
 
 

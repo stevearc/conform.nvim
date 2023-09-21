@@ -24,6 +24,7 @@ local M = {}
 ---@class (exact) conform.FormatterMeta
 ---@field url string
 ---@field description string
+---@field deprecated? boolean
 
 ---@class (exact) conform.Context
 ---@field buf integer
