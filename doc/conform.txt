@@ -215,6 +215,7 @@ FORMATTERS                                                    *conform-formatter
 `rubocop` - Ruby static code analyzer and formatter, based on the community Ruby
           style guide.
 `ruff` - An extremely fast Python linter, written in Rust.
+`ruff_format` - An extremely fast Python linter, written in Rust. Formatter subcommand.
 `rustfmt` - A tool for formatting rust code according to style guidelines.
 `rustywind` - A tool for formatting Tailwind CSS classes.
 `scalafmt` - Code formatter for Scala.

@@ -203,6 +203,7 @@ To view configured and available formatters, as well as to see the log file, run
 - [prettierd](https://github.com/fsouza/prettierd) - prettier, as a daemon, for ludicrous formatting speed.
 - [rubocop](https://github.com/rubocop/rubocop) - Ruby static code analyzer and formatter, based on the community Ruby style guide.
 - [ruff](https://beta.ruff.rs/docs/) - An extremely fast Python linter, written in Rust.
+- [ruff_format](https://beta.ruff.rs/docs/) - An extremely fast Python linter, written in Rust. Formatter subcommand.
 - [rustfmt](https://github.com/rust-lang/rustfmt) - A tool for formatting rust code according to style guidelines.
 - [rustywind](https://github.com/avencera/rustywind) - A tool for formatting Tailwind CSS classes.
 - [scalafmt](https://github.com/scalameta/scalafmt) - Code formatter for Scala.
