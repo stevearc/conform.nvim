@@ -1,5 +1,20 @@
 # Changelog
 
+## [3.5.0](https://github.com/stevearc/conform.nvim/compare/v3.4.1...v3.5.0) (2023-09-22)
+
+
+### Features
+
+* add `bibtex-tidy` ([#69](https://github.com/stevearc/conform.nvim/issues/69)) ([f5e7f84](https://github.com/stevearc/conform.nvim/commit/f5e7f84fb27f05d9a3f3893634cbb6c7f7f89056))
+* add dprint ([#71](https://github.com/stevearc/conform.nvim/issues/71)) ([0e2c97a](https://github.com/stevearc/conform.nvim/commit/0e2c97ab640f14f7da92278c731879efcb11f563))
+* add mdformat ([#68](https://github.com/stevearc/conform.nvim/issues/68)) ([4a4c927](https://github.com/stevearc/conform.nvim/commit/4a4c92715b174b847ba0fcdccf9dfea71c8ed33e))
+* add ruff formatter and improve ruff root finding ([#66](https://github.com/stevearc/conform.nvim/issues/66)) ([44e9e82](https://github.com/stevearc/conform.nvim/commit/44e9e8292d552f9a35498612a93dff934cc8802f))
+
+
+### Bug Fixes
+
+* `stylelint` and `markdownlint` when there are non-autofixable errors ([#70](https://github.com/stevearc/conform.nvim/issues/70)) ([5454fb5](https://github.com/stevearc/conform.nvim/commit/5454fb5a72a957b550fb7a0f5c4e84684c529920))
+
 ## [3.4.1](https://github.com/stevearc/conform.nvim/compare/v3.4.0...v3.4.1) (2023-09-19)
 
 
