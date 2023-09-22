@@ -6,5 +6,5 @@ return {
   },
   command = "bibtex-tidy",
   stdin = true,
-  args = { "--quiet" }
+  args = { "--quiet" },
 }
