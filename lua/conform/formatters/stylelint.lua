@@ -6,5 +6,6 @@ return {
   },
   command = "stylelint",
   args = { "--stdin", "--fix" },
+  exit_codes = { 0, 2 }, -- code 2 is given when trying file includees some non-autofixable errors
   stdin = true,
 }
