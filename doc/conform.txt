@@ -160,6 +160,7 @@ FORMATTERS                                                    *conform-formatter
 `autopep8` - A tool that automatically formats Python code to conform to the PEP
            8 style guide.
 `beautysh` - A Bash beautifier for the masses.
+`bibtex-tidy` - Cleaner and Formatter for BibTeX files.
 `biome` - A toolchain for web projects, aimed to provide functionalities to
         maintain them.
 `black` - The uncompromising Python code formatter.

@@ -167,6 +167,7 @@ To view configured and available formatters, as well as to see the log file, run
 - [autoflake](https://github.com/PyCQA/autoflake) - Removes unused imports and unused variables as reported by pyflakes.
 - [autopep8](https://github.com/hhatto/autopep8) - A tool that automatically formats Python code to conform to the PEP 8 style guide.
 - [beautysh](https://github.com/lovesegfault/beautysh) - A Bash beautifier for the masses.
+- [bibtex-tidy](https://github.com/FlamingTempura/bibtex-tidy) - Cleaner and Formatter for BibTeX files.
 - [biome](https://github.com/biomejs/biome) - A toolchain for web projects, aimed to provide functionalities to maintain them.
 - [black](https://github.com/psf/black) - The uncompromising Python code formatter.
 - [buf](https://buf.build/docs/reference/cli/buf/format) - A new way of working with Protocol Buffers
