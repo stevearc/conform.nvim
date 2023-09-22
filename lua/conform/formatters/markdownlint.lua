@@ -6,5 +6,6 @@ return {
   },
   command = "markdownlint",
   args = { "--fix", "$FILENAME" },
+  exit_codes = { 0, 1 }, -- code 1 is given when trying a file that includes non-autofixable errors
   stdin = false,
 }
