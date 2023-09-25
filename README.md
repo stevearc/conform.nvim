@@ -220,6 +220,7 @@ To view configured and available formatters, as well as to see the log file, run
 - [swift_format](https://github.com/apple/swift-format) - Swift formatter from apple. Requires building from source with `swift build`.
 - [swiftformat](https://github.com/nicklockwood/SwiftFormat) - SwiftFormat is a code library and command-line tool for reformatting `swift` code on macOS or Linux.
 - [taplo](https://github.com/tamasfe/taplo) - A TOML toolkit written in Rust
+- [templ](https://templ.guide/commands-and-tools/cli/#formatting-templ-files) - A Go HTML template engine
 - [terraform_fmt](https://www.terraform.io/docs/cli/commands/fmt.html) - The terraform-fmt command rewrites `terraform` configuration files to a canonical format and style.
 - [trim_newlines](https://www.gnu.org/software/gawk/manual/gawk.html) - Trim new lines with awk
 - [trim_whitespace](https://www.gnu.org/software/gawk/manual/gawk.html) - Trim whitespaces with awk
