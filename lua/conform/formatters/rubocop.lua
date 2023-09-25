@@ -13,4 +13,5 @@ return {
     "--stdin",
     "$FILENAME",
   },
+  exit_codes = { 0, 1 },
 }
