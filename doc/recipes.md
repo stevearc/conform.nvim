@@ -191,4 +191,7 @@ local deno_fmt = require("conform.formatters.deno_fmt")
 require("conform").formatters.deno_fmt = vim.tbl_deep_extend('force', deno_fmt, {
   args = util.extend_args(deno_fmt.args, { "--use-tabs" }, { append = true })
 })
+
+-- There is also a utility to modify a formatter in-place
+util.add_formatter_args(require("conform.formatters.prettier"), { "--tab", "--indent", "2" })
 ```

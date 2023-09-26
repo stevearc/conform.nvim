@@ -114,4 +114,18 @@ M.extend_args = function(args, extra_args, opts)
   end
 end
 
+---@param formatter conform.FormatterConfig
+---@param extra_args string|string[]|fun(ctx: conform.Context): string|string[]
+---@param opts? { append?: boolean }
+---@example
+--- local util = require("conform.util")
+--- local prettier = require("conform.formatters.prettier")
+--- util.add_formatter_args(prettier, { "--tab", "--indent", "2" })
+M.add_formatter_args = function(formatter, extra_args, opts)
+  formatter.args = M.extend_args(formatter.args, extra_args, opts)
+  if formatter.range_args then
+    formatter.range_args = M.extend_args(formatter.range_args, extra_args, opts)
+  end
+end
+
 return M
