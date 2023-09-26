@@ -1,19 +1,47 @@
 local M = {}
 
+---Find a command in node_modules
 ---@param cmd string
 ---@return fun(ctx: conform.Context): string
 M.from_node_modules = function(cmd)
+  return M.find_executable({ "node_modules/.bin/" .. cmd }, cmd)
+end
+
+---Search parent directories for a relative path to a command
+---@param paths string[]
+---@param default string
+---@return fun(ctx: conform.Context): string
+---@example
+--- local cmd = require("conform.util").find_executable({ "node_modules/.bin/prettier" }, "prettier")
+M.find_executable = function(paths, default)
   return function(ctx)
-    local fs = require("conform.fs")
-    local found =
-      vim.fs.find("node_modules", { upward = true, type = "directory", path = ctx.dirname })
-    for _, dir in ipairs(found) do
-      local executable = fs.join(dir, ".bin", cmd)
-      if vim.fn.executable(executable) == 1 then
-        return executable
+    for _, path in ipairs(paths) do
+      local normpath = vim.fs.normalize(path)
+      local is_absolute = vim.startswith(normpath, "/")
+      if is_absolute and vim.fn.executable(normpath) then
+        return normpath
+      end
+
+      local idx = normpath:find("/", 1, true)
+      local dir, subpath
+      if idx then
+        dir = normpath:sub(1, idx - 1)
+        subpath = normpath:sub(idx)
+      else
+        -- This is a bare relative-path executable
+        dir = normpath
+        subpath = ""
+      end
+      local results = vim.fs.find(dir, { upward = true, path = ctx.dirname, limit = math.huge })
+      for _, result in ipairs(results) do
+        local fullpath = result .. subpath
+        if vim.fn.executable(fullpath) == 1 then
+          return fullpath
+        end
       end
     end
-    return cmd
+
+    return default
   end
 end
 
