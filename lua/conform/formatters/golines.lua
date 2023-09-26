@@ -5,4 +5,5 @@ return {
     description = "A golang formatter that fixes long lines",
   },
   command = "golines",
+  args = { "$FILENAME" },
 }
