@@ -6,7 +6,7 @@ return {
     url = "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer",
     description = "The PHP Coding Standards Fixer.",
   },
-  command = util.path_or({
+  command = util.find_executable({
     "tools/php-cs-fixer/vendor/bin/php-cs-fixer",
     "vendor/bin/php-cs-fixer",
   }, "php-cs-fixer"),
