@@ -1,5 +1,21 @@
 # Changelog
 
+## [3.6.0](https://github.com/stevearc/conform.nvim/compare/v3.5.0...v3.6.0) (2023-09-27)
+
+
+### Features
+
+* add `markdown-toc` ([#75](https://github.com/stevearc/conform.nvim/issues/75)) ([de58b06](https://github.com/stevearc/conform.nvim/commit/de58b06d434047c6ecd5ec2d52877335d37b05fd))
+* Add support for php-cs-fixer ([#78](https://github.com/stevearc/conform.nvim/issues/78)) ([e691eca](https://github.com/stevearc/conform.nvim/commit/e691ecaf41139a68ccb79fde824cb534ca11abd2))
+* add templ support ([#73](https://github.com/stevearc/conform.nvim/issues/73)) ([28ecd5c](https://github.com/stevearc/conform.nvim/commit/28ecd5cf9132213417bff41d79477354cb81f50c))
+* another utility for extending formatter arguments ([aada09c](https://github.com/stevearc/conform.nvim/commit/aada09c9cfea38187966ce47f34b9008e1104d21))
+* new  utility function ([9e1fcd5](https://github.com/stevearc/conform.nvim/commit/9e1fcd5cafc42b5dfbe2e942ddbece0dada4e1d0))
+
+
+### Bug Fixes
+
+* rubocop succeeds even if some errors are not autocorrected ([#74](https://github.com/stevearc/conform.nvim/issues/74)) ([34daf23](https://github.com/stevearc/conform.nvim/commit/34daf23415e9d212697f79506039498db2b35240))
+
 ## [3.5.0](https://github.com/stevearc/conform.nvim/compare/v3.4.1...v3.5.0) (2023-09-22)
 
 
