@@ -232,6 +232,7 @@ FORMATTERS                                                    *conform-formatter
 `sql_formatter` - A whitespace formatter for different query languages.
 `squeeze_blanks` - Squeeze repeated blank lines into a single blank line via
                  `cat -s`.
+`standardjs` - JavaScript Standard style guide, linter, and formatter.
 `stylelint` - A mighty CSS linter that helps you avoid errors and enforce
             conventions.
 `stylua` - An opinionated code formatter for Lua.
