@@ -33,21 +33,20 @@ class Formatter:
     name: str
     description: str
     url: str
+    deprecated: bool = False
 
 
 @lru_cache
 def get_all_formatters() -> List[Formatter]:
-    names = sorted(
-        [
-            os.path.splitext(file)[0]
-            for file in os.listdir(os.path.join(ROOT, "lua", "conform", "formatters"))
-        ]
-    )
     formatters = []
-    for name in names:
-        meta = read_nvim_json(f'require("conform.formatters.{name}").meta')
-        if not meta.get("deprecated"):
-            formatters.append(Formatter(name, **meta))
+    formatter_map = read_nvim_json(
+        'require("conform.formatters").list_all_formatters()'
+    )
+    for name, meta in formatter_map.items():
+        formatter = Formatter(name, **meta)
+        if not formatter.deprecated:
+            formatters.append(formatter)
+    formatters.sort(key=lambda f: f.name)
     return formatters
 
 
