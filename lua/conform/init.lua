@@ -312,9 +312,8 @@ M.format = function(opts, callback)
 
   local explicit_formatters = opts.formatters ~= nil
   local formatter_names = opts.formatters or M.list_formatters_for_buffer(opts.bufnr)
-  local any_formatters_configured = formatter_names ~= nil and not vim.tbl_isempty(formatter_names)
   local formatters =
-    resolve_formatters(formatter_names, opts.bufnr, not opts.quiet and opts.formatters ~= nil)
+    resolve_formatters(formatter_names, opts.bufnr, not opts.quiet and explicit_formatters)
 
   local any_formatters = not vim.tbl_isempty(formatters)
   if not explicit_formatters and opts.lsp_fallback == true and M.will_fallback_lsp(opts) then
@@ -368,19 +367,17 @@ M.format = function(opts, callback)
       local err = runner.format_sync(opts.bufnr, formatters, opts.timeout_ms, opts.range)
       handle_err(err)
     end
+    return true
   elseif opts.lsp_fallback and not vim.tbl_isempty(lsp_format.get_format_clients(opts)) then
     log.debug("Running LSP formatter on %s", vim.api.nvim_buf_get_name(opts.bufnr))
     lsp_format.format(opts, callback)
-    any_formatters = true
-  elseif any_formatters_configured and not opts.quiet then
-    vim.notify("No formatters found for buffer. See :ConformInfo", vim.log.levels.WARN)
-    callback("No formatters found for buffer")
+    return true
   else
-    log.debug("No formatters found for %s", vim.api.nvim_buf_get_name(opts.bufnr))
+    local level = vim.tbl_isempty(formatter_names) and "debug" or "warn"
+    log[level]("No formatters found for %s", vim.api.nvim_buf_get_name(opts.bufnr))
     callback("No formatters found for buffer")
+    return false
   end
-
-  return any_formatters
 end
 
 ---Retrieve the available formatters for a buffer
