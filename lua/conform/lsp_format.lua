@@ -91,7 +91,7 @@ function M.format(options, callback)
           return callback(err or "No result returned from LSP formatter")
         elseif not vim.api.nvim_buf_is_valid(bufnr) then
           return callback("buffer was deleted")
-        elseif changedtick ~= util.buf_get_changedtick(bufnr) then
+        elseif changedtick ~= require("conform.util").buf_get_changedtick(bufnr) then
           return
             callback(
             string.format(
