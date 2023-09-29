@@ -257,9 +257,17 @@ local last_run_errored = {}
 ---@param callback fun(err?: conform.Error, output?: string[])
 ---@return integer? job_id
 local function run_formatter(bufnr, formatter, config, ctx, input_lines, callback)
+  log.info("Run %s on %s", formatter.name, vim.api.nvim_buf_get_name(bufnr))
+  log.trace("Input lines: %s", input_lines)
   if config.format then
     ---@cast config conform.LuaFormatterConfig
-    config.format(ctx, input_lines, callback)
+    local ok, err = pcall(config.format, ctx, input_lines, callback)
+    if not ok then
+      callback({
+        code = M.ERROR_CODE.RUNTIME,
+        message = string.format("Formatter '%s' error: %s", formatter.name, err),
+      })
+    end
     return
   end
   ---@cast config conform.JobFormatterConfig
@@ -283,14 +291,12 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, callbac
     end
   end)
 
-  log.info("Run %s on %s", formatter.name, vim.api.nvim_buf_get_name(bufnr))
   local buffer_text
   -- If the buffer has a newline at the end, make sure we include that in the input to the formatter
   local add_extra_newline = vim.bo[bufnr].eol
   if add_extra_newline then
     table.insert(input_lines, "")
   end
-  log.trace("Input lines: %s", input_lines)
   buffer_text = table.concat(input_lines, "\n")
   if add_extra_newline then
     table.remove(input_lines)

@@ -53,6 +53,7 @@ return {
   end,
   format = function(ctx, lines, callback)
     local conform = require("conform")
+    local log = require("conform.log")
     local util = require("conform.util")
     local ok, parser = pcall(vim.treesitter.get_parser, ctx.buf)
     if not ok then
@@ -78,6 +79,7 @@ return {
     table.sort(regions, function(a, b)
       return a[2] > b[2]
     end)
+    log.trace("Injected formatter regions %s", regions)
 
     local replacements = {}
     local format_error = nil
@@ -124,12 +126,17 @@ return {
         local formatter_names = conform.formatters_by_ft[lang]
         local format_opts = { async = true, bufnr = ctx.buf, quiet = true }
         local idx = num_format
+        log.debug("Injected format %s:%d:%d: %s", lang, start_lnum, end_lnum, formatter_names)
+        log.trace("Injected format lines %s", input_lines)
         conform.format_lines(formatter_names, input_lines, format_opts, function(err, new_lines)
           -- Preserve indentation in case the code block is indented
           apply_indent(input_lines, new_lines)
           formatter_cb(err, idx, start_lnum, end_lnum, new_lines)
         end)
       end
+    end
+    if num_format == 0 then
+      apply_format_results()
     end
   end,
 }
