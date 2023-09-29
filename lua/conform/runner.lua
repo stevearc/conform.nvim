@@ -47,7 +47,7 @@ M.is_execution_error = function(code)
 end
 
 ---@param ctx conform.Context
----@param config conform.FormatterConfig
+---@param config conform.JobFormatterConfig
 ---@return string|string[]
 M.build_cmd = function(ctx, config)
   local command = config.command
@@ -255,8 +255,14 @@ local last_run_errored = {}
 ---@param ctx conform.Context
 ---@param input_lines string[]
 ---@param callback fun(err?: conform.Error, output?: string[])
----@return integer job_id
+---@return integer? job_id
 local function run_formatter(bufnr, formatter, config, ctx, input_lines, callback)
+  if config.format then
+    ---@cast config conform.LuaFormatterConfig
+    config.format(ctx, input_lines, callback)
+    return
+  end
+  ---@cast config conform.JobFormatterConfig
   local cmd = M.build_cmd(ctx, config)
   local cwd = nil
   if config.cwd then
@@ -440,11 +446,6 @@ M.format_async = function(bufnr, formatters, range, callback)
   if bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
   end
-  local idx = 1
-  local changedtick = vim.b[bufnr].changedtick
-  local original_lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
-  local input_lines = original_lines
-  local all_support_range_formatting = true
 
   -- kill previous jobs for buffer
   local prev_jid = vim.b[bufnr].conform_jid
@@ -454,9 +455,18 @@ M.format_async = function(bufnr, formatters, range, callback)
     end
   end
 
-  local function run_next_formatter()
-    local formatter = formatters[idx]
-    if not formatter then
+  local original_lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+  local changedtick = vim.b[bufnr].changedtick
+  M.format_lines_async(
+    bufnr,
+    formatters,
+    range,
+    original_lines,
+    function(err, output_lines, all_support_range_formatting)
+      if err then
+        return callback(err)
+      end
+      assert(output_lines)
       local new_changedtick = vim.b[bufnr].changedtick
       -- changedtick gets set to -1 when vim is exiting. We have an autocmd that should store it in
       -- last_changedtick before it is set to -1.
@@ -473,9 +483,29 @@ M.format_async = function(bufnr, formatters, range, callback)
           ),
         })
       else
-        M.apply_format(bufnr, original_lines, input_lines, range, not all_support_range_formatting)
+        M.apply_format(bufnr, original_lines, output_lines, range, not all_support_range_formatting)
         callback()
       end
+    end
+  )
+end
+
+---@param bufnr integer
+---@param formatters conform.FormatterInfo[]
+---@param range? conform.Range
+---@param input_lines string[]
+---@param callback fun(err?: conform.Error, output_lines?: string[], all_support_range_formatting?: boolean)
+M.format_lines_async = function(bufnr, formatters, range, input_lines, callback)
+  if bufnr == 0 then
+    bufnr = vim.api.nvim_get_current_buf()
+  end
+  local idx = 1
+  local all_support_range_formatting = true
+
+  local function run_next_formatter()
+    local formatter = formatters[idx]
+    if not formatter then
+      callback(nil, input_lines, all_support_range_formatting)
       return
     end
     idx = idx + 1
@@ -503,9 +533,7 @@ M.format_sync = function(bufnr, formatters, timeout_ms, range)
   if bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
   end
-  local start = uv.hrtime() / 1e6
   local original_lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
-  local input_lines = original_lines
 
   -- kill previous jobs for buffer
   local prev_jid = vim.b[bufnr].conform_jid
@@ -514,6 +542,29 @@ M.format_sync = function(bufnr, formatters, timeout_ms, range)
       log.info("Canceled previous format job for %s", vim.api.nvim_buf_get_name(bufnr))
     end
   end
+
+  local err, final_result, all_support_range_formatting =
+    M.format_lines_sync(bufnr, formatters, timeout_ms, range, original_lines)
+  if err then
+    return err
+  end
+  assert(final_result)
+
+  M.apply_format(bufnr, original_lines, final_result, range, not all_support_range_formatting)
+end
+
+---@param bufnr integer
+---@param formatters conform.FormatterInfo[]
+---@param timeout_ms integer
+---@param range? conform.Range
+---@return conform.Error? error
+---@return string[]? output_lines
+---@return boolean? all_support_range_formatting
+M.format_lines_sync = function(bufnr, formatters, timeout_ms, range, input_lines)
+  if bufnr == 0 then
+    bufnr = vim.api.nvim_get_current_buf()
+  end
+  local start = uv.hrtime() / 1e6
 
   local all_support_range_formatting = true
   for _, formatter in ipairs(formatters) do
@@ -541,7 +592,9 @@ M.format_sync = function(bufnr, formatters, timeout_ms, range)
     end, 5)
 
     if not wait_result then
-      vim.fn.jobstop(jid)
+      if jid then
+        vim.fn.jobstop(jid)
+      end
       if wait_reason == -1 then
         return {
           code = M.ERROR_CODE.TIMEOUT,
@@ -562,8 +615,7 @@ M.format_sync = function(bufnr, formatters, timeout_ms, range)
     input_lines = result
   end
 
-  local final_result = input_lines
-  M.apply_format(bufnr, original_lines, final_result, range, not all_support_range_formatting)
+  return nil, input_lines, all_support_range_formatting
 end
 
 return M

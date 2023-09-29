@@ -31,6 +31,7 @@ Lightweight yet powerful formatter plugin for Neovim
 - **Fixes bad-behaving LSP formatters** - Some LSP servers are lazy and simply replace the entire buffer, leading to the problems mentioned above. Conform hooks into the LSP handler and turns these responses into proper piecewise changes.
 - **Enables range formatting for all formatters** - Since conform calculates minimal diffs, it can perform range formatting even if the underlying formatter doesn't support it.
 - **Simple API** - Conform exposes a simple, imperative API modeled after `vim.lsp.buf.format()`.
+- **Formats embedded code blocks** - Use the `injected` formatter to format code blocks e.g. in markdown files.
 
 ## Installation
 
@@ -192,6 +193,7 @@ To view configured and available formatters, as well as to see the log file, run
 - [golines](https://github.com/segmentio/golines) - A golang formatter that fixes long lines
 - [htmlbeautifier](https://github.com/threedaymonk/htmlbeautifier) - A normaliser/beautifier for HTML that also understands embedded Ruby. Ideal for tidying up Rails templates.
 - [indent](https://www.gnu.org/software/indent/) - GNU Indent
+- [injected](lua/conform/formatters/injected.lua) - Format treesitter injected languages.
 - [isort](https://github.com/PyCQA/isort) - Python utility / library to sort imports alphabetically and automatically separate them into sections and by type.
 - [jq](https://github.com/stedolan/jq) - Command-line JSON processor.
 - [latexindent](https://github.com/cmhughes/latexindent.pl) - A perl script for formatting LaTeX files that is generally included in major TeX distributions.

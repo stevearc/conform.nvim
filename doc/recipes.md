@@ -41,11 +41,12 @@ require("conform.formatters.yamlfix").env = {
 }
 
 -- Or create your own formatter that overrides certain values
-require("conform").formatters.yamlfix = vim.tbl_deep_extend("force", require("conform.formatters.yamlfix"), {
-  env = {
-    YAMLFIX_SEQUENCE_STYLE = "block_style",
-  },
-})
+require("conform").formatters.yamlfix =
+  vim.tbl_deep_extend("force", require("conform.formatters.yamlfix"), {
+    env = {
+      YAMLFIX_SEQUENCE_STYLE = "block_style",
+    },
+  })
 
 -- Here is an example that modifies the command arguments for prettier to add
 -- a custom config file, if it is present
@@ -188,8 +189,8 @@ require("conform").formatters.prettier = vim.tbl_deep_extend("force", prettier, 
 
 -- Pass append=true to append the extra arguments to the end
 local deno_fmt = require("conform.formatters.deno_fmt")
-require("conform").formatters.deno_fmt = vim.tbl_deep_extend('force', deno_fmt, {
-  args = util.extend_args(deno_fmt.args, { "--use-tabs" }, { append = true })
+require("conform").formatters.deno_fmt = vim.tbl_deep_extend("force", deno_fmt, {
+  args = util.extend_args(deno_fmt.args, { "--use-tabs" }, { append = true }),
 })
 
 -- There is also a utility to modify a formatter in-place

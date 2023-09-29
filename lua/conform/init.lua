@@ -7,7 +7,7 @@ local M = {}
 ---@field available boolean
 ---@field available_msg? string
 
----@class (exact) conform.FormatterConfig
+---@class (exact) conform.JobFormatterConfig
 ---@field command string|fun(ctx: conform.Context): string
 ---@field args? string|string[]|fun(ctx: conform.Context): string|string[]
 ---@field range_args? fun(ctx: conform.RangeContext): string|string[]
@@ -18,8 +18,17 @@ local M = {}
 ---@field exit_codes? integer[] Exit codes that indicate success (default {0})
 ---@field env? table<string, any>|fun(ctx: conform.Context): table<string, any>
 
----@class (exact) conform.FileFormatterConfig : conform.FormatterConfig
+---@class (exact) conform.LuaFormatterConfig
+---@field format fun(ctx: conform.Context, lines: string[], callback: fun(err: nil|string, new_lines: nil|string[]))
+---@field condition? fun(ctx: conform.Context): boolean
+
+---@class (exact) conform.FileLuaFormatterConfig : conform.LuaFormatterConfig
 ---@field meta conform.FormatterMeta
+
+---@class (exact) conform.FileFormatterConfig : conform.JobFormatterConfig
+---@field meta conform.FormatterMeta
+
+---@alias conform.FormatterConfig conform.JobFormatterConfig|conform.LuaFormatterConfig
 
 ---@class (exact) conform.FormatterMeta
 ---@field url string
@@ -415,6 +424,56 @@ M.format = function(opts, callback)
   end
 end
 
+---Process lines with formatters
+---@private
+---@param formatter_names string[]
+---@param lines string[]
+---@param opts? table
+---    timeout_ms nil|integer Time in milliseconds to block for formatting. Defaults to 1000. No effect if async = true.
+---    bufnr nil|integer use this as the working buffer (default 0)
+---    async nil|boolean If true the method won't block. Defaults to false. If the buffer is modified before the formatter completes, the formatting will be discarded.
+---    quiet nil|boolean Don't show any notifications for warnings or failures. Defaults to false.
+---@param callback? fun(err: nil|string, lines: nil|string[]) Called once formatting has completed
+---@return nil|string error Only present if async = false
+---@return nil|string[] new_lines Only present if async = false
+M.format_lines = function(formatter_names, lines, opts, callback)
+  ---@type {timeout_ms: integer, bufnr: integer, async: boolean, quiet: boolean}
+  opts = vim.tbl_extend("keep", opts or {}, {
+    timeout_ms = 1000,
+    bufnr = 0,
+    async = false,
+    quiet = false,
+  })
+  callback = callback or function(_err, _lines) end
+  local log = require("conform.log")
+  local runner = require("conform.runner")
+  local formatters = resolve_formatters(formatter_names, opts.bufnr, not opts.quiet)
+  if vim.tbl_isempty(formatters) then
+    callback(nil, lines)
+    return
+  end
+
+  ---@param err? conform.Error
+  ---@param new_lines? string[]
+  local function handle_err(err, new_lines)
+    if err then
+      local level = runner.level_for_code(err.code)
+      log.log(level, err.message)
+    end
+    local err_message = err and err.message
+    callback(err_message, new_lines)
+  end
+
+  if opts.async then
+    runner.format_lines_async(opts.bufnr, formatters, nil, lines, handle_err)
+  else
+    local err, new_lines =
+      runner.format_lines_sync(opts.bufnr, formatters, opts.timeout_ms, nil, lines)
+    handle_err(err, new_lines)
+    return err and err.message, new_lines
+  end
+end
+
 ---Retrieve the available formatters for a buffer
 ---@param bufnr? integer
 ---@return conform.FormatterInfo[]
@@ -508,13 +567,26 @@ M.get_formatter_info = function(formatter, bufnr)
 
   local ctx = require("conform.runner").build_context(bufnr, config)
 
+  local available = true
+  local available_msg = nil
+  if config.format then
+    if config.condition and not config.condition(ctx) then
+      available = false
+      available_msg = "Condition failed"
+    end
+    return {
+      name = formatter,
+      command = formatter,
+      available = available,
+      available_msg = available_msg,
+    }
+  end
+
   local command = config.command
   if type(command) == "function" then
     command = command(ctx)
   end
 
-  local available = true
-  local available_msg = nil
   if vim.fn.executable(command) == 0 then
     available = false
     available_msg = "Command not found"
