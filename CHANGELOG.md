@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.7.1](https://github.com/stevearc/conform.nvim/compare/v3.7.0...v3.7.1) (2023-09-29)
+
+
+### Bug Fixes
+
+* format_after_save blocks on exit for lsp formatting ([0c52ee2](https://github.com/stevearc/conform.nvim/commit/0c52ee248245f40610a4957b6bc9515ce1fd9ab6))
+
 ## [3.7.0](https://github.com/stevearc/conform.nvim/compare/v3.6.0...v3.7.0) (2023-09-29)
 
 
