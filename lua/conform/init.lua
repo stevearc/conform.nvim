@@ -106,6 +106,8 @@ M.setup = function(opts)
     if type(opts.format_after_save) == "boolean" then
       opts.format_after_save = {}
     end
+    local exit_timeout = 1000
+    local num_running_format_jobs = 0
     vim.api.nvim_create_autocmd("BufWritePost", {
       pattern = "*",
       group = aug,
@@ -118,12 +120,15 @@ M.setup = function(opts)
           format_args, callback = format_args(args.buf)
         end
         if format_args then
+          exit_timeout = format_args.timeout_ms or exit_timeout
+          num_running_format_jobs = num_running_format_jobs + 1
           M.format(
             vim.tbl_deep_extend("force", format_args, {
               buf = args.buf,
               async = true,
             }),
             function(err)
+              num_running_format_jobs = num_running_format_jobs - 1
               if not err and vim.api.nvim_buf_is_valid(args.buf) then
                 vim.api.nvim_buf_call(args.buf, function()
                   vim.b[args.buf].conform_applying_formatting = true
@@ -136,6 +141,36 @@ M.setup = function(opts)
               end
             end
           )
+        end
+      end,
+    })
+
+    vim.api.nvim_create_autocmd("BufWinLeave", {
+      pattern = "*",
+      group = aug,
+      callback = function(args)
+        -- We store this because when vim is exiting it will set changedtick = -1 for visible
+        -- buffers right after firing BufWinLeave
+        vim.b[args.buf].last_changedtick = vim.api.nvim_buf_get_changedtick(args.buf)
+      end,
+    })
+
+    vim.api.nvim_create_autocmd("VimLeavePre", {
+      pattern = "*",
+      group = aug,
+      callback = function()
+        if num_running_format_jobs == 0 then
+          return
+        end
+        local uv = vim.uv or vim.loop
+        local start = uv.hrtime() / 1e6
+        vim.wait(exit_timeout, function()
+          return num_running_format_jobs == 0
+        end, 10)
+        local elapsed = uv.hrtime() / 1e6 - start
+        if elapsed > 200 then
+          local log = require("conform.log")
+          log.warn("Delayed Neovim exit by %dms to wait for formatting to complete", elapsed)
         end
       end,
     })

@@ -457,8 +457,14 @@ M.format_async = function(bufnr, formatters, range, callback)
   local function run_next_formatter()
     local formatter = formatters[idx]
     if not formatter then
+      local new_changedtick = vim.b[bufnr].changedtick
+      -- changedtick gets set to -1 when vim is exiting. We have an autocmd that should store it in
+      -- last_changedtick before it is set to -1.
+      if new_changedtick == -1 then
+        new_changedtick = vim.b[bufnr].last_changedtick or -1
+      end
       -- discard formatting if buffer has changed
-      if not vim.api.nvim_buf_is_valid(bufnr) or vim.b[bufnr].changedtick ~= changedtick then
+      if not vim.api.nvim_buf_is_valid(bufnr) or changedtick ~= new_changedtick then
         callback({
           code = M.ERROR_CODE.CONCURRENT_MODIFICATION,
           message = string.format(
