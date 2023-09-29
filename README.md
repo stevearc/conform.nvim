@@ -175,6 +175,7 @@ To view configured and available formatters, as well as to see the log file, run
 - [cljstyle](https://github.com/greglook/cljstyle) - Formatter for Clojure code.
 - [cmake_format](https://github.com/cheshirekow/cmake_format) - Parse cmake listfiles and format them nicely.
 - [codespell](https://github.com/codespell-project/codespell) - Check code for common misspellings.
+- [darker](https://github.com/akaihola/darker) - Run black only on changed lines.
 - [dart_format](https://dart.dev/tools/dart-format) - Replace the whitespace in your program with formatting that follows Dart guidelines.
 - [deno_fmt](https://deno.land/manual/tools/formatter) - Use [Deno](https://deno.land/) to format TypeScript, JavaScript/JSON and markdown.
 - [dfmt](https://github.com/dlang-community/dfmt) - Formatter for D source code.

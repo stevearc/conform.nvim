@@ -170,6 +170,7 @@ FORMATTERS                                                    *conform-formatter
 `cljstyle` - Formatter for Clojure code.
 `cmake_format` - Parse cmake listfiles and format them nicely.
 `codespell` - Check code for common misspellings.
+`darker` - Run black only on changed lines.
 `dart_format` - Replace the whitespace in your program with formatting that
               follows Dart guidelines.
 `deno_fmt` - Use [Deno](https://deno.land/) to format TypeScript,
