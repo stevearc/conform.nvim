@@ -6,6 +6,41 @@ local function in_range(range, start_lnum, end_lnum)
   return not range or (start_lnum <= range["end"][1] and range["start"][1] <= end_lnum)
 end
 
+---@param lines string[]
+---@return string?
+local function get_indent(lines)
+  local indent = nil
+  for _, line in ipairs(lines) do
+    if line ~= "" then
+      local whitespace = line:match("^%s*")
+      if whitespace == "" then
+        return nil
+      elseif not indent or whitespace:len() < indent:len() then
+        indent = whitespace
+      end
+    end
+  end
+  return indent
+end
+
+---@param original_lines string[]
+---@param new_lines? string[]
+local function apply_indent(original_lines, new_lines)
+  if not new_lines then
+    return
+  end
+  local indent = get_indent(original_lines)
+  local already_indented = get_indent(new_lines)
+  if not indent or already_indented then
+    return
+  end
+  for i, line in ipairs(new_lines) do
+    if line ~= "" then
+      new_lines[i] = indent .. line
+    end
+  end
+end
+
 ---@type conform.FileLuaFormatterConfig
 return {
   meta = {
@@ -90,6 +125,8 @@ return {
         local format_opts = { async = true, bufnr = ctx.buf, quiet = true }
         local idx = num_format
         conform.format_lines(formatter_names, input_lines, format_opts, function(err, new_lines)
+          -- Preserve indentation in case the code block is indented
+          apply_indent(input_lines, new_lines)
           formatter_cb(err, idx, start_lnum, end_lnum, new_lines)
         end)
       end
