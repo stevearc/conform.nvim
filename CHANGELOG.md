@@ -1,5 +1,14 @@
 # Changelog
 
+## [3.7.2](https://github.com/stevearc/conform.nvim/compare/v3.7.1...v3.7.2) (2023-09-29)
+
+
+### Bug Fixes
+
+* injected formatter hangs on empty file ([671186e](https://github.com/stevearc/conform.nvim/commit/671186e4b29e26ee9fc0f1df4e529134bc334666))
+* injected formatter preserves indentation of code blocks ([470d419](https://github.com/stevearc/conform.nvim/commit/470d41988e83913df428c9e832c15b8bb84301ad))
+* lsp format calls method from wrong util file ([df69e3e](https://github.com/stevearc/conform.nvim/commit/df69e3ee61e1a0cbb960c8466ace74c696cc7830))
+
 ## [3.7.1](https://github.com/stevearc/conform.nvim/compare/v3.7.0...v3.7.1) (2023-09-29)
 
 
