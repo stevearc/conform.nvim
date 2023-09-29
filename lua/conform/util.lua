@@ -156,4 +156,20 @@ M.add_formatter_args = function(formatter, extra_args, opts)
   end
 end
 
+---@param bufnr integer
+---@return integer
+M.buf_get_changedtick = function(bufnr)
+  if not vim.api.nvim_buf_is_valid(bufnr) then
+    return -2
+  end
+  local changedtick = vim.b[bufnr].changedtick
+  -- changedtick gets set to -1 when vim is exiting. We have an autocmd that should store it in
+  -- last_changedtick before it is set to -1.
+  if changedtick == -1 then
+    return vim.b[bufnr].last_changedtick or -1
+  else
+    return changedtick
+  end
+end
+
 return M

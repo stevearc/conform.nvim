@@ -1,4 +1,5 @@
 ---This module replaces the default vim.lsp.buf.format() so that we can inject our own logic
+local log = require("conform.log")
 local util = require("vim.lsp.util")
 
 local M = {}
@@ -75,12 +76,22 @@ function M.format(options, callback)
         return callback()
       end
       local params = set_range(client, util.make_formatting_params(options.formatting_options))
+      local auto_id = vim.api.nvim_create_autocmd("LspDetach", {
+        buffer = bufnr,
+        callback = function(args)
+          if args.data.client_id == client.id then
+            log.warn("LSP %s detached during format request", client.name)
+            callback("LSP detached")
+          end
+        end,
+      })
       client.request(method, params, function(err, result, ctx, _)
+        vim.api.nvim_del_autocmd(auto_id)
         if not result then
           return callback(err or "No result returned from LSP formatter")
         elseif not vim.api.nvim_buf_is_valid(bufnr) then
           return callback("buffer was deleted")
-        elseif vim.b[bufnr].changedtick ~= changedtick then
+        elseif changedtick ~= util.buf_get_changedtick(bufnr) then
           return
             callback(
             string.format(
