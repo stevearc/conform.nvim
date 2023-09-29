@@ -1,5 +1,20 @@
 # Changelog
 
+## [3.7.0](https://github.com/stevearc/conform.nvim/compare/v3.6.0...v3.7.0) (2023-09-29)
+
+
+### Features
+
+* add 'JavaScript Standard Style' formatter ([#82](https://github.com/stevearc/conform.nvim/issues/82)) ([971fa7f](https://github.com/stevearc/conform.nvim/commit/971fa7f2e4005454ce141ca8ee0462a3c34d2922))
+* add darker ([#80](https://github.com/stevearc/conform.nvim/issues/80)) ([e359687](https://github.com/stevearc/conform.nvim/commit/e359687e3684452ff45d7a5f1a59cd40b0bfa320))
+* format injected languages ([#83](https://github.com/stevearc/conform.nvim/issues/83)) ([a5526fb](https://github.com/stevearc/conform.nvim/commit/a5526fb2ee963cf426ab6d6ba1f3eb82887b1c22))
+
+
+### Bug Fixes
+
+* format_after_save autocmd blocks nvim exit until complete ([388d6e2](https://github.com/stevearc/conform.nvim/commit/388d6e2440bccded26d5e67ce6a7039c1953ae70))
+* only show "no formatters" warning if formatters passed in explicitly ([#85](https://github.com/stevearc/conform.nvim/issues/85)) ([45edf94](https://github.com/stevearc/conform.nvim/commit/45edf9462d06db0809d4a4a7afc6b7896b63fa35))
+
 ## [3.6.0](https://github.com/stevearc/conform.nvim/compare/v3.5.0...v3.6.0) (2023-09-27)
 
 
