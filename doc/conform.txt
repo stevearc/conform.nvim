@@ -235,6 +235,7 @@ FORMATTERS                                                    *conform-formatter
 `squeeze_blanks` - Squeeze repeated blank lines into a single blank line via
                  `cat -s`.
 `standardjs` - JavaScript Standard style guide, linter, and formatter.
+`standardrb` - Ruby's bikeshed-proof linter and formatter
 `stylelint` - A mighty CSS linter that helps you avoid errors and enforce
             conventions.
 `stylua` - An opinionated code formatter for Lua.
