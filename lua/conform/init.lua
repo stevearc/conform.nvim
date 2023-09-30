@@ -313,7 +313,7 @@ local function resolve_formatters(names, bufnr, warn_on_missing)
       -- If this is an alternation, take the first one that's available
       for i, v in ipairs(name) do
         local info = M.get_formatter_info(v, bufnr)
-        if add_info(info, i == #name) then
+        if add_info(info, warn_on_missing and i == #name) then
           break
         end
       end
