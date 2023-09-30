@@ -19,9 +19,16 @@ body:
       placeholder: "MacOS 11.5"
     validations:
       required: true
+  - type: checkboxes
+    attributes:
+      label: Add the debug logs
+      options:
+        - label: I have set `log_level = vim.log.levels.DEBUG` and pasted the log contents below.
+          required: true
   - type: textarea
     attributes:
-      label: "Output of :ConformInfo"
+      label: "Log file"
+      description: "Recent contents from the log file. You can find it with :ConformInfo"
     validations:
       required: true
   - type: textarea
