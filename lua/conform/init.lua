@@ -94,6 +94,9 @@ M.setup = function(opts)
       pattern = "*",
       group = aug,
       callback = function(args)
+        if vim.bo[args.buf].buftype ~= "" then
+          return
+        end
         local format_args, callback = opts.format_on_save, nil
         if type(format_args) == "function" then
           format_args, callback = format_args(args.buf)
@@ -121,7 +124,7 @@ M.setup = function(opts)
       pattern = "*",
       group = aug,
       callback = function(args)
-        if vim.b[args.buf].conform_applying_formatting then
+        if vim.b[args.buf].conform_applying_formatting or vim.bo[args.buf].buftype ~= "" then
           return
         end
         local format_args, callback = opts.format_after_save, nil
