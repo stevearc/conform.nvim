@@ -195,6 +195,8 @@ FORMATTERS                                                    *conform-formatter
 `goimports` - Updates your Go import lines, adding missing ones and removing
             unreferenced ones.
 `golines` - A golang formatter that fixes long lines
+`google-java-format` - Reformats Java source code according to Google Java
+                     Style.
 `htmlbeautifier` - A normaliser/beautifier for HTML that also understands
                  embedded Ruby. Ideal for tidying up Rails templates.
 `indent` - GNU Indent
