@@ -340,6 +340,7 @@ require("conform").formatters.my_formatter = {
 - [Command to toggle format-on-save](doc/recipes.md#command-to-toggle-format-on-save)
 - [Automatically run slow formatters async](doc/recipes.md#automatically-run-slow-formatters-async)
 - [Add extra arguments to a formatter command](doc/recipes.md#add-extra-arguments-to-a-formatter-command)
+- [Lazy loading with lazy.nvim](doc/recipes.md#lazy-loading-with-lazynvim)
 
 <!-- /RECIPES -->
 

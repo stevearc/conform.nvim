@@ -8,6 +8,7 @@
 - [Command to toggle format-on-save](#command-to-toggle-format-on-save)
 - [Automatically run slow formatters async](#automatically-run-slow-formatters-async)
 - [Add extra arguments to a formatter command](#add-extra-arguments-to-a-formatter-command)
+- [Lazy loading with lazy.nvim](#lazy-loading-with-lazynvim)
 
 <!-- /TOC -->
 
@@ -195,4 +196,47 @@ require("conform").formatters.deno_fmt = vim.tbl_deep_extend("force", deno_fmt, 
 
 -- There is also a utility to modify a formatter in-place
 util.add_formatter_args(require("conform.formatters.prettier"), { "--tab", "--indent", "2" })
+```
+
+## Lazy loading with lazy.nvim
+
+Here is the recommended config for lazy-loading using lazy.nvim
+
+```lua
+return {
+  "stevearc/conform.nvim",
+  event = { "BufWritePre" },
+  cmd = { "ConformInfo" },
+  keys = {
+    {
+      -- Customize or remove this keymap to your liking
+      "<leader>f",
+      function()
+        require("conform").format({ async = true, lsp_fallback = true })
+      end,
+      mode = "",
+      desc = "Format buffer",
+    },
+  },
+  -- Everything in opts will be passed to setup()
+  opts = {
+    formatters_by_ft = {
+      lua = { "stylua" },
+      python = { "isort", "black" },
+      javascript = { { "prettierd", "prettier" } },
+    },
+    format_on_save = { timeout_ms = 500, lsp_fallback = true },
+  },
+  init = function()
+    -- If you want the formatexpr, here is the place to set it
+    vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+  end,
+
+  -- This function is optional, but if you want to customize formatters do it here
+  config = function(_, opts)
+    local util = require("conform.util")
+    util.add_formatter_args(require("conform.formatters.shfmt"), { "-i", "2" })
+    require("conform").setup(opts)
+  end,
+}
 ```
