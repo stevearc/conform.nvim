@@ -155,6 +155,8 @@ will_fallback_lsp({options}): boolean                  *conform.will_fallback_ls
 FORMATTERS                                                    *conform-formatters*
 
 `alejandra` - The Uncompromising Nix Code Formatter.
+`astyle` - A Free, Fast, and Small Automatic Formatter for C, C++, C++/CLI,
+         Objective-C, C#, and Java Source Code
 `autoflake` - Removes unused imports and unused variables as reported by
             pyflakes.
 `autopep8` - A tool that automatically formats Python code to conform to the PEP
