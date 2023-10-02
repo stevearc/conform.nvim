@@ -207,6 +207,7 @@ To view configured and available formatters, as well as to see the log file, run
 - [perltidy](https://github.com/perltidy/perltidy) - Perl::Tidy, a source code formatter for Perl
 - [pg_format](https://github.com/darold/pgFormatter) - PostgreSQL SQL syntax beautifier.
 - [php_cs_fixer](https://github.com/PHP-CS-Fixer/PHP-CS-Fixer) - The PHP Coding Standards Fixer.
+- [phpcbf](https://github.com/squizlabs/PHP_CodeSniffer) - PHP Code Beautifier and Fixer.
 - [prettier](https://github.com/prettier/prettier) - Prettier is an opinionated code formatter. It enforces a consistent style by parsing your code and re-printing it with its own rules that take the maximum line length into account, wrapping code when necessary.
 - [prettierd](https://github.com/fsouza/prettierd) - prettier, as a daemon, for ludicrous formatting speed.
 - [rubocop](https://github.com/rubocop/rubocop) - Ruby static code analyzer and formatter, based on the community Ruby style guide.
@@ -384,7 +385,6 @@ Retrieve the available formatters for a buffer
 
 `list_all_formatters(): conform.FormatterInfo[]` \
 List information about all filetype-configured formatters
-
 
 ### get_formatter_info(formatter, bufnr)
 
