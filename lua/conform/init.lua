@@ -433,8 +433,8 @@ end
 ---    bufnr nil|integer use this as the working buffer (default 0)
 ---    async nil|boolean If true the method won't block. Defaults to false. If the buffer is modified before the formatter completes, the formatting will be discarded.
 ---    quiet nil|boolean Don't show any notifications for warnings or failures. Defaults to false.
----@param callback? fun(err: nil|string, lines: nil|string[]) Called once formatting has completed
----@return nil|string error Only present if async = false
+---@param callback? fun(err: nil|conform.Error, lines: nil|string[]) Called once formatting has completed
+---@return nil|conform.Error error Only present if async = false
 ---@return nil|string[] new_lines Only present if async = false
 M.format_lines = function(formatter_names, lines, opts, callback)
   ---@type {timeout_ms: integer, bufnr: integer, async: boolean, quiet: boolean}
@@ -460,8 +460,7 @@ M.format_lines = function(formatter_names, lines, opts, callback)
       local level = runner.level_for_code(err.code)
       log.log(level, err.message)
     end
-    local err_message = err and err.message
-    callback(err_message, new_lines)
+    callback(err, new_lines)
   end
 
   if opts.async then
@@ -470,7 +469,7 @@ M.format_lines = function(formatter_names, lines, opts, callback)
     local err, new_lines =
       runner.format_lines_sync(opts.bufnr, formatters, opts.timeout_ms, nil, lines)
     handle_err(err, new_lines)
-    return err and err.message, new_lines
+    return err, new_lines
   end
 end
 
