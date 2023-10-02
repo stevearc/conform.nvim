@@ -1,5 +1,22 @@
 # Changelog
 
+## [3.8.0](https://github.com/stevearc/conform.nvim/compare/v3.7.2...v3.8.0) (2023-10-02)
+
+
+### Features
+
+* add 'google-java-format' formatter ([#99](https://github.com/stevearc/conform.nvim/issues/99)) ([e887736](https://github.com/stevearc/conform.nvim/commit/e8877369df244515af20e18bf1307632fc638d2a))
+* add standardrb ([#91](https://github.com/stevearc/conform.nvim/issues/91)) ([37d0367](https://github.com/stevearc/conform.nvim/commit/37d036704a100ef6e6457be45b4dfc2f8e429572))
+* metatable to make accessing formatters a bit easier ([#89](https://github.com/stevearc/conform.nvim/issues/89)) ([d8170c1](https://github.com/stevearc/conform.nvim/commit/d8170c14db0f3c90fa799db3bca29d3fb3c089c3))
+
+
+### Bug Fixes
+
+* alternations follow notification rules ([3f89275](https://github.com/stevearc/conform.nvim/commit/3f8927532bc8ce4fc4b5b75eab1bf8f1fc83f6b9))
+* error handling for injected formatter ([f7b82fb](https://github.com/stevearc/conform.nvim/commit/f7b82fb395a4cd636a26ee879b5fd7690612e5a9))
+* injected formatter doesn't have interruption errors ([af3d59d](https://github.com/stevearc/conform.nvim/commit/af3d59da20d2bc37933df409f8fc9e24ec15e066))
+* injected formatter operates on input lines ([501319e](https://github.com/stevearc/conform.nvim/commit/501319eed2ff26f856ea91b5456bef1d00f77df7))
+
 ## [3.7.2](https://github.com/stevearc/conform.nvim/compare/v3.7.1...v3.7.2) (2023-09-29)
 
 
