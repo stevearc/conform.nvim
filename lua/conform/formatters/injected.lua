@@ -62,7 +62,11 @@ return {
       callback("No treesitter parser for buffer")
       return
     end
-    parser:parse()
+    --- Disable diagnostic to pass the typecheck github action
+    --- This is available on nightly, but not on stable
+    --- Stable doesn't have any parameters, so it's safe to always pass `true`
+    ---@diagnostic disable-next-line: redundant-parameter
+    parser:parse(true)
     local root_lang = parser:lang()
     local regions = {}
     for lang, child_tree in pairs(parser:children()) do
