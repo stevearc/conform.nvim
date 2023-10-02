@@ -55,17 +55,20 @@ return {
     local conform = require("conform")
     local log = require("conform.log")
     local util = require("conform.util")
-    local ok, parser = pcall(vim.treesitter.get_parser, ctx.buf)
+    local text = table.concat(lines, "\n")
+    local buf_lang = vim.treesitter.language.get_lang(vim.bo[ctx.buf].filetype)
+    local ok, parser = pcall(vim.treesitter.get_string_parser, text, buf_lang)
     if not ok then
       callback("No treesitter parser for buffer")
       return
     end
+    parser:parse()
     local root_lang = parser:lang()
     local regions = {}
-    for lang, child_lang in pairs(parser:children()) do
+    for lang, child_tree in pairs(parser:children()) do
       local formatter_names = conform.formatters_by_ft[lang]
       if formatter_names and lang ~= root_lang then
-        for _, tree in ipairs(child_lang:trees()) do
+        for _, tree in ipairs(child_tree:trees()) do
           local root = tree:root()
           local start_lnum = root:start() + 1
           local end_lnum = root:end_()
