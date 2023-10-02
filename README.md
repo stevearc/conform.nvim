@@ -191,6 +191,7 @@ To view configured and available formatters, as well as to see the log file, run
 - [gofumpt](https://github.com/mvdan/gofumpt) - Enforce a stricter format than gofmt, while being backwards compatible. That is, gofumpt is happy with a subset of the formats that gofmt is happy with.
 - [goimports](https://pkg.go.dev/golang.org/x/tools/cmd/goimports) - Updates your Go import lines, adding missing ones and removing unreferenced ones.
 - [golines](https://github.com/segmentio/golines) - A golang formatter that fixes long lines
+- [google-java-format](https://github.com/google/google-java-format) - Reformats Java source code according to Google Java Style.
 - [htmlbeautifier](https://github.com/threedaymonk/htmlbeautifier) - A normaliser/beautifier for HTML that also understands embedded Ruby. Ideal for tidying up Rails templates.
 - [indent](https://www.gnu.org/software/indent/) - GNU Indent
 - [injected](lua/conform/formatters/injected.lua) - Format treesitter injected languages.
