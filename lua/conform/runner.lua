@@ -4,6 +4,9 @@ local util = require("conform.util")
 local uv = vim.uv or vim.loop
 local M = {}
 
+---@class (exact) conform.RunOpts
+---@field exclusive boolean If true, ensure only a single formatter is running per buffer
+
 ---@class conform.Error
 ---@field code conform.ERROR_CODE
 ---@field message string
@@ -254,9 +257,10 @@ local last_run_errored = {}
 ---@param config conform.FormatterConfig
 ---@param ctx conform.Context
 ---@param input_lines string[]
+---@param opts conform.RunOpts
 ---@param callback fun(err?: conform.Error, output?: string[])
 ---@return integer? job_id
-local function run_formatter(bufnr, formatter, config, ctx, input_lines, callback)
+local function run_formatter(bufnr, formatter, config, ctx, input_lines, opts, callback)
   log.info("Run %s on %s", formatter.name, vim.api.nvim_buf_get_name(bufnr))
   log.trace("Input lines: %s", input_lines)
   if config.format then
@@ -371,7 +375,11 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, callbac
         elseif stdout and not vim.tbl_isempty(stdout) then
           err_str = table.concat(stdout, "\n")
         end
-        if vim.api.nvim_buf_is_valid(bufnr) and jid ~= vim.b[bufnr].conform_jid then
+        if
+          vim.api.nvim_buf_is_valid(bufnr)
+          and jid ~= vim.b[bufnr].conform_jid
+          and opts.exclusive
+        then
           callback({
             code = M.ERROR_CODE.INTERRUPTED,
             message = string.format("Formatter '%s' was interrupted", formatter.name),
@@ -399,7 +407,9 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, callbac
     vim.api.nvim_chan_send(jid, buffer_text)
     vim.fn.chanclose(jid, "stdin")
   end
-  vim.b[bufnr].conform_jid = jid
+  if opts.exclusive then
+    vim.b[bufnr].conform_jid = jid
+  end
 
   return jid
 end
@@ -447,15 +457,16 @@ end
 ---@param bufnr integer
 ---@param formatters conform.FormatterInfo[]
 ---@param range? conform.Range
+---@param opts conform.RunOpts
 ---@param callback fun(err?: conform.Error)
-M.format_async = function(bufnr, formatters, range, callback)
+M.format_async = function(bufnr, formatters, range, opts, callback)
   if bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
   end
 
   -- kill previous jobs for buffer
   local prev_jid = vim.b[bufnr].conform_jid
-  if prev_jid then
+  if prev_jid and opts.exclusive then
     if vim.fn.jobstop(prev_jid) == 1 then
       log.info("Canceled previous format job for %s", vim.api.nvim_buf_get_name(bufnr))
     end
@@ -468,6 +479,7 @@ M.format_async = function(bufnr, formatters, range, callback)
     formatters,
     range,
     original_lines,
+    opts,
     function(err, output_lines, all_support_range_formatting)
       if err then
         return callback(err)
@@ -494,8 +506,9 @@ end
 ---@param formatters conform.FormatterInfo[]
 ---@param range? conform.Range
 ---@param input_lines string[]
+---@param opts conform.RunOpts
 ---@param callback fun(err?: conform.Error, output_lines?: string[], all_support_range_formatting?: boolean)
-M.format_lines_async = function(bufnr, formatters, range, input_lines, callback)
+M.format_lines_async = function(bufnr, formatters, range, input_lines, opts, callback)
   if bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
   end
@@ -512,7 +525,7 @@ M.format_lines_async = function(bufnr, formatters, range, input_lines, callback)
 
     local config = assert(require("conform").get_formatter_config(formatter.name, bufnr))
     local ctx = M.build_context(bufnr, config, range)
-    run_formatter(bufnr, formatter, config, ctx, input_lines, function(err, output)
+    run_formatter(bufnr, formatter, config, ctx, input_lines, opts, function(err, output)
       if err then
         return callback(err)
       end
@@ -528,8 +541,9 @@ end
 ---@param formatters conform.FormatterInfo[]
 ---@param timeout_ms integer
 ---@param range? conform.Range
+---@param opts conform.RunOpts
 ---@return conform.Error? error
-M.format_sync = function(bufnr, formatters, timeout_ms, range)
+M.format_sync = function(bufnr, formatters, timeout_ms, range, opts)
   if bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
   end
@@ -537,14 +551,14 @@ M.format_sync = function(bufnr, formatters, timeout_ms, range)
 
   -- kill previous jobs for buffer
   local prev_jid = vim.b[bufnr].conform_jid
-  if prev_jid then
+  if prev_jid and opts.exclusive then
     if vim.fn.jobstop(prev_jid) == 1 then
       log.info("Canceled previous format job for %s", vim.api.nvim_buf_get_name(bufnr))
     end
   end
 
   local err, final_result, all_support_range_formatting =
-    M.format_lines_sync(bufnr, formatters, timeout_ms, range, original_lines)
+    M.format_lines_sync(bufnr, formatters, timeout_ms, range, original_lines, opts)
   if err then
     return err
   end
@@ -557,10 +571,11 @@ end
 ---@param formatters conform.FormatterInfo[]
 ---@param timeout_ms integer
 ---@param range? conform.Range
+---@param opts conform.RunOpts
 ---@return conform.Error? error
 ---@return string[]? output_lines
 ---@return boolean? all_support_range_formatting
-M.format_lines_sync = function(bufnr, formatters, timeout_ms, range, input_lines)
+M.format_lines_sync = function(bufnr, formatters, timeout_ms, range, input_lines, opts)
   if bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
   end
@@ -580,11 +595,19 @@ M.format_lines_sync = function(bufnr, formatters, timeout_ms, range, input_lines
     local run_err = nil
     local config = assert(require("conform").get_formatter_config(formatter.name, bufnr))
     local ctx = M.build_context(bufnr, config, range)
-    local jid = run_formatter(bufnr, formatter, config, ctx, input_lines, function(err, output)
-      run_err = err
-      done = true
-      result = output
-    end)
+    local jid = run_formatter(
+      bufnr,
+      formatter,
+      config,
+      ctx,
+      input_lines,
+      opts,
+      function(err, output)
+        run_err = err
+        done = true
+        result = output
+      end
+    )
     all_support_range_formatting = all_support_range_formatting and config.range_args ~= nil
 
     local wait_result, wait_reason = vim.wait(remaining, function()

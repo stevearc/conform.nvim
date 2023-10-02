@@ -405,10 +405,11 @@ M.format = function(opts, callback)
       end
     end
 
+    local run_opts = { exclusive = true }
     if opts.async then
-      runner.format_async(opts.bufnr, formatters, opts.range, handle_err)
+      runner.format_async(opts.bufnr, formatters, opts.range, run_opts, handle_err)
     else
-      local err = runner.format_sync(opts.bufnr, formatters, opts.timeout_ms, opts.range)
+      local err = runner.format_sync(opts.bufnr, formatters, opts.timeout_ms, opts.range, run_opts)
       handle_err(err)
     end
     return true
@@ -463,11 +464,12 @@ M.format_lines = function(formatter_names, lines, opts, callback)
     callback(err, new_lines)
   end
 
+  local run_opts = { exclusive = false }
   if opts.async then
-    runner.format_lines_async(opts.bufnr, formatters, nil, lines, handle_err)
+    runner.format_lines_async(opts.bufnr, formatters, nil, lines, run_opts, handle_err)
   else
     local err, new_lines =
-      runner.format_lines_sync(opts.bufnr, formatters, opts.timeout_ms, nil, lines)
+      runner.format_lines_sync(opts.bufnr, formatters, opts.timeout_ms, nil, lines, run_opts)
     handle_err(err, new_lines)
     return err, new_lines
   end
