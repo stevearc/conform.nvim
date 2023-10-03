@@ -255,6 +255,8 @@ FORMATTERS                                                    *conform-formatter
                 files to a canonical format and style.
 `trim_newlines` - Trim new lines with awk
 `trim_whitespace` - Trim whitespaces with awk
+`ts-standard` - TypeScript Style Guide, with linter and automatic code fixer 
+              based on StandardJS
 `uncrustify` - A source code beautifier for C, C++, C#, ObjectiveC, D, Java,
              Pawn and Vala.
 `xmlformat` - xmlformatter is an Open Source Python package, which provides
