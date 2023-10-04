@@ -1,5 +1,21 @@
 # Changelog
 
+## [3.9.0](https://github.com/stevearc/conform.nvim/compare/v3.8.0...v3.9.0) (2023-10-04)
+
+
+### Features
+
+* add phpcbf ([#103](https://github.com/stevearc/conform.nvim/issues/103)) ([db5af4b](https://github.com/stevearc/conform.nvim/commit/db5af4b04e5d61236a142ab78ec3f9416aab848c))
+* gci formatter for Go ([#109](https://github.com/stevearc/conform.nvim/issues/109)) ([362e4ec](https://github.com/stevearc/conform.nvim/commit/362e4ec709d241e47d6093dd4b030125ce214cfa))
+
+
+### Bug Fixes
+
+* format on save autocmds ignore nonstandard buffers ([cb87cab](https://github.com/stevearc/conform.nvim/commit/cb87cab7a6baa6192bf13123c2a5af6fd059d62c))
+* injected formatter silent failure on nvim nightly ([#100](https://github.com/stevearc/conform.nvim/issues/100)) ([0156beb](https://github.com/stevearc/conform.nvim/commit/0156beb8397169d7ec18d4f4ea8dd002ee9bcc96))
+* phpcbf invalid stdin-path arguments ([#108](https://github.com/stevearc/conform.nvim/issues/108)) ([ce427b0](https://github.com/stevearc/conform.nvim/commit/ce427b03b9cc428ee7a64cb77487ed19efec202d))
+* support for mix format ([#107](https://github.com/stevearc/conform.nvim/issues/107)) ([6836930](https://github.com/stevearc/conform.nvim/commit/6836930ed5a0ec6e8bb531116c62cc10f475c298))
+
 ## [3.8.0](https://github.com/stevearc/conform.nvim/compare/v3.7.2...v3.8.0) (2023-10-02)
 
 
