@@ -632,7 +632,11 @@ M.format_lines_sync = function(bufnr, formatters, timeout_ms, range, input_lines
     end
 
     if not result then
-      return run_err
+      if formatter.name == "injected" then
+        result = input_lines
+      else
+        return run_err
+      end
     end
 
     input_lines = result
