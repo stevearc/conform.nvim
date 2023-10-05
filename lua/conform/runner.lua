@@ -40,7 +40,7 @@ M.level_for_code = function(code)
   end
 end
 
----Returns true if the error ocurred while attempting to run the formatter
+---Returns true if the error occurred while attempting to run the formatter
 ---@param code conform.ERROR_CODE
 ---@return boolean
 M.is_execution_error = function(code)
