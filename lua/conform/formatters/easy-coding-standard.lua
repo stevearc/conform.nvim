@@ -8,7 +8,7 @@ return {
   },
   command = util.find_executable({
     "vendor/bin/ecs",
-  }, "easy-coding-standard"),
+  }, "ecs"),
   args = { "check", "$FILENAME", "--fix", "--no-interaction" },
   cwd = util.root_file({
     "ecs.php",
