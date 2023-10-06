@@ -183,6 +183,7 @@ To view configured and available formatters, as well as to see the log file, run
 - [dfmt](https://github.com/dlang-community/dfmt) - Formatter for D source code.
 - [djlint](https://github.com/Riverside-Healthcare/djLint) - ✨ HTML Template Linter and Formatter. Django - Jinja - Nunjucks - Handlebars - GoLang.
 - [dprint](https://github.com/dprint/dprint) - Pluggable and configurable code formatting platform written in Rust.
+- [easy-coding-standard](https://github.com/easy-coding-standard/easy-coding-standard) - ecs - Use Coding Standard with 0-knowledge of PHP-CS-Fixer and PHP_CodeSniffer.
 - [elm_format](https://github.com/avh4/elm-format) - elm-format formats Elm source code according to a standard set of rules based on the official [Elm Style Guide](https://elm-lang.org/docs/style-guide).
 - [erb_format](https://github.com/nebulab/erb-formatter) - Format ERB files with speed and precision.
 - [eslint_d](https://github.com/mantoni/eslint_d.js/) - Like ESLint, but faster.
