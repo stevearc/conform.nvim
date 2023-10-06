@@ -7,12 +7,18 @@ local function in_range(range, start_lnum, end_lnum)
 end
 
 ---@param lines string[]
+---@param language? string The language of the buffer
 ---@return string?
-local function get_indent(lines)
+local function get_indent(lines, language)
   local indent = nil
+  -- Handle markdown code blocks that are inside blockquotes
+  -- > ```lua
+  -- > local x = 1
+  -- > ```
+  local pattern = language == "markdown" and "^>?%s*" or "^%s*"
   for _, line in ipairs(lines) do
     if line ~= "" then
-      local whitespace = line:match("^%s*")
+      local whitespace = line:match(pattern)
       if whitespace == "" then
         return nil
       elseif not indent or whitespace:len() < indent:len() then
@@ -23,20 +29,33 @@ local function get_indent(lines)
   return indent
 end
 
----@param original_lines string[]
----@param new_lines? string[]
-local function apply_indent(original_lines, new_lines)
-  if not new_lines then
+---Remove leading indentation from lines and return the indentation string
+---@param lines string[]
+---@param language? string The language of the buffer
+---@return string?
+local function remove_indent(lines, language)
+  local indent = get_indent(lines, language)
+  if not indent then
     return
   end
-  local indent = get_indent(original_lines)
-  local already_indented = get_indent(new_lines)
-  if not indent or already_indented then
-    return
-  end
-  for i, line in ipairs(new_lines) do
+  local sub_start = indent:len() + 1
+  for i, line in ipairs(lines) do
     if line ~= "" then
-      new_lines[i] = indent .. line
+      lines[i] = line:sub(sub_start)
+    end
+  end
+  return indent
+end
+
+---@param lines string[]?
+---@param indentation string?
+local function apply_indent(lines, indentation)
+  if not lines or not indentation then
+    return
+  end
+  for i, line in ipairs(lines) do
+    if line ~= "" then
+      lines[i] = indentation .. line
     end
   end
 end
@@ -135,9 +154,10 @@ return {
         local idx = num_format
         log.debug("Injected format %s:%d:%d: %s", lang, start_lnum, end_lnum, formatter_names)
         log.trace("Injected format lines %s", input_lines)
+        local indent = remove_indent(input_lines, buf_lang)
         conform.format_lines(formatter_names, input_lines, format_opts, function(err, new_lines)
           -- Preserve indentation in case the code block is indented
-          apply_indent(input_lines, new_lines)
+          apply_indent(new_lines, indent)
           formatter_cb(err, idx, start_lnum, end_lnum, new_lines)
         end)
       end
