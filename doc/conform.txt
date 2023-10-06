@@ -206,6 +206,7 @@ FORMATTERS                                                    *conform-formatter
 `isort` - Python utility / library to sort imports alphabetically and
         automatically separate them into sections and by type.
 `jq` - Command-line JSON processor.
+`just` - Format Justfile
 `latexindent` - A perl script for formatting LaTeX files that is generally
               included in major TeX distributions.
 `markdown-toc` - API and CLI for generating a markdown TOC (table of contents)

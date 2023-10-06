@@ -199,6 +199,7 @@ To view configured and available formatters, as well as to see the log file, run
 - [injected](lua/conform/formatters/injected.lua) - Format treesitter injected languages.
 - [isort](https://github.com/PyCQA/isort) - Python utility / library to sort imports alphabetically and automatically separate them into sections and by type.
 - [jq](https://github.com/stedolan/jq) - Command-line JSON processor.
+- [just](https://github.com/casey/just) - Format Justfile
 - [latexindent](https://github.com/cmhughes/latexindent.pl) - A perl script for formatting LaTeX files that is generally included in major TeX distributions.
 - [markdown-toc](https://github.com/jonschlinkert/markdown-toc) - API and CLI for generating a markdown TOC (table of contents) for a README or any markdown files.
 - [markdownlint](https://github.com/DavidAnson/markdownlint) - A Node.js style checker and lint tool for Markdown/CommonMark files.
