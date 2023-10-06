@@ -265,7 +265,7 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, opts, c
   log.trace("Input lines: %s", input_lines)
   if config.format then
     ---@cast config conform.LuaFormatterConfig
-    local ok, err = pcall(config.format, ctx, input_lines, callback)
+    local ok, err = pcall(config.format, config, ctx, input_lines, callback)
     if not ok then
       callback({
         code = M.ERROR_CODE.RUNTIME,

@@ -19,8 +19,8 @@ local M = {}
 ---@field env? table<string, any>|fun(ctx: conform.Context): table<string, any>
 
 ---@class (exact) conform.LuaFormatterConfig
----@field format fun(ctx: conform.Context, lines: string[], callback: fun(err: nil|string, new_lines: nil|string[]))
----@field condition? fun(ctx: conform.Context): boolean
+---@field format fun(self: conform.LuaFormatterConfig, ctx: conform.Context, lines: string[], callback: fun(err: nil|string, new_lines: nil|string[]))
+---@field condition? fun(self: conform.LuaFormatterConfig, ctx: conform.Context): boolean
 
 ---@class (exact) conform.FileLuaFormatterConfig : conform.LuaFormatterConfig
 ---@field meta conform.FormatterMeta
@@ -574,7 +574,8 @@ M.get_formatter_info = function(formatter, bufnr)
   local available = true
   local available_msg = nil
   if config.format then
-    if config.condition and not config.condition(ctx) then
+    ---@cast config conform.LuaFormatterConfig
+    if config.condition and not config:condition(ctx) then
       available = false
       available_msg = "Condition failed"
     end
