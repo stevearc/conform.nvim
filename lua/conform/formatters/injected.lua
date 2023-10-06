@@ -41,17 +41,29 @@ local function apply_indent(original_lines, new_lines)
   end
 end
 
----@type conform.FileLuaFormatterConfig
+---@class conform.InjectedFormatterConfig : conform.FileLuaFormatterConfig
+---@field format fun(self: conform.InjectedFormatterConfig, ctx: conform.Context, lines: string[], callback: fun(err: nil|string, new_lines: nil|string[]))
+---@field condition? fun(self: conform.InjectedFormatterConfig, ctx: conform.Context): boolean
+---@field options conform.InjectedFormatterOptions
+
+---@class (exact) conform.InjectedFormatterOptions
+---@field ignore_errors boolean
+
+---@type conform.InjectedFormatterConfig
 return {
   meta = {
     url = "lua/conform/formatters/injected.lua",
     description = "Format treesitter injected languages.",
   },
-  condition = function(ctx)
+  options = {
+    -- Set to true to ignore errors
+    ignore_errors = false,
+  },
+  condition = function(self, ctx)
     local ok = pcall(vim.treesitter.get_parser, ctx.buf)
     return ok
   end,
-  format = function(ctx, lines, callback)
+  format = function(self, ctx, lines, callback)
     local conform = require("conform")
     local log = require("conform.log")
     local util = require("conform.util")
@@ -93,8 +105,20 @@ return {
 
     local function apply_format_results()
       if format_error then
-        callback(format_error)
-        return
+        if self.options.ignore_errors then
+          -- Find all of the conform errors in the replacements table and remove them
+          local i = 1
+          while i <= #replacements do
+            if replacements[i].code then
+              table.remove(replacements, i)
+            else
+              i = i + 1
+            end
+          end
+        else
+          callback(format_error)
+          return
+        end
       end
 
       local formatted_lines = vim.deepcopy(lines)
@@ -114,6 +138,7 @@ return {
     local formatter_cb = function(err, idx, start_lnum, end_lnum, new_lines)
       if err then
         format_error = err
+        replacements[idx] = err
       else
         replacements[idx] = { start_lnum, end_lnum, new_lines }
       end
