@@ -150,7 +150,6 @@ describe("runner", function()
   describe("e2e", function()
     before_each(function()
       conform.formatters.test = {
-        meta = { url = "", description = "" },
         command = "tests/fake_formatter.sh",
       }
     end)
@@ -167,7 +166,7 @@ describe("runner", function()
       vim.bo[bufnr].modified = false
       local expected_lines = vim.split(expected, "\n", { plain = true })
       test_util.set_formatter_output(expected_lines)
-      conform.format(vim.tbl_extend("force", opts or {}, { formatters = { "test" }, quiet = true }))
+      conform.format(vim.tbl_extend("keep", opts or {}, { formatters = { "test" }, quiet = true }))
       return expected_lines
     end
 
@@ -285,6 +284,15 @@ print("a")
       local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
       vim.fn.delete("tests/testfile.txt")
       assert.are.same({ "goodbye" }, lines)
+    end)
+
+    it("formats file even if one formatter errors", function()
+      conform.formatters.test2 = {
+        command = "tests/fake_formatter.sh",
+        args = { "--fail" },
+      }
+      local lines = run_formatter("hello", "goodbye", { formatters = { "test2", "test" } })
+      assert.are.same(lines, vim.api.nvim_buf_get_lines(0, 0, -1, false))
     end)
 
     describe("range formatting", function()

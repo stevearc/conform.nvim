@@ -1,3 +1,4 @@
+local errors = require("conform.errors")
 local fs = require("conform.fs")
 local log = require("conform.log")
 local util = require("conform.util")
@@ -6,48 +7,6 @@ local M = {}
 
 ---@class (exact) conform.RunOpts
 ---@field exclusive boolean If true, ensure only a single formatter is running per buffer
-
----@class conform.Error
----@field code conform.ERROR_CODE
----@field message string
----@field debounce_message? boolean
-
----@enum conform.ERROR_CODE
-M.ERROR_CODE = {
-  -- Command was passed invalid arguments
-  INVALID_ARGS = 1,
-  -- Command was not executable
-  NOT_EXECUTABLE = 2,
-  -- Command timed out during execution
-  TIMEOUT = 3,
-  -- Command was pre-empted by another call to format
-  INTERRUPTED = 4,
-  -- Command produced an error during execution
-  RUNTIME = 5,
-  -- Asynchronous formatter results were discarded due to a concurrent modification
-  CONCURRENT_MODIFICATION = 6,
-}
-
----@param code conform.ERROR_CODE
----@return integer
-M.level_for_code = function(code)
-  if code == M.ERROR_CODE.CONCURRENT_MODIFICATION then
-    return vim.log.levels.INFO
-  elseif code == M.ERROR_CODE.TIMEOUT or code == M.ERROR_CODE.INTERRUPTED then
-    return vim.log.levels.WARN
-  else
-    return vim.log.levels.ERROR
-  end
-end
-
----Returns true if the error occurred while attempting to run the formatter
----@param code conform.ERROR_CODE
----@return boolean
-M.is_execution_error = function(code)
-  return code == M.ERROR_CODE.RUNTIME
-    or code == M.ERROR_CODE.NOT_EXECUTABLE
-    or code == M.ERROR_CODE.INVALID_ARGS
-end
 
 ---@param ctx conform.Context
 ---@param config conform.JobFormatterConfig
@@ -263,12 +222,22 @@ local last_run_errored = {}
 local function run_formatter(bufnr, formatter, config, ctx, input_lines, opts, callback)
   log.info("Run %s on %s", formatter.name, vim.api.nvim_buf_get_name(bufnr))
   log.trace("Input lines: %s", input_lines)
+  callback = util.wrap_callback(callback, function(err)
+    if err then
+      if last_run_errored[formatter.name] then
+        err.debounce_message = true
+      end
+      last_run_errored[formatter.name] = true
+    else
+      last_run_errored[formatter.name] = false
+    end
+  end)
   if config.format then
     ---@cast config conform.LuaFormatterConfig
     local ok, err = pcall(config.format, config, ctx, input_lines, callback)
     if not ok then
       callback({
-        code = M.ERROR_CODE.RUNTIME,
+        code = errors.ERROR_CODE.RUNTIME,
         message = string.format("Formatter '%s' error: %s", formatter.name, err),
       })
     end
@@ -284,16 +253,6 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, opts, c
   if type(env) == "function" then
     env = env(ctx)
   end
-  callback = util.wrap_callback(callback, function(err)
-    if err then
-      if last_run_errored[formatter.name] then
-        err.debounce_message = true
-      end
-      last_run_errored[formatter.name] = true
-    else
-      last_run_errored[formatter.name] = false
-    end
-  end)
 
   local buffer_text
   -- If the buffer has a newline at the end, make sure we include that in the input to the formatter
@@ -381,12 +340,12 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, opts, c
           and opts.exclusive
         then
           callback({
-            code = M.ERROR_CODE.INTERRUPTED,
+            code = errors.ERROR_CODE.INTERRUPTED,
             message = string.format("Formatter '%s' was interrupted", formatter.name),
           })
         else
           callback({
-            code = M.ERROR_CODE.RUNTIME,
+            code = errors.ERROR_CODE.RUNTIME,
             message = string.format("Formatter '%s' error: %s", formatter.name, err_str),
           })
         end
@@ -395,12 +354,12 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, opts, c
   })
   if jid == 0 then
     callback({
-      code = M.ERROR_CODE.INVALID_ARGS,
+      code = errors.ERROR_CODE.INVALID_ARGS,
       message = string.format("Formatter '%s' invalid arguments", formatter.name),
     })
   elseif jid == -1 then
     callback({
-      code = M.ERROR_CODE.NOT_EXECUTABLE,
+      code = errors.ERROR_CODE.NOT_EXECUTABLE,
       message = string.format("Formatter '%s' command is not executable", formatter.name),
     })
   elseif config.stdin then
@@ -481,23 +440,19 @@ M.format_async = function(bufnr, formatters, range, opts, callback)
     original_lines,
     opts,
     function(err, output_lines, all_support_range_formatting)
-      if err then
-        return callback(err)
-      end
-      assert(output_lines)
       -- discard formatting if buffer has changed
       if not vim.api.nvim_buf_is_valid(bufnr) or changedtick ~= util.buf_get_changedtick(bufnr) then
-        callback({
-          code = M.ERROR_CODE.CONCURRENT_MODIFICATION,
+        err = {
+          code = errors.ERROR_CODE.CONCURRENT_MODIFICATION,
           message = string.format(
             "Async formatter discarding changes for %s: concurrent modification",
             vim.api.nvim_buf_get_name(bufnr)
           ),
-        })
+        }
       else
         M.apply_format(bufnr, original_lines, output_lines, range, not all_support_range_formatting)
-        callback()
       end
+      callback(err)
     end
   )
 end
@@ -507,18 +462,19 @@ end
 ---@param range? conform.Range
 ---@param input_lines string[]
 ---@param opts conform.RunOpts
----@param callback fun(err?: conform.Error, output_lines?: string[], all_support_range_formatting?: boolean)
+---@param callback fun(err?: conform.Error, output_lines: string[], all_support_range_formatting: boolean)
 M.format_lines_async = function(bufnr, formatters, range, input_lines, opts, callback)
   if bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
   end
   local idx = 1
   local all_support_range_formatting = true
+  local final_err = nil
 
   local function run_next_formatter()
     local formatter = formatters[idx]
     if not formatter then
-      callback(nil, input_lines, all_support_range_formatting)
+      callback(final_err, input_lines, all_support_range_formatting)
       return
     end
     idx = idx + 1
@@ -527,9 +483,9 @@ M.format_lines_async = function(bufnr, formatters, range, input_lines, opts, cal
     local ctx = M.build_context(bufnr, config, range)
     run_formatter(bufnr, formatter, config, ctx, input_lines, opts, function(err, output)
       if err then
-        return callback(err)
+        final_err = errors.coalesce(final_err, err)
       end
-      input_lines = output
+      input_lines = output or input_lines
       run_next_formatter()
     end)
     all_support_range_formatting = all_support_range_formatting and config.range_args ~= nil
@@ -559,12 +515,9 @@ M.format_sync = function(bufnr, formatters, timeout_ms, range, opts)
 
   local err, final_result, all_support_range_formatting =
     M.format_lines_sync(bufnr, formatters, timeout_ms, range, original_lines, opts)
-  if err then
-    return err
-  end
-  assert(final_result)
 
   M.apply_format(bufnr, original_lines, final_result, range, not all_support_range_formatting)
+  return err
 end
 
 ---@param bufnr integer
@@ -573,8 +526,8 @@ end
 ---@param range? conform.Range
 ---@param opts conform.RunOpts
 ---@return conform.Error? error
----@return string[]? output_lines
----@return boolean? all_support_range_formatting
+---@return string[] output_lines
+---@return boolean all_support_range_formatting
 M.format_lines_sync = function(bufnr, formatters, timeout_ms, range, input_lines, opts)
   if bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
@@ -582,17 +535,20 @@ M.format_lines_sync = function(bufnr, formatters, timeout_ms, range, input_lines
   local start = uv.hrtime() / 1e6
 
   local all_support_range_formatting = true
+  local final_err = nil
   for _, formatter in ipairs(formatters) do
     local remaining = timeout_ms - (uv.hrtime() / 1e6 - start)
     if remaining <= 0 then
-      return {
-        code = M.ERROR_CODE.TIMEOUT,
+      return errors.coalesce(final_err, {
+        code = errors.ERROR_CODE.TIMEOUT,
         message = string.format("Formatter '%s' timeout", formatter.name),
-      }
+      }),
+        input_lines,
+        all_support_range_formatting
     end
     local done = false
     local result = nil
-    local run_err = nil
+    ---@type conform.FormatterConfig
     local config = assert(require("conform").get_formatter_config(formatter.name, bufnr))
     local ctx = M.build_context(bufnr, config, range)
     local jid = run_formatter(
@@ -603,7 +559,7 @@ M.format_lines_sync = function(bufnr, formatters, timeout_ms, range, input_lines
       input_lines,
       opts,
       function(err, output)
-        run_err = err
+        final_err = errors.coalesce(final_err, err)
         done = true
         result = output
       end
@@ -619,26 +575,26 @@ M.format_lines_sync = function(bufnr, formatters, timeout_ms, range, input_lines
         vim.fn.jobstop(jid)
       end
       if wait_reason == -1 then
-        return {
-          code = M.ERROR_CODE.TIMEOUT,
+        return errors.coalesce(final_err, {
+          code = errors.ERROR_CODE.TIMEOUT,
           message = string.format("Formatter '%s' timeout", formatter.name),
-        }
+        }),
+          input_lines,
+          all_support_range_formatting
       else
-        return {
-          code = M.ERROR_CODE.INTERRUPTED,
+        return errors.coalesce(final_err, {
+          code = errors.ERROR_CODE.INTERRUPTED,
           message = string.format("Formatter '%s' was interrupted", formatter.name),
-        }
+        }),
+          input_lines,
+          all_support_range_formatting
       end
     end
 
-    if not result then
-      return run_err
-    end
-
-    input_lines = result
+    input_lines = result or input_lines
   end
 
-  return nil, input_lines, all_support_range_formatting
+  return final_err, input_lines, all_support_range_formatting
 end
 
 return M

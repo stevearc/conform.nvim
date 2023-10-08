@@ -84,6 +84,7 @@ return {
   end,
   format = function(self, ctx, lines, callback)
     local conform = require("conform")
+    local errors = require("conform.errors")
     local log = require("conform.log")
     local util = require("conform.util")
     local text = table.concat(lines, "\n")
@@ -124,19 +125,17 @@ return {
 
     local function apply_format_results()
       if format_error then
-        if self.options.ignore_errors then
-          -- Find all of the conform errors in the replacements table and remove them
-          local i = 1
-          while i <= #replacements do
-            if replacements[i].code then
-              table.remove(replacements, i)
-            else
-              i = i + 1
-            end
+        -- Find all of the conform errors in the replacements table and remove them
+        local i = 1
+        while i <= #replacements do
+          if replacements[i].code then
+            table.remove(replacements, i)
+          else
+            i = i + 1
           end
-        else
-          callback(format_error)
-          return
+        end
+        if self.options.ignore_errors then
+          format_error = nil
         end
       end
 
@@ -150,13 +149,13 @@ return {
           table.insert(formatted_lines, start_lnum, new_lines[i])
         end
       end
-      callback(nil, formatted_lines)
+      callback(format_error, formatted_lines)
     end
 
     local num_format = 0
     local formatter_cb = function(err, idx, start_lnum, end_lnum, new_lines)
       if err then
-        format_error = err
+        format_error = errors.coalesce(format_error, err)
         replacements[idx] = err
       else
         replacements[idx] = { start_lnum, end_lnum, new_lines }

@@ -353,6 +353,7 @@ M.format = function(opts, callback)
     opts.range = range_from_selection(opts.bufnr, mode)
   end
   callback = callback or function(_err) end
+  local errors = require("conform.errors")
   local log = require("conform.log")
   local lsp_format = require("conform.lsp_format")
   local runner = require("conform.runner")
@@ -377,12 +378,12 @@ M.format = function(opts, callback)
     ---@param err? conform.Error
     local function handle_err(err)
       if err then
-        local level = runner.level_for_code(err.code)
+        local level = errors.level_for_code(err.code)
         log.log(level, err.message)
         local should_notify = not opts.quiet and level >= vim.log.levels.WARN
         -- Execution errors have special handling. Maybe should reconsider this.
         local notify_msg = err.message
-        if runner.is_execution_error(err.code) then
+        if errors.is_execution_error(err.code) then
           should_notify = should_notify and M.notify_on_error and not err.debounce_message
           notify_msg = "Formatter failed. See :ConformInfo for details"
         end
@@ -449,6 +450,7 @@ M.format_lines = function(formatter_names, lines, opts, callback)
     quiet = false,
   })
   callback = callback or function(_err, _lines) end
+  local errors = require("conform.errors")
   local log = require("conform.log")
   local runner = require("conform.runner")
   local formatters = resolve_formatters(formatter_names, opts.bufnr, not opts.quiet)
@@ -461,7 +463,7 @@ M.format_lines = function(formatter_names, lines, opts, callback)
   ---@param new_lines? string[]
   local function handle_err(err, new_lines)
     if err then
-      local level = runner.level_for_code(err.code)
+      local level = errors.level_for_code(err.code)
       log.log(level, err.message)
     end
     callback(err, new_lines)
