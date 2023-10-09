@@ -168,14 +168,14 @@ You can view this list in vim with `:help conform-formatters`
 <!-- FORMATTERS -->
 
 - [alejandra](https://kamadorueda.com/alejandra/) - The Uncompromising Nix Code Formatter.
-- [astyle](https://astyle.sourceforge.net/astyle.html) - A Free, Fast, and Small Automatic Formatter for C, C++, C++/CLI, Objective-C, C#, and Java Source Code
+- [astyle](https://astyle.sourceforge.net/astyle.html) - A Free, Fast, and Small Automatic Formatter for C, C++, C++/CLI, Objective-C, C#, and Java Source Code.
 - [autoflake](https://github.com/PyCQA/autoflake) - Removes unused imports and unused variables as reported by pyflakes.
 - [autopep8](https://github.com/hhatto/autopep8) - A tool that automatically formats Python code to conform to the PEP 8 style guide.
 - [beautysh](https://github.com/lovesegfault/beautysh) - A Bash beautifier for the masses.
 - [bibtex-tidy](https://github.com/FlamingTempura/bibtex-tidy) - Cleaner and Formatter for BibTeX files.
 - [biome](https://github.com/biomejs/biome) - A toolchain for web projects, aimed to provide functionalities to maintain them.
 - [black](https://github.com/psf/black) - The uncompromising Python code formatter.
-- [buf](https://buf.build/docs/reference/cli/buf/format) - A new way of working with Protocol Buffers
+- [buf](https://buf.build/docs/reference/cli/buf/format) - A new way of working with Protocol Buffers.
 - [clang_format](https://www.kernel.org/doc/html/latest/process/clang-format.html) - Tool to format C/C++/… code according to a set of rules and heuristics.
 - [cljstyle](https://github.com/greglook/cljstyle) - Formatter for Clojure code.
 - [cmake_format](https://github.com/cheshirekow/cmake_format) - Parse cmake listfiles and format them nicely.
@@ -191,20 +191,20 @@ You can view this list in vim with `:help conform-formatters`
 - [erb_format](https://github.com/nebulab/erb-formatter) - Format ERB files with speed and precision.
 - [eslint_d](https://github.com/mantoni/eslint_d.js/) - Like ESLint, but faster.
 - [fish_indent](https://fishshell.com/docs/current/cmds/fish_indent.html) - Indent or otherwise prettify a piece of fish code.
-- [fixjson](https://github.com/rhysd/fixjson) - JSON Fixer for Humans using (relaxed) JSON5 
+- [fixjson](https://github.com/rhysd/fixjson) - JSON Fixer for Humans using (relaxed) JSON5.
 - [gci](https://github.com/daixiang0/gci) - GCI, a tool that controls Go package import order and makes it always deterministic.
 - [gdformat](https://github.com/Scony/godot-gdscript-toolkit) - A formatter for Godot's gdscript.
 - [gofmt](https://pkg.go.dev/cmd/gofmt) - Formats go programs.
 - [gofumpt](https://github.com/mvdan/gofumpt) - Enforce a stricter format than gofmt, while being backwards compatible. That is, gofumpt is happy with a subset of the formats that gofmt is happy with.
 - [goimports](https://pkg.go.dev/golang.org/x/tools/cmd/goimports) - Updates your Go import lines, adding missing ones and removing unreferenced ones.
-- [golines](https://github.com/segmentio/golines) - A golang formatter that fixes long lines
+- [golines](https://github.com/segmentio/golines) - A golang formatter that fixes long lines.
 - [google-java-format](https://github.com/google/google-java-format) - Reformats Java source code according to Google Java Style.
 - [htmlbeautifier](https://github.com/threedaymonk/htmlbeautifier) - A normaliser/beautifier for HTML that also understands embedded Ruby. Ideal for tidying up Rails templates.
-- [indent](https://www.gnu.org/software/indent/) - GNU Indent
-- [injected](lua/conform/formatters/injected.lua) - Format treesitter injected languages.
+- [indent](https://www.gnu.org/software/indent/) - GNU Indent.
+- [injected](doc/advanced_topics.md#injected-language-formatting-code-blocks) - Format treesitter injected languages.
 - [isort](https://github.com/PyCQA/isort) - Python utility / library to sort imports alphabetically and automatically separate them into sections and by type.
 - [jq](https://github.com/stedolan/jq) - Command-line JSON processor.
-- [just](https://github.com/casey/just) - Format Justfile
+- [just](https://github.com/casey/just) - Format Justfile.
 - [latexindent](https://github.com/cmhughes/latexindent.pl) - A perl script for formatting LaTeX files that is generally included in major TeX distributions.
 - [markdown-toc](https://github.com/jonschlinkert/markdown-toc) - API and CLI for generating a markdown TOC (table of contents) for a README or any markdown files.
 - [markdownlint](https://github.com/DavidAnson/markdownlint) - A Node.js style checker and lint tool for Markdown/CommonMark files.
@@ -213,8 +213,8 @@ You can view this list in vim with `:help conform-formatters`
 - [nixfmt](https://github.com/serokell/nixfmt) - nixfmt is a formatter for Nix code, intended to apply a uniform style.
 - [nixpkgs_fmt](https://github.com/nix-community/nixpkgs-fmt) - nixpkgs-fmt is a Nix code formatter for nixpkgs.
 - [ocamlformat](https://github.com/ocaml-ppx/ocamlformat) - Auto-formatter for OCaml code.
-- [perlimports](https://github.com/perl-ide/App-perlimports) - Make implicit Perl imports explicit
-- [perltidy](https://github.com/perltidy/perltidy) - Perl::Tidy, a source code formatter for Perl
+- [perlimports](https://github.com/perl-ide/App-perlimports) - Make implicit Perl imports explicit.
+- [perltidy](https://github.com/perltidy/perltidy) - Perl::Tidy, a source code formatter for Perl.
 - [pg_format](https://github.com/darold/pgFormatter) - PostgreSQL SQL syntax beautifier.
 - [php_cs_fixer](https://github.com/PHP-CS-Fixer/PHP-CS-Fixer) - The PHP Coding Standards Fixer.
 - [phpcbf](https://phpqa.io/projects/phpcbf.html) - PHP Code Beautifier and Fixer fixes violations of a defined coding standard.
@@ -227,21 +227,21 @@ You can view this list in vim with `:help conform-formatters`
 - [rustywind](https://github.com/avencera/rustywind) - A tool for formatting Tailwind CSS classes.
 - [scalafmt](https://github.com/scalameta/scalafmt) - Code formatter for Scala.
 - [shellcheck](https://github.com/koalaman/shellcheck) - A static analysis tool for shell scripts.
-- [shellharden](https://github.com/anordal/shellharden) - The corrective bash syntax highlighter
+- [shellharden](https://github.com/anordal/shellharden) - The corrective bash syntax highlighter.
 - [shfmt](https://github.com/mvdan/sh) - A shell parser, formatter, and interpreter with `bash` support.
 - [sql_formatter](https://github.com/sql-formatter-org/sql-formatter) - A whitespace formatter for different query languages.
 - [squeeze_blanks](https://www.gnu.org/software/coreutils/manual/html_node/cat-invocation.html#cat-invocation) - Squeeze repeated blank lines into a single blank line via `cat -s`.
 - [standardjs](https://standardjs.com) - JavaScript Standard style guide, linter, and formatter.
-- [standardrb](https://github.com/standardrb/standard) - Ruby's bikeshed-proof linter and formatter
+- [standardrb](https://github.com/standardrb/standard) - Ruby's bikeshed-proof linter and formatter.
 - [stylelint](https://github.com/stylelint/stylelint) - A mighty CSS linter that helps you avoid errors and enforce conventions.
 - [stylua](https://github.com/JohnnyMorganz/StyLua) - An opinionated code formatter for Lua.
 - [swift_format](https://github.com/apple/swift-format) - Swift formatter from apple. Requires building from source with `swift build`.
 - [swiftformat](https://github.com/nicklockwood/SwiftFormat) - SwiftFormat is a code library and command-line tool for reformatting `swift` code on macOS or Linux.
-- [taplo](https://github.com/tamasfe/taplo) - A TOML toolkit written in Rust
+- [taplo](https://github.com/tamasfe/taplo) - A TOML toolkit written in Rust.
 - [templ](https://templ.guide/commands-and-tools/cli/#formatting-templ-files) - Formats templ template files.
 - [terraform_fmt](https://www.terraform.io/docs/cli/commands/fmt.html) - The terraform-fmt command rewrites `terraform` configuration files to a canonical format and style.
-- [trim_newlines](https://www.gnu.org/software/gawk/manual/gawk.html) - Trim new lines with awk
-- [trim_whitespace](https://www.gnu.org/software/gawk/manual/gawk.html) - Trim whitespaces with awk
+- [trim_newlines](https://www.gnu.org/software/gawk/manual/gawk.html) - Trim new lines with awk.
+- [trim_whitespace](https://www.gnu.org/software/gawk/manual/gawk.html) - Trim whitespaces with awk.
 - [uncrustify](https://github.com/uncrustify/uncrustify) - A source code beautifier for C, C++, C#, ObjectiveC, D, Java, Pawn and Vala.
 - [xmlformat](https://github.com/pamoller/xmlformatter) - xmlformatter is an Open Source Python package, which provides formatting of XML documents.
 - [yamlfix](https://github.com/lyz-code/yamlfix) - A configurable YAML formatter that keeps comments.

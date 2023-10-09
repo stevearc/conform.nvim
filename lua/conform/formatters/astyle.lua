@@ -3,7 +3,7 @@ local util = require("conform.util")
 return {
   meta = {
     url = "https://astyle.sourceforge.net/astyle.html",
-    description = "A Free, Fast, and Small Automatic Formatter for C, C++, C++/CLI, Objective-C, C#, and Java Source Code",
+    description = "A Free, Fast, and Small Automatic Formatter for C, C++, C++/CLI, Objective-C, C#, and Java Source Code.",
   },
   command = "astyle",
   args = { "--quiet" },

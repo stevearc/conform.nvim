@@ -156,7 +156,7 @@ FORMATTERS                                                    *conform-formatter
 
 `alejandra` - The Uncompromising Nix Code Formatter.
 `astyle` - A Free, Fast, and Small Automatic Formatter for C, C++, C++/CLI,
-         Objective-C, C#, and Java Source Code
+         Objective-C, C#, and Java Source Code.
 `autoflake` - Removes unused imports and unused variables as reported by
             pyflakes.
 `autopep8` - A tool that automatically formats Python code to conform to the PEP
@@ -166,7 +166,7 @@ FORMATTERS                                                    *conform-formatter
 `biome` - A toolchain for web projects, aimed to provide functionalities to
         maintain them.
 `black` - The uncompromising Python code formatter.
-`buf` - A new way of working with Protocol Buffers
+`buf` - A new way of working with Protocol Buffers.
 `clang_format` - Tool to format C/C++/… code according to a set of rules and
                heuristics.
 `cljstyle` - Formatter for Clojure code.
@@ -189,7 +189,7 @@ FORMATTERS                                                    *conform-formatter
 `erb_format` - Format ERB files with speed and precision.
 `eslint_d` - Like ESLint, but faster.
 `fish_indent` - Indent or otherwise prettify a piece of fish code.
-`fixjson` - JSON Fixer for Humans using (relaxed) JSON5
+`fixjson` - JSON Fixer for Humans using (relaxed) JSON5.
 `gci` - GCI, a tool that controls Go package import order and makes it always
       deterministic.
 `gdformat` - A formatter for Godot's gdscript.
@@ -199,17 +199,17 @@ FORMATTERS                                                    *conform-formatter
           that gofmt is happy with.
 `goimports` - Updates your Go import lines, adding missing ones and removing
             unreferenced ones.
-`golines` - A golang formatter that fixes long lines
+`golines` - A golang formatter that fixes long lines.
 `google-java-format` - Reformats Java source code according to Google Java
                      Style.
 `htmlbeautifier` - A normaliser/beautifier for HTML that also understands
                  embedded Ruby. Ideal for tidying up Rails templates.
-`indent` - GNU Indent
+`indent` - GNU Indent.
 `injected` - Format treesitter injected languages.
 `isort` - Python utility / library to sort imports alphabetically and
         automatically separate them into sections and by type.
 `jq` - Command-line JSON processor.
-`just` - Format Justfile
+`just` - Format Justfile.
 `latexindent` - A perl script for formatting LaTeX files that is generally
               included in major TeX distributions.
 `markdown-toc` - API and CLI for generating a markdown TOC (table of contents)
@@ -222,8 +222,8 @@ FORMATTERS                                                    *conform-formatter
          style.
 `nixpkgs_fmt` - nixpkgs-fmt is a Nix code formatter for nixpkgs.
 `ocamlformat` - Auto-formatter for OCaml code.
-`perlimports` - Make implicit Perl imports explicit
-`perltidy` - Perl::Tidy, a source code formatter for Perl
+`perlimports` - Make implicit Perl imports explicit.
+`perltidy` - Perl::Tidy, a source code formatter for Perl.
 `pg_format` - PostgreSQL SQL syntax beautifier.
 `php_cs_fixer` - The PHP Coding Standards Fixer.
 `phpcbf` - PHP Code Beautifier and Fixer fixes violations of a defined coding
@@ -242,13 +242,13 @@ FORMATTERS                                                    *conform-formatter
 `rustywind` - A tool for formatting Tailwind CSS classes.
 `scalafmt` - Code formatter for Scala.
 `shellcheck` - A static analysis tool for shell scripts.
-`shellharden` - The corrective bash syntax highlighter
+`shellharden` - The corrective bash syntax highlighter.
 `shfmt` - A shell parser, formatter, and interpreter with `bash` support.
 `sql_formatter` - A whitespace formatter for different query languages.
 `squeeze_blanks` - Squeeze repeated blank lines into a single blank line via
                  `cat -s`.
 `standardjs` - JavaScript Standard style guide, linter, and formatter.
-`standardrb` - Ruby's bikeshed-proof linter and formatter
+`standardrb` - Ruby's bikeshed-proof linter and formatter.
 `stylelint` - A mighty CSS linter that helps you avoid errors and enforce
             conventions.
 `stylua` - An opinionated code formatter for Lua.
@@ -256,12 +256,12 @@ FORMATTERS                                                    *conform-formatter
                `swift build`.
 `swiftformat` - SwiftFormat is a code library and command-line tool for
               reformatting `swift` code on macOS or Linux.
-`taplo` - A TOML toolkit written in Rust
+`taplo` - A TOML toolkit written in Rust.
 `templ` - Formats templ template files.
 `terraform_fmt` - The terraform-fmt command rewrites `terraform` configuration
                 files to a canonical format and style.
-`trim_newlines` - Trim new lines with awk
-`trim_whitespace` - Trim whitespaces with awk
+`trim_newlines` - Trim new lines with awk.
+`trim_whitespace` - Trim whitespaces with awk.
 `uncrustify` - A source code beautifier for C, C++, C#, ObjectiveC, D, Java,
              Pawn and Vala.
 `xmlformat` - xmlformatter is an Open Source Python package, which provides

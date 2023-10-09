@@ -2,7 +2,7 @@
 return {
   meta = {
     url = "https://github.com/standardrb/standard",
-    description = "Ruby's bikeshed-proof linter and formatter",
+    description = "Ruby's bikeshed-proof linter and formatter.",
   },
   command = "standardrb",
   args = {

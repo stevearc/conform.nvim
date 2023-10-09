@@ -71,7 +71,7 @@ end
 ---@type conform.InjectedFormatterConfig
 return {
   meta = {
-    url = "lua/conform/formatters/injected.lua",
+    url = "doc/advanced_topics.md#injected-language-formatting-code-blocks",
     description = "Format treesitter injected languages.",
   },
   options = {

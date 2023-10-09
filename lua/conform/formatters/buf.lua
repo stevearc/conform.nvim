@@ -2,7 +2,7 @@
 return {
   meta = {
     url = "https://buf.build/docs/reference/cli/buf/format",
-    description = "A new way of working with Protocol Buffers",
+    description = "A new way of working with Protocol Buffers.",
   },
   command = "buf",
   args = { "format", "-w", "$FILENAME" },
