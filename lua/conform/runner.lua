@@ -48,11 +48,12 @@ M.build_cmd = function(ctx, config)
   end
 end
 
----@param range? conform.Range
+---@param range conform.Range
 ---@param start_a integer
 ---@param end_a integer
+---@return boolean
 local function indices_in_range(range, start_a, end_a)
-  return not range or (start_a <= range["end"][1] and range["start"][1] <= end_a)
+  return start_a <= range["end"][1] and range["start"][1] <= end_a
 end
 
 ---@param a? string
@@ -189,7 +190,10 @@ M.apply_format = function(bufnr, original_lines, new_lines, range, only_apply_ra
     if is_replace then
       orig_line_end = orig_line_end - 1
     end
-    if not only_apply_range or indices_in_range(range, orig_line_start, orig_line_end) then
+    local should_apply_diff = not only_apply_range
+      or not range
+      or indices_in_range(range, orig_line_start, orig_line_end)
+    if should_apply_diff then
       local text_edit = create_text_edit(
         original_lines,
         replacement,
@@ -199,6 +203,14 @@ M.apply_format = function(bufnr, original_lines, new_lines, range, only_apply_ra
         orig_line_end
       )
       table.insert(text_edits, text_edit)
+
+      -- If we're using the aftermarket range formatting, diffs often have paired delete/insert
+      -- diffs. We should make sure that if one of them overlaps our selected range, extend the
+      -- range so that we pick up the other diff as well.
+      if range and only_apply_range then
+        range = vim.deepcopy(range)
+        range["end"][1] = math.max(range["end"][1], orig_line_end + 1)
+      end
     end
   end
 
