@@ -9,7 +9,7 @@ local function apply_text_edits(text_edits, bufnr, offset_encoding)
     #text_edits == 1
     and text_edits[1].range.start.line == 0
     and text_edits[1].range.start.character == 0
-    and text_edits[1].range["end"].line == vim.api.nvim_buf_line_count(bufnr) + 1
+    and text_edits[1].range["end"].line >= vim.api.nvim_buf_line_count(bufnr)
     and text_edits[1].range["end"].character == 0
   then
     local original_lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, true)
@@ -18,6 +18,7 @@ local function apply_text_edits(text_edits, bufnr, offset_encoding)
     if #new_lines > 1 and new_lines[#new_lines] == "" then
       table.remove(new_lines)
     end
+    log.debug("Converting full-file LSP format to piecewise format")
     require("conform.runner").apply_format(bufnr, original_lines, new_lines, nil, false)
   else
     vim.lsp.util.apply_text_edits(text_edits, bufnr, offset_encoding)
