@@ -92,8 +92,7 @@ function M.format(options, callback)
         elseif not vim.api.nvim_buf_is_valid(bufnr) then
           return callback("buffer was deleted")
         elseif changedtick ~= require("conform.util").buf_get_changedtick(bufnr) then
-          return
-            callback(
+          return callback(
             string.format(
               "Async LSP formatter discarding changes for %s: concurrent modification",
               vim.api.nvim_buf_get_name(bufnr)
