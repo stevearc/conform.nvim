@@ -23,6 +23,7 @@ ROOT = os.path.abspath(os.path.join(HERE, os.path.pardir))
 README = os.path.join(ROOT, "README.md")
 DOC = os.path.join(ROOT, "doc")
 RECIPES = os.path.join(DOC, "recipes.md")
+ADVANCED = os.path.join(DOC, "advanced_topics.md")
 VIMDOC = os.path.join(DOC, "conform.txt")
 OPTIONS = os.path.join(ROOT, "scripts", "options_doc.lua")
 AUTOFORMAT = os.path.join(ROOT, "scripts", "autoformat_doc.lua")
@@ -125,6 +126,13 @@ def update_recipes_toc():
     replace_section(README, r"^<!-- RECIPES -->$", r"^<!-- /RECIPES -->$", subtoc)
 
 
+def update_advanced_toc():
+    toc = ["\n"] + generate_md_toc(ADVANCED) + ["\n"]
+    replace_section(ADVANCED, r"^<!-- TOC -->$", r"^<!-- /TOC -->$", toc)
+    subtoc = add_md_link_path("doc/advanced_topics.md", toc)
+    replace_section(README, r"^<!-- ADVANCED -->$", r"^<!-- /ADVANCED -->$", subtoc)
+
+
 def gen_options_vimdoc() -> VimdocSection:
     section = VimdocSection("Options", "conform-options", ["\n", ">lua\n"])
     with open(OPTIONS, "r", encoding="utf-8") as f:
@@ -178,5 +186,6 @@ def main() -> None:
     update_autocmd_md()
     update_md_api()
     update_recipes_toc()
+    update_advanced_toc()
     update_readme_toc()
     generate_vimdoc()

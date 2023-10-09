@@ -11,6 +11,7 @@ Lightweight yet powerful formatter plugin for Neovim
 - [Formatters](#formatters)
 - [Options](#options)
 - [Recipes](#recipes)
+- [Advanced topics](#advanced-topics)
 - [API](#api)
   - [format(opts, callback)](#formatopts-callback)
   - [list_formatters(bufnr)](#list_formattersbufnr)
@@ -161,6 +162,8 @@ vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
 To view configured and available formatters, as well as to see the log file, run `:ConformInfo`
 
 ## Formatters
+
+You can view this list in vim with `:help conform-formatters`
 
 <!-- FORMATTERS -->
 
@@ -348,6 +351,16 @@ require("conform").formatters.my_formatter = {
 - [Lazy loading with lazy.nvim](doc/recipes.md#lazy-loading-with-lazynvim)
 
 <!-- /RECIPES -->
+
+## Advanced topics
+
+<!-- ADVANCED -->
+
+- [Minimal format diffs](doc/advanced_topics.md#minimal-format-diffs)
+- [Range formatting](doc/advanced_topics.md#range-formatting)
+- [Injected language formatting (code blocks)](doc/advanced_topics.md#injected-language-formatting-code-blocks)
+
+<!-- /ADVANCED -->
 
 ## API
 
