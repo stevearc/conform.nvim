@@ -1,7 +1,7 @@
 require("plenary.async").tests.add_to_env()
-local test_util = require("tests.test_util")
 local conform = require("conform")
 local runner = require("conform.runner")
+local test_util = require("tests.test_util")
 
 describe("runner", function()
   after_each(function()

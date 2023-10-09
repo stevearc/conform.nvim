@@ -1,8 +1,8 @@
 require("plenary.async").tests.add_to_env()
-local test_util = require("tests.test_util")
 local conform = require("conform")
 local log = require("conform.log")
 local runner = require("conform.runner")
+local test_util = require("tests.test_util")
 
 describe("fuzzer", function()
   before_each(function()

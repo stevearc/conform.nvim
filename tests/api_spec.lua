@@ -1,6 +1,6 @@
 require("plenary.async").tests.add_to_env()
-local test_util = require("tests.test_util")
 local conform = require("conform")
+local test_util = require("tests.test_util")
 
 describe("api", function()
   after_each(function()
