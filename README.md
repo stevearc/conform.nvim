@@ -433,3 +433,21 @@ Thanks to
 
 - [nvim-lint](https://github.com/mfussenegger/nvim-lint) for providing inspiration for the config and API. It's an excellent plugin that balances power and simplicity.
 - [null-ls](https://github.com/jose-elias-alvarez/null-ls.nvim) for formatter configurations and being my formatter/linter of choice for a long time.
+
+## Contributors ✨
+
+Thanks goes to these wonderful people :
+
+<table>
+  <tr>
+     <td>
+  <a href="https://github.com/solana-labs/solana/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=solana-labs/solana" />
+  </a>
+    </td>
+  </tr>
+</table>
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+
+<p align="right"><a href="#top">Back to top</a></p>
