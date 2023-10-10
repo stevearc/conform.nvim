@@ -1,5 +1,25 @@
 # Changelog
 
+## [3.10.0](https://github.com/stevearc/conform.nvim/compare/v3.9.0...v3.10.0) (2023-10-09)
+
+
+### Features
+
+* add easy-coding-standard ([#121](https://github.com/stevearc/conform.nvim/issues/121)) ([e758196](https://github.com/stevearc/conform.nvim/commit/e75819642c36810a55a7235b6b5e16a5ce896ed3))
+* add fixjson ([#126](https://github.com/stevearc/conform.nvim/issues/126)) ([280360e](https://github.com/stevearc/conform.nvim/commit/280360eb019fe52433a68b7918790c9187076865))
+* add justfile formatter ([#114](https://github.com/stevearc/conform.nvim/issues/114)) ([4c91b52](https://github.com/stevearc/conform.nvim/commit/4c91b5270a6f741850de2eef3a804ff1dc6ec3ee))
+* errors do not stop formatting early ([a94f686](https://github.com/stevearc/conform.nvim/commit/a94f686986631d5b97bd75b3877813c39de55c47))
+* expose configuration options for injected formatter ([#118](https://github.com/stevearc/conform.nvim/issues/118)) ([ba1ca20](https://github.com/stevearc/conform.nvim/commit/ba1ca20bb5f89a8bdd94b268411263275550843a))
+
+
+### Bug Fixes
+
+* **biome:** do not use stdin due to biome bug ([#120](https://github.com/stevearc/conform.nvim/issues/120)) ([e5ed063](https://github.com/stevearc/conform.nvim/commit/e5ed0635d9aa66c6c2f7eac3235e6a8eb2de0653))
+* catch and fix more cases of bad-behaving LSP formatters ([#119](https://github.com/stevearc/conform.nvim/issues/119)) ([9bd1690](https://github.com/stevearc/conform.nvim/commit/9bd169029ac7fac5d0b3899a47556549d113a4c2))
+* handle one failure mode with range formatting ([#123](https://github.com/stevearc/conform.nvim/issues/123)) ([b5a2da9](https://github.com/stevearc/conform.nvim/commit/b5a2da9410d56bd7bc229d0185ad427a966cac50))
+* injected formatter handles markdown code blocks in blockquotes ([#117](https://github.com/stevearc/conform.nvim/issues/117)) ([0bffab5](https://github.com/stevearc/conform.nvim/commit/0bffab53672d62cbfe8fc450e78757982e656318))
+* move justfile formatter to correct directory ([8217144](https://github.com/stevearc/conform.nvim/commit/8217144491e8aba3a24828a71ee768b007a2ec43))
+
 ## [3.9.0](https://github.com/stevearc/conform.nvim/compare/v3.8.0...v3.9.0) (2023-10-04)
 
 
