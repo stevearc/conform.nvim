@@ -94,7 +94,7 @@ M.setup = function(opts)
       pattern = "*",
       group = aug,
       callback = function(args)
-        if vim.bo[args.buf].buftype ~= "" then
+        if not vim.api.nvim_buf_is_valid(args.buf) or vim.bo[args.buf].buftype ~= "" then
           return
         end
         local format_args, callback = opts.format_on_save, nil
