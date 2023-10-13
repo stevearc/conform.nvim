@@ -5,6 +5,6 @@ return {
     description = "A static analysis tool for shell scripts.",
   },
   command = "shellcheck",
-  args = "$FILENAME --format=diff | patch -p1 $FILENAME",
+  args = "'$FILENAME' --format=diff | patch -p1 '$FILENAME'",
   stdin = false,
 }
