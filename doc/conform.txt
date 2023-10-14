@@ -237,6 +237,7 @@ FORMATTERS                                                    *conform-formatter
 `prettierd` - prettier, as a daemon, for ludicrous formatting speed.
 `rubocop` - Ruby static code analyzer and formatter, based on the community Ruby
           style guide.
+`rubyfmt` - Ruby Autoformatter! (Written in Rust)
 `ruff_fix` - An extremely fast Python linter, written in Rust. Fix lint errors.
 `ruff_format` - An extremely fast Python linter, written in Rust. Formatter
               subcommand.
