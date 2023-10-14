@@ -21,6 +21,7 @@ local M = {}
 ---@class (exact) conform.LuaFormatterConfig
 ---@field format fun(self: conform.LuaFormatterConfig, ctx: conform.Context, lines: string[], callback: fun(err: nil|string, new_lines: nil|string[]))
 ---@field condition? fun(self: conform.LuaFormatterConfig, ctx: conform.Context): boolean
+---@field options? table
 
 ---@class (exact) conform.FileLuaFormatterConfig : conform.LuaFormatterConfig
 ---@field meta conform.FormatterMeta
@@ -29,6 +30,12 @@ local M = {}
 ---@field meta conform.FormatterMeta
 
 ---@alias conform.FormatterConfig conform.JobFormatterConfig|conform.LuaFormatterConfig
+
+---@class (exact) conform.FormatterConfigOverride : conform.JobFormatterConfig
+---@field inherit? boolean
+---@field command? string|fun(ctx: conform.Context): string
+---@field prepend_args? string|string[]|fun(ctx: conform.Context): string|string[]
+---@field options? table
 
 ---@class (exact) conform.FormatterMeta
 ---@field url string
@@ -53,7 +60,7 @@ local M = {}
 ---@type table<string, conform.FormatterUnit[]>
 M.formatters_by_ft = {}
 
----@type table<string, conform.FormatterConfig|fun(bufnr: integer): nil|conform.FormatterConfig>
+---@type table<string, conform.FormatterConfigOverride|fun(bufnr: integer): nil|conform.FormatterConfigOverride>
 M.formatters = {}
 
 M.notify_on_error = true
@@ -538,20 +545,39 @@ M.get_formatter_config = function(formatter, bufnr)
   if not bufnr or bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
   end
-  ---@type nil|conform.FormatterConfig|fun(bufnr: integer): nil|conform.FormatterConfig
-  local config = M.formatters[formatter]
-  if type(config) == "function" then
-    config = config(bufnr)
+  ---@type nil|conform.FormatterConfigOverride|fun(bufnr: integer): nil|conform.FormatterConfigOverride
+  local override = M.formatters[formatter]
+  if type(override) == "function" then
+    override = override(bufnr)
   end
-  if not config then
-    local ok
-    ok, config = pcall(require, "conform.formatters." .. formatter)
-    if not ok then
+
+  ---@type nil|conform.FormatterConfig
+  local config = override
+  if not override or override.inherit ~= false then
+    local ok, mod_config = pcall(require, "conform.formatters." .. formatter)
+    if ok then
+      if override then
+        config = require("conform.util").merge_formatter_configs(mod_config, override)
+      else
+        config = mod_config
+      end
+    elseif override then
+      if override.command then
+        config = override
+      else
+        local msg = string.format(
+          "Formatter '%s' missing built-in definition\nSet `command` to get rid of this error.",
+          formatter
+        )
+        vim.notify_once(msg, vim.log.levels.ERROR)
+        return nil
+      end
+    else
       return nil
     end
   end
 
-  if config.stdin == nil then
+  if config and config.stdin == nil then
     config.stdin = true
   end
   return config

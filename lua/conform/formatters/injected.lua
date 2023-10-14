@@ -60,15 +60,10 @@ local function apply_indent(lines, indentation)
   end
 end
 
----@class conform.InjectedFormatterConfig : conform.FileLuaFormatterConfig
----@field format fun(self: conform.InjectedFormatterConfig, ctx: conform.Context, lines: string[], callback: fun(err: nil|string, new_lines: nil|string[]))
----@field condition? fun(self: conform.InjectedFormatterConfig, ctx: conform.Context): boolean
----@field options conform.InjectedFormatterOptions
-
 ---@class (exact) conform.InjectedFormatterOptions
 ---@field ignore_errors boolean
 
----@type conform.InjectedFormatterConfig
+---@type conform.FileLuaFormatterConfig
 return {
   meta = {
     url = "doc/advanced_topics.md#injected-language-formatting-code-blocks",
@@ -94,6 +89,8 @@ return {
       callback("No treesitter parser for buffer")
       return
     end
+    ---@type conform.InjectedFormatterOptions
+    local options = self.options
     --- Disable diagnostic to pass the typecheck github action
     --- This is available on nightly, but not on stable
     --- Stable doesn't have any parameters, so it's safe to always pass `true`
@@ -134,7 +131,7 @@ return {
             i = i + 1
           end
         end
-        if self.options.ignore_errors then
+        if options.ignore_errors then
           format_error = nil
         end
       end
