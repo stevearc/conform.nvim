@@ -9,9 +9,10 @@ Lightweight yet powerful formatter plugin for Neovim
 - [Installation](#installation)
 - [Setup](#setup)
 - [Formatters](#formatters)
-- [Options](#options)
+- [Customizing formatters](#customizing-formatters)
 - [Recipes](#recipes)
 - [Advanced topics](#advanced-topics)
+- [Options](#options)
 - [API](#api)
   - [format(opts, callback)](#formatopts-callback)
   - [list_formatters(bufnr)](#list_formattersbufnr)
@@ -30,9 +31,9 @@ Lightweight yet powerful formatter plugin for Neovim
 
 - **Preserves extmarks and folds** - Most formatters replace the entire buffer, which clobbers extmarks and folds, and can cause the viewport and cursor to jump unexpectedly. Conform calculates minimal diffs and applies them using the built-in LSP format utilities.
 - **Fixes bad-behaving LSP formatters** - Some LSP servers are lazy and simply replace the entire buffer, leading to the problems mentioned above. Conform hooks into the LSP handler and turns these responses into proper piecewise changes.
-- **Enables range formatting for all formatters** - Since conform calculates minimal diffs, it can perform range formatting even if the underlying formatter doesn't support it.
+- **Enables range formatting for all formatters** - Since conform calculates minimal diffs, it can perform range formatting [even if the underlying formatter doesn't support it.](doc/advanced_topics.md#range-formatting)
 - **Simple API** - Conform exposes a simple, imperative API modeled after `vim.lsp.buf.format()`.
-- **Formats embedded code blocks** - Use the `injected` formatter to format code blocks e.g. in markdown files.
+- **Formats embedded code blocks** - Can format code blocks inside markdown files or similar (see [injected language formatting](doc/advanced_topics.md#injected-language-formatting-code-blocks))
 
 ## Installation
 
@@ -48,17 +49,21 @@ conform.nvim supports all the usual plugin managers
 }
 ```
 
+For a more thorough configuration involving lazy-loading, see [Lazy loading with lazy.nvim](doc/recipes.md#lazy-loading-with-lazynvim).
+
 </details>
 
 <details>
   <summary>Packer</summary>
 
 ```lua
-require('packer').startup(function()
-    use {
-      'stevearc/conform.nvim',
-      config = function() require('conform').setup() end
-    }
+require("packer").startup(function()
+  use({
+    "stevearc/conform.nvim",
+    config = function()
+      require("conform").setup()
+    end,
+  })
 end)
 ```
 
@@ -68,9 +73,9 @@ end)
   <summary>Paq</summary>
 
 ```lua
-require "paq" {
-    {'stevearc/conform.nvim'};
-}
+require("paq")({
+  { "stevearc/conform.nvim" },
+})
 ```
 
 </details>
@@ -118,13 +123,13 @@ At a minimum, you will need to set up some formatters by filetype
 
 ```lua
 require("conform").setup({
-    formatters_by_ft = {
-        lua = { "stylua" },
-        -- Conform will run multiple formatters sequentially
-        python = { "isort", "black" },
-        -- Use a sub-list to run only the first available formatter
-        javascript = { { "prettierd", "prettier" } },
-    },
+  formatters_by_ft = {
+    lua = { "stylua" },
+    -- Conform will run multiple formatters sequentially
+    python = { "isort", "black" },
+    -- Use a sub-list to run only the first available formatter
+    javascript = { { "prettierd", "prettier" } },
+  },
 })
 ```
 
@@ -132,10 +137,10 @@ Then you can use `conform.format()` just like you would `vim.lsp.buf.format()`. 
 
 ```lua
 vim.api.nvim_create_autocmd("BufWritePre", {
-    pattern = "*",
-    callback = function(args)
-        require("conform").format({ bufnr = args.buf })
-    end,
+  pattern = "*",
+  callback = function(args)
+    require("conform").format({ bufnr = args.buf })
+  end,
 })
 ```
 
@@ -143,11 +148,11 @@ As a shortcut, conform will optionally set up this format-on-save autocmd for yo
 
 ```lua
 require("conform").setup({
-    format_on_save = {
-        -- These options will be passed to conform.format()
-        timeout_ms = 500,
-        lsp_fallback = true,
-    },
+  format_on_save = {
+    -- These options will be passed to conform.format()
+    timeout_ms = 500,
+    lsp_fallback = true,
+  },
 })
 ```
 
@@ -164,6 +169,9 @@ To view configured and available formatters, as well as to see the log file, run
 ## Formatters
 
 You can view this list in vim with `:help conform-formatters`
+
+<details>
+  <summary>Expand to see all formatters</summary>
 
 <!-- FORMATTERS -->
 
@@ -252,6 +260,92 @@ You can view this list in vim with `:help conform-formatters`
 - [zigfmt](https://github.com/ziglang/zig) - Reformat Zig source into canonical form.
 <!-- /FORMATTERS -->
 
+</details>
+
+## Customizing formatters
+
+You can override/add to the default values of formatters
+
+```lua
+require("conform").setup({
+  formatters = {
+    yamlfix = {
+      -- Change where to find the command
+      command = "local/path/yamlfix",
+      -- Adds environment args to the yamlfix formatter
+      env = {
+        YAMLFIX_SEQUENCE_STYLE = "block_style",
+      },
+    },
+  },
+})
+
+-- These can also be set directly
+require("conform").formatters.yamlfix = {
+  env = {
+    YAMLFIX_SEQUENCE_STYLE = "block_style",
+  },
+}
+
+-- This can also be a function that returns the config,
+-- which can be useful if you're doing lazy loading
+require("conform").formatters.yamlfix = function(bufnr)
+  return {
+    command = require("conform.util").find_executable({
+      "local/path/yamlfix",
+    }, "yamlfix"),
+  }
+end
+```
+
+In addition to being able to override any of the original properties on the formatter, there is another property for easily adding additional arguments to the format command
+
+```lua
+require("conform").formatters.shfmt = {
+  prepend_args = { "-i", "2" },
+  -- The base args are { "-filename", "$FILENAME" } so the final args will be
+  -- { "-i", "2", "-filename", "$FILENAME" }
+}
+-- prepend_args can be a function, just like args
+require("conform").formatters.shfmt = {
+  prepend_args = function(ctx)
+    return { "-i", "2" }
+  end,
+}
+```
+
+If you want to overwrite the entire formatter definition and _not_ merge with the default values, pass `inherit = false`. This is also the default behavior if there is no built-in formatter with the given name, which can be used to add your own custom formatters.
+
+```lua
+require("conform").formatters.shfmt = {
+  inherit = false,
+  command = "shfmt",
+  args = { "-i", "2", "-filename", "$FILENAME" },
+}
+```
+
+## Recipes
+
+<!-- RECIPES -->
+
+- [Format command](doc/recipes.md#format-command)
+- [Autoformat with extra features](doc/recipes.md#autoformat-with-extra-features)
+- [Command to toggle format-on-save](doc/recipes.md#command-to-toggle-format-on-save)
+- [Automatically run slow formatters async](doc/recipes.md#automatically-run-slow-formatters-async)
+- [Lazy loading with lazy.nvim](doc/recipes.md#lazy-loading-with-lazynvim)
+
+<!-- /RECIPES -->
+
+## Advanced topics
+
+<!-- ADVANCED -->
+
+- [Minimal format diffs](doc/advanced_topics.md#minimal-format-diffs)
+- [Range formatting](doc/advanced_topics.md#range-formatting)
+- [Injected language formatting (code blocks)](doc/advanced_topics.md#injected-language-formatting-code-blocks)
+
+<!-- /ADVANCED -->
+
 ## Options
 
 A complete list of all configuration options
@@ -291,14 +385,14 @@ require("conform").setup({
   log_level = vim.log.levels.ERROR,
   -- Conform will notify you when a formatter errors
   notify_on_error = true,
-  -- Define custom formatters here
+  -- Custom formatters and changes to built-in formatters
   formatters = {
     my_formatter = {
-      -- This can be a string or a function that returns a string
+      -- This can be a string or a function that returns a string.
+      -- When defining a new formatter, this is the only field that is *required*
       command = "my_cmd",
-      -- OPTIONAL - all fields below this are optional
       -- A list of strings, or a function that returns a list of strings
-      -- Return a single string instead to run the command in a shell
+      -- Return a single string instead of a list to run the command in a shell
       args = { "--stdin-from-filename", "$FILENAME" },
       -- If the formatter supports range formatting, create the range arguments here
       range_args = function(ctx)
@@ -316,15 +410,20 @@ require("conform").setup({
       condition = function(ctx)
         return vim.fs.basename(ctx.filename) ~= "README.md"
       end,
-      -- Exit codes that indicate success (default {0})
+      -- Exit codes that indicate success (default { 0 })
       exit_codes = { 0, 1 },
       -- Environment variables. This can also be a function that returns a table.
       env = {
         VAR = "value",
       },
+      -- Set to false to disable merging the config with the base definition
+      inherit = true,
+      -- When inherit = true, add these additional arguments to the command.
+      -- This can also be a function, like args
+      prepend_args = { "--use-tabs" },
     },
     -- These can also be a function that returns the formatter
-    other_formatter = function()
+    other_formatter = function(bufnr)
       return {
         command = "my_cmd",
       }
@@ -340,30 +439,6 @@ require("conform").formatters.my_formatter = {
 ```
 
 <!-- /OPTIONS -->
-
-## Recipes
-
-<!-- RECIPES -->
-
-- [Format command](doc/recipes.md#format-command)
-- [Customizing formatters](doc/recipes.md#customizing-formatters)
-- [Autoformat with extra features](doc/recipes.md#autoformat-with-extra-features)
-- [Command to toggle format-on-save](doc/recipes.md#command-to-toggle-format-on-save)
-- [Automatically run slow formatters async](doc/recipes.md#automatically-run-slow-formatters-async)
-- [Add extra arguments to a formatter command](doc/recipes.md#add-extra-arguments-to-a-formatter-command)
-- [Lazy loading with lazy.nvim](doc/recipes.md#lazy-loading-with-lazynvim)
-
-<!-- /RECIPES -->
-
-## Advanced topics
-
-<!-- ADVANCED -->
-
-- [Minimal format diffs](doc/advanced_topics.md#minimal-format-diffs)
-- [Range formatting](doc/advanced_topics.md#range-formatting)
-- [Injected language formatting (code blocks)](doc/advanced_topics.md#injected-language-formatting-code-blocks)
-
-<!-- /ADVANCED -->
 
 ## API
 

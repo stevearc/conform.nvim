@@ -44,14 +44,14 @@ OPTIONS                                                          *conform-option
       log_level = vim.log.levels.ERROR,
       -- Conform will notify you when a formatter errors
       notify_on_error = true,
-      -- Define custom formatters here
+      -- Custom formatters and changes to built-in formatters
       formatters = {
         my_formatter = {
-          -- This can be a string or a function that returns a string
+          -- This can be a string or a function that returns a string.
+          -- When defining a new formatter, this is the only field that is *required*
           command = "my_cmd",
-          -- OPTIONAL - all fields below this are optional
           -- A list of strings, or a function that returns a list of strings
-          -- Return a single string instead to run the command in a shell
+          -- Return a single string instead of a list to run the command in a shell
           args = { "--stdin-from-filename", "$FILENAME" },
           -- If the formatter supports range formatting, create the range arguments here
           range_args = function(ctx)
@@ -69,15 +69,20 @@ OPTIONS                                                          *conform-option
           condition = function(ctx)
             return vim.fs.basename(ctx.filename) ~= "README.md"
           end,
-          -- Exit codes that indicate success (default {0})
+          -- Exit codes that indicate success (default { 0 })
           exit_codes = { 0, 1 },
           -- Environment variables. This can also be a function that returns a table.
           env = {
             VAR = "value",
           },
+          -- Set to false to disable merging the config with the base definition
+          inherit = true,
+          -- When inherit = true, add these additional arguments to the command.
+          -- This can also be a function, like args
+          prepend_args = { "--use-tabs" },
         },
         -- These can also be a function that returns the formatter
-        other_formatter = function()
+        other_formatter = function(bufnr)
           return {
             command = "my_cmd",
           }
