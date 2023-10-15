@@ -168,6 +168,7 @@ FORMATTERS                                                    *conform-formatter
 `black` - The uncompromising Python code formatter.
 `blade-formatter` - An opinionated blade template formatter for Laravel that
                   respects readability.
+`blue` - The slightly less uncompromising Python code formatter.
 `buf` - A new way of working with Protocol Buffers.
 `clang_format` - Tool to format C/C++/… code according to a set of rules and
                heuristics.
