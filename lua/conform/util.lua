@@ -156,6 +156,17 @@ M.add_formatter_args = function(formatter, extra_args, opts)
   end
 end
 
+---@param config conform.FormatterConfig
+---@param override conform.FormatterConfigOverride
+---@return conform.FormatterConfig
+M.merge_formatter_configs = function(config, override)
+  local ret = vim.tbl_deep_extend("force", config, override)
+  if override.prepend_args then
+    M.add_formatter_args(ret, override.prepend_args, { append = false })
+  end
+  return ret
+end
+
 ---@param bufnr integer
 ---@return integer
 M.buf_get_changedtick = function(bufnr)
