@@ -202,6 +202,8 @@ FORMATTERS                                                    *conform-formatter
           that gofmt is happy with.
 `goimports` - Updates your Go import lines, adding missing ones and removing
             unreferenced ones.
+`goimports-reviser` - Right imports sorting & code formatting tool (goimports
+                    alternative).
 `golines` - A golang formatter that fixes long lines.
 `google-java-format` - Reformats Java source code according to Google Java
                      Style.
