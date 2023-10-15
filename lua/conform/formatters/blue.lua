@@ -3,7 +3,7 @@ local util = require("conform.util")
 return {
   meta = {
     url = "https://github.com/grantjenks/blue",
-    description = "Blue -- Some folks like black but I prefer blue.",
+    description = "The slightly less uncompromising Python code formatter.",
   },
   command = "blue",
   args = {
