@@ -4,7 +4,7 @@ local util = require("conform.util")
 return {
   meta = {
     url = "https://github.com/laravel/pint",
-    description = "Laravel Pint is an opinionated PHP code style fixer for minimalists. Pint is built on top of PHP-CS-Fixer and makes it simple to ensure that your code style stays clean and consistent.",
+    description = "Laravel Pint is an opinionated PHP code style fixer for minimalists.",
   },
   command = util.find_executable({
     "vendor/bin/pint",
