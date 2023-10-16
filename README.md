@@ -230,7 +230,6 @@ You can view this list in vim with `:help conform-formatters`
 - [pg_format](https://github.com/darold/pgFormatter) - PostgreSQL SQL syntax beautifier.
 - [php_cs_fixer](https://github.com/PHP-CS-Fixer/PHP-CS-Fixer) - The PHP Coding Standards Fixer.
 - [phpcbf](https://phpqa.io/projects/phpcbf.html) - PHP Code Beautifier and Fixer fixes violations of a defined coding standard.
-- [pint](https://github.com/laravel/pint) - An opinionated PHP code style fixer for minimalists.
 - [prettier](https://github.com/prettier/prettier) - Prettier is an opinionated code formatter. It enforces a consistent style by parsing your code and re-printing it with its own rules that take the maximum line length into account, wrapping code when necessary.
 - [prettierd](https://github.com/fsouza/prettierd) - prettier, as a daemon, for ludicrous formatting speed.
 - [rubocop](https://github.com/rubocop/rubocop) - Ruby static code analyzer and formatter, based on the community Ruby style guide.
