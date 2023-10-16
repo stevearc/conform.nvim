@@ -1,5 +1,30 @@
 # Changelog
 
+## [4.0.0](https://github.com/stevearc/conform.nvim/compare/v3.10.0...v4.0.0) (2023-10-16)
+
+
+### ⚠ BREAKING CHANGES
+
+* merge configs in conform.formatters with defaults ([#140](https://github.com/stevearc/conform.nvim/issues/140))
+
+### Features
+
+* add blade-formatter ([#136](https://github.com/stevearc/conform.nvim/issues/136)) ([f90b222](https://github.com/stevearc/conform.nvim/commit/f90b2229c481252c43a71a004972b473952c1c3c))
+* add blue formatter ([#142](https://github.com/stevearc/conform.nvim/issues/142)) ([a97ddff](https://github.com/stevearc/conform.nvim/commit/a97ddfff2d701245ad49daf24ef436a50ee72a50))
+* Add config for laravel/pint ([#144](https://github.com/stevearc/conform.nvim/issues/144)) ([43414c8](https://github.com/stevearc/conform.nvim/commit/43414c8ebd22921f44806fb9612a2f4f376419af))
+* add goimports-reviser ([#143](https://github.com/stevearc/conform.nvim/issues/143)) ([3fcebb0](https://github.com/stevearc/conform.nvim/commit/3fcebb0001e6d5b943dbb36fe5c035e3ef8c3509))
+* add ktlint ([#137](https://github.com/stevearc/conform.nvim/issues/137)) ([8b02f47](https://github.com/stevearc/conform.nvim/commit/8b02f478fefe93f76a7f57c983418744287f4c69))
+* add rufo support ([#132](https://github.com/stevearc/conform.nvim/issues/132)) ([aca5d30](https://github.com/stevearc/conform.nvim/commit/aca5d307232a22600bd0ab57571a8b6e2dc9a12c))
+* merge configs in conform.formatters with defaults ([#140](https://github.com/stevearc/conform.nvim/issues/140)) ([7027ebb](https://github.com/stevearc/conform.nvim/commit/7027ebbd772e2d3593f7dd566dea06d2d20622ee))
+* support for rubyfmt ([#139](https://github.com/stevearc/conform.nvim/issues/139)) ([ae33777](https://github.com/stevearc/conform.nvim/commit/ae337775e46804a8347ea7c3da92be5587e5850e))
+
+
+### Bug Fixes
+
+* prevent format-after-save autocmd from running on invalid buffers ([80f2f70](https://github.com/stevearc/conform.nvim/commit/80f2f70740431b07d725cc66f63abbfd66aaae6d))
+* prevent format-on-save autocmd from running on invalid buffers ([#128](https://github.com/stevearc/conform.nvim/issues/128)) ([69ee0bf](https://github.com/stevearc/conform.nvim/commit/69ee0bfde439e30344ae57de6227cb3a035dd0bb))
+* **shellcheck:** support filenames with spaces ([#135](https://github.com/stevearc/conform.nvim/issues/135)) ([64a8956](https://github.com/stevearc/conform.nvim/commit/64a89568925c3f62b7ecdcf60b612001d2749eb1))
+
 ## [3.10.0](https://github.com/stevearc/conform.nvim/compare/v3.9.0...v3.10.0) (2023-10-09)
 
 
