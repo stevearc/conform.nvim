@@ -285,6 +285,7 @@ FORMATTERS                                                    *conform-formatter
           files.
 `yapf` - Yet Another Python Formatter.
 `zigfmt` - Reformat Zig source into canonical form.
+`zprint` - Formatter for Clojure and EDN.
 
 --------------------------------------------------------------------------------
 AUTOFORMAT                                                    *conform-autoformat*

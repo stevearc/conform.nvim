@@ -263,7 +263,7 @@ You can view this list in vim with `:help conform-formatters`
 - [yamlfmt](https://github.com/google/yamlfmt) - yamlfmt is an extensible command line tool or library to format yaml files.
 - [yapf](https://github.com/google/yapf) - Yet Another Python Formatter.
 - [zigfmt](https://github.com/ziglang/zig) - Reformat Zig source into canonical form.
-- [zprint](https://github.com/kkinnear/zprint) - Highly configurable formatter for Clojure and EDN.
+- [zprint](https://github.com/kkinnear/zprint) - Formatter for Clojure and EDN.
 <!-- /FORMATTERS -->
 
 </details>
