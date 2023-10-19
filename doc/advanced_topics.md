@@ -16,7 +16,7 @@ What conform does differently is it leverages `:help vim.diff`, Neovim's lua bin
 
 ## Range formatting
 
-When a formatting tool doesn't have built-in support for range formatting, conform will attempt to "fake it" when requested. This is necessarily a **best effort** operation and is **not** guaranteed to be correct or error-free, however in _most_ cases it should produce acceptible results.
+When a formatting tool doesn't have built-in support for range formatting, conform will attempt to "fake it" when requested. This is necessarily a **best effort** operation and is **not** guaranteed to be correct or error-free, however in _most_ cases it should produce acceptable results.
 
 The way this "aftermarket" range formatting works is conform will format the entire buffer as per usual, but during the diff process it will discard diffs that fall outside of the selected range. This usually approximates a correct result, but as you can guess it's possible for the formatting to exceed the range (if the diff covering the range is large) or for the results to be incorrect (if the formatting changes require two diffs in different locations to be semantically correct).
 
