@@ -245,6 +245,7 @@ FORMATTERS                                                    *conform-formatter
            take the maximum line length into account, wrapping code when
            necessary.
 `prettierd` - prettier, as a daemon, for ludicrous formatting speed.
+`puppet-lint` - Check that your Puppet manifests conform to the style guide.
 `rubocop` - Ruby static code analyzer and formatter, based on the community Ruby
           style guide.
 `rubyfmt` - Ruby Autoformatter! (Written in Rust)
