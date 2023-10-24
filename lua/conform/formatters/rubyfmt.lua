@@ -4,5 +4,4 @@ return {
     description = "Ruby Autoformatter! (Written in Rust)",
   },
   command = "rubyfmt",
-  exit_codes = { 0, 1 },
 }
