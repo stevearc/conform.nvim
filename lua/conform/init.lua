@@ -665,6 +665,7 @@ M.will_fallback_lsp = function(options)
 end
 
 M.formatexpr = function(opts)
+  local lsp_format = require("conform.lsp_format")
   -- Change the defaults slightly from conform.format
   opts = vim.tbl_deep_extend("keep", opts or {}, {
     timeout_ms = 500,
@@ -692,7 +693,7 @@ M.formatexpr = function(opts)
   }
   if M.format(opts) then
     return 0
-  elseif opts.lsp_fallback then
+  elseif opts.lsp_fallback and not vim.tbl_isempty(lsp_format.get_format_clients(opts)) then
     -- No formatters were available; fall back to lsp formatter
     return vim.lsp.formatexpr({ timeout_ms = opts.timeout_ms })
   else
