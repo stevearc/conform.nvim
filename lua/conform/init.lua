@@ -692,7 +692,7 @@ M.formatexpr = function(opts)
   }
   if M.format(opts) then
     return 0
-  elseif opts.lsp_fallback then
+  elseif opts.lsp_fallback and #vim.lsp.get_active_clients() > 0 then
     -- No formatters were available; fall back to lsp formatter
     return vim.lsp.formatexpr({ timeout_ms = opts.timeout_ms })
   else
