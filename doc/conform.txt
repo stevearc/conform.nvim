@@ -277,7 +277,8 @@ FORMATTERS                                                    *conform-formatter
 `templ` - Formats templ template files.
 `terraform_fmt` - The terraform-fmt command rewrites `terraform` configuration
                 files to a canonical format and style.
-`tlint` - Tighten linter for Laravel conventions.
+`tlint` - Tighten linter for Laravel conventions with support for auto-
+        formatting.
 `trim_newlines` - Trim new lines with awk.
 `trim_whitespace` - Trim whitespaces with awk.
 `uncrustify` - A source code beautifier for C, C++, C#, ObjectiveC, D, Java,
