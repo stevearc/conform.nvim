@@ -234,6 +234,7 @@ You can view this list in vim with `:help conform-formatters`
 - [pint](https://github.com/laravel/pint) - Laravel Pint is an opinionated PHP code style fixer for minimalists.
 - [prettier](https://github.com/prettier/prettier) - Prettier is an opinionated code formatter. It enforces a consistent style by parsing your code and re-printing it with its own rules that take the maximum line length into account, wrapping code when necessary.
 - [prettierd](https://github.com/fsouza/prettierd) - prettier, as a daemon, for ludicrous formatting speed.
+- [pretty-php](https://github.com/lkrms/pretty-php) - The opinionated PHP code formatter
 - [puppet-lint](https://github.com/puppetlabs/puppet-lint) - Check that your Puppet manifests conform to the style guide.
 - [rubocop](https://github.com/rubocop/rubocop) - Ruby static code analyzer and formatter, based on the community Ruby style guide.
 - [rubyfmt](https://github.com/fables-tales/rubyfmt) - Ruby Autoformatter! (Written in Rust)
