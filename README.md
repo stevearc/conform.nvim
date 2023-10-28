@@ -211,7 +211,7 @@ You can view this list in vim with `:help conform-formatters`
 - [goimports-reviser](https://github.com/incu6us/goimports-reviser) - Right imports sorting & code formatting tool (goimports alternative).
 - [golines](https://github.com/segmentio/golines) - A golang formatter that fixes long lines.
 - [google-java-format](https://github.com/google/google-java-format) - Reformats Java source code according to Google Java Style.
-- [htmlbeautifier](https://github.com/threedaymonk/htmlbeautifier) - A normaliser/beautifier for HTML that also understands embedded Ruby. Ideal for tidying up Rails templates.
+- [htmlbeautifier](https://github.com/threedaymonk/htmlbeautifier) - A normalizer/beautifier for HTML that also understands embedded Ruby. Ideal for tidying up Rails templates.
 - [indent](https://www.gnu.org/software/indent/) - GNU Indent.
 - [injected](doc/advanced_topics.md#injected-language-formatting-code-blocks) - Format treesitter injected languages.
 - [isort](https://github.com/PyCQA/isort) - Python utility / library to sort imports alphabetically and automatically separate them into sections and by type.
@@ -240,7 +240,7 @@ You can view this list in vim with `:help conform-formatters`
 - [rubyfmt](https://github.com/fables-tales/rubyfmt) - Ruby Autoformatter! (Written in Rust)
 - [ruff_fix](https://beta.ruff.rs/docs/) - An extremely fast Python linter, written in Rust. Fix lint errors.
 - [ruff_format](https://beta.ruff.rs/docs/) - An extremely fast Python linter, written in Rust. Formatter subcommand.
-- [rufo](https://github.com/ruby-formatter/rufo) - Rufo is as an opinionated ruby formatter.
+- [rufo](https://github.com/ruby-formatter/rufo) - Rufo is an opinionated ruby formatter.
 - [rustfmt](https://github.com/rust-lang/rustfmt) - A tool for formatting rust code according to style guidelines.
 - [rustywind](https://github.com/avencera/rustywind) - A tool for formatting Tailwind CSS classes.
 - [scalafmt](https://github.com/scalameta/scalafmt) - Code formatter for Scala.
