@@ -190,7 +190,7 @@ You can view this list in vim with `:help conform-formatters`
 - [cljstyle](https://github.com/greglook/cljstyle) - Formatter for Clojure code.
 - [cmake_format](https://github.com/cheshirekow/cmake_format) - Parse cmake listfiles and format them nicely.
 - [codespell](https://github.com/codespell-project/codespell) - Check code for common misspellings.
-- [csharpier](https://github.com/belav/csharpier) - An opinionated C# formatter.
+- [csharpier](https://github.com/belav/csharpier) - The opinionated C# code formatter
 - [darker](https://github.com/akaihola/darker) - Run black only on changed lines.
 - [dart_format](https://dart.dev/tools/dart-format) - Replace the whitespace in your program with formatting that follows Dart guidelines.
 - [deno_fmt](https://deno.land/manual/tools/formatter) - Use [Deno](https://deno.land/) to format TypeScript, JavaScript/JSON and markdown.
@@ -495,6 +495,7 @@ Retrieve the available formatters for a buffer
 `list_all_formatters(): conform.FormatterInfo[]` \
 List information about all filetype-configured formatters
 
+
 ### get_formatter_info(formatter, bufnr)
 
 `get_formatter_info(formatter, bufnr): conform.FormatterInfo` \
@@ -513,7 +514,6 @@ Check if the buffer will use LSP formatting when lsp_fallback = true
 | Param   | Type         | Desc                                 |
 | ------- | ------------ | ------------------------------------ |
 | options | `nil\|table` | Options passed to vim.lsp.buf.format |
-
 <!-- /API -->
 
 ## Acknowledgements
