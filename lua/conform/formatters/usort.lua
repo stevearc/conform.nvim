@@ -7,8 +7,8 @@ return {
     description = "Safe, minimal import sorting for Python projects.",
   },
   command = "usort",
-  args = { "format", "$FILENAME" },
-  stdin = false,
+  args = { "format", "-" },
+  stdin = true,
   cwd = util.root_file({
     "pyproject.toml",
   }),
