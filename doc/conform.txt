@@ -284,6 +284,7 @@ FORMATTERS                                                    *conform-formatter
 `trim_whitespace` - Trim whitespaces with awk.
 `uncrustify` - A source code beautifier for C, C++, C#, ObjectiveC, D, Java,
              Pawn and Vala.
+`usort` - Safe, minimal import sorting for Python projects.
 `xmlformat` - xmlformatter is an Open Source Python package, which provides
             formatting of XML documents.
 `yamlfix` - A configurable YAML formatter that keeps comments.
