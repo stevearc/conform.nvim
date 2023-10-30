@@ -222,6 +222,7 @@ You can view this list in vim with `:help conform-formatters`
 - [latexindent](https://github.com/cmhughes/latexindent.pl) - A perl script for formatting LaTeX files that is generally included in major TeX distributions.
 - [markdown-toc](https://github.com/jonschlinkert/markdown-toc) - API and CLI for generating a markdown TOC (table of contents) for a README or any markdown files.
 - [markdownlint](https://github.com/DavidAnson/markdownlint) - A Node.js style checker and lint tool for Markdown/CommonMark files.
+- [markdownlint-cli2](https://github.com/DavidAnson/markdownlint-cli2) - A fast, flexible, configuration-based command-line interface for linting Markdown/CommonMark files with the markdownlint library.
 - [mdformat](https://github.com/executablebooks/mdformat) - An opinionated Markdown formatter.
 - [mix](https://hexdocs.pm/mix/main/Mix.Tasks.Format.html) - Format Elixir files using the mix format command.
 - [nixfmt](https://github.com/serokell/nixfmt) - nixfmt is a formatter for Nix code, intended to apply a uniform style.
@@ -495,7 +496,6 @@ Retrieve the available formatters for a buffer
 
 `list_all_formatters(): conform.FormatterInfo[]` \
 List information about all filetype-configured formatters
-
 
 ### get_formatter_info(formatter, bufnr)
 
