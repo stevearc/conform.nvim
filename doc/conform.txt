@@ -228,9 +228,10 @@ FORMATTERS                                                    *conform-formatter
 `markdown-toc` - API and CLI for generating a markdown TOC (table of contents)
                for a README or any markdown files.
 `markdownlint` - A Node.js style checker and lint tool for Markdown/CommonMark
+               files.
 `markdownlint-cli2` - A fast, flexible, configuration-based command-line
-                    interface for linting Markdown/CommonMark files with
-                    the markdownlint library
+                    interface for linting Markdown/CommonMark files with the
+                    markdownlint library
 `mdformat` - An opinionated Markdown formatter.
 `mix` - Format Elixir files using the mix format command.
 `nixfmt` - nixfmt is a formatter for Nix code, intended to apply a uniform
