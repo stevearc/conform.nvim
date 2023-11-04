@@ -12,8 +12,14 @@ local function get_formatter_filetypes(name)
   local conform = require("conform")
   local filetypes = {}
   for filetype, formatters in pairs(conform.formatters_by_ft) do
+    if type(formatters) == "function" then
+      formatters = formatters(0)
     -- support the old structure where formatters could be a subkey
-    if not vim.tbl_islist(formatters) then
+    elseif not vim.tbl_islist(formatters) then
+      vim.notify_once(
+        "Using deprecated structure for formatters_by_ft. See :help conform-options for details.",
+        vim.log.levels.ERROR
+      )
       ---@diagnostic disable-next-line: undefined-field
       formatters = formatters.formatters
     end

@@ -56,8 +56,9 @@ local M = {}
 ---@field end integer[]
 
 ---@alias conform.FormatterUnit string|string[]
+---@alias conform.FiletypeFormatter conform.FormatterUnit[]|fun(bufnr: integer): string[]
 
----@type table<string, conform.FormatterUnit[]>
+---@type table<string, conform.FiletypeFormatter>
 M.formatters_by_ft = {}
 
 ---@type table<string, conform.FormatterConfigOverride|fun(bufnr: integer): nil|conform.FormatterConfigOverride>
@@ -76,20 +77,6 @@ M.setup = function(opts)
   end
   if opts.notify_on_error ~= nil then
     M.notify_on_error = opts.notify_on_error
-  end
-
-  for ft, formatters in pairs(M.formatters_by_ft) do
-    ---@diagnostic disable-next-line: undefined-field
-    if formatters.format_on_save ~= nil then
-      vim.notify(
-        string.format(
-          'The "format_on_save" option for filetype "%s" is deprecated. It is recommended to put this logic in the autocmd, see :help conform-autoformat',
-          ft
-        ),
-        vim.log.levels.WARN
-      )
-      break
-    end
   end
 
   local aug = vim.api.nvim_create_augroup("Conform", { clear = true })
@@ -214,7 +201,6 @@ local function get_matching_filetype(bufnr)
   local filetypes = vim.split(vim.bo[bufnr].filetype, ".", { plain = true })
   table.insert(filetypes, "_")
   for _, filetype in ipairs(filetypes) do
-    ---@type conform.FormatterUnit[]
     local ft_formatters = M.formatters_by_ft[filetype]
     if ft_formatters then
       return filetype
@@ -254,16 +240,23 @@ M.list_formatters_for_buffer = function(bufnr)
   end
   table.insert(filetypes, "*")
   for _, ft in ipairs(filetypes) do
-    ---@type conform.FormatterUnit[]
     local ft_formatters = M.formatters_by_ft[ft]
     if ft_formatters then
-      -- support the old structure where formatters could be a subkey
-      if not vim.tbl_islist(ft_formatters) then
-        ---@diagnostic disable-next-line: undefined-field
-        ft_formatters = ft_formatters.formatters
-      end
+      if type(ft_formatters) == "function" then
+        dedupe_formatters(ft_formatters(bufnr), formatters)
+      else
+        -- support the old structure where formatters could be a subkey
+        if not vim.tbl_islist(ft_formatters) then
+          vim.notify_once(
+            "Using deprecated structure for formatters_by_ft. See :help conform-options for details.",
+            vim.log.levels.ERROR
+          )
+          ---@diagnostic disable-next-line: undefined-field
+          ft_formatters = ft_formatters.formatters
+        end
 
-      dedupe_formatters(ft_formatters, formatters)
+        dedupe_formatters(ft_formatters, formatters)
+      end
     end
   end
 
@@ -301,11 +294,12 @@ local function range_from_selection(bufnr, mode)
   }
 end
 
+---@private
 ---@param names conform.FormatterUnit[]
 ---@param bufnr integer
 ---@param warn_on_missing boolean
 ---@return conform.FormatterInfo[]
-local function resolve_formatters(names, bufnr, warn_on_missing)
+M.resolve_formatters = function(names, bufnr, warn_on_missing)
   local all_info = {}
   local function add_info(info, warn)
     if info.available then
@@ -372,7 +366,7 @@ M.format = function(opts, callback)
   local explicit_formatters = opts.formatters ~= nil
   local formatter_names = opts.formatters or M.list_formatters_for_buffer(opts.bufnr)
   local formatters =
-    resolve_formatters(formatter_names, opts.bufnr, not opts.quiet and explicit_formatters)
+    M.resolve_formatters(formatter_names, opts.bufnr, not opts.quiet and explicit_formatters)
 
   local any_formatters = not vim.tbl_isempty(formatters)
   if not explicit_formatters and opts.lsp_fallback == true and M.will_fallback_lsp(opts) then
@@ -464,7 +458,7 @@ M.format_lines = function(formatter_names, lines, opts, callback)
   local errors = require("conform.errors")
   local log = require("conform.log")
   local runner = require("conform.runner")
-  local formatters = resolve_formatters(formatter_names, opts.bufnr, not opts.quiet)
+  local formatters = M.resolve_formatters(formatter_names, opts.bufnr, not opts.quiet)
   if vim.tbl_isempty(formatters) then
     callback(nil, lines)
     return
@@ -499,7 +493,7 @@ M.list_formatters = function(bufnr)
     bufnr = vim.api.nvim_get_current_buf()
   end
   local formatters = M.list_formatters_for_buffer(bufnr)
-  return resolve_formatters(formatters, bufnr, false)
+  return M.resolve_formatters(formatters, bufnr, false)
 end
 
 ---List information about all filetype-configured formatters
@@ -507,8 +501,15 @@ end
 M.list_all_formatters = function()
   local formatters = {}
   for _, ft_formatters in pairs(M.formatters_by_ft) do
+    if type(ft_formatters) == "function" then
+      ft_formatters = ft_formatters(0)
+    end
     -- support the old structure where formatters could be a subkey
     if not vim.tbl_islist(ft_formatters) then
+      vim.notify_once(
+        "Using deprecated structure for formatters_by_ft. See :help conform-options for details.",
+        vim.log.levels.ERROR
+      )
       ---@diagnostic disable-next-line: undefined-field
       ft_formatters = ft_formatters.formatters
     end
