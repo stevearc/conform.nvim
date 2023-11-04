@@ -233,6 +233,8 @@ FORMATTERS                                                    *conform-formatter
                     interface for linting Markdown/CommonMark files with the
                     markdownlint library
 `mdformat` - An opinionated Markdown formatter.
+`mdslw` - Prepare your markdown for easy diff'ing by adding line breaks after
+        every sentence.
 `mix` - Format Elixir files using the mix format command.
 `nixfmt` - nixfmt is a formatter for Nix code, intended to apply a uniform
          style.
