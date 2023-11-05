@@ -176,6 +176,7 @@ You can view this list in vim with `:help conform-formatters`
 <!-- FORMATTERS -->
 
 - [alejandra](https://kamadorueda.com/alejandra/) - The Uncompromising Nix Code Formatter.
+- [astgrep](https://ast-grep.github.io/) - A CLI tool for code structural search, lint and rewriting. Written in Rust
 - [astyle](https://astyle.sourceforge.net/astyle.html) - A Free, Fast, and Small Automatic Formatter for C, C++, C++/CLI, Objective-C, C#, and Java Source Code.
 - [autoflake](https://github.com/PyCQA/autoflake) - Removes unused imports and unused variables as reported by pyflakes.
 - [autopep8](https://github.com/hhatto/autopep8) - A tool that automatically formats Python code to conform to the PEP 8 style guide.
