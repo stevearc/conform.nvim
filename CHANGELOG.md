@@ -1,5 +1,28 @@
 # Changelog
 
+## [4.1.0](https://github.com/stevearc/conform.nvim/compare/v4.0.0...v4.1.0) (2023-11-05)
+
+
+### Features
+
+* add `ast-grep` ([#177](https://github.com/stevearc/conform.nvim/issues/177)) ([fa3cf1c](https://github.com/stevearc/conform.nvim/commit/fa3cf1c40716492fd0df0c3dedd54c8018f9ea70))
+* add CSharpier ([#165](https://github.com/stevearc/conform.nvim/issues/165)) ([b2368ff](https://github.com/stevearc/conform.nvim/commit/b2368ff18a9dd9452170d3a6f41b1f872ae5d0b2))
+* add markdownlint-cli2 ([#171](https://github.com/stevearc/conform.nvim/issues/171)) ([9bb3a94](https://github.com/stevearc/conform.nvim/commit/9bb3a940389dda796192a477a016069472692526))
+* add mdslw markdown formatter ([#175](https://github.com/stevearc/conform.nvim/issues/175)) ([369c7fe](https://github.com/stevearc/conform.nvim/commit/369c7fe690b3fec0ecdd7c17faeebf3f8113a0f5))
+* add pretty-php ([#161](https://github.com/stevearc/conform.nvim/issues/161)) ([4653408](https://github.com/stevearc/conform.nvim/commit/4653408d5c270168e31ffd0585d1cf2de27fc827))
+* add puppet-lint formatter ([#153](https://github.com/stevearc/conform.nvim/issues/153)) ([0219648](https://github.com/stevearc/conform.nvim/commit/0219648cd9a2bafc13fda64903e49fda5db0016b))
+* add tlint ([#162](https://github.com/stevearc/conform.nvim/issues/162)) ([2538784](https://github.com/stevearc/conform.nvim/commit/253878436e2b6d73dfd91ccf0ac12d04cc683d34))
+* add usort ([#167](https://github.com/stevearc/conform.nvim/issues/167)) ([f7766d2](https://github.com/stevearc/conform.nvim/commit/f7766d2fbe23f0f22a3db1513beba7d03a8dc261))
+* allow formatters_by_ft to be a function ([#174](https://github.com/stevearc/conform.nvim/issues/174)) ([0bbe838](https://github.com/stevearc/conform.nvim/commit/0bbe83830be5a07a1161bb1a23d7280310656177))
+* gn build file format cmd ([#155](https://github.com/stevearc/conform.nvim/issues/155)) ([3716927](https://github.com/stevearc/conform.nvim/commit/37169273a0776752a3c01cbe01227e275b642b89))
+* zprint formatter for clojure ([#146](https://github.com/stevearc/conform.nvim/issues/146)) ([2800552](https://github.com/stevearc/conform.nvim/commit/280055248661a4fc7b692db2d5ee80a465ebb577))
+
+
+### Bug Fixes
+
+* **formatexpr:** use default formatexpr if no formatters or LSP clients ([#55](https://github.com/stevearc/conform.nvim/issues/55)) ([278bcd8](https://github.com/stevearc/conform.nvim/commit/278bcd8bf2017e187e963b515017341fdd87fe2f))
+* **rubyfmt:** exit code 1 should not be a success ([#157](https://github.com/stevearc/conform.nvim/issues/157)) ([e4ecb6e](https://github.com/stevearc/conform.nvim/commit/e4ecb6e8ed3163c86d7e647f1dc3d94de77ca687))
+
 ## [4.0.0](https://github.com/stevearc/conform.nvim/compare/v3.10.0...v4.0.0) (2023-10-16)
 
 
