@@ -6,5 +6,5 @@ return {
     description = "R formatter and linter.",
   },
   command = util.find_executable({"usr/bin/"}, "R"),
-  args = {"-s", "--vanilla", "-e", "r.nvim::format()", "--args", "$FILENAME", "grk"},
+  args = {"-s", "-e", "r.nvim::format()", "--args", "$FILENAME", "grk"},
 }
