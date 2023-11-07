@@ -85,6 +85,7 @@ M.setup = function(opts)
       opts.format_on_save = {}
     end
     vim.api.nvim_create_autocmd("BufWritePre", {
+      desc = "Format on save",
       pattern = "*",
       group = aug,
       callback = function(args)
@@ -106,6 +107,16 @@ M.setup = function(opts)
         end
       end,
     })
+    vim.api.nvim_create_autocmd("VimLeavePre", {
+      desc = "conform.nvim hack to work around Neovim bug",
+      pattern = "*",
+      group = aug,
+      callback = function()
+        -- HACK: Work around https://github.com/neovim/neovim/issues/21856
+        -- causing exit code 134 on :wq
+        vim.cmd.sleep({ args = { "1m" } })
+      end,
+    })
   end
 
   if opts.format_after_save then
@@ -115,6 +126,7 @@ M.setup = function(opts)
     local exit_timeout = 1000
     local num_running_format_jobs = 0
     vim.api.nvim_create_autocmd("BufWritePost", {
+      desc = "Format after save",
       pattern = "*",
       group = aug,
       callback = function(args)
@@ -156,6 +168,7 @@ M.setup = function(opts)
     })
 
     vim.api.nvim_create_autocmd("BufWinLeave", {
+      desc = "conform.nvim store changedtick for use during Neovim exit",
       pattern = "*",
       group = aug,
       callback = function(args)
@@ -166,6 +179,7 @@ M.setup = function(opts)
     })
 
     vim.api.nvim_create_autocmd("VimLeavePre", {
+      desc = "conform.nvim wait for running formatters before exit",
       pattern = "*",
       group = aug,
       callback = function()
@@ -182,6 +196,9 @@ M.setup = function(opts)
           local log = require("conform.log")
           log.warn("Delayed Neovim exit by %dms to wait for formatting to complete", elapsed)
         end
+        -- HACK: Work around https://github.com/neovim/neovim/issues/21856
+        -- causing exit code 134 on :wq
+        vim.cmd.sleep({ args = { "1m" } })
       end,
     })
   end
