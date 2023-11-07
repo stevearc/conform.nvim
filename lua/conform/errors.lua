@@ -11,14 +11,16 @@ M.ERROR_CODE = {
   INVALID_ARGS = 1,
   -- Command was not executable
   NOT_EXECUTABLE = 2,
+  -- Error occurred during when calling jobstart
+  JOBSTART = 3,
   -- Command timed out during execution
-  TIMEOUT = 3,
+  TIMEOUT = 4,
   -- Command was pre-empted by another call to format
-  INTERRUPTED = 4,
+  INTERRUPTED = 5,
   -- Command produced an error during execution
-  RUNTIME = 5,
+  RUNTIME = 6,
   -- Asynchronous formatter results were discarded due to a concurrent modification
-  CONCURRENT_MODIFICATION = 6,
+  CONCURRENT_MODIFICATION = 7,
 }
 
 ---@param code conform.ERROR_CODE
@@ -40,6 +42,7 @@ M.is_execution_error = function(code)
   return code == M.ERROR_CODE.RUNTIME
     or code == M.ERROR_CODE.NOT_EXECUTABLE
     or code == M.ERROR_CODE.INVALID_ARGS
+    or code == M.ERROR_CODE.JOBSTART
 end
 
 ---@param err1? conform.Error

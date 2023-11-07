@@ -299,7 +299,7 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, opts, c
   local stderr
   local exit_codes = config.exit_codes or { 0 }
   local jid
-  jid = vim.fn.jobstart(cmd, {
+  local ok, jid_or_err = pcall(vim.fn.jobstart, cmd, {
     cwd = cwd,
     env = env,
     stdout_buffered = true,
@@ -364,6 +364,14 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, opts, c
       end
     end,
   })
+  if not ok then
+    callback({
+      code = errors.ERROR_CODE.JOBSTART,
+      message = string.format("Formatter '%s' error in jobstart: %s", formatter.name, jid_or_err),
+    })
+    return
+  end
+  jid = jid_or_err
   if jid == 0 then
     callback({
       code = errors.ERROR_CODE.INVALID_ARGS,
