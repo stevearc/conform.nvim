@@ -7,4 +7,5 @@ return {
   },
   command = util.find_executable({"usr/bin/"}, "R"),
   args = {"-s", "-e", "r.nvim::format()", "--args", "$FILENAME", "grk"},
+  stdin = false,
 }
