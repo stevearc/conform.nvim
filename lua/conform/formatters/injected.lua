@@ -171,11 +171,15 @@ return {
         last_start_lnum = start_lnum
         local input_lines = util.tbl_slice(lines, start_lnum, end_lnum)
         local ft_formatters = conform.formatters_by_ft[lang]
+        ---@type string[]
         local formatter_names
         if type(ft_formatters) == "function" then
           formatter_names = ft_formatters(ctx.buf)
         else
-          formatter_names = require("conform").resolve_formatters(ft_formatters, ctx.buf, false)
+          local formatters = require("conform").resolve_formatters(ft_formatters, ctx.buf, false)
+          formatter_names = vim.tbl_map(function(f)
+            return f.name
+          end, formatters)
         end
         local format_opts = { async = true, bufnr = ctx.buf, quiet = true }
         local idx = num_format
