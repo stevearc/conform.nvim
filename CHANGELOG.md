@@ -1,5 +1,20 @@
 # Changelog
 
+## [4.2.0](https://github.com/stevearc/conform.nvim/compare/v4.1.0...v4.2.0) (2023-11-09)
+
+
+### Features
+
+* add typstfmt ([#180](https://github.com/stevearc/conform.nvim/issues/180)) ([b1f1194](https://github.com/stevearc/conform.nvim/commit/b1f1194338c96d385ec6370ac734ab63c0289776))
+
+
+### Bug Fixes
+
+* catch jobstart errors ([#183](https://github.com/stevearc/conform.nvim/issues/183)) ([dcbe650](https://github.com/stevearc/conform.nvim/commit/dcbe650bd4811cefe5a885fafb6309c7d592bda6))
+* injected formatter not working ([#187](https://github.com/stevearc/conform.nvim/issues/187)) ([68abada](https://github.com/stevearc/conform.nvim/commit/68abada5a348f448eabdbd7d71884c195969484f))
+* nonzero exit code on :wq ([#176](https://github.com/stevearc/conform.nvim/issues/176)) ([161d95b](https://github.com/stevearc/conform.nvim/commit/161d95bfbb1ad1a2b89ba2ea75ca1b5e012a111e))
+* rename `astgrep` to `ast-grep` ([#178](https://github.com/stevearc/conform.nvim/issues/178)) ([bfa69a9](https://github.com/stevearc/conform.nvim/commit/bfa69a942e19159d3a3e958a5be85cb7cdae19a7))
+
 ## [4.1.0](https://github.com/stevearc/conform.nvim/compare/v4.0.0...v4.1.0) (2023-11-05)
 
 
