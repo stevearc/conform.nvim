@@ -285,6 +285,7 @@ FORMATTERS                                                    *conform-formatter
 `standardrb` - Ruby's bikeshed-proof linter and formatter.
 `stylelint` - A mighty CSS linter that helps you avoid errors and enforce
             conventions.
+`styler` - R formatter and linter.
 `stylua` - An opinionated code formatter for Lua.
 `swift_format` - Swift formatter from apple. Requires building from source with
                `swift build`.
