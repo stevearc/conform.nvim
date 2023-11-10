@@ -250,6 +250,7 @@ FORMATTERS                                                    *conform-formatter
          style.
 `nixpkgs_fmt` - nixpkgs-fmt is a Nix code formatter for nixpkgs.
 `ocamlformat` - Auto-formatter for OCaml code.
+`pangu` - Insert whitespace between CJK and half-width characters
 `perlimports` - Make implicit Perl imports explicit.
 `perltidy` - Perl::Tidy, a source code formatter for Perl.
 `pg_format` - PostgreSQL SQL syntax beautifier.
