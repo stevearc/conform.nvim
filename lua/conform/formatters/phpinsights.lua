@@ -4,7 +4,7 @@ local util = require("conform.util")
 return {
   meta = {
     url = "https://github.com/nunomaduro/phpinsights",
-    description = "The perfect starting point to analyze the code quality of your PHP projects with support for auto-formatting.",
+    description = "The perfect starting point to analyze the code quality of your PHP projects.",
   },
   command = util.find_executable({
     "vendor/bin/phpinsights",
