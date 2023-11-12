@@ -87,7 +87,12 @@ M.show_window = function()
   if vim.fn.filereadable(logfile) == 1 then
     local f = io.open(logfile, "r")
     if f then
-      f:seek("end", -1024)
+      local context = -1024
+      -- Show more logs if the log level is set to trace.
+      if log.level == vim.log.levels.TRACE then
+        context = 3 * context
+      end
+      f:seek("end", context)
       local text = f:read("*a")
       f:close()
       local log_lines = vim.split(text, "\n", { plain = true, trimempty = true })
