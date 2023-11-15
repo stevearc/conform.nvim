@@ -2,7 +2,7 @@
 return {
   meta = {
     url = "https://ast-grep.github.io/",
-    description = "A CLI tool for code structural search, lint and rewriting. Written in Rust",
+    description = "A CLI tool for code structural search, lint and rewriting. Written in Rust.",
   },
   command = "ast-grep",
   args = { "scan", "--update-all", "$FILENAME" },
