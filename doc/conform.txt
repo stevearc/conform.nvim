@@ -187,6 +187,7 @@ FORMATTERS                                                    *conform-formatter
                   respects readability.
 `blue` - The slightly less uncompromising Python code formatter.
 `buf` - A new way of working with Protocol Buffers.
+`cbfmt` - A tool to format codeblocks inside markdown and org documents.
 `clang_format` - Tool to format C/C++/… code according to a set of rules and
                heuristics.
 `cljstyle` - Formatter for Clojure code.
