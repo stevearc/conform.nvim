@@ -150,6 +150,7 @@ return {
     end
 
     local num_format = 0
+    local tmp_bufs = {}
     local formatter_cb = function(err, idx, start_lnum, end_lnum, new_lines)
       if err then
         format_error = errors.coalesce(format_error, err)
@@ -159,6 +160,9 @@ return {
       end
       num_format = num_format - 1
       if num_format == 0 then
+        for buf in pairs(tmp_bufs) do
+          vim.api.nvim_buf_delete(buf, { force = true })
+        end
         apply_format_results()
       end
     end
@@ -181,11 +185,17 @@ return {
             return f.name
           end, formatters)
         end
-        local format_opts = { async = true, bufnr = ctx.buf, quiet = true }
         local idx = num_format
         log.debug("Injected format %s:%d:%d: %s", lang, start_lnum, end_lnum, formatter_names)
         log.trace("Injected format lines %s", input_lines)
         local indent = remove_indent(input_lines, buf_lang)
+        -- Create a temporary buffer. This is only needed because some formatters rely on the file
+        -- extension to determine a run mode (see https://github.com/stevearc/conform.nvim/issues/194)
+        -- This is using the language name as the file extension, but that is a reasonable
+        -- approximation for now. We can add special cases as the need arises.
+        local buf = vim.fn.bufadd(string.format("%s.%s", vim.api.nvim_buf_get_name(ctx.buf), lang))
+        tmp_bufs[buf] = true
+        local format_opts = { async = true, bufnr = buf, quiet = true }
         conform.format_lines(formatter_names, input_lines, format_opts, function(err, new_lines)
           -- Preserve indentation in case the code block is indented
           apply_indent(new_lines, indent)
