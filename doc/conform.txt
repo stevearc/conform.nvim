@@ -253,6 +253,8 @@ FORMATTERS                                                    *conform-formatter
          style.
 `nixpkgs_fmt` - nixpkgs-fmt is a Nix code formatter for nixpkgs.
 `ocamlformat` - Auto-formatter for OCaml code.
+`packer_fmt` - The packer fmt Packer command is used to format HCL2
+             configuration files to a canonical format and style.
 `pangu` - Insert whitespace between CJK and half-width characters.
 `perlimports` - Make implicit Perl imports explicit.
 `perltidy` - Perl::Tidy, a source code formatter for Perl.
