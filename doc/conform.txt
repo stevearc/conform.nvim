@@ -169,7 +169,7 @@ FORMATTERS                                                    *conform-formatter
 
 `alejandra` - The Uncompromising Nix Code Formatter.
 `ast-grep` - A CLI tool for code structural search, lint and rewriting. Written
-           in Rust
+           in Rust.
 `astyle` - A Free, Fast, and Small Automatic Formatter for C, C++, C++/CLI,
          Objective-C, C#, and Java Source Code.
 `auto_optional` - Adds the Optional type-hint to arguments where the default
@@ -193,7 +193,7 @@ FORMATTERS                                                    *conform-formatter
 `cljstyle` - Formatter for Clojure code.
 `cmake_format` - Parse cmake listfiles and format them nicely.
 `codespell` - Check code for common misspellings.
-`csharpier` - The opinionated C# code formatter
+`csharpier` - The opinionated C# code formatter.
 `darker` - Run black only on changed lines.
 `dart_format` - Replace the whitespace in your program with formatting that
               follows Dart guidelines.
@@ -215,7 +215,7 @@ FORMATTERS                                                    *conform-formatter
 `gci` - GCI, a tool that controls Go package import order and makes it always
       deterministic.
 `gdformat` - A formatter for Godot's gdscript.
-`gn` - gn build system
+`gn` - gn build system.
 `gofmt` - Formats go programs.
 `gofumpt` - Enforce a stricter format than gofmt, while being backwards
           compatible. That is, gofumpt is happy with a subset of the formats
@@ -244,7 +244,7 @@ FORMATTERS                                                    *conform-formatter
                files.
 `markdownlint-cli2` - A fast, flexible, configuration-based command-line
                     interface for linting Markdown/CommonMark files with the
-                    markdownlint library
+                    markdownlint library.
 `mdformat` - An opinionated Markdown formatter.
 `mdslw` - Prepare your markdown for easy diff'ing by adding line breaks after
         every sentence.
@@ -253,7 +253,7 @@ FORMATTERS                                                    *conform-formatter
          style.
 `nixpkgs_fmt` - nixpkgs-fmt is a Nix code formatter for nixpkgs.
 `ocamlformat` - Auto-formatter for OCaml code.
-`pangu` - Insert whitespace between CJK and half-width characters
+`pangu` - Insert whitespace between CJK and half-width characters.
 `perlimports` - Make implicit Perl imports explicit.
 `perltidy` - Perl::Tidy, a source code formatter for Perl.
 `pg_format` - PostgreSQL SQL syntax beautifier.
@@ -268,7 +268,7 @@ FORMATTERS                                                    *conform-formatter
            take the maximum line length into account, wrapping code when
            necessary.
 `prettierd` - prettier, as a daemon, for ludicrous formatting speed.
-`pretty-php` - The opinionated PHP code formatter
+`pretty-php` - The opinionated PHP code formatter.
 `puppet-lint` - Check that your Puppet manifests conform to the style guide.
 `rubocop` - Ruby static code analyzer and formatter, based on the community Ruby
           style guide.
@@ -276,7 +276,7 @@ FORMATTERS                                                    *conform-formatter
 `ruff_fix` - An extremely fast Python linter, written in Rust. Fix lint errors.
 `ruff_format` - An extremely fast Python linter, written in Rust. Formatter
               subcommand.
-`rufo` - Rufo is as an opinionated ruby formatter.
+`rufo` - Rufo is an opinionated ruby formatter.
 `rustfmt` - A tool for formatting rust code according to style guidelines.
 `rustywind` - A tool for formatting Tailwind CSS classes.
 `scalafmt` - Code formatter for Scala.

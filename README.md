@@ -176,7 +176,7 @@ You can view this list in vim with `:help conform-formatters`
 <!-- FORMATTERS -->
 
 - [alejandra](https://kamadorueda.com/alejandra/) - The Uncompromising Nix Code Formatter.
-- [ast-grep](https://ast-grep.github.io/) - A CLI tool for code structural search, lint and rewriting. Written in Rust
+- [ast-grep](https://ast-grep.github.io/) - A CLI tool for code structural search, lint and rewriting. Written in Rust.
 - [astyle](https://astyle.sourceforge.net/astyle.html) - A Free, Fast, and Small Automatic Formatter for C, C++, C++/CLI, Objective-C, C#, and Java Source Code.
 - [auto_optional](https://auto-optional.daanluttik.nl/) - Adds the Optional type-hint to arguments where the default value is None.
 - [autoflake](https://github.com/PyCQA/autoflake) - Removes unused imports and unused variables as reported by pyflakes.
@@ -193,7 +193,7 @@ You can view this list in vim with `:help conform-formatters`
 - [cljstyle](https://github.com/greglook/cljstyle) - Formatter for Clojure code.
 - [cmake_format](https://github.com/cheshirekow/cmake_format) - Parse cmake listfiles and format them nicely.
 - [codespell](https://github.com/codespell-project/codespell) - Check code for common misspellings.
-- [csharpier](https://github.com/belav/csharpier) - The opinionated C# code formatter
+- [csharpier](https://github.com/belav/csharpier) - The opinionated C# code formatter.
 - [darker](https://github.com/akaihola/darker) - Run black only on changed lines.
 - [dart_format](https://dart.dev/tools/dart-format) - Replace the whitespace in your program with formatting that follows Dart guidelines.
 - [deno_fmt](https://deno.land/manual/tools/formatter) - Use [Deno](https://deno.land/) to format TypeScript, JavaScript/JSON and markdown.
@@ -208,7 +208,7 @@ You can view this list in vim with `:help conform-formatters`
 - [fixjson](https://github.com/rhysd/fixjson) - JSON Fixer for Humans using (relaxed) JSON5.
 - [gci](https://github.com/daixiang0/gci) - GCI, a tool that controls Go package import order and makes it always deterministic.
 - [gdformat](https://github.com/Scony/godot-gdscript-toolkit) - A formatter for Godot's gdscript.
-- [gn](https://gn.googlesource.com/gn/) - gn build system
+- [gn](https://gn.googlesource.com/gn/) - gn build system.
 - [gofmt](https://pkg.go.dev/cmd/gofmt) - Formats go programs.
 - [gofumpt](https://github.com/mvdan/gofumpt) - Enforce a stricter format than gofmt, while being backwards compatible. That is, gofumpt is happy with a subset of the formats that gofmt is happy with.
 - [goimports](https://pkg.go.dev/golang.org/x/tools/cmd/goimports) - Updates your Go import lines, adding missing ones and removing unreferenced ones.
@@ -225,14 +225,14 @@ You can view this list in vim with `:help conform-formatters`
 - [latexindent](https://github.com/cmhughes/latexindent.pl) - A perl script for formatting LaTeX files that is generally included in major TeX distributions.
 - [markdown-toc](https://github.com/jonschlinkert/markdown-toc) - API and CLI for generating a markdown TOC (table of contents) for a README or any markdown files.
 - [markdownlint](https://github.com/DavidAnson/markdownlint) - A Node.js style checker and lint tool for Markdown/CommonMark files.
-- [markdownlint-cli2](https://github.com/DavidAnson/markdownlint-cli2) - A fast, flexible, configuration-based command-line interface for linting Markdown/CommonMark files with the markdownlint library
+- [markdownlint-cli2](https://github.com/DavidAnson/markdownlint-cli2) - A fast, flexible, configuration-based command-line interface for linting Markdown/CommonMark files with the markdownlint library.
 - [mdformat](https://github.com/executablebooks/mdformat) - An opinionated Markdown formatter.
 - [mdslw](https://github.com/razziel89/mdslw) - Prepare your markdown for easy diff'ing by adding line breaks after every sentence.
 - [mix](https://hexdocs.pm/mix/main/Mix.Tasks.Format.html) - Format Elixir files using the mix format command.
 - [nixfmt](https://github.com/serokell/nixfmt) - nixfmt is a formatter for Nix code, intended to apply a uniform style.
 - [nixpkgs_fmt](https://github.com/nix-community/nixpkgs-fmt) - nixpkgs-fmt is a Nix code formatter for nixpkgs.
 - [ocamlformat](https://github.com/ocaml-ppx/ocamlformat) - Auto-formatter for OCaml code.
-- [pangu](https://github.com/vinta/pangu.py) - Insert whitespace between CJK and half-width characters
+- [pangu](https://github.com/vinta/pangu.py) - Insert whitespace between CJK and half-width characters.
 - [perlimports](https://github.com/perl-ide/App-perlimports) - Make implicit Perl imports explicit.
 - [perltidy](https://github.com/perltidy/perltidy) - Perl::Tidy, a source code formatter for Perl.
 - [pg_format](https://github.com/darold/pgFormatter) - PostgreSQL SQL syntax beautifier.
@@ -242,13 +242,13 @@ You can view this list in vim with `:help conform-formatters`
 - [pint](https://github.com/laravel/pint) - Laravel Pint is an opinionated PHP code style fixer for minimalists.
 - [prettier](https://github.com/prettier/prettier) - Prettier is an opinionated code formatter. It enforces a consistent style by parsing your code and re-printing it with its own rules that take the maximum line length into account, wrapping code when necessary.
 - [prettierd](https://github.com/fsouza/prettierd) - prettier, as a daemon, for ludicrous formatting speed.
-- [pretty-php](https://github.com/lkrms/pretty-php) - The opinionated PHP code formatter
+- [pretty-php](https://github.com/lkrms/pretty-php) - The opinionated PHP code formatter.
 - [puppet-lint](https://github.com/puppetlabs/puppet-lint) - Check that your Puppet manifests conform to the style guide.
 - [rubocop](https://github.com/rubocop/rubocop) - Ruby static code analyzer and formatter, based on the community Ruby style guide.
 - [rubyfmt](https://github.com/fables-tales/rubyfmt) - Ruby Autoformatter! (Written in Rust)
 - [ruff_fix](https://beta.ruff.rs/docs/) - An extremely fast Python linter, written in Rust. Fix lint errors.
 - [ruff_format](https://beta.ruff.rs/docs/) - An extremely fast Python linter, written in Rust. Formatter subcommand.
-- [rufo](https://github.com/ruby-formatter/rufo) - Rufo is as an opinionated ruby formatter.
+- [rufo](https://github.com/ruby-formatter/rufo) - Rufo is an opinionated ruby formatter.
 - [rustfmt](https://github.com/rust-lang/rustfmt) - A tool for formatting rust code according to style guidelines.
 - [rustywind](https://github.com/avencera/rustywind) - A tool for formatting Tailwind CSS classes.
 - [scalafmt](https://github.com/scalameta/scalafmt) - Code formatter for Scala.
