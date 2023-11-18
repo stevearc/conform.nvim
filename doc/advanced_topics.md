@@ -22,6 +22,8 @@ The way this "aftermarket" range formatting works is conform will format the ent
 
 ## Injected language formatting (code blocks)
 
+Requires: Neovim 0.9+
+
 Sometimes you may have a file that contains small chunks of code in another language. This is most common for markup formats like markdown and neorg, but can theoretically be present in any filetype (for example, embedded SQL queries in a host language). For files like this, it would be nice to be able to format these code chunks using their language-specific formatters.
 
 The way that conform supports this is via the `injected` formatter. If you run this formatter on a file, it will use treesitter to parse out the blocks in the file that have different languages and runs the formatters for that filetype (configured with `formatters_by_ft`). The formatters are run in parallel, one job for each language block.
