@@ -239,4 +239,7 @@ return {
       apply_format_results()
     end
   end,
+  -- TODO this is kind of a hack. It's here to ensure all_support_range_formatting is set properly.
+  -- Should figure out a better way to do this.
+  range_args = true,
 }

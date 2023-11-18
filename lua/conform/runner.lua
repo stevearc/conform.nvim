@@ -48,6 +48,12 @@ M.build_cmd = function(ctx, config)
   end
 end
 
+---@param value any
+---@return boolean
+local function truthy(value)
+  return value ~= nil and value ~= false
+end
+
 ---@param range conform.Range
 ---@param start_a integer
 ---@param end_a integer
@@ -506,9 +512,9 @@ M.format_lines_async = function(bufnr, formatters, range, input_lines, opts, cal
         final_err = errors.coalesce(final_err, err)
       end
       input_lines = output or input_lines
+      all_support_range_formatting = all_support_range_formatting and truthy(config.range_args)
       run_next_formatter()
     end)
-    all_support_range_formatting = all_support_range_formatting and config.range_args ~= nil
   end
   run_next_formatter()
 end
@@ -584,7 +590,7 @@ M.format_lines_sync = function(bufnr, formatters, timeout_ms, range, input_lines
         result = output
       end
     )
-    all_support_range_formatting = all_support_range_formatting and config.range_args ~= nil
+    all_support_range_formatting = all_support_range_formatting and truthy(config.range_args)
 
     local wait_result, wait_reason = vim.wait(remaining, function()
       return done
