@@ -206,6 +206,7 @@ You can view this list in vim with `:help conform-formatters`
 - [eslint_d](https://github.com/mantoni/eslint_d.js/) - Like ESLint, but faster.
 - [fish_indent](https://fishshell.com/docs/current/cmds/fish_indent.html) - Indent or otherwise prettify a piece of fish code.
 - [fixjson](https://github.com/rhysd/fixjson) - JSON Fixer for Humans using (relaxed) JSON5.
+- [fourmolu](https://hackage.haskell.org/package/fourmolu) - Fourmolu is a formatter for Haskell source code.
 - [gci](https://github.com/daixiang0/gci) - GCI, a tool that controls Go package import order and makes it always deterministic.
 - [gdformat](https://github.com/Scony/godot-gdscript-toolkit) - A formatter for Godot's gdscript.
 - [gn](https://gn.googlesource.com/gn/) - gn build system.
