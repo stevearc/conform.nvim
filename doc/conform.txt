@@ -178,6 +178,8 @@ FORMATTERS                                                    *conform-formatter
             pyflakes.
 `autopep8` - A tool that automatically formats Python code to conform to the PEP
            8 style guide.
+`bean-format` - Reformat Beancount files to right-align all the numbers at the
+              same, minimal column.
 `beautysh` - A Bash beautifier for the masses.
 `bibtex-tidy` - Cleaner and Formatter for BibTeX files.
 `biome` - A toolchain for web projects, aimed to provide functionalities to
