@@ -181,6 +181,7 @@ You can view this list in vim with `:help conform-formatters`
 - [auto_optional](https://auto-optional.daanluttik.nl/) - Adds the Optional type-hint to arguments where the default value is None.
 - [autoflake](https://github.com/PyCQA/autoflake) - Removes unused imports and unused variables as reported by pyflakes.
 - [autopep8](https://github.com/hhatto/autopep8) - A tool that automatically formats Python code to conform to the PEP 8 style guide.
+- [bean-format](https://beancount.github.io/docs/running_beancount_and_generating_reports.html#bean-format) - Format [Beancount](https://beancount.github.io/) files.
 - [beautysh](https://github.com/lovesegfault/beautysh) - A Bash beautifier for the masses.
 - [bibtex-tidy](https://github.com/FlamingTempura/bibtex-tidy) - Cleaner and Formatter for BibTeX files.
 - [biome](https://github.com/biomejs/biome) - A toolchain for web projects, aimed to provide functionalities to maintain them.
@@ -515,7 +516,6 @@ Retrieve the available formatters for a buffer
 `list_all_formatters(): conform.FormatterInfo[]` \
 List information about all filetype-configured formatters
 
-
 ### get_formatter_info(formatter, bufnr)
 
 `get_formatter_info(formatter, bufnr): conform.FormatterInfo` \
@@ -534,6 +534,7 @@ Check if the buffer will use LSP formatting when lsp_fallback = true
 | Param   | Type         | Desc                                 |
 | ------- | ------------ | ------------------------------------ |
 | options | `nil\|table` | Options passed to vim.lsp.buf.format |
+
 <!-- /API -->
 
 ## Acknowledgements
