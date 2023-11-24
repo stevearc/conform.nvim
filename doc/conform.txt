@@ -309,6 +309,7 @@ FORMATTERS                                                    *conform-formatter
         formatting.
 `trim_newlines` - Trim new lines with awk.
 `trim_whitespace` - Trim whitespaces with awk.
+`typos` - Source code spell checker
 `typstfmt` - Basic formatter for the Typst language with a future!
 `uncrustify` - A source code beautifier for C, C++, C#, ObjectiveC, D, Java,
              Pawn and Vala.
