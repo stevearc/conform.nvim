@@ -5,7 +5,13 @@ return {
     description = "Source code spell checker",
   },
   command = "typos",
-  stdin = true,
-  args = { "--write-changes", "-" },
+  -- cannot use stdin, as otherwise `typos` has no information on the filename,
+  -- making excluded-file-configs ineffective
+  stdin = false,
+  args = {
+    "--write-changes",
+    "--force-exclude", -- so excluded files in the config take effect
+    "$FILENAME",
+  },
   exit_codes = { 0, 2 },
 }
