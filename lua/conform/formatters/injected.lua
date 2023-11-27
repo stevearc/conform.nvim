@@ -226,6 +226,8 @@ return {
         -- This is using the language name as the file extension, but that is a reasonable
         -- approximation for now. We can add special cases as the need arises.
         local buf = vim.fn.bufadd(string.format("%s.%s", vim.api.nvim_buf_get_name(ctx.buf), lang))
+        -- Actually load the buffer to set the buffer context which is required by some formatters such as `filetype`
+        vim.fn.bufload(buf)
         tmp_bufs[buf] = true
         local format_opts = { async = true, bufnr = buf, quiet = true }
         conform.format_lines(formatter_names, input_lines, format_opts, function(err, new_lines)
