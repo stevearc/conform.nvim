@@ -6,10 +6,17 @@ return {
     description = [[Prettier is an opinionated code formatter. It enforces a consistent style by parsing your code and re-printing it with its own rules that take the maximum line length into account, wrapping code when necessary.]],
   },
   command = util.from_node_modules("prettier"),
-  args = { "--stdin-filepath", "$FILENAME" },
+  args = function(ctx)
+    return { "--parser=" .. vim.bo[ctx.buf].filetype }
+  end,
   range_args = function(ctx)
     local start_offset, end_offset = util.get_offsets_from_range(ctx.buf, ctx.range)
-    return { "$FILENAME", "--range-start=" .. start_offset, "--range-end=" .. end_offset }
+    return {
+      "$FILENAME",
+      "--parser=" .. vim.bo[ctx.buf].filetype,
+      "--range-start=" .. start_offset,
+      "--range-end=" .. end_offset,
+    }
   end,
   cwd = util.root_file({
     -- https://prettier.io/docs/en/configuration.html
