@@ -75,7 +75,8 @@ return {
   },
   condition = function(self, ctx)
     local ok = pcall(vim.treesitter.get_parser, ctx.buf)
-    return ok
+    -- Require Neovim 0.9 because the treesitter API has changed significantly
+    return ok and vim.fn.has("nvim-0.9") == 1
   end,
   format = function(self, ctx, lines, callback)
     local conform = require("conform")
@@ -93,24 +94,55 @@ return {
     local options = self.options
     --- Disable diagnostic to pass the typecheck github action
     --- This is available on nightly, but not on stable
-    --- Stable doesn't have any parameters, so it's safe to always pass `true`
+    --- Stable doesn't have any parameters, so it's safe to always pass `false`
     ---@diagnostic disable-next-line: redundant-parameter
-    parser:parse(true)
+    parser:parse(false)
     local root_lang = parser:lang()
     local regions = {}
-    for lang, child_tree in pairs(parser:children()) do
-      local formatter_names = conform.formatters_by_ft[lang]
-      if formatter_names and lang ~= root_lang then
-        for _, tree in ipairs(child_tree:trees()) do
-          local root = tree:root()
-          local start_lnum = root:start() + 1
-          local end_lnum = root:end_()
-          if start_lnum <= end_lnum and in_range(ctx.range, start_lnum, end_lnum) then
+
+    for _, tree in pairs(parser:trees()) do
+      local root_node = tree:root()
+      local start_line, _, end_line, _ = root_node:range()
+
+      -- I don't like using these private methods, but critically we do _not_ want to format
+      -- "combined" injections (they contain the metadata "injection.combined"). These injections
+      -- will merge all of their regions into a single LanguageTree. If we then try to format the
+      -- range defined by that LanguageTree, we will likely end up with a range that contains all
+      -- sorts of content. As a concrete example, consider the following markdown:
+      --   This is some text
+      --   <!-- Here is a comment -->
+      --   Some more text
+      --   <!-- Another comment -->
+      -- Since the html injection is combined, the range will contain "Some more text", which is not
+      -- what we want.
+      -- To avoid this, don't parse with injections. Instead, we use private methods to run the
+      -- injection queries ourselves, and then filter out the combined injections.
+      for _, match, metadata in
+        ---@diagnostic disable-next-line: invisible
+        parser._injection_query:iter_matches(root_node, text, start_line, end_line + 1)
+      do
+        ---@diagnostic disable-next-line: invisible
+        local lang, combined, ranges = parser:_get_injection(match, metadata)
+        local has_formatters = conform.formatters_by_ft[lang] ~= nil
+        if lang and has_formatters and not combined and #ranges > 0 and lang ~= root_lang then
+          local start_lnum
+          local end_lnum
+          -- Merge all of the ranges into a single range
+          for _, range in ipairs(ranges) do
+            if not start_lnum or start_lnum > range[1] + 1 then
+              start_lnum = range[1] + 1
+            end
+            if not end_lnum or end_lnum < range[4] then
+              end_lnum = range[4]
+            end
+          end
+          if in_range(ctx.range, start_lnum, end_lnum) then
             table.insert(regions, { lang, start_lnum, end_lnum })
           end
         end
       end
     end
+
     -- Sort from largest start_lnum to smallest
     table.sort(regions, function(a, b)
       return a[2] > b[2]
@@ -207,4 +239,7 @@ return {
       apply_format_results()
     end
   end,
+  -- TODO this is kind of a hack. It's here to ensure all_support_range_formatting is set properly.
+  -- Should figure out a better way to do this.
+  range_args = true,
 }

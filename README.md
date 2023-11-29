@@ -181,6 +181,7 @@ You can view this list in vim with `:help conform-formatters`
 - [auto_optional](https://auto-optional.daanluttik.nl/) - Adds the Optional type-hint to arguments where the default value is None.
 - [autoflake](https://github.com/PyCQA/autoflake) - Removes unused imports and unused variables as reported by pyflakes.
 - [autopep8](https://github.com/hhatto/autopep8) - A tool that automatically formats Python code to conform to the PEP 8 style guide.
+- [bean-format](https://beancount.github.io/docs/running_beancount_and_generating_reports.html#bean-format) - Reformat Beancount files to right-align all the numbers at the same, minimal column.
 - [beautysh](https://github.com/lovesegfault/beautysh) - A Bash beautifier for the masses.
 - [bibtex-tidy](https://github.com/FlamingTempura/bibtex-tidy) - Cleaner and Formatter for BibTeX files.
 - [biome](https://github.com/biomejs/biome) - A toolchain for web projects, aimed to provide functionalities to maintain them.
@@ -188,6 +189,7 @@ You can view this list in vim with `:help conform-formatters`
 - [blade-formatter](https://github.com/shufo/blade-formatter) - An opinionated blade template formatter for Laravel that respects readability.
 - [blue](https://github.com/grantjenks/blue) - The slightly less uncompromising Python code formatter.
 - [buf](https://buf.build/docs/reference/cli/buf/format) - A new way of working with Protocol Buffers.
+- [buildifier](https://github.com/bazelbuild/buildtools/tree/master/buildifier) - buildifier is a tool for formatting bazel BUILD and .bzl files with a standard convention.
 - [cbfmt](https://github.com/lukas-reineke/cbfmt) - A tool to format codeblocks inside markdown and org documents.
 - [clang_format](https://www.kernel.org/doc/html/latest/process/clang-format.html) - Tool to format C/C++/… code according to a set of rules and heuristics.
 - [cljstyle](https://github.com/greglook/cljstyle) - Formatter for Clojure code.
@@ -206,6 +208,7 @@ You can view this list in vim with `:help conform-formatters`
 - [eslint_d](https://github.com/mantoni/eslint_d.js/) - Like ESLint, but faster.
 - [fish_indent](https://fishshell.com/docs/current/cmds/fish_indent.html) - Indent or otherwise prettify a piece of fish code.
 - [fixjson](https://github.com/rhysd/fixjson) - JSON Fixer for Humans using (relaxed) JSON5.
+- [fourmolu](https://hackage.haskell.org/package/fourmolu) - Fourmolu is a formatter for Haskell source code.
 - [gci](https://github.com/daixiang0/gci) - GCI, a tool that controls Go package import order and makes it always deterministic.
 - [gdformat](https://github.com/Scony/godot-gdscript-toolkit) - A formatter for Godot's gdscript.
 - [gn](https://gn.googlesource.com/gn/) - gn build system.
@@ -257,6 +260,7 @@ You can view this list in vim with `:help conform-formatters`
 - [shellharden](https://github.com/anordal/shellharden) - The corrective bash syntax highlighter.
 - [shfmt](https://github.com/mvdan/sh) - A shell parser, formatter, and interpreter with `bash` support.
 - [sql_formatter](https://github.com/sql-formatter-org/sql-formatter) - A whitespace formatter for different query languages.
+- [sqlfluff](https://github.com/sqlfluff/sqlfluff) - A modular SQL linter and auto-formatter with support for multiple dialects and templated code.
 - [squeeze_blanks](https://www.gnu.org/software/coreutils/manual/html_node/cat-invocation.html#cat-invocation) - Squeeze repeated blank lines into a single blank line via `cat -s`.
 - [standardjs](https://standardjs.com) - JavaScript Standard style guide, linter, and formatter.
 - [standardrb](https://github.com/standardrb/standard) - Ruby's bikeshed-proof linter and formatter.
@@ -271,6 +275,7 @@ You can view this list in vim with `:help conform-formatters`
 - [tlint](https://github.com/tighten/tlint) - Tighten linter for Laravel conventions with support for auto-formatting.
 - [trim_newlines](https://www.gnu.org/software/gawk/manual/gawk.html) - Trim new lines with awk.
 - [trim_whitespace](https://www.gnu.org/software/gawk/manual/gawk.html) - Trim whitespaces with awk.
+- [typos](https://github.com/crate-ci/typos) - Source code spell checker
 - [typstfmt](https://github.com/astrale-sharp/typstfmt) - Basic formatter for the Typst language with a future!
 - [uncrustify](https://github.com/uncrustify/uncrustify) - A source code beautifier for C, C++, C#, ObjectiveC, D, Java, Pawn and Vala.
 - [usort](https://github.com/facebook/usort) - Safe, minimal import sorting for Python projects.
