@@ -1,3 +1,16 @@
+require("conform").setup({
+  formatters = {
+    prettier = {
+      args = function(ctx)
+        if vim.endswith(ctx.filename, ".ejs") then
+          return { "--stdin-filepath", "$FILENAME", "--parser", "html" }
+        end
+        return { "--stdin-filepath", "$FILENAME" }
+      end,
+    },
+  },
+})
+
 local util = require("conform.util")
 ---@type conform.FileFormatterConfig
 return {
