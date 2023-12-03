@@ -5,5 +5,6 @@ return {
     description = "yamlfmt is a command line tool to format jsonnet files.",
   },
   command = "jsonnetfmt",
-  args = { "$FILENAME" },
+  args = { "-" },
+  stdin = true,
 }
