@@ -174,6 +174,8 @@ FORMATTERS                                                    *conform-formatter
          Objective-C, C#, and Java Source Code.
 `auto_optional` - Adds the Optional type-hint to arguments where the default
                 value is None.
+`autocorrect` - A linter and formatter to help you to improve copywriting,
+              correct spaces, words, and punctuations between CJK.
 `autoflake` - Removes unused imports and unused variables as reported by
             pyflakes.
 `autopep8` - A tool that automatically formats Python code to conform to the PEP
