@@ -1,4 +1,4 @@
-name: Remove Label
+name: Remove Question Label on Issue Comment
 
 on: [issue_comment]
 

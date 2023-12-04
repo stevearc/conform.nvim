@@ -1,0 +1,24 @@
+name: Request Review
+on:
+  pull_request:
+    types: [opened, ready_for_review]
+
+jobs:
+  # Request review automatically when PRs are opened
+  request_review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Request Review
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const pr = context.payload.pull_request;
+            if (!pr.draft) {
+              github.rest.pulls.requestReviewers({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: pr.number,
+                reviewers: ['stevearc']
+              });
+            }

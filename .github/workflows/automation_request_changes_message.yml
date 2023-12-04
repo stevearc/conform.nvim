@@ -1,0 +1,41 @@
+name: PR Request Changes Message
+on:
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  comment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Previous Reviews
+        id: check
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const pr = context.payload.pull_request;
+            const review = context.payload.review;
+            const reviews = await github.rest.pulls.listReviews({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number,
+            });
+            const changesRequestedReviews = reviews.data.filter((review) => review.state === 'CHANGES_REQUESTED');
+            const firstTimeChangesRequested = changesRequestedReviews.length === 1;
+            return firstTimeChangesRequested;
+
+      - name: Comment on PR
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const runPreviousCheckStep = steps.check.outputs.result
+            const pr = context.payload.pull_request;
+            if (runPreviousCheckStep === 'true') {
+              github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr.number,
+                body: 'Please make sure to **re-request review** after making any changes or answering any questions'
+              });
+            }
