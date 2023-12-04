@@ -2,7 +2,7 @@
 return {
   meta = {
     url = "https://github.com/google/go-jsonnet/cmd/jsonnetfmt",
-    description = "yamlfmt is a command line tool to format jsonnet files.",
+    description = "jsonnetfmt is a command line tool to format jsonnet files.",
   },
   command = "jsonnetfmt",
   args = { "-" },
