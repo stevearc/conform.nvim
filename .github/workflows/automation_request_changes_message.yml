@@ -4,11 +4,11 @@ on:
     types: [submitted]
 
 jobs:
-  comment:
+  check:
     runs-on: ubuntu-latest
     steps:
       - name: Check Previous Reviews
-        id: check
+        id: result
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -22,16 +22,22 @@ jobs:
             });
             const changesRequestedReviews = reviews.data.filter((review) => review.state === 'CHANGES_REQUESTED');
             const firstTimeChangesRequested = changesRequestedReviews.length === 1;
-            return firstTimeChangesRequested;
+            // Set firstTimeChangesRequested as output of this step
+            core.setOutput("firstTimeChangesRequested", firstTimeChangesRequested)
 
+  comment:
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
       - name: Comment on PR
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const runPreviousCheckStep = steps.check.outputs.result
             const pr = context.payload.pull_request;
-            if (runPreviousCheckStep === 'true') {
+            // Get output from previous 'check' step
+            const firstTimeChangesRequested = needs.check.outputs.firstTimeChangesRequested
+            if (firstTimeChangesRequested === 'true') {
               github.rest.issues.createComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
