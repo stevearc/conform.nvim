@@ -6,7 +6,7 @@ return {
   },
   command = "yapf",
   args = { "--quiet" },
-  range_args = function(ctx)
+  range_args = function(self, ctx)
     return { "--quiet", "--lines", string.format("%d-%d", ctx.range.start[1], ctx.range["end"][1]) }
   end,
 }

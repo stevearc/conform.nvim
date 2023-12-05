@@ -6,7 +6,7 @@ return {
   },
   command = "autopep8",
   args = { "-" },
-  range_args = function(ctx)
+  range_args = function(self, ctx)
     return { "-", "--line-range", tostring(ctx.range.start[1]), tostring(ctx.range["end"][1]) }
   end,
 }

@@ -8,15 +8,16 @@ local M = {}
 ---@field available_msg? string
 
 ---@class (exact) conform.JobFormatterConfig
----@field command string|fun(ctx: conform.Context): string
----@field args? string|string[]|fun(ctx: conform.Context): string|string[]
----@field range_args? fun(ctx: conform.RangeContext): string|string[]
----@field cwd? fun(ctx: conform.Context): nil|string
+---@field command string|fun(self: conform.JobFormatterConfig, ctx: conform.Context): string
+---@field args? string|string[]|fun(self: conform.JobFormatterConfig, ctx: conform.Context): string|string[]
+---@field range_args? fun(self: conform.JobFormatterConfig, ctx: conform.RangeContext): string|string[]
+---@field cwd? fun(self: conform.JobFormatterConfig, ctx: conform.Context): nil|string
 ---@field require_cwd? boolean When cwd is not found, don't run the formatter (default false)
 ---@field stdin? boolean Send buffer contents to stdin (default true)
----@field condition? fun(ctx: conform.Context): boolean
+---@field condition? fun(self: conform.JobFormatterConfig, ctx: conform.Context): boolean
 ---@field exit_codes? integer[] Exit codes that indicate success (default {0})
----@field env? table<string, any>|fun(ctx: conform.Context): table<string, any>
+---@field env? table<string, any>|fun(self: conform.JobFormatterConfig, ctx: conform.Context): table<string, any>
+---@field options? table
 
 ---@class (exact) conform.LuaFormatterConfig
 ---@field format fun(self: conform.LuaFormatterConfig, ctx: conform.Context, lines: string[], callback: fun(err: nil|string, new_lines: nil|string[]))
@@ -33,8 +34,8 @@ local M = {}
 
 ---@class (exact) conform.FormatterConfigOverride : conform.JobFormatterConfig
 ---@field inherit? boolean
----@field command? string|fun(ctx: conform.Context): string
----@field prepend_args? string|string[]|fun(ctx: conform.Context): string|string[]
+---@field command? string|fun(self: conform.FormatterConfig, ctx: conform.Context): string
+---@field prepend_args? string|string[]|fun(self: conform.FormatterConfig, ctx: conform.Context): string|string[]
 ---@field options? table
 
 ---@class (exact) conform.FormatterMeta
@@ -606,6 +607,7 @@ end
 ---@param bufnr? integer
 ---@return conform.FormatterInfo
 M.get_formatter_info = function(formatter, bufnr)
+  local util = require("conform.util")
   if not bufnr or bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
   end
@@ -639,19 +641,21 @@ M.get_formatter_info = function(formatter, bufnr)
 
   local command = config.command
   if type(command) == "function" then
-    command = command(ctx)
+    command = util.compat_call_with_self(formatter, config, command, ctx)
   end
 
   if vim.fn.executable(command) == 0 then
     available = false
     available_msg = "Command not found"
-  elseif config.condition and not config.condition(ctx) then
+  elseif
+    config.condition and not util.compat_call_with_self(formatter, config, config.condition, ctx)
+  then
     available = false
     available_msg = "Condition failed"
   end
   local cwd = nil
   if config.cwd then
-    cwd = config.cwd(ctx)
+    cwd = util.compat_call_with_self(formatter, config, config.cwd, ctx)
     if available and not cwd and config.require_cwd then
       available = false
       available_msg = "Root directory not found"

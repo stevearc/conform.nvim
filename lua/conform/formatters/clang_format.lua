@@ -7,7 +7,7 @@ return {
   },
   command = "clang-format",
   args = { "-assume-filename", "$FILENAME" },
-  range_args = function(ctx)
+  range_args = function(self, ctx)
     local start_offset, end_offset = util.get_offsets_from_range(ctx.buf, ctx.range)
     local length = end_offset - start_offset
     return {

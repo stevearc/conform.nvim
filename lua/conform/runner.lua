@@ -8,25 +8,26 @@ local M = {}
 ---@class (exact) conform.RunOpts
 ---@field exclusive boolean If true, ensure only a single formatter is running per buffer
 
+---@param formatter_name string
 ---@param ctx conform.Context
 ---@param config conform.JobFormatterConfig
 ---@return string|string[]
-M.build_cmd = function(ctx, config)
+M.build_cmd = function(formatter_name, ctx, config)
   local command = config.command
   if type(command) == "function" then
-    command = command(ctx)
+    command = util.compat_call_with_self(formatter_name, config, command, ctx)
   end
   ---@type string|string[]
   local args = {}
   if ctx.range and config.range_args then
-    ---@cast ctx conform.RangeContext
-    args = config.range_args(ctx)
+    args = util.compat_call_with_self(formatter_name, config, config.range_args, ctx)
   elseif config.args then
-    if type(config.args) == "function" then
-      args = config.args(ctx)
+    local computed_args = config.args
+    if type(computed_args) == "function" then
+      args = util.compat_call_with_self(formatter_name, config, computed_args, ctx)
     else
       ---@diagnostic disable-next-line: cast-local-type
-      args = config.args
+      args = computed_args
     end
   end
 
@@ -262,14 +263,14 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, opts, c
     return
   end
   ---@cast config conform.JobFormatterConfig
-  local cmd = M.build_cmd(ctx, config)
+  local cmd = M.build_cmd(formatter.name, ctx, config)
   local cwd = nil
   if config.cwd then
-    cwd = config.cwd(ctx)
+    cwd = util.compat_call_with_self(formatter.name, config, config.cwd, ctx)
   end
   local env = config.env
   if type(env) == "function" then
-    env = env(ctx)
+    env = util.compat_call_with_self(formatter.name, config, env, ctx)
   end
 
   local buffer_text

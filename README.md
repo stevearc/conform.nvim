@@ -337,7 +337,7 @@ require("conform").formatters.shfmt = {
 }
 -- prepend_args can be a function, just like args
 require("conform").formatters.shfmt = {
-  prepend_args = function(ctx)
+  prepend_args = function(self, ctx)
     return { "-i", "2" }
   end,
 }

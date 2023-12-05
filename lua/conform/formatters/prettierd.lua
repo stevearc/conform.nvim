@@ -7,7 +7,7 @@ return {
   },
   command = util.from_node_modules("prettierd"),
   args = { "$FILENAME" },
-  range_args = function(ctx)
+  range_args = function(self, ctx)
     local start_offset, end_offset = util.get_offsets_from_range(ctx.buf, ctx.range)
     return { "$FILENAME", "--range-start=" .. start_offset, "--range-end=" .. end_offset }
   end,

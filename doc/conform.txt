@@ -6,7 +6,7 @@ CONTENTS                                                        *conform-content
   1. Options                                                 |conform-options|
   2. Api                                                         |conform-api|
   3. Formatters                                           |conform-formatters|
-  4. Autoformat                                           |conform-autoformat|
+  4. Self argument migration                               |conform-self-args|
 
 --------------------------------------------------------------------------------
 OPTIONS                                                          *conform-options*
@@ -331,45 +331,27 @@ FORMATTERS                                                    *conform-formatter
 `zprint` - Formatter for Clojure and EDN.
 
 --------------------------------------------------------------------------------
-AUTOFORMAT                                                    *conform-autoformat*
+SELF ARGUMENT MIGRATION                                        *conform-self-args*
 
-If you want more complex logic than the `format_on_save` option allows, you can
-write it yourself using your own autocmd. For example:
+The function arguments for formatter config functions have changed. Previously,
+they took a single `ctx` argument.
 >lua
-    -- if format_on_save is a function, it will be called during BufWritePre
-    require("conform").setup({
-      format_on_save = function(bufnr)
-        -- Disable autoformat on certain filetypes
-        local ignore_filetypes = { "sql", "java" }
-        if vim.tbl_contains(ignore_filetypes, vim.bo[bufnr].filetype) then
-          return
+    {
+        command = "phpcbf",
+        args = function(ctx)
+            return { "-q", "--stdin-path=" .. ctx.filename, "-" }
         end
-        -- Disable with a global or buffer-local variable
-        if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
-          return
+    }
+<Now, they take `self` as the first argument, and `ctx` as the second.
+>lua
+    {
+        command = "phpcbf",
+        args = function(self, ctx)
+            return { "-q", "--stdin-path=" .. ctx.filename, "-" }
         end
-        -- Disable autoformat for files in a certain path
-        local bufname = vim.api.nvim_buf_get_name(bufnr)
-        if bufname:match("/node_modules/") then
-          return
-        end
-        -- ...additional logic...
-        return { timeout_ms = 500, lsp_fallback = true }
-      end,
-    })
-
-    -- There is a similar affordance for format_after_save, which uses BufWritePost.
-    -- This is good for formatters that are too slow to run synchronously.
-    require("conform").setup({
-      format_after_save = function(bufnr)
-        if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
-          return
-        end
-        -- ...additional logic...
-        return { lsp_fallback = true }
-      end,
-    })
-<
+    }
+<The config values that can be defined as functions are: `command`, `args`,
+`range_args`, `cwd`, `env`, and `condition`.
 
 ================================================================================
 vim:tw=80:ts=2:ft=help:norl:syntax=help:
