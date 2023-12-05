@@ -74,9 +74,10 @@ return {
     ignore_errors = false,
   },
   condition = function(self, ctx)
-    local ok = pcall(vim.treesitter.get_parser, ctx.buf)
+    local ok, parser = pcall(vim.treesitter.get_parser, ctx.buf)
     -- Require Neovim 0.9 because the treesitter API has changed significantly
-    return ok and vim.fn.has("nvim-0.9") == 1
+    ---@diagnostic disable-next-line: invisible
+    return ok and parser._injection_query and vim.fn.has("nvim-0.9") == 1
   end,
   format = function(self, ctx, lines, callback)
     local conform = require("conform")
