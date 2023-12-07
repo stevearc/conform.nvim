@@ -74,9 +74,10 @@ return {
     ignore_errors = false,
   },
   condition = function(self, ctx)
-    local ok = pcall(vim.treesitter.get_parser, ctx.buf)
+    local ok, parser = pcall(vim.treesitter.get_parser, ctx.buf)
     -- Require Neovim 0.9 because the treesitter API has changed significantly
-    return ok and vim.fn.has("nvim-0.9") == 1
+    ---@diagnostic disable-next-line: invisible
+    return ok and parser._injection_query and vim.fn.has("nvim-0.9") == 1
   end,
   format = function(self, ctx, lines, callback)
     local conform = require("conform")
@@ -226,6 +227,8 @@ return {
         -- This is using the language name as the file extension, but that is a reasonable
         -- approximation for now. We can add special cases as the need arises.
         local buf = vim.fn.bufadd(string.format("%s.%s", vim.api.nvim_buf_get_name(ctx.buf), lang))
+        -- Actually load the buffer to set the buffer context which is required by some formatters such as `filetype`
+        vim.fn.bufload(buf)
         tmp_bufs[buf] = true
         local format_opts = { async = true, bufnr = buf, quiet = true }
         conform.format_lines(formatter_names, input_lines, format_opts, function(err, new_lines)
