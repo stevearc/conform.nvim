@@ -1,4 +1,6 @@
 name: Request Review
+permissions:
+  pull-requests: write
 on:
   pull_request:
     types: [opened, ready_for_review]
