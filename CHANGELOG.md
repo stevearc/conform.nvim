@@ -1,5 +1,37 @@
 # Changelog
 
+## [4.3.0](https://github.com/stevearc/conform.nvim/compare/v4.2.0...v4.3.0) (2023-12-07)
+
+
+### Features
+
+* add `auto-optional` ([#196](https://github.com/stevearc/conform.nvim/issues/196)) ([9156364](https://github.com/stevearc/conform.nvim/commit/9156364c23cff19734a0055377321c22b1484c0f))
+* add `typos` ([#214](https://github.com/stevearc/conform.nvim/issues/214)) ([d86c186](https://github.com/stevearc/conform.nvim/commit/d86c186ba910d28a6266c4d6210578dca984f3e3))
+* add autocorrect ([#223](https://github.com/stevearc/conform.nvim/issues/223)) ([cd81d21](https://github.com/stevearc/conform.nvim/commit/cd81d215d39b16186186a1539c71b48705bb081d))
+* add beancount formatter ([#212](https://github.com/stevearc/conform.nvim/issues/212)) ([c0924a6](https://github.com/stevearc/conform.nvim/commit/c0924a61e079d94f0be40da2d4188210c6e4ffea))
+* add cbfmt ([#198](https://github.com/stevearc/conform.nvim/issues/198)) ([aa36bc0](https://github.com/stevearc/conform.nvim/commit/aa36bc05563d5390a2ef67956d72560048acdc2e))
+* add fourmolu support ([#209](https://github.com/stevearc/conform.nvim/issues/209)) ([e688864](https://github.com/stevearc/conform.nvim/commit/e688864883aa4f468cc73a4c1db661c7c94addc4))
+* add jsonnetfmt ([#230](https://github.com/stevearc/conform.nvim/issues/230)) ([769dde8](https://github.com/stevearc/conform.nvim/commit/769dde8ddccf8338c68da706e46fd2fb004e6455))
+* add packer formatter ([#202](https://github.com/stevearc/conform.nvim/issues/202)) ([a0cabaa](https://github.com/stevearc/conform.nvim/commit/a0cabaaf5c94137c8dc34043244a34b552860af6))
+* add pangu ([#188](https://github.com/stevearc/conform.nvim/issues/188)) ([f0780e2](https://github.com/stevearc/conform.nvim/commit/f0780e2231df2e4751e31db32c1545872412ba75))
+* add phpinsights ([#170](https://github.com/stevearc/conform.nvim/issues/170)) ([5235405](https://github.com/stevearc/conform.nvim/commit/5235405cc6d4ac98dc9008ffa850038e3325bbce))
+* add styler formatter for R ([#184](https://github.com/stevearc/conform.nvim/issues/184)) ([6afc64e](https://github.com/stevearc/conform.nvim/commit/6afc64e9f36cbae35c2a8b6852d0b91c9807a72a))
+* add support for buildifier ([#216](https://github.com/stevearc/conform.nvim/issues/216)) ([e478834](https://github.com/stevearc/conform.nvim/commit/e478834227e0958e21a54f31c9cd896a3a8bdde0))
+* add support for sqlfluff ([#213](https://github.com/stevearc/conform.nvim/issues/213)) ([e8c8683](https://github.com/stevearc/conform.nvim/commit/e8c8683a00fb932dfe669e1c96832da12b8054bd))
+
+
+### Bug Fixes
+
+* **biome:** perform formatting over stdin ([#220](https://github.com/stevearc/conform.nvim/issues/220)) ([eddd643](https://github.com/stevearc/conform.nvim/commit/eddd6431370814caacec1d1e3c7d6d95d41b133d))
+* **biome:** use binary from node_modules ([#226](https://github.com/stevearc/conform.nvim/issues/226)) ([5bf1405](https://github.com/stevearc/conform.nvim/commit/5bf1405fd234d469243ea6f394e0aeec9ea53bd8))
+* injected formatter adds language to file extension ([#199](https://github.com/stevearc/conform.nvim/issues/199)) ([e2b889e](https://github.com/stevearc/conform.nvim/commit/e2b889e26586acf30dda7b4a5c3f1a063bc18f18))
+* injected parser shouldn't format combined injections ([#205](https://github.com/stevearc/conform.nvim/issues/205)) ([eeef888](https://github.com/stevearc/conform.nvim/commit/eeef88849fb644d84a5856524adf10d0ad2d7cbe))
+* invalid prettier configuration in last commit ([e8ac7f1](https://github.com/stevearc/conform.nvim/commit/e8ac7f1a9a3973ecce6942b2f26d16e65902aa70))
+* range format method for async formatters and injected ([a36c68d](https://github.com/stevearc/conform.nvim/commit/a36c68d2cd551e49883ddb2492c178d915567f58))
+* respect excluded-files-config from `typos.toml` ([#219](https://github.com/stevearc/conform.nvim/issues/219)) ([db9da1a](https://github.com/stevearc/conform.nvim/commit/db9da1aa57e8be683ada1b1e5f8129c28d2576eb))
+* show more logs in ConformInfo when log level is TRACE ([0963118](https://github.com/stevearc/conform.nvim/commit/0963118e60e0895e2e4842aeffc67cdf9e2bcd10))
+* various fixes for the `injected` formatter ([#235](https://github.com/stevearc/conform.nvim/issues/235)) ([07fcbfc](https://github.com/stevearc/conform.nvim/commit/07fcbfc13490786f5983bce3f404643fcfd83775))
+
 ## [4.2.0](https://github.com/stevearc/conform.nvim/compare/v4.1.0...v4.2.0) (2023-11-09)
 
 
