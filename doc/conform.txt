@@ -241,6 +241,7 @@ FORMATTERS                                                    *conform-formatter
 `injected` - Format treesitter injected languages.
 `isort` - Python utility / library to sort imports alphabetically and
         automatically separate them into sections and by type.
+`joker` - Small Clojure interpreter, linter and formatter.
 `jq` - Command-line JSON processor.
 `jsonnetfmt` - jsonnetfmt is a command line tool to format jsonnet files.
 `just` - Format Justfile.
