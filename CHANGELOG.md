@@ -1,5 +1,22 @@
 # Changelog
 
+## [5.0.0](https://github.com/stevearc/conform.nvim/compare/v4.3.0...v5.0.0) (2023-12-07)
+
+
+### ⚠ BREAKING CHANGES
+
+* formatter config functions take self as first argument ([#233](https://github.com/stevearc/conform.nvim/issues/233))
+
+### Features
+
+* add asmfmt ([#239](https://github.com/stevearc/conform.nvim/issues/239)) ([a5ef494](https://github.com/stevearc/conform.nvim/commit/a5ef4943f6382f36a5a8d6e16eb0a0c60af5e7a5))
+* add joker for clojure formatting ([#240](https://github.com/stevearc/conform.nvim/issues/240)) ([6b13100](https://github.com/stevearc/conform.nvim/commit/6b1310014ceec5752fd5859f9cc62ef7c93d72b2))
+
+
+### Code Refactoring
+
+* formatter config functions take self as first argument ([#233](https://github.com/stevearc/conform.nvim/issues/233)) ([659838f](https://github.com/stevearc/conform.nvim/commit/659838ff4244ef6af095395ce68aaaf99fa8e696))
+
 ## [4.3.0](https://github.com/stevearc/conform.nvim/compare/v4.2.0...v4.3.0) (2023-12-07)
 
 
