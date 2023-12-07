@@ -6,7 +6,7 @@ return {
     description = "Run black only on changed lines.",
   },
   command = "darker",
-  args = function(ctx)
+  args = function(self, ctx)
     -- make sure pre-save doesn't lose changes while post-save respects
     -- the revision setting potentially set in pyproject.toml
     if vim.bo[ctx.buf].modified then

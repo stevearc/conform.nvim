@@ -14,7 +14,7 @@ return {
     description = "Use [Deno](https://deno.land/) to format TypeScript, JavaScript/JSON and markdown.",
   },
   command = "deno",
-  args = function(ctx)
+  args = function(self, ctx)
     return {
       "fmt",
       "-",

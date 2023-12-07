@@ -70,7 +70,7 @@ describe("runner", function()
       }
       local config = assert(conform.get_formatter_config("test"))
       local ctx = runner.build_context(0, config)
-      local cmd = runner.build_cmd(ctx, config)
+      local cmd = runner.build_cmd("", ctx, config)
       assert.are.same({ "echo", vim.api.nvim_buf_get_name(bufnr) }, cmd)
     end)
 
@@ -84,7 +84,7 @@ describe("runner", function()
       }
       local config = assert(conform.get_formatter_config("test"))
       local ctx = runner.build_context(0, config)
-      local cmd = runner.build_cmd(ctx, config)
+      local cmd = runner.build_cmd("", ctx, config)
       assert.are.same({ "echo", vim.fs.dirname(vim.api.nvim_buf_get_name(bufnr)) }, cmd)
     end)
 
@@ -99,7 +99,7 @@ describe("runner", function()
       }
       local config = assert(conform.get_formatter_config("test"))
       local ctx = runner.build_context(0, config)
-      local cmd = runner.build_cmd(ctx, config)
+      local cmd = runner.build_cmd("", ctx, config)
       assert.are.same({ "echo", "--stdin" }, cmd)
     end)
 
@@ -113,7 +113,7 @@ describe("runner", function()
       }
       local config = assert(conform.get_formatter_config("test"))
       local ctx = runner.build_context(0, config)
-      local cmd = runner.build_cmd(ctx, config)
+      local cmd = runner.build_cmd("", ctx, config)
       assert.equal("echo " .. vim.api.nvim_buf_get_name(bufnr) .. " | patch", cmd)
     end)
 
@@ -127,7 +127,7 @@ describe("runner", function()
       }
       local config = assert(conform.get_formatter_config("test"))
       local ctx = runner.build_context(0, config)
-      local cmd = runner.build_cmd(ctx, config)
+      local cmd = runner.build_cmd("", ctx, config)
       assert.equal("echo " .. vim.fs.dirname(vim.api.nvim_buf_get_name(bufnr)) .. " | patch", cmd)
     end)
 
@@ -142,7 +142,7 @@ describe("runner", function()
       }
       local config = assert(conform.get_formatter_config("test"))
       local ctx = runner.build_context(0, config)
-      local cmd = runner.build_cmd(ctx, config)
+      local cmd = runner.build_cmd("", ctx, config)
       assert.equal("echo | patch", cmd)
     end)
   end)

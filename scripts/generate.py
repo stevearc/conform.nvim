@@ -141,17 +141,41 @@ def gen_options_vimdoc() -> VimdocSection:
     return section
 
 
-def gen_autocmd_vimdoc() -> VimdocSection:
-    section = VimdocSection("Autoformat", "conform-autoformat", ["\n"])
+def gen_self_compat_vimdoc() -> VimdocSection:
+    section = VimdocSection("self argument migration", "conform-self-args", ["\n"])
     section.body.extend(
         wrap(
-            "If you want more complex logic than the `format_on_save` option allows, you can write it yourself using your own autocmd. For example:"
+            "The function arguments for formatter config functions have changed. Previously, they took a single `ctx` argument."
         )
     )
-    section.body.append(">lua\n")
-    with open(AUTOFORMAT, "r", encoding="utf-8") as f:
-        section.body.extend(indent(f.readlines(), 4))
-    section.body.append("<\n")
+    section.body.append(
+        """>lua
+    {
+        command = "phpcbf",
+        args = function(ctx)
+            return { "-q", "--stdin-path=" .. ctx.filename, "-" }
+        end
+    }
+<"""
+    )
+    section.body.extend(
+        wrap("Now, they take `self` as the first argument, and `ctx` as the second.")
+    )
+    section.body.append(
+        """>lua
+    {
+        command = "phpcbf",
+        args = function(self, ctx)
+            return { "-q", "--stdin-path=" .. ctx.filename, "-" }
+        end
+    }
+<"""
+    )
+    section.body.extend(
+        wrap(
+            "The config values that can be defined as functions are: `command`, `args`, `range_args`, `cwd`, `env`, and `condition`."
+        )
+    )
     return section
 
 
@@ -171,7 +195,7 @@ def generate_vimdoc():
             gen_options_vimdoc(),
             VimdocSection("API", "conform-api", render_vimdoc_api("conform", funcs)),
             gen_formatter_vimdoc(),
-            gen_autocmd_vimdoc(),
+            gen_self_compat_vimdoc(),
         ]
     )
 

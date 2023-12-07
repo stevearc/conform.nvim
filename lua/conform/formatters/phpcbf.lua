@@ -9,7 +9,7 @@ return {
   command = util.find_executable({
     "vendor/bin/phpcbf",
   }, "phpcbf"),
-  args = function(ctx)
+  args = function(self, ctx)
     return { "-q", "--stdin-path=" .. ctx.filename, "-" }
   end,
   stdin = true,

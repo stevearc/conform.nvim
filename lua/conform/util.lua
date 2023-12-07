@@ -10,11 +10,11 @@ end
 ---Search parent directories for a relative path to a command
 ---@param paths string[]
 ---@param default string
----@return fun(ctx: conform.Context): string
+---@return fun(self: conform.FormatterConfig, ctx: conform.Context): string
 ---@example
 --- local cmd = require("conform.util").find_executable({ "node_modules/.bin/prettier" }, "prettier")
 M.find_executable = function(paths, default)
-  return function(ctx)
+  return function(self, ctx)
     for _, path in ipairs(paths) do
       local normpath = vim.fs.normalize(path)
       local is_absolute = vim.startswith(normpath, "/")
@@ -46,9 +46,9 @@ M.find_executable = function(paths, default)
 end
 
 ---@param files string|string[]
----@return fun(ctx: conform.Context): nil|string
+---@return fun(self: conform.FormatterConfig, ctx: conform.Context): nil|string
 M.root_file = function(files)
-  return function(ctx)
+  return function(self, ctx)
     local found = vim.fs.find(files, { upward = true, path = ctx.dirname })[1]
     if found then
       return vim.fs.dirname(found)
@@ -101,8 +101,8 @@ M.wrap_callback = function(cb, wrapper)
 end
 
 ---Helper function to add to the default args of a formatter.
----@param args string|string[]|fun(ctx: conform.Context): string|string[]
----@param extra_args string|string[]|fun(ctx: conform.Context): string|string[]
+---@param args string|string[]|fun(self: conform.FormatterConfig, ctx: conform.Context): string|string[]
+---@param extra_args string|string[]|fun(self: conform.FormatterConfig, ctx: conform.Context): string|string[]
 ---@param opts? { append?: boolean }
 ---@example
 --- local util = require("conform.util")
@@ -113,12 +113,12 @@ end
 --- })
 M.extend_args = function(args, extra_args, opts)
   opts = opts or {}
-  return function(ctx)
+  return function(self, ctx)
     if type(args) == "function" then
-      args = args(ctx)
+      args = M.compat_call_with_self("unknown", self, args, ctx)
     end
     if type(extra_args) == "function" then
-      extra_args = extra_args(ctx)
+      extra_args = M.compat_call_with_self("unknown", self, extra_args, ctx)
     end
     if type(args) == "string" then
       if type(extra_args) ~= "string" then
@@ -143,7 +143,7 @@ M.extend_args = function(args, extra_args, opts)
 end
 
 ---@param formatter conform.FormatterConfig
----@param extra_args string|string[]|fun(ctx: conform.Context): string|string[]
+---@param extra_args string|string[]|fun(self: conform.FormatterConfig, ctx: conform.Context): string|string[]
 ---@param opts? { append?: boolean }
 ---@example
 --- local util = require("conform.util")
@@ -180,6 +180,48 @@ M.buf_get_changedtick = function(bufnr)
     return vim.b[bufnr].last_changedtick or -1
   else
     return changedtick
+  end
+end
+
+---Returns true if the function takes no args or has self as the first arg
+---@param name string
+---@param fn function(...: any): T
+---@return boolean
+local function has_self_arg(name, fn)
+  local first_arg_name = nil
+  debug.sethook(function()
+    local info = debug.getinfo(3)
+    if info.name ~= "pcall" then
+      return
+    end
+    first_arg_name = debug.getlocal(2, 1)
+    error()
+  end, "c")
+  pcall(fn)
+  debug.sethook()
+
+  return first_arg_name == "self" or first_arg_name == nil
+end
+
+---@generic T
+---@param formatter_name string
+---@param self any
+---@param fn fun(...: any): T
+---@param ... any
+---@return T
+M.compat_call_with_self = function(formatter_name, self, fn, ...)
+  local has_self = has_self_arg(formatter_name, fn)
+  if has_self then
+    return fn(self, ...)
+  else
+    vim.notify_once(
+      string.format(
+        "[conform] formatter %s should take 'self' as the first argument for args, range_args, cwd, condition, and env functions (see :help conform-self-args)\nCompatibility will be dropped on 2024-03-01",
+        formatter_name
+      ),
+      vim.log.levels.WARN
+    )
+    return fn(...)
   end
 end
 
