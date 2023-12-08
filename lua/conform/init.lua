@@ -719,7 +719,8 @@ M.formatexpr = function(opts)
     -- No formatters were available; fall back to lsp formatter
     return vim.lsp.formatexpr({ timeout_ms = opts.timeout_ms })
   else
-    return 1
+    -- Do not fallback to built-in formatter.
+    return 0
   end
 end
 
