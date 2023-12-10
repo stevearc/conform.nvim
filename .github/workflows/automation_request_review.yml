@@ -2,8 +2,10 @@ name: Request Review
 permissions:
   pull-requests: write
 on:
-  pull_request:
-    types: [opened, ready_for_review]
+  pull_request_target:
+    types: [opened, reopened, ready_for_review]
+    branches-ignore:
+      - "release-please--**"
 
 jobs:
   # Request review automatically when PRs are opened
@@ -16,11 +18,9 @@ jobs:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             const pr = context.payload.pull_request;
-            if (!pr.draft) {
-              github.rest.pulls.requestReviewers({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                pull_number: pr.number,
-                reviewers: ['stevearc']
-              });
-            }
+            github.rest.pulls.requestReviewers({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number,
+              reviewers: ['stevearc']
+            });
