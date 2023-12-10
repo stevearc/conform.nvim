@@ -114,12 +114,20 @@ M.show_window = function()
       )
     else
       local filetypes = get_formatter_filetypes(formatter.name)
-      local line = string.format("%s ready (%s)", formatter.name, table.concat(filetypes, ", "))
+      local filetypes_list = table.concat(filetypes, ", ")
+      local path = vim.fn.exepath(formatter.command)
+      local line = string.format("%s ready (%s) %s", formatter.name, filetypes_list, path)
       table.insert(lines, line)
       table.insert(
         highlights,
         { "DiagnosticInfo", #lines, formatter.name:len(), formatter.name:len() + 6 }
       )
+      table.insert(highlights, {
+        "DiagnosticInfo",
+        #lines,
+        formatter.name:len() + 7 + filetypes_list:len() + 3,
+        line:len(),
+      })
     end
   end
 
