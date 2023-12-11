@@ -219,6 +219,7 @@ FORMATTERS                                                    *conform-formatter
 `eslint_d` - Like ESLint, but faster.
 `fish_indent` - Indent or otherwise prettify a piece of fish code.
 `fixjson` - JSON Fixer for Humans using (relaxed) JSON5.
+`fnlfmt` - A formatter for Fennel code.
 `fourmolu` - Fourmolu is a formatter for Haskell source code.
 `gci` - GCI, a tool that controls Go package import order and makes it always
       deterministic.
