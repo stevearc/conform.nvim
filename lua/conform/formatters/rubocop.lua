@@ -6,6 +6,7 @@ return {
   },
   command = "rubocop",
   args = {
+    "--server",
     "-a",
     "-f",
     "quiet",
