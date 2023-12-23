@@ -472,8 +472,8 @@ M.format_async = function(bufnr, formatters, range, opts, callback)
         err = {
           code = errors.ERROR_CODE.CONCURRENT_MODIFICATION,
           message = string.format(
-            "Async formatter discarding changes for %s: concurrent modification",
-            vim.api.nvim_buf_get_name(bufnr)
+            "Async formatter discarding changes for %d: concurrent modification",
+            bufnr
           ),
         }
       else
