@@ -1,3 +1,4 @@
+local fs = require("conform.fs")
 local util = require("conform.util")
 
 --- Helper function to parse options to into a parser if available
@@ -49,7 +50,7 @@ return {
       -- qmd = "markdown",
     },
   },
-  command = util.from_node_modules("prettier"),
+  command = util.from_node_modules(fs.is_windows and "prettier.cmd" or "prettier"),
   args = function(self, ctx)
     return eval_parser(self, ctx) or { "--stdin-filepath", "$FILENAME" }
   end,
