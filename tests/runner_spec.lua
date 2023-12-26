@@ -272,6 +272,19 @@ print("a")
       assert.are.same({ "newcontent" }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
     end)
 
+    it("discards formatting changes if formatter output is empty and original text is not", function()
+      local bufnr = vim.fn.bufadd("testfile")
+      vim.fn.bufload(bufnr)
+      vim.api.nvim_set_current_buf(bufnr)
+      local original_lines = { "line one", "line two" }
+      vim.api.nvim_buf_set_lines(bufnr, 0, -1, true, original_lines)
+      vim.bo[bufnr].modified = false
+      test_util.set_formatter_output({ "" })
+      conform.format({ formatters = { "test" }, quiet = true })
+      local output_lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+      assert.are.same(original_lines, output_lines)
+    end)
+
     it("formats on save", function()
       conform.setup({
         formatters_by_ft = { ["*"] = { "test" } },
