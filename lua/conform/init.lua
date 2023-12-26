@@ -36,6 +36,7 @@ local M = {}
 ---@field inherit? boolean
 ---@field command? string|fun(self: conform.FormatterConfig, ctx: conform.Context): string
 ---@field prepend_args? string|string[]|fun(self: conform.FormatterConfig, ctx: conform.Context): string|string[]
+---@field format? fun(self: conform.LuaFormatterConfig, ctx: conform.Context, lines: string[], callback: fun(err: nil|string, new_lines: nil|string[])) Mutually exclusive with command
 ---@field options? table
 
 ---@class (exact) conform.FormatterMeta
@@ -569,6 +570,12 @@ M.get_formatter_config = function(formatter, bufnr)
   if type(override) == "function" then
     override = override(bufnr)
   end
+  if override and override.command and override.format then
+    local msg =
+      string.format("Formatter '%s' cannot define both 'command' and 'format' function", formatter)
+    vim.notify_once(msg, vim.log.levels.ERROR)
+    return nil
+  end
 
   ---@type nil|conform.FormatterConfig
   local config = override
@@ -581,7 +588,7 @@ M.get_formatter_config = function(formatter, bufnr)
         config = mod_config
       end
     elseif override then
-      if override.command then
+      if override.command or override.format then
         config = override
       else
         local msg = string.format(
