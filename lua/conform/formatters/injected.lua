@@ -127,7 +127,10 @@ return {
     local errors = require("conform.errors")
     local log = require("conform.log")
     local util = require("conform.util")
-    local text = table.concat(lines, "\n")
+    -- Need to add a trailing newline; some parsers need this.
+    -- For example, if a markdown code block ends at the end of the file, a trailing newline is
+    -- required otherwise the ``` will be grabbed as part of the injected block
+    local text = table.concat(lines, "\n") .. "\n"
     local buf_lang = vim.treesitter.language.get_lang(vim.bo[ctx.buf].filetype)
     local ok, parser = pcall(vim.treesitter.get_string_parser, text, buf_lang)
     if not ok then

@@ -1,6 +1,5 @@
 require("plenary.async").tests.add_to_env()
 local conform = require("conform")
-local fs = require("conform.fs")
 local injected = require("conform.formatters.injected")
 local runner = require("conform.runner")
 local test_util = require("tests.test_util")
@@ -49,7 +48,7 @@ describe("injected formatter", function()
           elseif i == #lines and line == "" then
             -- Simulate formatters removing trailing newline
           else
-            table.insert(ret, "|" .. line:gsub("%s+", " ") .. "|")
+            table.insert(ret, "|" .. line .. "|")
           end
         end
         callback(nil, ret)
@@ -65,11 +64,9 @@ describe("injected formatter", function()
     local filepath = "./tests/injected/" .. filename
     local formatted_file = filepath .. ".formatted"
     it(filename, function()
-      local content = fs.read_file(filepath)
-      assert(content)
-      local lines = vim.split(content, "\n", { plain = true })
       local bufnr = vim.fn.bufadd(filepath)
       vim.fn.bufload(bufnr)
+      local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, true)
       local config = assert(conform.get_formatter_config("injected", bufnr))
       local ctx = runner.build_context(bufnr, config)
       local err, new_lines, done
@@ -82,9 +79,9 @@ describe("injected formatter", function()
         return done
       end)
       assert(err == nil, err)
-      local expected = fs.read_file(formatted_file)
-      assert(expected)
-      local expected_lines = vim.split(expected, "\n", { plain = true })
+      local expected_bufnr = vim.fn.bufadd(formatted_file)
+      vim.fn.bufload(expected_bufnr)
+      local expected_lines = vim.api.nvim_buf_get_lines(expected_bufnr, 0, -1, true)
       assert.are.same(expected_lines, new_lines)
     end)
   end

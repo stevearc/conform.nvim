@@ -1,5 +1,5 @@
 text
 
 ```lua
-local foo = 'bar'
+local foo = "bar"
 ```
