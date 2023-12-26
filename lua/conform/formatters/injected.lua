@@ -155,38 +155,17 @@ return {
     ---@type LangRange[]
     local regions = {}
 
-    for _, tree in pairs(parser:trees()) do
-      local root_node = tree:root()
-      local start_line, _, end_line, _ = root_node:range()
-
-      -- I don't like using these private methods, but critically we do _not_ want to format
-      -- "combined" injections (they contain the metadata "injection.combined"). These injections
-      -- will merge all of their regions into a single LanguageTree. If we then try to format the
-      -- range defined by that LanguageTree, we will likely end up with a range that contains all
-      -- sorts of content. As a concrete example, consider the following markdown:
-      --   This is some text
-      --   <!-- Here is a comment -->
-      --   Some more text
-      --   <!-- Another comment -->
-      -- Since the html injection is combined, the range will contain "Some more text", which is not
-      -- what we want.
-      -- To avoid this, don't parse with injections. Instead, we use private methods to run the
-      -- injection queries ourselves, and then filter out the combined injections.
-      for _, match, metadata in
-        ---@diagnostic disable-next-line: invisible
-        parser._injection_query:iter_matches(root_node, text, start_line, end_line + 1)
-      do
-        ---@diagnostic disable-next-line: invisible
-        local lang, combined, ranges = parser:_get_injection(match, metadata)
-        if
-          lang
-          and get_formatters(lang) ~= nil
-          and not combined
-          and #ranges > 0
-          and lang ~= root_lang
-        then
-          for _, range in ipairs(ranges) do
-            accum_range(regions, { lang, range[1] + 1, range[2], range[4] + 1, range[5] })
+    for lang, lang_tree in pairs(parser:children()) do
+      if lang ~= root_lang then
+        for _, ranges in ipairs(lang_tree:included_regions()) do
+          for _, region in ipairs(ranges) do
+            local formatters = get_formatters(lang)
+            if formatters ~= nil then
+              -- The types are wrong. included_regions should be Range[][] not integer[][]
+              ---@diagnostic disable-next-line: param-type-mismatch
+              local start_row, start_col, _, end_row, end_col, _ = unpack(region)
+              accum_range(regions, { lang, start_row + 1, start_col, end_row + 1, end_col })
+            end
           end
         end
       end
