@@ -272,7 +272,7 @@ print("a")
       assert.are.same({ "newcontent" }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
     end)
 
-    it("discards formatting changes if formatter output is empty and original text is not", function()
+    it("discards formatting changes if formatter output is empty /w non-empty input", function()
       local bufnr = vim.fn.bufadd("testfile")
       vim.fn.bufload(bufnr)
       vim.api.nvim_set_current_buf(bufnr)
