@@ -1,7 +1,8 @@
 local M = {}
 local uv = vim.uv or vim.loop
 
--- This is used for documentation generation
+---@private
+---This is used for documentation generation
 M.list_all_formatters = function()
   local ret = {}
   for path in vim.gsplit(vim.o.runtimepath, ",", { plain = true }) do
@@ -14,7 +15,9 @@ M.list_all_formatters = function()
           if entry.name ~= "init.lua" then
             local basename = string.match(entry.name, "^(.*)%.lua$")
             local module = require("conform.formatters." .. basename)
-            ret[basename] = module.meta
+            local module_data = vim.deepcopy(module.meta)
+            module_data.has_options = module.options ~= nil
+            ret[basename] = module_data
           end
         end
         entries = uv.fs_readdir(formatter_dir)

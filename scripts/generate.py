@@ -8,10 +8,12 @@ from typing import List
 from nvim_doc_tools import (
     Vimdoc,
     VimdocSection,
+    dedent,
     generate_md_toc,
     indent,
     parse_functions,
     read_nvim_json,
+    read_section,
     render_md_api,
     render_vimdoc_api,
     replace_section,
@@ -24,6 +26,7 @@ README = os.path.join(ROOT, "README.md")
 DOC = os.path.join(ROOT, "doc")
 RECIPES = os.path.join(DOC, "recipes.md")
 ADVANCED = os.path.join(DOC, "advanced_topics.md")
+FORMATTER_OPTIONS = os.path.join(DOC, "formatter_options.md")
 VIMDOC = os.path.join(DOC, "conform.txt")
 OPTIONS = os.path.join(ROOT, "scripts", "options_doc.lua")
 AUTOFORMAT = os.path.join(ROOT, "scripts", "autoformat_doc.lua")
@@ -34,6 +37,7 @@ class Formatter:
     name: str
     description: str
     url: str
+    has_options: bool
     deprecated: bool = False
 
 
@@ -91,6 +95,25 @@ def update_autocmd_md():
     )
 
 
+def update_formatter_options_md():
+    lines = ["\n"]
+    for formatter in get_all_formatters():
+        if formatter.has_options:
+            lines.extend([f"## {formatter.name}\n", "\n", "```lua\n", "options = {\n"])
+            formatter_file = os.path.join(
+                ROOT, "lua", "conform", "formatters", f"{formatter.name}.lua"
+            )
+            code = read_section(formatter_file, r"^  options = {$", r"^  },$")
+            lines.extend(dedent(code, 2))
+            lines.extend(["}\n", "```\n", "\n"])
+    replace_section(
+        FORMATTER_OPTIONS,
+        r"^<!-- OPTIONS -->$",
+        r"^<!-- /OPTIONS -->$",
+        lines,
+    )
+
+
 def add_md_link_path(path: str, lines: List[str]) -> List[str]:
     ret = []
     for line in lines:
@@ -131,6 +154,18 @@ def update_advanced_toc():
     replace_section(ADVANCED, r"^<!-- TOC -->$", r"^<!-- /TOC -->$", toc)
     subtoc = add_md_link_path("doc/advanced_topics.md", toc)
     replace_section(README, r"^<!-- ADVANCED -->$", r"^<!-- /ADVANCED -->$", subtoc)
+
+
+def update_formatter_options_toc():
+    toc = ["\n"] + generate_md_toc(FORMATTER_OPTIONS) + ["\n"]
+    replace_section(FORMATTER_OPTIONS, r"^<!-- TOC -->$", r"^<!-- /TOC -->$", toc)
+    subtoc = add_md_link_path("doc/formatter_options.md", toc)
+    replace_section(
+        README,
+        r"^<!-- FORMATTER_OPTIONS -->$",
+        r"^<!-- /FORMATTER_OPTIONS -->$",
+        subtoc,
+    )
 
 
 def gen_options_vimdoc() -> VimdocSection:
@@ -208,8 +243,10 @@ def main() -> None:
     update_formatter_list()
     update_options()
     update_autocmd_md()
+    update_formatter_options_md()
     update_md_api()
     update_recipes_toc()
     update_advanced_toc()
+    update_formatter_options_toc()
     update_readme_toc()
     generate_vimdoc()

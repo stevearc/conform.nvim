@@ -13,6 +13,7 @@ Lightweight yet powerful formatter plugin for Neovim
 - [Recipes](#recipes)
 - [Advanced topics](#advanced-topics)
 - [Options](#options)
+- [Formatter options](#formatter-options)
 - [API](#api)
   - [format(opts, callback)](#formatopts-callback)
   - [list_formatters(bufnr)](#list_formattersbufnr)
@@ -479,6 +480,15 @@ require("conform").formatters.my_formatter = {
 ```
 
 <!-- /OPTIONS -->
+
+## Formatter options
+
+<!-- FORMATTER_OPTIONS -->
+
+- [injected](doc/formatter_options.md#injected)
+- [prettier](doc/formatter_options.md#prettier)
+
+<!-- /FORMATTER_OPTIONS -->
 
 ## API
 
