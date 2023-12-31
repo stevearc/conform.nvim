@@ -172,7 +172,7 @@ M.apply_format = function(bufnr, original_lines, new_lines, range, only_apply_ra
   -- Abort if output is empty but input is not (i.e. has some non-whitespace characters).
   -- This is to hack around oddly behaving formatters (e.g black outputs nothing for excluded files).
   if new_text:match("^%s*$") and not original_text:match("^%s*$") then
-    log.trace("Aborting because a formatter returned empty output")
+    log.warn("Aborting because a formatter returned empty output for buffer %s", bufname)
     return
   end
 
