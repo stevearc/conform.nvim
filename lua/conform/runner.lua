@@ -349,6 +349,7 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, opts, c
         end
         log.debug("%s exited with code %d", formatter.name, code)
         log.trace("Output lines: %s", output)
+        log.trace("%s stderr: %s", formatter.name, stderr)
         callback(nil, output)
       else
         log.info("%s exited with code %d", formatter.name, code)

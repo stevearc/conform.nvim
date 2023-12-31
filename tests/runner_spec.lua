@@ -2,10 +2,35 @@ require("plenary.async").tests.add_to_env()
 local conform = require("conform")
 local runner = require("conform.runner")
 local test_util = require("tests.test_util")
+local util = require("conform.util")
 
 describe("runner", function()
+  local OUTPUT_FILE
+  local CLEANUP_FILES = {}
+
+  ---@param lines string[]
+  local function set_formatter_output(lines)
+    local fd, output_file = vim.loop.fs_mkstemp(".testenv/outputXXXXXXXXX")
+    assert(type(fd) == "number" and output_file, fd)
+    local content = table.concat(lines, "\n")
+    vim.loop.fs_write(fd, content)
+    -- Make sure we add the final newline
+    vim.loop.fs_write(fd, "\n")
+    vim.loop.fs_fsync(fd)
+    vim.loop.fs_close(fd)
+    OUTPUT_FILE = output_file
+    table.insert(CLEANUP_FILES, output_file)
+  end
+
   after_each(function()
     test_util.reset_editor()
+    OUTPUT_FILE = nil
+    for _, file in ipairs(CLEANUP_FILES) do
+      if vim.loop.fs_stat(file) then
+        vim.loop.fs_unlink(file)
+      end
+    end
+    CLEANUP_FILES = {}
   end)
 
   it("resolves config function", function()
@@ -151,6 +176,12 @@ describe("runner", function()
     before_each(function()
       conform.formatters.test = {
         command = "tests/fake_formatter.sh",
+        args = function()
+          if OUTPUT_FILE then
+            return { OUTPUT_FILE }
+          end
+          return {}
+        end,
       }
     end)
 
@@ -165,7 +196,7 @@ describe("runner", function()
       vim.api.nvim_buf_set_lines(bufnr, 0, -1, true, lines)
       vim.bo[bufnr].modified = false
       local expected_lines = vim.split(expected, "\n", { plain = true })
-      test_util.set_formatter_output(expected_lines)
+      set_formatter_output(expected_lines)
       conform.format(vim.tbl_extend("keep", opts or {}, { formatters = { "test" }, quiet = true }))
       return expected_lines
     end
@@ -240,19 +271,19 @@ print("a")
     end)
 
     it("does not change output if formatter fails", function()
-      conform.formatters.test.args = { "--fail" }
+      conform.formatters.test.args = util.extend_args(conform.formatters.test.args, { "--fail" })
       run_formatter("hello", "goodbye")
       assert.are.same({ "hello" }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
     end)
 
     it("allows nonzero exit codes", function()
-      conform.formatters.test.args = { "--fail" }
+      conform.formatters.test.args = util.extend_args(conform.formatters.test.args, { "--fail" })
       conform.formatters.test.exit_codes = { 0, 1 }
       run_formatter_test("hello", "goodbye")
     end)
 
     it("does not format if it times out", function()
-      conform.formatters.test.args = { "--timeout" }
+      conform.formatters.test.args = util.extend_args(conform.formatters.test.args, { "--timeout" })
       run_formatter("hello", "goodbye", { timeout_ms = 10 })
       assert.are.same({ "hello" }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
     end)
@@ -260,7 +291,9 @@ print("a")
     it("can format async", function()
       run_formatter("hello", "goodbye", { async = true })
       assert.are.same({ "hello" }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
-      vim.wait(100)
+      vim.wait(1000, function()
+        return vim.api.nvim_buf_get_lines(0, 0, -1, false)[1] == "goodbye"
+      end)
       assert.are.same({ "goodbye" }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
     end)
 
@@ -268,7 +301,9 @@ print("a")
       run_formatter("hello", "goodbye", { async = true })
       assert.are.same({ "hello" }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
       vim.api.nvim_buf_set_lines(0, 0, -1, true, { "newcontent" })
-      vim.wait(100)
+      vim.wait(1000, function()
+        return vim.api.nvim_buf_get_lines(0, 0, -1, false)[1] == "newcontent"
+      end)
       assert.are.same({ "newcontent" }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
     end)
 
@@ -292,7 +327,7 @@ print("a")
       })
       vim.cmd.edit({ args = { "tests/testfile.txt" } })
       vim.api.nvim_buf_set_lines(0, 0, -1, true, { "hello" })
-      test_util.set_formatter_output({ "goodbye" })
+      set_formatter_output({ "goodbye" })
       vim.cmd.write()
       local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
       vim.fn.delete("tests/testfile.txt")

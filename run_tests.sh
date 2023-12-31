@@ -14,11 +14,17 @@ else
   (cd "$PLUGINS/plenary.nvim" && git pull)
 fi
 
+if [ ! -e "$PLUGINS/nvim-treesitter" ]; then
+  git clone --depth=1 https://github.com/nvim-treesitter/nvim-treesitter.git "$PLUGINS/nvim-treesitter"
+else
+  (cd "$PLUGINS/nvim-treesitter" && git pull)
+fi
+
 XDG_CONFIG_HOME=".testenv/config" \
   XDG_DATA_HOME=".testenv/data" \
   XDG_STATE_HOME=".testenv/state" \
   XDG_RUNTIME_DIR=".testenv/run" \
   XDG_CACHE_HOME=".testenv/cache" \
   nvim --headless -u tests/minimal_init.lua \
-  -c "PlenaryBustedDirectory ${1-tests} { minimal_init = './tests/minimal_init.lua' }"
+  -c "RunTests ${1-tests}"
 echo "Success"

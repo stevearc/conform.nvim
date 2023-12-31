@@ -2,16 +2,24 @@
 
 set -e
 
-if [ -e "tests/fake_formatter_output" ]; then
-	cat tests/fake_formatter_output
-else
-	cat
-fi
-
+CODE=0
 if [ "$1" = "--fail" ]; then
-	echo "failure" >&2
-	exit 1
-elif [ "$1" = "--timeout" ]; then
-	sleep 4
+  shift
+  echo "failure" >&2
+  CODE=1
+fi
+if [ "$1" = "--timeout" ]; then
+  shift
+  echo "timeout" >&2
+  sleep 4
 fi
 
+output_file="$1"
+
+if [ -n "$output_file" ] && [ -e "$output_file" ]; then
+  cat "$output_file"
+else
+  cat
+fi
+
+exit $CODE

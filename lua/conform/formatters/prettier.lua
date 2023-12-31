@@ -26,7 +26,8 @@ return {
     description = [[Prettier is an opinionated code formatter. It enforces a consistent style by parsing your code and re-printing it with its own rules that take the maximum line length into account, wrapping code when necessary.]],
   },
   options = {
-    -- add parsers for different filetypes
+    -- Use a specific prettier parser for a filetype
+    -- Otherwise, prettier will try to infer the parser from the file name
     ft_parsers = {
       --     javascript = "babel",
       --     javascriptreact = "babel",
@@ -45,7 +46,7 @@ return {
       --     graphql = "graphql",
       --     handlebars = "glimmer",
     },
-    -- add parsers for different extensions
+    -- Use a specific prettier parser for a file extension
     ext_parsers = {
       -- qmd = "markdown",
     },

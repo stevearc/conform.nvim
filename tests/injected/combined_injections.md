@@ -1,0 +1,14 @@
+text
+
+<!-- comment -->
+
+```lua
+local foo = 'bar'
+```
+
+
+<!-- comment -->
+
+```lua
+local foo = 'bar'
+```

@@ -1,5 +1,24 @@
 # Changelog
 
+## [5.1.0](https://github.com/stevearc/conform.nvim/compare/v5.0.0...v5.1.0) (2023-12-26)
+
+
+### Features
+
+* add fnlfmt formatter ([#247](https://github.com/stevearc/conform.nvim/issues/247)) ([af6643a](https://github.com/stevearc/conform.nvim/commit/af6643afa10e17c0228da97c84d4c32f144a6ad3))
+* ConformInfo shows path to executable ([#244](https://github.com/stevearc/conform.nvim/issues/244)) ([fb9b050](https://github.com/stevearc/conform.nvim/commit/fb9b0500270ba05b89cc27cd8b7762443bcfae22))
+* **prettier:** add `options` for configuring prettier parser based on filetype and extension ([#241](https://github.com/stevearc/conform.nvim/issues/241)) ([8df1bed](https://github.com/stevearc/conform.nvim/commit/8df1bed7b8de9cf40476996fb5ab73ed667aed35))
+
+
+### Bug Fixes
+
+* crash in error handling ([4185249](https://github.com/stevearc/conform.nvim/commit/41852493b5abd7b5a0fd61ff007994c777a08ec9))
+* **formatexpr:** does not fallback to the built-in formatexpr ([#238](https://github.com/stevearc/conform.nvim/issues/238)) ([48bc999](https://github.com/stevearc/conform.nvim/commit/48bc9996ebfe90e7766f46338360f75fd6ecb174))
+* **injected:** code block at end of markdown file ([9245b61](https://github.com/stevearc/conform.nvim/commit/9245b616d1edb159775a0832c03324bf92884494))
+* **injected:** handle inline injections ([#251](https://github.com/stevearc/conform.nvim/issues/251)) ([f245cca](https://github.com/stevearc/conform.nvim/commit/f245cca8ad42c9d344b53a18c3fc1a3c6724c2d4))
+* **prettier:** use correct prettier executable on windows ([#236](https://github.com/stevearc/conform.nvim/issues/236)) ([7396fc0](https://github.com/stevearc/conform.nvim/commit/7396fc0208539e2bd70e3e446f27529e28dba12b))
+* **rubocop:** pass --server for faster execution ([#246](https://github.com/stevearc/conform.nvim/issues/246)) ([0ec6edd](https://github.com/stevearc/conform.nvim/commit/0ec6edd67689e8df6726b83333106bcec13c36d4))
+
 ## [5.0.0](https://github.com/stevearc/conform.nvim/compare/v4.3.0...v5.0.0) (2023-12-07)
 
 
