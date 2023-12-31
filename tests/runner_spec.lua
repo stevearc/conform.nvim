@@ -314,7 +314,7 @@ print("a")
       local original_lines = { "line one", "line two" }
       vim.api.nvim_buf_set_lines(bufnr, 0, -1, true, original_lines)
       vim.bo[bufnr].modified = false
-      test_util.set_formatter_output({ "" })
+      set_formatter_output({ "" })
       conform.format({ formatters = { "test" }, quiet = true })
       local output_lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
       assert.are.same(original_lines, output_lines)
