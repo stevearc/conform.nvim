@@ -169,6 +169,13 @@ M.apply_format = function(bufnr, original_lines, new_lines, range, only_apply_ra
   table.remove(original_lines)
   table.remove(new_lines)
 
+  -- Abort if output is empty but input is not (i.e. has some non-whitespace characters).
+  -- This is to hack around oddly behaving formatters (e.g black outputs nothing for excluded files).
+  if new_text:match("^%s*$") and not original_text:match("^%s*$") then
+    log.warn("Aborting because a formatter returned empty output for buffer %s", bufname)
+    return
+  end
+
   log.trace("Comparing lines %s and %s", original_lines, new_lines)
   local indices = vim.diff(original_text, new_text, {
     result_type = "indices",

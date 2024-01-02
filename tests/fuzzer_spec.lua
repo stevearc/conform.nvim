@@ -97,6 +97,7 @@ describe("fuzzer", function()
   end
 
   local function make_edits(lines)
+    local was_empty = table.concat(lines):match("^%s*$")
     lines = vim.deepcopy(lines)
     for _ = 1, math.random(0, 3) do
       do_insert(lines)
@@ -106,6 +107,12 @@ describe("fuzzer", function()
     end
     for _ = 1, math.random(0, 3) do
       do_delete(lines)
+    end
+    -- avoid blank output (whitepsace only) which is ignored when applying formatting
+    if not was_empty then
+      while table.concat(lines):match("^%s*$") do
+        do_replace(lines)
+      end
     end
     return lines
   end
