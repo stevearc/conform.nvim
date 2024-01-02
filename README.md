@@ -286,6 +286,7 @@ You can view this list in vim with `:help conform-formatters`
 - [uncrustify](https://github.com/uncrustify/uncrustify) - A source code beautifier for C, C++, C#, ObjectiveC, D, Java, Pawn and Vala.
 - [usort](https://github.com/facebook/usort) - Safe, minimal import sorting for Python projects.
 - [xmlformat](https://github.com/pamoller/xmlformatter) - xmlformatter is an Open Source Python package, which provides formatting of XML documents.
+- [xmllint](http://xmlsoft.org/xmllint.html) - Despite the name, xmllint can be used to format XML files as well as lint them, and that's the mode this formatter is using.
 - [yamlfix](https://github.com/lyz-code/yamlfix) - A configurable YAML formatter that keeps comments.
 - [yamlfmt](https://github.com/google/yamlfmt) - yamlfmt is an extensible command line tool or library to format yaml files.
 - [yapf](https://github.com/google/yapf) - Yet Another Python Formatter.

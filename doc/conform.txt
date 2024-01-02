@@ -326,6 +326,8 @@ FORMATTERS                                                    *conform-formatter
 `usort` - Safe, minimal import sorting for Python projects.
 `xmlformat` - xmlformatter is an Open Source Python package, which provides
             formatting of XML documents.
+`xmllint` - Despite the name, xmllint can be used to format XML files as well as
+          lint them, and that's the mode this formatter is using.
 `yamlfix` - A configurable YAML formatter that keeps comments.
 `yamlfmt` - yamlfmt is an extensible command line tool or library to format yaml
           files.
