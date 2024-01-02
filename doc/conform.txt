@@ -327,7 +327,7 @@ FORMATTERS                                                    *conform-formatter
 `xmlformat` - xmlformatter is an Open Source Python package, which provides
             formatting of XML documents.
 `xmllint` - Despite the name, xmllint can be used to format XML files as well as
-          lint them, and that's the mode this formatter is using.
+          lint them.
 `yamlfix` - A configurable YAML formatter that keeps comments.
 `yamlfmt` - yamlfmt is an extensible command line tool or library to format yaml
           files.
