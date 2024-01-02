@@ -372,6 +372,9 @@ M.format = function(opts, callback)
     lsp_fallback = false,
     quiet = false,
   })
+  if opts.bufnr == 0 then
+    opts.bufnr = vim.api.nvim_get_current_buf()
+  end
   local mode = vim.api.nvim_get_mode().mode
   if not opts.range and mode == "v" or mode == "V" then
     opts.range = range_from_selection(opts.bufnr, mode)
