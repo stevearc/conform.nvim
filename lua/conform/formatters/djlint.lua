@@ -1,3 +1,4 @@
+local util = require("conform.util")
 ---@type conform.FileFormatterConfig
 return {
   meta = {
@@ -9,4 +10,7 @@ return {
     "--reformat",
     "-",
   },
+  cwd = util.root_file({
+    ".djlintrc",
+  }),
 }
