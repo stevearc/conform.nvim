@@ -1,3 +1,4 @@
+local util = require("conform.util")
 ---@type conform.FileFormatterConfig
 return {
   meta = {
@@ -6,4 +7,10 @@ return {
   },
   command = "dprint",
   args = { "fmt", "--stdin", "$FILENAME" },
+  cwd = util.root_file({
+    "dprint.json",
+    ".dprint.json",
+    "dprint.jsonc",
+    ".dprint.jsonc",
+  }),
 }
