@@ -199,6 +199,7 @@ You can view this list in vim with `:help conform-formatters`
 - [cmake_format](https://github.com/cheshirekow/cmake_format) - Parse cmake listfiles and format them nicely.
 - [codespell](https://github.com/codespell-project/codespell) - Check code for common misspellings.
 - [csharpier](https://github.com/belav/csharpier) - The opinionated C# code formatter.
+- [cue_fmt](https://cuelang.org/) - Format CUE files using `cue fmt` command
 - [darker](https://github.com/akaihola/darker) - Run black only on changed lines.
 - [dart_format](https://dart.dev/tools/dart-format) - Replace the whitespace in your program with formatting that follows Dart guidelines.
 - [deno_fmt](https://deno.land/manual/tools/formatter) - Use [Deno](https://deno.land/) to format TypeScript, JavaScript/JSON and markdown.
