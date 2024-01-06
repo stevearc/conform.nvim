@@ -28,9 +28,4 @@ Sometimes you may have a file that contains small chunks of code in another lang
 
 The way that conform supports this is via the `injected` formatter. If you run this formatter on a file, it will use treesitter to parse out the blocks in the file that have different languages and runs the formatters for that filetype (configured with `formatters_by_ft`). The formatters are run in parallel, one job for each language block.
 
-This formatter is experimental; the behavior and configuration options are still subject to change. Below are the current options available to customize the behavior of the formatter.
-
-```lua
--- Set this value to true to silence errors when formatting a block fails
-require("conform.formatters.injected").options.ignore_errors = false
-```
+This formatter is experimental; the behavior and configuration options are still subject to change. The current list of configuration options can be found at [formatter options](formatter_options.md#injected)
