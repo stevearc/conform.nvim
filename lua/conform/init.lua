@@ -686,8 +686,10 @@ end
 ---@param options? table Options passed to |vim.lsp.buf.format|
 ---@return boolean
 M.will_fallback_lsp = function(options)
-  options = options or {}
-  if not options.bufnr or options.bufnr == 0 then
+  options = vim.tbl_deep_extend("keep", options or {}, {
+    bufnr = vim.api.nvim_get_current_buf(),
+  })
+  if options.bufnr == 0 then
     options.bufnr = vim.api.nvim_get_current_buf()
   end
   local matching_filetype = get_matching_filetype(options.bufnr)
