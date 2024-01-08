@@ -721,10 +721,17 @@ M.formatexpr = function(opts)
   end
   local end_line = vim.fn.getline(end_lnum)
   local end_col = end_line:len()
-  opts.range = {
-    start = { start_lnum, 0 },
-    ["end"] = { end_lnum, end_col },
-  }
+
+  if vim.v.count == vim.fn.line("$") then
+    -- Whole buffer is selected; use buffer formatting
+    opts.range = nil
+  else
+    opts.range = {
+      start = { start_lnum, 0 },
+      ["end"] = { end_lnum, end_col },
+    }
+  end
+
   if M.format(opts) then
     return 0
   elseif opts.lsp_fallback and not vim.tbl_isempty(lsp_format.get_format_clients(opts)) then
