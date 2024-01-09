@@ -30,17 +30,29 @@ end
 function M.get_format_clients(options)
   local method = options.range and "textDocument/rangeFormatting" or "textDocument/formatting"
 
-  local clients = vim.lsp.get_active_clients({
-    id = options.id,
-    bufnr = options.bufnr,
-    name = options.name,
-  })
+  local clients
+  if vim.lsp.get_clients then
+    clients = vim.lsp.get_clients({
+      id = options.id,
+      bufnr = options.bufnr,
+      name = options.name,
+      method = method,
+    })
+  else
+    clients = vim.lsp.get_active_clients({
+      id = options.id,
+      bufnr = options.bufnr,
+      name = options.name,
+    })
+
+    clients = vim.tbl_filter(function(client)
+      return client.supports_method(method, { bufnr = options.bufnr })
+    end, clients)
+  end
   if options.filter then
     clients = vim.tbl_filter(options.filter, clients)
   end
-  return vim.tbl_filter(function(client)
-    return client.supports_method(method, { bufnr = options.bufnr })
-  end, clients)
+  return clients
 end
 
 ---@param options table
