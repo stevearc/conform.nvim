@@ -148,9 +148,9 @@ return {
 
     --- Disable diagnostic to pass the typecheck github action
     --- This is available on nightly, but not on stable
-    --- Stable doesn't have any parameters, so it's safe to always pass `false`
+    --- Stable doesn't have any parameters, so it's safe
     ---@diagnostic disable-next-line: redundant-parameter
-    parser:parse(false)
+    parser:parse(true)
     local root_lang = parser:lang()
     ---@type LangRange[]
     local regions = {}
