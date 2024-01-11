@@ -4,7 +4,7 @@ local util = require("vim.lsp.util")
 
 local M = {}
 
-local function apply_text_edits(text_edits, bufnr, offset_encoding)
+local function apply_text_edits(text_edits, bufnr, offset_encoding, dry_run)
   if
     #text_edits == 1
     and text_edits[1].range.start.line == 0
@@ -19,9 +19,19 @@ local function apply_text_edits(text_edits, bufnr, offset_encoding)
       table.remove(new_lines)
     end
     log.debug("Converting full-file LSP format to piecewise format")
-    require("conform.runner").apply_format(bufnr, original_lines, new_lines, nil, false)
+    return require("conform.runner").apply_format(
+      bufnr,
+      original_lines,
+      new_lines,
+      nil,
+      false,
+      dry_run
+    )
+  elseif dry_run then
+    return #text_edits > 0
   else
     vim.lsp.util.apply_text_edits(text_edits, bufnr, offset_encoding)
+    return true
   end
 end
 
@@ -56,7 +66,7 @@ function M.get_format_clients(options)
 end
 
 ---@param options table
----@param callback fun(err?: string)
+---@param callback fun(err?: string, changed?: boolean)
 function M.format(options, callback)
   options = options or {}
   if not options.bufnr or options.bufnr == 0 then
@@ -69,7 +79,8 @@ function M.format(options, callback)
   local clients = M.get_format_clients(options)
 
   if #clients == 0 then
-    return callback("[LSP] Format request failed, no matching language servers.")
+    callback("[LSP] Format request failed, no matching language servers.")
+    return false
   end
 
   local function set_range(client, params)
@@ -84,9 +95,10 @@ function M.format(options, callback)
   if options.async then
     local changedtick = vim.b[bufnr].changedtick
     local do_format
+    local changed = false
     do_format = function(idx, client)
       if not client then
-        return callback()
+        return callback(nil, changed)
       end
       local params = set_range(client, util.make_formatting_params(options.formatting_options))
       local auto_id = vim.api.nvim_create_autocmd("LspDetach", {
@@ -112,10 +124,16 @@ function M.format(options, callback)
             )
           )
         else
-          apply_text_edits(result, ctx.bufnr, client.offset_encoding)
+          local this_changed =
+            apply_text_edits(result, ctx.bufnr, client.offset_encoding, options.dry_run)
           changedtick = vim.b[bufnr].changedtick
 
-          do_format(next(clients, idx))
+          if options.dry_run and this_changed then
+            callback(nil, true)
+          else
+            changed = changed or this_changed
+            do_format(next(clients, idx))
+          end
         end
       end, bufnr)
     end
@@ -126,7 +144,12 @@ function M.format(options, callback)
       local params = set_range(client, util.make_formatting_params(options.formatting_options))
       local result, err = client.request_sync(method, params, timeout_ms, bufnr)
       if result and result.result then
-        apply_text_edits(result.result, bufnr, client.offset_encoding)
+        local changed = apply_text_edits(result.result, bufnr, client.offset_encoding)
+
+        if changed then
+          callback(nil, true)
+          return true, true
+        end
       elseif err then
         if not options.quiet then
           vim.notify(string.format("[LSP][%s] %s", client.name, err), vim.log.levels.WARN)
