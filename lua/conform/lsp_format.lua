@@ -140,13 +140,16 @@ function M.format(options, callback)
     do_format(next(clients))
   else
     local timeout_ms = options.timeout_ms or 1000
+    local changed = false
     for _, client in pairs(clients) do
       local params = set_range(client, util.make_formatting_params(options.formatting_options))
       local result, err = client.request_sync(method, params, timeout_ms, bufnr)
       if result and result.result then
-        local changed = apply_text_edits(result.result, bufnr, client.offset_encoding)
+        local this_changed =
+          apply_text_edits(result.result, bufnr, client.offset_encoding, options.dry_run)
+        changed = changed or this_changed
 
-        if changed then
+        if options.dry_run and changed then
           callback(nil, true)
           return true, true
         end
