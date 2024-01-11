@@ -362,7 +362,7 @@ end
 ---    id nil|integer Passed to |vim.lsp.buf.format| when lsp_fallback = true
 ---    name nil|string Passed to |vim.lsp.buf.format| when lsp_fallback = true
 ---    filter nil|fun(client: table): boolean Passed to |vim.lsp.buf.format| when lsp_fallback = true
----@param callback? fun(err: nil|string, changed: nil|boolean) Called once formatting has completed
+---@param callback? fun(err: nil|string, did_edit: nil|boolean) Called once formatting has completed
 ---@return boolean True if any formatters were attempted
 ---@return boolean? True if changes were made (unless async = true)
 M.format = function(opts, callback)
@@ -382,7 +382,7 @@ M.format = function(opts, callback)
   if not opts.range and mode == "v" or mode == "V" then
     opts.range = range_from_selection(opts.bufnr, mode)
   end
-  callback = callback or function(_err, _changed) end
+  callback = callback or function(_err, _did_edit) end
   local errors = require("conform.errors")
   local log = require("conform.log")
   local lsp_format = require("conform.lsp_format")
@@ -406,8 +406,8 @@ M.format = function(opts, callback)
 
   if any_formatters then
     ---@param err? conform.Error
-    ---@param changed? boolean
-    local function handle_result(err, changed)
+    ---@param did_edit? boolean
+    local function handle_result(err, did_edit)
       if err then
         local level = errors.level_for_code(err.code)
         log.log(level, err.message)
@@ -430,7 +430,7 @@ M.format = function(opts, callback)
         return callback(err_message)
       end
 
-      if opts.dry_run and changed then
+      if opts.dry_run and did_edit then
         callback(nil, true)
         return
       elseif
@@ -439,7 +439,7 @@ M.format = function(opts, callback)
         log.debug("Running LSP formatter on %s", vim.api.nvim_buf_get_name(opts.bufnr))
         lsp_format.format(opts, callback)
       else
-        callback(nil, changed)
+        callback(nil, did_edit)
       end
     end
 
@@ -447,7 +447,7 @@ M.format = function(opts, callback)
     if opts.async then
       runner.format_async(opts.bufnr, formatters, opts.range, run_opts, handle_result, opts.dry_run)
     else
-      local err, changed = runner.format_sync(
+      local err, did_edit = runner.format_sync(
         opts.bufnr,
         formatters,
         opts.timeout_ms,
@@ -455,8 +455,8 @@ M.format = function(opts, callback)
         run_opts,
         opts.dry_run
       )
-      handle_result(err, changed)
-      return true, changed
+      handle_result(err, did_edit)
+      return true, did_edit
     end
     return true
   elseif opts.lsp_fallback and not vim.tbl_isempty(lsp_format.get_format_clients(opts)) then

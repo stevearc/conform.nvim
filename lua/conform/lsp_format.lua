@@ -66,7 +66,7 @@ function M.get_format_clients(options)
 end
 
 ---@param options table
----@param callback fun(err?: string, changed?: boolean)
+---@param callback fun(err?: string, did_edit?: boolean)
 function M.format(options, callback)
   options = options or {}
   if not options.bufnr or options.bufnr == 0 then
@@ -95,10 +95,10 @@ function M.format(options, callback)
   if options.async then
     local changedtick = vim.b[bufnr].changedtick
     local do_format
-    local changed = false
+    local did_edit = false
     do_format = function(idx, client)
       if not client then
-        return callback(nil, changed)
+        return callback(nil, did_edit)
       end
       local params = set_range(client, util.make_formatting_params(options.formatting_options))
       local auto_id = vim.api.nvim_create_autocmd("LspDetach", {
@@ -124,14 +124,14 @@ function M.format(options, callback)
             )
           )
         else
-          local this_changed =
+          local this_did_edit =
             apply_text_edits(result, ctx.bufnr, client.offset_encoding, options.dry_run)
           changedtick = vim.b[bufnr].changedtick
 
-          if options.dry_run and this_changed then
+          if options.dry_run and this_did_edit then
             callback(nil, true)
           else
-            changed = changed or this_changed
+            did_edit = did_edit or this_did_edit
             do_format(next(clients, idx))
           end
         end
@@ -140,16 +140,16 @@ function M.format(options, callback)
     do_format(next(clients))
   else
     local timeout_ms = options.timeout_ms or 1000
-    local changed = false
+    local did_edit = false
     for _, client in pairs(clients) do
       local params = set_range(client, util.make_formatting_params(options.formatting_options))
       local result, err = client.request_sync(method, params, timeout_ms, bufnr)
       if result and result.result then
-        local this_changed =
+        local this_did_edit =
           apply_text_edits(result.result, bufnr, client.offset_encoding, options.dry_run)
-        changed = changed or this_changed
+        did_edit = did_edit or this_did_edit
 
-        if options.dry_run and changed then
+        if options.dry_run and did_edit then
           callback(nil, true)
           return true, true
         end

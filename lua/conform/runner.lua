@@ -458,7 +458,7 @@ end
 ---@param formatters conform.FormatterInfo[]
 ---@param range? conform.Range
 ---@param opts conform.RunOpts
----@param callback fun(err?: conform.Error, changed?: boolean)
+---@param callback fun(err?: conform.Error, did_edit?: boolean)
 ---@param dry_run boolean
 M.format_async = function(bufnr, formatters, range, opts, callback, dry_run)
   if bufnr == 0 then
@@ -482,7 +482,7 @@ M.format_async = function(bufnr, formatters, range, opts, callback, dry_run)
     original_lines,
     opts,
     function(err, output_lines, all_support_range_formatting)
-      local changed = nil
+      local did_edit = nil
       -- discard formatting if buffer has changed
       if not vim.api.nvim_buf_is_valid(bufnr) or changedtick ~= util.buf_get_changedtick(bufnr) then
         err = {
@@ -493,7 +493,7 @@ M.format_async = function(bufnr, formatters, range, opts, callback, dry_run)
           ),
         }
       else
-        changed = M.apply_format(
+        did_edit = M.apply_format(
           bufnr,
           original_lines,
           output_lines,
@@ -502,7 +502,7 @@ M.format_async = function(bufnr, formatters, range, opts, callback, dry_run)
           dry_run
         )
       end
-      callback(err, changed)
+      callback(err, did_edit)
     end
   )
 end
@@ -550,7 +550,7 @@ end
 ---@param opts conform.RunOpts
 ---@param dry_run boolean
 ---@return conform.Error? error
----@return boolean? changed
+---@return boolean? did_edit
 M.format_sync = function(bufnr, formatters, timeout_ms, range, opts, dry_run)
   if bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
@@ -568,7 +568,7 @@ M.format_sync = function(bufnr, formatters, timeout_ms, range, opts, dry_run)
   local err, final_result, all_support_range_formatting =
     M.format_lines_sync(bufnr, formatters, timeout_ms, range, original_lines, opts)
 
-  local changed = M.apply_format(
+  local did_edit = M.apply_format(
     bufnr,
     original_lines,
     final_result,
@@ -576,7 +576,7 @@ M.format_sync = function(bufnr, formatters, timeout_ms, range, opts, dry_run)
     not all_support_range_formatting,
     dry_run
   )
-  return err, changed
+  return err, did_edit
 end
 
 ---@param bufnr integer
