@@ -7,6 +7,7 @@ local M = {}
 
 ---@class (exact) conform.RunOpts
 ---@field exclusive boolean If true, ensure only a single formatter is running per buffer
+---@field dry_run boolean If true, do not apply changes and stop after the first formatter attempts to do so
 
 ---@param formatter_name string
 ---@param ctx conform.Context
@@ -152,11 +153,10 @@ end
 ---@param new_lines string[]
 ---@param range? conform.Range
 ---@param only_apply_range boolean
----@param dry_run boolean
----@return boolean?
+---@return boolean any_changes
 M.apply_format = function(bufnr, original_lines, new_lines, range, only_apply_range, dry_run)
   if not vim.api.nvim_buf_is_valid(bufnr) then
-    return
+    return false
   end
   local bufname = vim.api.nvim_buf_get_name(bufnr)
   log.trace("Applying formatting to %s", bufname)
@@ -548,10 +548,9 @@ end
 ---@param timeout_ms integer
 ---@param range? conform.Range
 ---@param opts conform.RunOpts
----@param dry_run boolean
 ---@return conform.Error? error
 ---@return boolean? did_edit
-M.format_sync = function(bufnr, formatters, timeout_ms, range, opts, dry_run)
+M.format_sync = function(bufnr, formatters, timeout_ms, range, opts)
   if bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
   end
@@ -574,7 +573,7 @@ M.format_sync = function(bufnr, formatters, timeout_ms, range, opts, dry_run)
     final_result,
     range,
     not all_support_range_formatting,
-    dry_run
+    opts.dry_run
   )
   return err, did_edit
 end

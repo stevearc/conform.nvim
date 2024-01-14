@@ -31,7 +31,7 @@ local function apply_text_edits(text_edits, bufnr, offset_encoding, dry_run)
     return #text_edits > 0
   else
     vim.lsp.util.apply_text_edits(text_edits, bufnr, offset_encoding)
-    return true
+    return #text_edits > 0
   end
 end
 
@@ -151,7 +151,7 @@ function M.format(options, callback)
 
         if options.dry_run and did_edit then
           callback(nil, true)
-          return true, true
+          return true
         end
       elseif err then
         if not options.quiet then
@@ -160,7 +160,7 @@ function M.format(options, callback)
         return callback(string.format("[LSP][%s] %s", client.name, err))
       end
     end
-    callback()
+    callback(nil, did_edit)
   end
 end
 

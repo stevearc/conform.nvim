@@ -354,7 +354,7 @@ end
 ---    timeout_ms nil|integer Time in milliseconds to block for formatting. Defaults to 1000. No effect if async = true.
 ---    bufnr nil|integer Format this buffer (default 0)
 ---    async nil|boolean If true the method won't block. Defaults to false. If the buffer is modified before the formatter completes, the formatting will be discarded.
----    dry_run nil|boolean If true don't edit the buffer, only return whether the buffer would be edited.
+---    dry_run nil|boolean If true don't apply formatting changes to the buffer
 ---    formatters nil|string[] List of formatters to run. Defaults to all formatters for the buffer filetype.
 ---    lsp_fallback nil|boolean|"always" Attempt LSP formatting if no formatters are available. Defaults to false. If "always", will attempt LSP formatting even if formatters are available.
 ---    quiet nil|boolean Don't show any notifications for warnings or failures. Defaults to false.
@@ -364,7 +364,6 @@ end
 ---    filter nil|fun(client: table): boolean Passed to |vim.lsp.buf.format| when lsp_fallback = true
 ---@param callback? fun(err: nil|string, did_edit: nil|boolean) Called once formatting has completed
 ---@return boolean True if any formatters were attempted
----@return boolean? True if changes were made (unless async = true)
 M.format = function(opts, callback)
   ---@type {timeout_ms: integer, bufnr: integer, async: boolean, dry_run: boolean, lsp_fallback: boolean|"always", quiet: boolean, formatters?: string[], range?: conform.Range}
   opts = vim.tbl_extend("keep", opts or {}, {
@@ -443,20 +442,14 @@ M.format = function(opts, callback)
       end
     end
 
-    local run_opts = { exclusive = true }
+    local run_opts = { exclusive = true, dry_run = opts.dry_run }
     if opts.async then
       runner.format_async(opts.bufnr, formatters, opts.range, run_opts, handle_result, opts.dry_run)
     else
-      local err, did_edit = runner.format_sync(
-        opts.bufnr,
-        formatters,
-        opts.timeout_ms,
-        opts.range,
-        run_opts,
-        opts.dry_run
-      )
+      local err, did_edit =
+        runner.format_sync(opts.bufnr, formatters, opts.timeout_ms, opts.range, run_opts)
       handle_result(err, did_edit)
-      return true, did_edit
+      return true
     end
     return true
   elseif opts.lsp_fallback and not vim.tbl_isempty(lsp_format.get_format_clients(opts)) then
@@ -466,7 +459,7 @@ M.format = function(opts, callback)
     local level = vim.tbl_isempty(formatter_names) and "debug" or "warn"
     log[level]("No formatters found for %s", vim.api.nvim_buf_get_name(opts.bufnr))
     callback("No formatters found for buffer")
-    return false, false
+    return false
   end
 end
 
