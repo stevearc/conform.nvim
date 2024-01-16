@@ -354,6 +354,7 @@ end
 ---    timeout_ms nil|integer Time in milliseconds to block for formatting. Defaults to 1000. No effect if async = true.
 ---    bufnr nil|integer Format this buffer (default 0)
 ---    async nil|boolean If true the method won't block. Defaults to false. If the buffer is modified before the formatter completes, the formatting will be discarded.
+---    dry_run nil|boolean If true don't apply formatting changes to the buffer
 ---    formatters nil|string[] List of formatters to run. Defaults to all formatters for the buffer filetype.
 ---    lsp_fallback nil|boolean|"always" Attempt LSP formatting if no formatters are available. Defaults to false. If "always", will attempt LSP formatting even if formatters are available.
 ---    quiet nil|boolean Don't show any notifications for warnings or failures. Defaults to false.
@@ -361,14 +362,15 @@ end
 ---    id nil|integer Passed to |vim.lsp.buf.format| when lsp_fallback = true
 ---    name nil|string Passed to |vim.lsp.buf.format| when lsp_fallback = true
 ---    filter nil|fun(client: table): boolean Passed to |vim.lsp.buf.format| when lsp_fallback = true
----@param callback? fun(err: nil|string) Called once formatting has completed
+---@param callback? fun(err: nil|string, did_edit: nil|boolean) Called once formatting has completed
 ---@return boolean True if any formatters were attempted
 M.format = function(opts, callback)
-  ---@type {timeout_ms: integer, bufnr: integer, async: boolean, lsp_fallback: boolean|"always", quiet: boolean, formatters?: string[], range?: conform.Range}
+  ---@type {timeout_ms: integer, bufnr: integer, async: boolean, dry_run: boolean, lsp_fallback: boolean|"always", quiet: boolean, formatters?: string[], range?: conform.Range}
   opts = vim.tbl_extend("keep", opts or {}, {
     timeout_ms = 1000,
     bufnr = 0,
     async = false,
+    dry_run = false,
     lsp_fallback = false,
     quiet = false,
   })
@@ -379,7 +381,7 @@ M.format = function(opts, callback)
   if not opts.range and mode == "v" or mode == "V" then
     opts.range = range_from_selection(opts.bufnr, mode)
   end
-  callback = callback or function(_err) end
+  callback = callback or function(_err, _did_edit) end
   local errors = require("conform.errors")
   local log = require("conform.log")
   local lsp_format = require("conform.lsp_format")
@@ -403,7 +405,8 @@ M.format = function(opts, callback)
 
   if any_formatters then
     ---@param err? conform.Error
-    local function handle_err(err)
+    ---@param did_edit? boolean
+    local function handle_result(err, did_edit)
       if err then
         local level = errors.level_for_code(err.code)
         log.log(level, err.message)
@@ -426,22 +429,25 @@ M.format = function(opts, callback)
         return callback(err_message)
       end
 
-      if
+      if opts.dry_run and did_edit then
+        callback(nil, true)
+      elseif
         opts.lsp_fallback == "always" and not vim.tbl_isempty(lsp_format.get_format_clients(opts))
       then
         log.debug("Running LSP formatter on %s", vim.api.nvim_buf_get_name(opts.bufnr))
         lsp_format.format(opts, callback)
       else
-        callback()
+        callback(nil, did_edit)
       end
     end
 
-    local run_opts = { exclusive = true }
+    local run_opts = { exclusive = true, dry_run = opts.dry_run }
     if opts.async then
-      runner.format_async(opts.bufnr, formatters, opts.range, run_opts, handle_err)
+      runner.format_async(opts.bufnr, formatters, opts.range, run_opts, handle_result)
     else
-      local err = runner.format_sync(opts.bufnr, formatters, opts.timeout_ms, opts.range, run_opts)
-      handle_err(err)
+      local err, did_edit =
+        runner.format_sync(opts.bufnr, formatters, opts.timeout_ms, opts.range, run_opts)
+      handle_result(err, did_edit)
     end
     return true
   elseif opts.lsp_fallback and not vim.tbl_isempty(lsp_format.get_format_clients(opts)) then
@@ -496,7 +502,7 @@ M.format_lines = function(formatter_names, lines, opts, callback)
     callback(err, new_lines)
   end
 
-  local run_opts = { exclusive = false }
+  local run_opts = { exclusive = false, dry_run = false }
   if opts.async then
     runner.format_lines_async(opts.bufnr, formatters, nil, lines, run_opts, handle_err)
   else

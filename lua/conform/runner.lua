@@ -7,6 +7,7 @@ local M = {}
 
 ---@class (exact) conform.RunOpts
 ---@field exclusive boolean If true, ensure only a single formatter is running per buffer
+---@field dry_run boolean If true, do not apply changes and stop after the first formatter attempts to do so
 
 ---@param formatter_name string
 ---@param ctx conform.Context
@@ -152,9 +153,10 @@ end
 ---@param new_lines string[]
 ---@param range? conform.Range
 ---@param only_apply_range boolean
-M.apply_format = function(bufnr, original_lines, new_lines, range, only_apply_range)
+---@return boolean any_changes
+M.apply_format = function(bufnr, original_lines, new_lines, range, only_apply_range, dry_run)
   if not vim.api.nvim_buf_is_valid(bufnr) then
-    return
+    return false
   end
   local bufname = vim.api.nvim_buf_get_name(bufnr)
   log.trace("Applying formatting to %s", bufname)
@@ -173,7 +175,7 @@ M.apply_format = function(bufnr, original_lines, new_lines, range, only_apply_ra
   -- This is to hack around oddly behaving formatters (e.g black outputs nothing for excluded files).
   if new_text:match("^%s*$") and not original_text:match("^%s*$") then
     log.warn("Aborting because a formatter returned empty output for buffer %s", bufname)
-    return
+    return false
   end
 
   log.trace("Comparing lines %s and %s", original_lines, new_lines)
@@ -228,9 +230,13 @@ M.apply_format = function(bufnr, original_lines, new_lines, range, only_apply_ra
     end
   end
 
-  log.trace("Applying text edits: %s", text_edits)
-  vim.lsp.util.apply_text_edits(text_edits, bufnr, "utf-8")
-  log.trace("Done formatting %s", bufname)
+  if not dry_run then
+    log.trace("Applying text edits: %s", text_edits)
+    vim.lsp.util.apply_text_edits(text_edits, bufnr, "utf-8")
+    log.trace("Done formatting %s", bufname)
+  end
+
+  return not vim.tbl_isempty(text_edits)
 end
 
 ---Map of formatter name to if the last run of that formatter produced an error
@@ -452,7 +458,7 @@ end
 ---@param formatters conform.FormatterInfo[]
 ---@param range? conform.Range
 ---@param opts conform.RunOpts
----@param callback fun(err?: conform.Error)
+---@param callback fun(err?: conform.Error, did_edit?: boolean)
 M.format_async = function(bufnr, formatters, range, opts, callback)
   if bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
@@ -475,6 +481,7 @@ M.format_async = function(bufnr, formatters, range, opts, callback)
     original_lines,
     opts,
     function(err, output_lines, all_support_range_formatting)
+      local did_edit = nil
       -- discard formatting if buffer has changed
       if not vim.api.nvim_buf_is_valid(bufnr) or changedtick ~= util.buf_get_changedtick(bufnr) then
         err = {
@@ -485,9 +492,16 @@ M.format_async = function(bufnr, formatters, range, opts, callback)
           ),
         }
       else
-        M.apply_format(bufnr, original_lines, output_lines, range, not all_support_range_formatting)
+        did_edit = M.apply_format(
+          bufnr,
+          original_lines,
+          output_lines,
+          range,
+          not all_support_range_formatting,
+          opts.dry_run
+        )
       end
-      callback(err)
+      callback(err, did_edit)
     end
   )
 end
@@ -534,6 +548,7 @@ end
 ---@param range? conform.Range
 ---@param opts conform.RunOpts
 ---@return conform.Error? error
+---@return boolean did_edit
 M.format_sync = function(bufnr, formatters, timeout_ms, range, opts)
   if bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
@@ -551,8 +566,15 @@ M.format_sync = function(bufnr, formatters, timeout_ms, range, opts)
   local err, final_result, all_support_range_formatting =
     M.format_lines_sync(bufnr, formatters, timeout_ms, range, original_lines, opts)
 
-  M.apply_format(bufnr, original_lines, final_result, range, not all_support_range_formatting)
-  return err
+  local did_edit = M.apply_format(
+    bufnr,
+    original_lines,
+    final_result,
+    range,
+    not all_support_range_formatting,
+    opts.dry_run
+  )
+  return err, did_edit
 end
 
 ---@param bufnr integer

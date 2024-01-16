@@ -343,6 +343,11 @@ print("a")
       assert.are.same(lines, vim.api.nvim_buf_get_lines(0, 0, -1, false))
     end)
 
+    it("does not change output if dry_run is true", function()
+      run_formatter("hello", "foo", { dry_run = true })
+      assert.are.same({ "hello" }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
+    end)
+
     describe("range formatting", function()
       it("applies edits that overlap the range start", function()
         run_formatter(
