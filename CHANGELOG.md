@@ -1,5 +1,27 @@
 # Changelog
 
+## [5.2.0](https://github.com/stevearc/conform.nvim/compare/v5.1.0...v5.2.0) (2024-01-16)
+
+
+### Features
+
+* add cue_fmt formatter ([#265](https://github.com/stevearc/conform.nvim/issues/265)) ([03de11a](https://github.com/stevearc/conform.nvim/commit/03de11a0dcf686fda58d64a895483e284dd0c5b6))
+* Add dry_run option and report if buffer was/would be changed by formatters ([#273](https://github.com/stevearc/conform.nvim/issues/273)) ([e0276bb](https://github.com/stevearc/conform.nvim/commit/e0276bb32e9b33ece11fef2a5cfc8fb2108df0df))
+* add opa_fmt formatter ([#267](https://github.com/stevearc/conform.nvim/issues/267)) ([a4e84d5](https://github.com/stevearc/conform.nvim/commit/a4e84d56d5959dae685c5e22db202cd86b5b322b))
+* add xmllint formatter ([#259](https://github.com/stevearc/conform.nvim/issues/259)) ([c50ba4b](https://github.com/stevearc/conform.nvim/commit/c50ba4baad90f02840cc31ee745b09078b7a1777))
+* **formatexpr:** don't require LSP range formatting if operating on whole file ([#272](https://github.com/stevearc/conform.nvim/issues/272)) ([47ceff6](https://github.com/stevearc/conform.nvim/commit/47ceff644e9d00872f410be374cc973eefa20ba9))
+
+
+### Bug Fixes
+
+* **black:** formatting excluded files results in blank buffer ([#254](https://github.com/stevearc/conform.nvim/issues/254)) ([c4b2efb](https://github.com/stevearc/conform.nvim/commit/c4b2efb8aee4af0ef179a9b49ba401de3c4ef5d2))
+* copy input parameters for will_fallback_lsp ([ad347d7](https://github.com/stevearc/conform.nvim/commit/ad347d70e66737a8b9d62c19df1c0e2c5b2cd008))
+* injected formatter works on nightly ([#270](https://github.com/stevearc/conform.nvim/issues/270)) ([229e9ab](https://github.com/stevearc/conform.nvim/commit/229e9ab5d6e90bc5e6d24141dce3cc28ba95293a))
+* LSP deprecated method warning on nvim nightly ([75e7c5c](https://github.com/stevearc/conform.nvim/commit/75e7c5c7eb5fbd53f8b12dc420b31ec70770b231))
+* pass explicit bufnr to avoid race conditions ([#260](https://github.com/stevearc/conform.nvim/issues/260)) ([a8e3935](https://github.com/stevearc/conform.nvim/commit/a8e39359814b7b5df5fac7423b4dc93826d64464))
+* set a cwd for djlint ([#264](https://github.com/stevearc/conform.nvim/issues/264)) ([0802406](https://github.com/stevearc/conform.nvim/commit/08024063232a7bd38ecdfaf89f06162a5ba2df91))
+* set a cwd for dprint ([#263](https://github.com/stevearc/conform.nvim/issues/263)) ([e6c1353](https://github.com/stevearc/conform.nvim/commit/e6c135338257f69c018e8351a6e5f63683f86318))
+
 ## [5.1.0](https://github.com/stevearc/conform.nvim/compare/v5.0.0...v5.1.0) (2023-12-26)
 
 
