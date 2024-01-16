@@ -459,8 +459,7 @@ end
 ---@param range? conform.Range
 ---@param opts conform.RunOpts
 ---@param callback fun(err?: conform.Error, did_edit?: boolean)
----@param dry_run boolean
-M.format_async = function(bufnr, formatters, range, opts, callback, dry_run)
+M.format_async = function(bufnr, formatters, range, opts, callback)
   if bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
   end
@@ -499,7 +498,7 @@ M.format_async = function(bufnr, formatters, range, opts, callback, dry_run)
           output_lines,
           range,
           not all_support_range_formatting,
-          dry_run
+          opts.dry_run
         )
       end
       callback(err, did_edit)
@@ -549,7 +548,7 @@ end
 ---@param range? conform.Range
 ---@param opts conform.RunOpts
 ---@return conform.Error? error
----@return boolean? did_edit
+---@return boolean did_edit
 M.format_sync = function(bufnr, formatters, timeout_ms, range, opts)
   if bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()

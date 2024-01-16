@@ -79,8 +79,7 @@ function M.format(options, callback)
   local clients = M.get_format_clients(options)
 
   if #clients == 0 then
-    callback("[LSP] Format request failed, no matching language servers.")
-    return false
+    return callback("[LSP] Format request failed, no matching language servers.")
   end
 
   local function set_range(client, params)

@@ -431,7 +431,6 @@ M.format = function(opts, callback)
 
       if opts.dry_run and did_edit then
         callback(nil, true)
-        return
       elseif
         opts.lsp_fallback == "always" and not vim.tbl_isempty(lsp_format.get_format_clients(opts))
       then
@@ -444,17 +443,17 @@ M.format = function(opts, callback)
 
     local run_opts = { exclusive = true, dry_run = opts.dry_run }
     if opts.async then
-      runner.format_async(opts.bufnr, formatters, opts.range, run_opts, handle_result, opts.dry_run)
+      runner.format_async(opts.bufnr, formatters, opts.range, run_opts, handle_result)
     else
       local err, did_edit =
         runner.format_sync(opts.bufnr, formatters, opts.timeout_ms, opts.range, run_opts)
       handle_result(err, did_edit)
-      return true
     end
     return true
   elseif opts.lsp_fallback and not vim.tbl_isempty(lsp_format.get_format_clients(opts)) then
     log.debug("Running LSP formatter on %s", vim.api.nvim_buf_get_name(opts.bufnr))
-    return lsp_format.format(opts, callback)
+    lsp_format.format(opts, callback)
+    return true
   else
     local level = vim.tbl_isempty(formatter_names) and "debug" or "warn"
     log[level]("No formatters found for %s", vim.api.nvim_buf_get_name(opts.bufnr))
@@ -503,7 +502,7 @@ M.format_lines = function(formatter_names, lines, opts, callback)
     callback(err, new_lines)
   end
 
-  local run_opts = { exclusive = false }
+  local run_opts = { exclusive = false, dry_run = false }
   if opts.async then
     runner.format_lines_async(opts.bufnr, formatters, nil, lines, run_opts, handle_err)
   else
