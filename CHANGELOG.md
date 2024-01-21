@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.2.1](https://github.com/stevearc/conform.nvim/compare/v5.2.0...v5.2.1) (2024-01-21)
+
+
+### Bug Fixes
+
+* handle windows line endings ([#274](https://github.com/stevearc/conform.nvim/issues/274)) ([9a785eb](https://github.com/stevearc/conform.nvim/commit/9a785eb8f0199ac47ce8bb9e9b6103de5ad8e3a7))
+
 ## [5.2.0](https://github.com/stevearc/conform.nvim/compare/v5.1.0...v5.2.0) (2024-01-16)
 
 
