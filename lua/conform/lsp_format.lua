@@ -13,7 +13,7 @@ local function apply_text_edits(text_edits, bufnr, offset_encoding, dry_run)
     and text_edits[1].range["end"].character == 0
   then
     local original_lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, true)
-    local new_lines = vim.split(text_edits[1].newText, "\n", { plain = true })
+    local new_lines = vim.split(text_edits[1].newText, "\r?\n", {})
     -- If it had a trailing newline, remove it to make the lines match the expected vim format
     if #new_lines > 1 and new_lines[#new_lines] == "" then
       table.remove(new_lines)

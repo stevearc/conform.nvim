@@ -341,7 +341,7 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, opts, c
           local stat = assert(uv.fs_fstat(fd))
           local content = assert(uv.fs_read(fd, stat.size))
           uv.fs_close(fd)
-          output = vim.split(content, "\n", { plain = true })
+          output = vim.split(content, "\r?\n", {})
         else
           output = stdout
         end

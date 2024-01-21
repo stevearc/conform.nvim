@@ -95,7 +95,7 @@ M.show_window = function()
       f:seek("end", context)
       local text = f:read("*a")
       f:close()
-      local log_lines = vim.split(text, "\n", { plain = true, trimempty = true })
+      local log_lines = vim.split(text, "\r?\n", { trimempty = true })
       for i = 2, #log_lines do
         table.insert(lines, string.rep(" ", 10) .. log_lines[i])
       end
