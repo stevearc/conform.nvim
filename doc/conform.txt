@@ -320,6 +320,7 @@ FORMATTERS                                                    *conform-formatter
 `templ` - Formats templ template files.
 `terraform_fmt` - The terraform-fmt command rewrites `terraform` configuration
                 files to a canonical format and style.
+`terragrunt_hclfmt` - Format hcl files into a canonical format.
 `tlint` - Tighten linter for Laravel conventions with support for auto-
         formatting.
 `trim_newlines` - Trim new lines with awk.
