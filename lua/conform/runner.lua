@@ -1,6 +1,7 @@
 local errors = require("conform.errors")
 local fs = require("conform.fs")
 local log = require("conform.log")
+local lsp_format = require("conform.lsp_format")
 local util = require("conform.util")
 local uv = vim.uv or vim.loop
 local M = {}
@@ -56,98 +57,6 @@ local function truthy(value)
   return value ~= nil and value ~= false
 end
 
----@param range conform.Range
----@param start_a integer
----@param end_a integer
----@return boolean
-local function indices_in_range(range, start_a, end_a)
-  return start_a <= range["end"][1] and range["start"][1] <= end_a
-end
-
----@param a? string
----@param b? string
----@return integer
-local function common_prefix_len(a, b)
-  if not a or not b then
-    return 0
-  end
-  local min_len = math.min(#a, #b)
-  for i = 1, min_len do
-    if string.byte(a, i) ~= string.byte(b, i) then
-      return i - 1
-    end
-  end
-  return min_len
-end
-
----@param a string
----@param b string
----@return integer
-local function common_suffix_len(a, b)
-  local a_len = #a
-  local b_len = #b
-  local min_len = math.min(a_len, b_len)
-  for i = 0, min_len - 1 do
-    if string.byte(a, a_len - i) ~= string.byte(b, b_len - i) then
-      return i
-    end
-  end
-  return min_len
-end
-
-local function create_text_edit(
-  original_lines,
-  replacement,
-  is_insert,
-  is_replace,
-  orig_line_start,
-  orig_line_end
-)
-  local start_line, end_line = orig_line_start - 1, orig_line_end - 1
-  local start_char, end_char = 0, 0
-  if is_replace then
-    -- If we're replacing text, see if we can avoid replacing the entire line
-    start_char = common_prefix_len(original_lines[orig_line_start], replacement[1])
-    if start_char > 0 then
-      replacement[1] = replacement[1]:sub(start_char + 1)
-    end
-
-    if original_lines[orig_line_end] then
-      local last_line = replacement[#replacement]
-      local suffix = common_suffix_len(original_lines[orig_line_end], last_line)
-      -- If we're only replacing one line, make sure the prefix/suffix calculations don't overlap
-      if orig_line_end == orig_line_start then
-        suffix = math.min(suffix, original_lines[orig_line_end]:len() - start_char)
-      end
-      end_char = original_lines[orig_line_end]:len() - suffix
-      if suffix > 0 then
-        replacement[#replacement] = last_line:sub(1, last_line:len() - suffix)
-      end
-    end
-  end
-  -- If we're inserting text, make sure the text includes a newline at the end.
-  -- The one exception is if we're inserting at the end of the file, in which case the newline is
-  -- implicit
-  if is_insert and start_line < #original_lines then
-    table.insert(replacement, "")
-  end
-  local new_text = table.concat(replacement, "\n")
-
-  return {
-    newText = new_text,
-    range = {
-      start = {
-        line = start_line,
-        character = start_char,
-      },
-      ["end"] = {
-        line = end_line,
-        character = end_char,
-      },
-    },
-  }
-end
-
 ---@param bufnr integer
 ---@param original_lines string[]
 ---@param new_lines string[]
@@ -155,85 +64,16 @@ end
 ---@param only_apply_range boolean
 ---@return boolean any_changes
 M.apply_format = function(bufnr, original_lines, new_lines, range, only_apply_range, dry_run)
-  if not vim.api.nvim_buf_is_valid(bufnr) then
+  local text_edits =
+    lsp_format.as_text_edits(bufnr, original_lines, new_lines, range, only_apply_range)
+  if not text_edits then
     return false
-  end
-  local bufname = vim.api.nvim_buf_get_name(bufnr)
-  log.trace("Applying formatting to %s", bufname)
-  -- The vim.diff algorithm doesn't handle changes in newline-at-end-of-file well. The unified
-  -- result_type has some text to indicate that the eol changed, but the indices result_type has no
-  -- such indication. To work around this, we just add a trailing newline to the end of both the old
-  -- and the new text.
-  table.insert(original_lines, "")
-  table.insert(new_lines, "")
-  local original_text = table.concat(original_lines, "\n")
-  local new_text = table.concat(new_lines, "\n")
-  table.remove(original_lines)
-  table.remove(new_lines)
-
-  -- Abort if output is empty but input is not (i.e. has some non-whitespace characters).
-  -- This is to hack around oddly behaving formatters (e.g black outputs nothing for excluded files).
-  if new_text:match("^%s*$") and not original_text:match("^%s*$") then
-    log.warn("Aborting because a formatter returned empty output for buffer %s", bufname)
-    return false
-  end
-
-  log.trace("Comparing lines %s and %s", original_lines, new_lines)
-  local indices = vim.diff(original_text, new_text, {
-    result_type = "indices",
-    algorithm = "histogram",
-  })
-  assert(indices)
-  log.trace("Diff indices %s", indices)
-  local text_edits = {}
-  for _, idx in ipairs(indices) do
-    local orig_line_start, orig_line_count, new_line_start, new_line_count = unpack(idx)
-    local is_insert = orig_line_count == 0
-    local is_delete = new_line_count == 0
-    local is_replace = not is_insert and not is_delete
-    local orig_line_end = orig_line_start + orig_line_count
-    local new_line_end = new_line_start + new_line_count
-
-    if is_insert then
-      -- When the diff is an insert, it actually means to insert after the mentioned line
-      orig_line_start = orig_line_start + 1
-      orig_line_end = orig_line_end + 1
-    end
-
-    local replacement = util.tbl_slice(new_lines, new_line_start, new_line_end - 1)
-
-    -- For replacement edits, convert the end line to be inclusive
-    if is_replace then
-      orig_line_end = orig_line_end - 1
-    end
-    local should_apply_diff = not only_apply_range
-      or not range
-      or indices_in_range(range, orig_line_start, orig_line_end)
-    if should_apply_diff then
-      local text_edit = create_text_edit(
-        original_lines,
-        replacement,
-        is_insert,
-        is_replace,
-        orig_line_start,
-        orig_line_end
-      )
-      table.insert(text_edits, text_edit)
-
-      -- If we're using the aftermarket range formatting, diffs often have paired delete/insert
-      -- diffs. We should make sure that if one of them overlaps our selected range, extend the
-      -- range so that we pick up the other diff as well.
-      if range and only_apply_range then
-        range = vim.deepcopy(range)
-        range["end"][1] = math.max(range["end"][1], orig_line_end + 1)
-      end
-    end
   end
 
   if not dry_run then
     log.trace("Applying text edits: %s", text_edits)
     vim.lsp.util.apply_text_edits(text_edits, bufnr, "utf-8")
-    log.trace("Done formatting %s", bufname)
+    log.trace("Done formatting %s", vim.api.nvim_buf_get_name(bufnr))
   end
 
   return not vim.tbl_isempty(text_edits)
