@@ -188,6 +188,7 @@ You can view this list in vim with `:help conform-formatters`
 - [beautysh](https://github.com/lovesegfault/beautysh) - A Bash beautifier for the masses.
 - [bibtex-tidy](https://github.com/FlamingTempura/bibtex-tidy) - Cleaner and Formatter for BibTeX files.
 - [biome](https://github.com/biomejs/biome) - A toolchain for web projects, aimed to provide functionalities to maintain them.
+- [biome-check](https://github.com/biomejs/biome) - A toolchain for web projects, aimed to provide functionalities to maintain them.
 - [black](https://github.com/psf/black) - The uncompromising Python code formatter.
 - [blade-formatter](https://github.com/shufo/blade-formatter) - An opinionated blade template formatter for Laravel that respects readability.
 - [blue](https://github.com/grantjenks/blue) - The slightly less uncompromising Python code formatter.
