@@ -338,6 +338,7 @@ FORMATTERS                                                    *conform-formatter
 `yamlfmt` - yamlfmt is an extensible command line tool or library to format yaml
           files.
 `yapf` - Yet Another Python Formatter.
+`yq` - YAML/JSON processor
 `zigfmt` - Reformat Zig source into canonical form.
 `zprint` - Formatter for Clojure and EDN.
 
