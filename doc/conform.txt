@@ -223,6 +223,7 @@ FORMATTERS                                                    *conform-formatter
              rules based on the official [Elm Style Guide](https://elm-
              lang.org/docs/style-guide).
 `erb_format` - Format ERB files with speed and precision.
+eslint - Format Typescript and Javascript files.
 `eslint_d` - Like ESLint, but faster.
 `fish_indent` - Indent or otherwise prettify a piece of fish code.
 `fixjson` - JSON Fixer for Humans using (relaxed) JSON5.
