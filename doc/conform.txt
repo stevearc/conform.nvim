@@ -292,6 +292,7 @@ FORMATTERS                                                    *conform-formatter
 `pretty-php` - The opinionated PHP code formatter.
 `puppet-lint` - Check that your Puppet manifests conform to the style guide.
 `reorder-python-imports` - Rewrites source to reorder python imports
+`rescript-format` - The built-in ReScript formatter.
 `rubocop` - Ruby static code analyzer and formatter, based on the community Ruby
           style guide.
 `rubyfmt` - Ruby Autoformatter! (Written in Rust)
