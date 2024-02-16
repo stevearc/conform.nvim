@@ -6,6 +6,7 @@ local M = {}
 ---@field cwd? string
 ---@field available boolean
 ---@field available_msg? string
+---@field execute? fun(args: any)
 
 ---@class (exact) conform.JobFormatterConfig
 ---@field command string|fun(self: conform.JobFormatterConfig, ctx: conform.Context): string
@@ -24,13 +25,18 @@ local M = {}
 ---@field condition? fun(self: conform.LuaFormatterConfig, ctx: conform.Context): boolean
 ---@field options? table
 
+---@class (exact) conform.ExecuteFormatterConfig
+---@field execute fun(self: conform.ExecuteFormatterConfig,  opts: table, callback: fun(err: nil|string, new_lines: nil|string[]))
+---@field condition? fun(self: conform.ExecuteFormatterConfig, ctx: conform.Context): boolean
+---@field options? table
+
 ---@class (exact) conform.FileLuaFormatterConfig : conform.LuaFormatterConfig
 ---@field meta conform.FormatterMeta
 
 ---@class (exact) conform.FileFormatterConfig : conform.JobFormatterConfig
 ---@field meta conform.FormatterMeta
 
----@alias conform.FormatterConfig conform.JobFormatterConfig|conform.LuaFormatterConfig
+---@alias conform.FormatterConfig conform.JobFormatterConfig|conform.LuaFormatterConfig|conform.ExecuteFormatterConfig
 
 ---@class (exact) conform.FormatterConfigOverride : conform.JobFormatterConfig
 ---@field inherit? boolean
@@ -38,6 +44,7 @@ local M = {}
 ---@field prepend_args? string|string[]|fun(self: conform.FormatterConfig, ctx: conform.Context): string|string[]
 ---@field format? fun(self: conform.LuaFormatterConfig, ctx: conform.Context, lines: string[], callback: fun(err: nil|string, new_lines: nil|string[])) Mutually exclusive with command
 ---@field options? table
+---@field execute? fun(opts: table)
 
 ---@class (exact) conform.FormatterMeta
 ---@field url string
@@ -392,6 +399,14 @@ M.format = function(opts, callback)
   local formatters =
     M.resolve_formatters(formatter_names, opts.bufnr, not opts.quiet and explicit_formatters)
 
+  local executable_formatters = vim.tbl_filter(function(value)
+    return value["execute"] ~= nil
+  end, formatters)
+
+  formatters = vim.tbl_filter(function(value)
+    return value["execute"] == nil
+  end, formatters)
+
   local any_formatters = not vim.tbl_isempty(formatters)
   if not explicit_formatters and opts.lsp_fallback == true and M.will_fallback_lsp(opts) then
     -- use the LSP formatter when the configured formatters are from the fallback "_" filetype
@@ -448,6 +463,14 @@ M.format = function(opts, callback)
       local err, did_edit =
         runner.format_sync(opts.bufnr, formatters, opts.timeout_ms, opts.range, run_opts)
       handle_result(err, did_edit)
+    end
+    for _, formatter in ipairs(executable_formatters) do
+      ---@cast formatter conform.FormatterInfo
+      local config = M.get_formatter_config(formatter.name)
+
+      ---@cast config conform.ExecuteFormatterConfig
+      ---@cast formatter conform.ExecuteFormatterConfig
+      formatter.execute(config, opts, callback)
     end
     return true
   elseif opts.lsp_fallback and not vim.tbl_isempty(lsp_format.get_format_clients(opts)) then
@@ -579,9 +602,23 @@ M.get_formatter_config = function(formatter, bufnr)
   if type(override) == "function" then
     override = override(bufnr)
   end
-  if override and override.command and override.format then
+
+  local one_of = { "command", "format", "execute" }
+  ---@param config conform.FormatterConfigOverride
+  ---@return boolean
+  local valid = function(config)
+    local config_contains = {}
+    for _, value in ipairs(one_of) do
+      if config and config[value] ~= nil then
+        table.insert(config_contains, value)
+      end
+    end
+    return #config_contains == 1
+  end
+
+  if override and not valid(override) then
     local msg =
-      string.format("Formatter '%s' cannot define both 'command' and 'format' function", formatter)
+      string.format("Formatter '%s' must define only one of '%s'", formatter, vim.inspect(one_of))
     vim.notify_once(msg, vim.log.levels.ERROR)
     return nil
   end
@@ -597,7 +634,7 @@ M.get_formatter_config = function(formatter, bufnr)
         config = mod_config
       end
     elseif override then
-      if override.command or override.format then
+      if override.command or override.format or override.execute then
         config = override
       else
         local msg = string.format(
@@ -652,6 +689,21 @@ M.get_formatter_info = function(formatter, bufnr)
       command = formatter,
       available = available,
       available_msg = available_msg,
+    }
+  end
+
+  if config.execute then
+    ---@cast config conform.ExecuteFormatterConfig
+    if config.condition and not config:condition(ctx) then
+      available = false
+      available_msg = "Condition failed"
+    end
+    return {
+      name = formatter,
+      command = formatter,
+      available = available,
+      available_msg = available_msg,
+      execute = config.execute,
     }
   end
 

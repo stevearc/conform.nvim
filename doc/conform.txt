@@ -57,7 +57,17 @@ OPTIONS                                                          *conform-option
         my_formatter = {
           -- This can be a string or a function that returns a string.
           -- When defining a new formatter, this is the only field that is *required*
+          -- unless execute is defined.
           command = "my_cmd",
+          -- This is an alternative to defining a command.
+          -- Useful for creating a custom lsp formatter.
+          -- Must be a function that will be called when this formatter is 
+          -- used. When 'execute' is defined, this formatter will be the last to
+          -- be executed, regardless of the order it is defined.
+          ---@param config table every other entry for this table
+          ---@param opts table require('conform').format(...) options
+          ---@param callback fun(err: nil|string, did_edit: nil|boolean) callback function passed to require('conform').format(...)
+          execute = function(config, opts, callback) ... end,
           -- A list of strings, or a function that returns a list of strings
           -- Return a single string instead of a list to run the command in a shell
           args = { "--stdin-from-filename", "$FILENAME" },

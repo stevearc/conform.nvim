@@ -7,6 +7,7 @@
 - [Command to toggle format-on-save](#command-to-toggle-format-on-save)
 - [Automatically run slow formatters async](#automatically-run-slow-formatters-async)
 - [Lazy loading with lazy.nvim](#lazy-loading-with-lazynvim)
+- [Custom formatter with execute](#custom-formatter-with-execute)
 
 <!-- /TOC -->
 
@@ -175,6 +176,22 @@ return {
   init = function()
     -- If you want the formatexpr, here is the place to set it
     vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+  end,
+}
+```
+
+## Custom formatter with execute
+
+Define a formatter using 'execute' function for eslint lsp server
+
+```lua
+require("conform").formatters.eslint_lsp = {
+  name = 'eslint',
+  execute = function(config, opts, callback)
+    local options = { async = opts.async, name = config.name }
+
+    local lsp_format = require('conform.lsp_format')
+    lsp_format.format(options, callback)
   end,
 }
 ```
