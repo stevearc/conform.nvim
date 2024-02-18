@@ -62,7 +62,7 @@ OPTIONS                                                          *conform-option
           -- This is an alternative to defining a command.
           -- Useful for creating a custom lsp formatter.
           -- Must be a function that will be called when this formatter is 
-          -- used. When 'execute' is defined, this formatter will be the last to
+          -- used. When 'execute' is defined, this formatter will be the first to
           -- be executed, regardless of the order it is defined.
           ---@param config table every other entry for this table
           ---@param opts table require('conform').format(...) options

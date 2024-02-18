@@ -456,14 +456,6 @@ M.format = function(opts, callback)
       end
     end
 
-    local run_opts = { exclusive = true, dry_run = opts.dry_run }
-    if opts.async then
-      runner.format_async(opts.bufnr, formatters, opts.range, run_opts, handle_result)
-    else
-      local err, did_edit =
-        runner.format_sync(opts.bufnr, formatters, opts.timeout_ms, opts.range, run_opts)
-      handle_result(err, did_edit)
-    end
     for _, formatter in ipairs(executable_formatters) do
       ---@cast formatter conform.FormatterInfo
       local config = M.get_formatter_config(formatter.name)
@@ -471,6 +463,15 @@ M.format = function(opts, callback)
       ---@cast config conform.ExecuteFormatterConfig
       ---@cast formatter conform.ExecuteFormatterConfig
       formatter.execute(config, opts, callback)
+    end
+
+    local run_opts = { exclusive = true, dry_run = opts.dry_run }
+    if opts.async then
+      runner.format_async(opts.bufnr, formatters, opts.range, run_opts, handle_result)
+    else
+      local err, did_edit =
+        runner.format_sync(opts.bufnr, formatters, opts.timeout_ms, opts.range, run_opts)
+      handle_result(err, did_edit)
     end
     return true
   elseif opts.lsp_fallback and not vim.tbl_isempty(lsp_format.get_format_clients(opts)) then
