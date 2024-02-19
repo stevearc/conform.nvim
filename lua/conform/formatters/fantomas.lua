@@ -6,4 +6,5 @@ return {
   },
   command = "fantomas",
   args = { "$FILENAME" },
+  stdin = false,
 }
