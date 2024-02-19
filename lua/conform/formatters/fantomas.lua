@@ -5,4 +5,5 @@ return {
     description = "F# source code formatter.",
   },
   command = "fantomas",
+  args = { "$FILENAME" },
 }
