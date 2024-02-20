@@ -224,6 +224,7 @@ FORMATTERS                                                    *conform-formatter
              lang.org/docs/style-guide).
 `erb_format` - Format ERB files with speed and precision.
 `eslint_d` - Like ESLint, but faster.
+`fantomas` - F# source code formatter.
 `fish_indent` - Indent or otherwise prettify a piece of fish code.
 `fixjson` - JSON Fixer for Humans using (relaxed) JSON5.
 `fnlfmt` - A formatter for Fennel code.

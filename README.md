@@ -212,8 +212,8 @@ You can view this list in vim with `:help conform-formatters`
 - [elm_format](https://github.com/avh4/elm-format) - elm-format formats Elm source code according to a standard set of rules based on the official [Elm Style Guide](https://elm-lang.org/docs/style-guide).
 - [erb_format](https://github.com/nebulab/erb-formatter) - Format ERB files with speed and precision.
 - [eslint_d](https://github.com/mantoni/eslint_d.js/) - Like ESLint, but faster.
-- [fish_indent](https://fishshell.com/docs/current/cmds/fish_indent.html) - Indent or otherwise prettify a piece of fish code.
 - [fantomas](https://github.com/fsprojects/fantomas) - F# source code formatter.
+- [fish_indent](https://fishshell.com/docs/current/cmds/fish_indent.html) - Indent or otherwise prettify a piece of fish code.
 - [fixjson](https://github.com/rhysd/fixjson) - JSON Fixer for Humans using (relaxed) JSON5.
 - [fnlfmt](https://git.sr.ht/~technomancy/fnlfmt) - A formatter for Fennel code.
 - [fourmolu](https://hackage.haskell.org/package/fourmolu) - Fourmolu is a formatter for Haskell source code.
