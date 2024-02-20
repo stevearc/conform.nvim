@@ -289,6 +289,7 @@ You can view this list in vim with `:help conform-formatters`
 - [tlint](https://github.com/tighten/tlint) - Tighten linter for Laravel conventions with support for auto-formatting.
 - [trim_newlines](https://www.gnu.org/software/gawk/manual/gawk.html) - Trim new lines with awk.
 - [trim_whitespace](https://www.gnu.org/software/gawk/manual/gawk.html) - Trim whitespaces with awk.
+- [twig-cs-fixer](https://github.com/VincentLanglet/Twig-CS-Fixer) - Automatically fix Twig Coding Standards issues
 - [typos](https://github.com/crate-ci/typos) - Source code spell checker
 - [typstfmt](https://github.com/astrale-sharp/typstfmt) - Basic formatter for the Typst language with a future!
 - [uncrustify](https://github.com/uncrustify/uncrustify) - A source code beautifier for C, C++, C#, ObjectiveC, D, Java, Pawn and Vala.
