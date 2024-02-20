@@ -1,5 +1,25 @@
 # Changelog
 
+## [5.3.0](https://github.com/stevearc/conform.nvim/compare/v5.2.1...v5.3.0) (2024-02-20)
+
+
+### Features
+
+* add awk formatter ([#286](https://github.com/stevearc/conform.nvim/issues/286)) ([338c307](https://github.com/stevearc/conform.nvim/commit/338c3070ae7f7028185ae6123541c2ca71cfe7ff))
+* add biome-check formatter ([#287](https://github.com/stevearc/conform.nvim/issues/287)) ([5a71b60](https://github.com/stevearc/conform.nvim/commit/5a71b6064ec6ecf0fff91af67e95200aae9e9562))
+* add fantomas formatter ([#302](https://github.com/stevearc/conform.nvim/issues/302)) ([0d99714](https://github.com/stevearc/conform.nvim/commit/0d997149a0472ab811bcfdca5dc45d9db483f949))
+* Add reorder-python-imports formatter ([#284](https://github.com/stevearc/conform.nvim/issues/284)) ([9a07f60](https://github.com/stevearc/conform.nvim/commit/9a07f60f7499cdc76ed40af62bb9a50ac928d7d2))
+* add ReScript formatter ([#293](https://github.com/stevearc/conform.nvim/issues/293)) ([a34b66f](https://github.com/stevearc/conform.nvim/commit/a34b66f9a4a8f4fb8e270ebfa9c8836fdb8381c1))
+* add terragrunt_hclfmt formatter ([#278](https://github.com/stevearc/conform.nvim/issues/278)) ([375258f](https://github.com/stevearc/conform.nvim/commit/375258f1fe1500f175d7135aef1dc6a87dbd83b2))
+* add twig-cs-fixer ([#304](https://github.com/stevearc/conform.nvim/issues/304)) ([766812b](https://github.com/stevearc/conform.nvim/commit/766812b0e830c2e40613f99f89102d8840431c6a))
+* add yq formatter ([#288](https://github.com/stevearc/conform.nvim/issues/288)) ([15c4a02](https://github.com/stevearc/conform.nvim/commit/15c4a0273bb5468004bb46f632dc5326bc5634d7))
+
+
+### Bug Fixes
+
+* `swift_format` doesn't respect `.swift-format` file ([#283](https://github.com/stevearc/conform.nvim/issues/283)) ([4588008](https://github.com/stevearc/conform.nvim/commit/4588008a7c5b57fbff97fdfb529c059235cdc7ee))
+* set a cwd for biome ([#282](https://github.com/stevearc/conform.nvim/issues/282)) ([03feeb5](https://github.com/stevearc/conform.nvim/commit/03feeb5024a4b44754d63dec55b79b8133a8ea9f))
+
 ## [5.2.1](https://github.com/stevearc/conform.nvim/compare/v5.2.0...v5.2.1) (2024-01-21)
 
 
