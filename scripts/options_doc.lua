@@ -42,7 +42,7 @@ require("conform").setup({
   formatters = {
     my_formatter = {
       -- This can be a string or a function that returns a string.
-      -- When defining a new formatter, this is the only field that is *required*
+      -- When defining a new formatter, this is the only field that is required
       command = "my_cmd",
       -- A list of strings, or a function that returns a list of strings
       -- Return a single string instead of a list to run the command in a shell
