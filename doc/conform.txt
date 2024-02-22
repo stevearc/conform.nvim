@@ -311,6 +311,8 @@ FORMATTERS                                                    *conform-formatter
 `sql_formatter` - A whitespace formatter for different query languages.
 `sqlfluff` - A modular SQL linter and auto-formatter with support for multiple
            dialects and templated code.
+`sqlfmt` - sqlfmt formats your dbt SQL files so you don't have to. It is similar
+         in nature to Black, gofmt, and rustfmt (but for SQL)
 `squeeze_blanks` - Squeeze repeated blank lines into a single blank line via
                  `cat -s`.
 `standardjs` - JavaScript Standard style guide, linter, and formatter.
