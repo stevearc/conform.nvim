@@ -275,6 +275,7 @@ You can view this list in vim with `:help conform-formatters`
 - [shfmt](https://github.com/mvdan/sh) - A shell parser, formatter, and interpreter with `bash` support.
 - [sql_formatter](https://github.com/sql-formatter-org/sql-formatter) - A whitespace formatter for different query languages.
 - [sqlfluff](https://github.com/sqlfluff/sqlfluff) - A modular SQL linter and auto-formatter with support for multiple dialects and templated code.
+- [sqlfmt](https://docs.sqlfmt.com) - sqlfmt formats your dbt SQL files so you don't have to. It is similar in nature to Black, gofmt, and rustfmt (but for SQL).
 - [squeeze_blanks](https://www.gnu.org/software/coreutils/manual/html_node/cat-invocation.html#cat-invocation) - Squeeze repeated blank lines into a single blank line via `cat -s`.
 - [standardjs](https://standardjs.com) - JavaScript Standard style guide, linter, and formatter.
 - [standardrb](https://github.com/standardrb/standard) - Ruby's bikeshed-proof linter and formatter.
@@ -547,7 +548,6 @@ Retrieve the available formatters for a buffer
 `list_all_formatters(): conform.FormatterInfo[]` \
 List information about all filetype-configured formatters
 
-
 ### get_formatter_info(formatter, bufnr)
 
 `get_formatter_info(formatter, bufnr): conform.FormatterInfo` \
@@ -566,6 +566,7 @@ Check if the buffer will use LSP formatting when lsp_fallback = true
 | Param   | Type         | Desc                                 |
 | ------- | ------------ | ------------------------------------ |
 | options | `nil\|table` | Options passed to vim.lsp.buf.format |
+
 <!-- /API -->
 
 ## Acknowledgements
