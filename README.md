@@ -289,6 +289,7 @@ You can view this list in vim with `:help conform-formatters`
 - [terraform_fmt](https://www.terraform.io/docs/cli/commands/fmt.html) - The terraform-fmt command rewrites `terraform` configuration files to a canonical format and style.
 - [terragrunt_hclfmt](https://terragrunt.gruntwork.io/docs/reference/cli-options/#hclfmt) - Format hcl files into a canonical format.
 - [tlint](https://github.com/tighten/tlint) - Tighten linter for Laravel conventions with support for auto-formatting.
+- [tofu_fmt](https://opentofu.org/docs/cli/commands/fmt/) - The tofu-fmt command rewrites OpenTofu configuration files to a canonical format and style.
 - [trim_newlines](https://www.gnu.org/software/gawk/manual/gawk.html) - Trim new lines with awk.
 - [trim_whitespace](https://www.gnu.org/software/gawk/manual/gawk.html) - Trim whitespaces with awk.
 - [twig-cs-fixer](https://github.com/VincentLanglet/Twig-CS-Fixer) - Automatically fix Twig Coding Standards issues
