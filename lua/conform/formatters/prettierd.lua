@@ -22,7 +22,6 @@ return {
     ".prettierrc.cjs",
     ".prettierrc.toml",
     "prettier.config.js",
-    "prettier.config.cjs",
-    "package.json",
+    "prettier.config.cjs"
   }),
 }
