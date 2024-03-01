@@ -623,7 +623,6 @@ end
 ---@param bufnr? integer
 ---@return conform.FormatterInfo
 M.get_formatter_info = function(formatter, bufnr)
-  local util = require("conform.util")
   if not bufnr or bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
   end
