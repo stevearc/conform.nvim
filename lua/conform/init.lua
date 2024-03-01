@@ -657,21 +657,21 @@ M.get_formatter_info = function(formatter, bufnr)
 
   local command = config.command
   if type(command) == "function" then
-    command = util.compat_call_with_self(formatter, config, command, ctx)
+    ---@cast config conform.JobFormatterConfig
+    command = command(config, ctx)
   end
 
   if vim.fn.executable(command) == 0 then
     available = false
     available_msg = "Command not found"
-  elseif
-    config.condition and not util.compat_call_with_self(formatter, config, config.condition, ctx)
-  then
+  elseif config.condition and not config.condition(config, ctx) then
     available = false
     available_msg = "Condition failed"
   end
   local cwd = nil
   if config.cwd then
-    cwd = util.compat_call_with_self(formatter, config, config.cwd, ctx)
+    ---@cast config conform.JobFormatterConfig
+    cwd = config.cwd(config, ctx)
     if available and not cwd and config.require_cwd then
       available = false
       available_msg = "Root directory not found"

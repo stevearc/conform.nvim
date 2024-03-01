@@ -176,44 +176,6 @@ def gen_options_vimdoc() -> VimdocSection:
     return section
 
 
-def gen_self_compat_vimdoc() -> VimdocSection:
-    section = VimdocSection("self argument migration", "conform-self-args", ["\n"])
-    section.body.extend(
-        wrap(
-            "The function arguments for formatter config functions have changed. Previously, they took a single `ctx` argument."
-        )
-    )
-    section.body.append(
-        """>lua
-    {
-        command = "phpcbf",
-        args = function(ctx)
-            return { "-q", "--stdin-path=" .. ctx.filename, "-" }
-        end
-    }
-<"""
-    )
-    section.body.extend(
-        wrap("Now, they take `self` as the first argument, and `ctx` as the second.")
-    )
-    section.body.append(
-        """>lua
-    {
-        command = "phpcbf",
-        args = function(self, ctx)
-            return { "-q", "--stdin-path=" .. ctx.filename, "-" }
-        end
-    }
-<"""
-    )
-    section.body.extend(
-        wrap(
-            "The config values that can be defined as functions are: `command`, `args`, `range_args`, `cwd`, `env`, and `condition`."
-        )
-    )
-    return section
-
-
 def gen_formatter_vimdoc() -> VimdocSection:
     section = VimdocSection("Formatters", "conform-formatters", ["\n"])
     for formatter in get_all_formatters():
@@ -230,7 +192,6 @@ def generate_vimdoc():
             gen_options_vimdoc(),
             VimdocSection("API", "conform-api", render_vimdoc_api("conform", funcs)),
             gen_formatter_vimdoc(),
-            gen_self_compat_vimdoc(),
         ]
     )
 

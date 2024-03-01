@@ -16,16 +16,17 @@ local M = {}
 M.build_cmd = function(formatter_name, ctx, config)
   local command = config.command
   if type(command) == "function" then
-    command = util.compat_call_with_self(formatter_name, config, command, ctx)
+    command = command(config, ctx)
   end
   ---@type string|string[]
   local args = {}
   if ctx.range and config.range_args then
-    args = util.compat_call_with_self(formatter_name, config, config.range_args, ctx)
+    ---@cast ctx conform.RangeContext
+    args = config.range_args(config, ctx)
   elseif config.args then
     local computed_args = config.args
     if type(computed_args) == "function" then
-      args = util.compat_call_with_self(formatter_name, config, computed_args, ctx)
+      args = computed_args(config, ctx)
     else
       ---@diagnostic disable-next-line: cast-local-type
       args = computed_args
@@ -279,11 +280,11 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, opts, c
   local cmd = M.build_cmd(formatter.name, ctx, config)
   local cwd = nil
   if config.cwd then
-    cwd = util.compat_call_with_self(formatter.name, config, config.cwd, ctx)
+    cwd = config.cwd(config, ctx)
   end
   local env = config.env
   if type(env) == "function" then
-    env = util.compat_call_with_self(formatter.name, config, env, ctx)
+    env = env(config, ctx)
   end
 
   local buffer_text

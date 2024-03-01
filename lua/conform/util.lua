@@ -115,10 +115,10 @@ M.extend_args = function(args, extra_args, opts)
   opts = opts or {}
   return function(self, ctx)
     if type(args) == "function" then
-      args = M.compat_call_with_self("unknown", self, args, ctx)
+      args = args(self, ctx)
     end
     if type(extra_args) == "function" then
-      extra_args = M.compat_call_with_self("unknown", self, extra_args, ctx)
+      extra_args = extra_args(self, ctx)
     end
     if type(args) == "string" then
       if type(extra_args) ~= "string" then
@@ -180,48 +180,6 @@ M.buf_get_changedtick = function(bufnr)
     return vim.b[bufnr].last_changedtick or -1
   else
     return changedtick
-  end
-end
-
----Returns true if the function takes no args or has self as the first arg
----@param name string
----@param fn function(...: any): T
----@return boolean
-local function has_self_arg(name, fn)
-  local first_arg_name = nil
-  debug.sethook(function()
-    local info = debug.getinfo(3)
-    if info.name ~= "pcall" then
-      return
-    end
-    first_arg_name = debug.getlocal(2, 1)
-    error()
-  end, "c")
-  pcall(fn)
-  debug.sethook()
-
-  return first_arg_name == "self" or first_arg_name == nil
-end
-
----@generic T
----@param formatter_name string
----@param self any
----@param fn fun(...: any): T
----@param ... any
----@return T
-M.compat_call_with_self = function(formatter_name, self, fn, ...)
-  local has_self = has_self_arg(formatter_name, fn)
-  if has_self then
-    return fn(self, ...)
-  else
-    vim.notify_once(
-      string.format(
-        "[conform] formatter %s should take 'self' as the first argument for args, range_args, cwd, condition, and env functions (see :help conform-self-args)\nCompatibility will be dropped on 2024-03-01",
-        formatter_name
-      ),
-      vim.log.levels.WARN
-    )
-    return fn(...)
   end
 end
 

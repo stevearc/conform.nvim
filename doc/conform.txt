@@ -6,7 +6,6 @@ CONTENTS                                                        *conform-content
   1. Options                                                 |conform-options|
   2. Api                                                         |conform-api|
   3. Formatters                                           |conform-formatters|
-  4. Self argument migration                               |conform-self-args|
 
 --------------------------------------------------------------------------------
 OPTIONS                                                          *conform-options*
@@ -354,29 +353,6 @@ FORMATTERS                                                    *conform-formatter
 `yq` - YAML/JSON processor
 `zigfmt` - Reformat Zig source into canonical form.
 `zprint` - Formatter for Clojure and EDN.
-
---------------------------------------------------------------------------------
-SELF ARGUMENT MIGRATION                                        *conform-self-args*
-
-The function arguments for formatter config functions have changed. Previously,
-they took a single `ctx` argument.
->lua
-    {
-        command = "phpcbf",
-        args = function(ctx)
-            return { "-q", "--stdin-path=" .. ctx.filename, "-" }
-        end
-    }
-<Now, they take `self` as the first argument, and `ctx` as the second.
->lua
-    {
-        command = "phpcbf",
-        args = function(self, ctx)
-            return { "-q", "--stdin-path=" .. ctx.filename, "-" }
-        end
-    }
-<The config values that can be defined as functions are: `command`, `args`,
-`range_args`, `cwd`, `env`, and `condition`.
 
 ================================================================================
 vim:tw=80:ts=2:ft=help:norl:syntax=help:
