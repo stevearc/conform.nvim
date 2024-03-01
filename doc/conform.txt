@@ -332,6 +332,8 @@ FORMATTERS                                                    *conform-formatter
 `terragrunt_hclfmt` - Format hcl files into a canonical format.
 `tlint` - Tighten linter for Laravel conventions with support for auto-
         formatting.
+`tofu_fmt` - The tofu-fmt command rewrites OpenTofu configuration files to a
+           canonical format and style.
 `trim_newlines` - Trim new lines with awk.
 `trim_whitespace` - Trim whitespaces with awk.
 `twig-cs-fixer` - Automatically fix Twig Coding Standards issues
