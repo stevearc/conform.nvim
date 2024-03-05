@@ -5,5 +5,5 @@ return {
     description = "A tool for formatting rust code according to style guidelines.",
   },
   command = "rustfmt",
-  args = { "--emit=stdout" },
+  args = { "--emit=stdout", "--edition=2021" },
 }
