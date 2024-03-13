@@ -504,6 +504,7 @@ require("conform").formatters.my_formatter = {
 
 - [injected](doc/formatter_options.md#injected)
 - [prettier](doc/formatter_options.md#prettier)
+- [rustfmt](doc/formatter_options.md#rustfmt)
 
 <!-- /FORMATTER_OPTIONS -->
 
