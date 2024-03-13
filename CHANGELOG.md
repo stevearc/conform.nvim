@@ -1,5 +1,26 @@
 # Changelog
 
+## [5.4.0](https://github.com/stevearc/conform.nvim/compare/v5.3.0...v5.4.0) (2024-03-13)
+
+
+### Features
+
+* add `gersemi` formatter ([#305](https://github.com/stevearc/conform.nvim/issues/305)) ([79d7fd9](https://github.com/stevearc/conform.nvim/commit/79d7fd9ee84e603bdb66038b1d1ed2703ec08d14))
+* add formatter sqlfmt ([#307](https://github.com/stevearc/conform.nvim/issues/307)) ([015f9e9](https://github.com/stevearc/conform.nvim/commit/015f9e90d945545b665dfda52e6c96590c3d1292))
+* add gleam formatter ([#327](https://github.com/stevearc/conform.nvim/issues/327)) ([2ebfcaa](https://github.com/stevearc/conform.nvim/commit/2ebfcaa4f2e85550d985eae8ed417401319ebccd))
+* add OpenTofu formatter ([#313](https://github.com/stevearc/conform.nvim/issues/313)) ([68dad93](https://github.com/stevearc/conform.nvim/commit/68dad93cde8d8b71e53d07ac43029d0fca06bf26))
+* add the cabal-fmt formatter ([#318](https://github.com/stevearc/conform.nvim/issues/318)) ([ea73026](https://github.com/stevearc/conform.nvim/commit/ea73026a163e124edb47fe48075091d924d139af))
+* **formatter:** add liquidsoap-prettier ([#312](https://github.com/stevearc/conform.nvim/issues/312)) ([dc873e9](https://github.com/stevearc/conform.nvim/commit/dc873e94f300cdadf0c1949c14b6e9137e7a9981))
+
+
+### Bug Fixes
+
+* add cwd to honor project php-cs-fixer ([#325](https://github.com/stevearc/conform.nvim/issues/325)) ([f5f8498](https://github.com/stevearc/conform.nvim/commit/f5f8498cf27931e06645c9fe020b9c28dce49d98))
+* **prettier:** Fix range formatting of buffer ([#322](https://github.com/stevearc/conform.nvim/issues/322)) ([bc93756](https://github.com/stevearc/conform.nvim/commit/bc937565f251866c0ff344fd13fe27f00a4c0d25))
+* remove call to deprecated tbl_add_reverse_lookup ([5a15cc4](https://github.com/stevearc/conform.nvim/commit/5a15cc46e75cad804fd51ec5af9227aeb1d1bdaa))
+* **rustfmt:** use Cargo.toml settings and default to recent edition ([#328](https://github.com/stevearc/conform.nvim/issues/328)) ([0ff1b7d](https://github.com/stevearc/conform.nvim/commit/0ff1b7d32fd3e8df194ca5ebec1dab9c61fb9911))
+* **swiftformat:** range formatting support and add cwd ([#326](https://github.com/stevearc/conform.nvim/issues/326)) ([db2c697](https://github.com/stevearc/conform.nvim/commit/db2c697fe8302f0328b50b480204be1b577a1e2f))
+
 ## [5.3.0](https://github.com/stevearc/conform.nvim/compare/v5.2.1...v5.3.0) (2024-02-20)
 
 
