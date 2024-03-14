@@ -464,6 +464,8 @@ require("conform").setup({
       cwd = require("conform.util").root_file({ ".editorconfig", "package.json" }),
       -- When cwd is not found, don't run the formatter (default false)
       require_cwd = true,
+      -- When stdin=false, use this template to generate the temporary file that gets formatted
+      tmpfile_format = ".conform.$RANDOM.$FILENAME",
       -- When returns false, the formatter will not be used
       condition = function(ctx)
         return vim.fs.basename(ctx.filename) ~= "README.md"
