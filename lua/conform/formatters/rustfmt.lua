@@ -1,3 +1,16 @@
+---@param manifest string
+---@return nil|string
+local function parse_edition(manifest)
+  for line in io.lines(manifest) do
+    if line:match("^edition *=") then
+      local edition = line:match("%d+")
+      if edition then
+        return edition
+      end
+    end
+  end
+end
+
 ---@type conform.FileFormatterConfig
 return {
   meta = {
@@ -11,12 +24,16 @@ return {
   },
   args = function(self, ctx)
     local args = { "--emit=stdout" }
+    local edition
     local manifest = vim.fs.find("Cargo.toml", { upward = true, path = ctx.dirname })[1]
     if manifest then
-      table.insert(args, "--manifest-path=" .. manifest)
-    elseif self.options.default_edition then
-      table.insert(args, "--edition=" .. self.options.default_edition)
+      edition = parse_edition(manifest)
     end
+    if not edition then
+      edition = self.options.default_edition
+    end
+    table.insert(args, "--edition=" .. edition)
+
     return args
   end,
 }
