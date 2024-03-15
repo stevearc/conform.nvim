@@ -14,6 +14,7 @@ local M = {}
 ---@field cwd? fun(self: conform.JobFormatterConfig, ctx: conform.Context): nil|string
 ---@field require_cwd? boolean When cwd is not found, don't run the formatter (default false)
 ---@field stdin? boolean Send buffer contents to stdin (default true)
+---@field tmpfile_format? string When stdin=false, use this format for temporary files (default ".conform.$RANDOM.$FILENAME")
 ---@field condition? fun(self: conform.JobFormatterConfig, ctx: conform.Context): boolean
 ---@field exit_codes? integer[] Exit codes that indicate success (default {0})
 ---@field env? table<string, any>|fun(self: conform.JobFormatterConfig, ctx: conform.Context): table<string, any>

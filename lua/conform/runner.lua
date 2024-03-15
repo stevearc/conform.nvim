@@ -442,8 +442,13 @@ M.build_context = function(bufnr, config, range)
   end
 
   if not config.stdin then
+    local template = config.tmpfile_format
+    if not template then
+      template = ".conform.$RANDOM.$FILENAME"
+    end
     local basename = vim.fs.basename(filename)
-    local tmpname = string.format(".conform.%d.%s", math.random(1000000, 9999999), basename)
+    local tmpname =
+      template:gsub("$FILENAME", basename):gsub("$RANDOM", tostring(math.random(1000000, 9999999)))
     local parent = vim.fs.dirname(filename)
     filename = fs.join(parent, tmpname)
   end
