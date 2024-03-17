@@ -7,7 +7,7 @@ return {
     description = "A modular SQL linter and auto-formatter with support for multiple dialects and templated code.",
   },
   command = "sqlfluff",
-  args = { "fix", "--force", "--dialect=ansi", "-" },
+  args = { "fix", "--dialect=ansi", "-" },
   stdin = true,
   cwd = util.root_file({
     ".sqlfluff",
