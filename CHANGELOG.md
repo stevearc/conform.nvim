@@ -1,5 +1,19 @@
 # Changelog
 
+## [5.5.0](https://github.com/stevearc/conform.nvim/compare/v5.4.0...v5.5.0) (2024-03-17)
+
+
+### Features
+
+* add formatter config option to change name of temporary file ([#332](https://github.com/stevearc/conform.nvim/issues/332)) ([b059626](https://github.com/stevearc/conform.nvim/commit/b05962622d3eebeefe6b1a90deb9eb86947e0349))
+
+
+### Bug Fixes
+
+* **phpcbf:** use non-stdin formatting and customize tempfile name ([#333](https://github.com/stevearc/conform.nvim/issues/333)) ([67ee225](https://github.com/stevearc/conform.nvim/commit/67ee2258e08ccb91345d52f62484b657feccef25))
+* **rustfmt:** parse edition from Cargo.toml ([#330](https://github.com/stevearc/conform.nvim/issues/330)) ([a605ce4](https://github.com/stevearc/conform.nvim/commit/a605ce4b2db397c84ae6fa8bcfc85f00b985bc73))
+* **sqlfluff:** remove --force flag since it's default now ([#338](https://github.com/stevearc/conform.nvim/issues/338)) ([42f3d8e](https://github.com/stevearc/conform.nvim/commit/42f3d8e1c1a90e1114d12a49be838409cbbd1239))
+
 ## [5.4.0](https://github.com/stevearc/conform.nvim/compare/v5.3.0...v5.4.0) (2024-03-13)
 
 
