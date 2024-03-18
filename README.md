@@ -246,6 +246,7 @@ You can view this list in vim with `:help conform-formatters`
 - [mdformat](https://github.com/executablebooks/mdformat) - An opinionated Markdown formatter.
 - [mdslw](https://github.com/razziel89/mdslw) - Prepare your markdown for easy diff'ing by adding line breaks after every sentence.
 - [mix](https://hexdocs.pm/mix/main/Mix.Tasks.Format.html) - Format Elixir files using the mix format command.
+- [nimpretty](https://github.com/nim-lang/nim) - nimpretty is a Nim source code beautifier that follows the official style guide.
 - [nixfmt](https://github.com/serokell/nixfmt) - nixfmt is a formatter for Nix code, intended to apply a uniform style.
 - [nixpkgs_fmt](https://github.com/nix-community/nixpkgs-fmt) - nixpkgs-fmt is a Nix code formatter for nixpkgs.
 - [ocamlformat](https://github.com/ocaml-ppx/ocamlformat) - Auto-formatter for OCaml code.
