@@ -29,14 +29,24 @@ local function get_indent(lines, language)
   return indent
 end
 
+---@class (exact) conform.Injected.Surrounding
+---@field indent string?
+---@field postfix string?
+
 ---Remove leading indentation from lines and return the indentation string
 ---@param lines string[]
 ---@param language? string The language of the buffer
----@return string?
-local function remove_indent(lines, language)
+---@return conform.Injected.Surrounding
+local function remove_surrounding(lines, language)
+  local surrounding = {}
+  if lines[#lines]:match("^%s*$") then
+    surrounding.postfix = lines[#lines]
+    table.remove(lines)
+  end
+
   local indent = get_indent(lines, language)
   if not indent then
-    return
+    return surrounding
   end
   local sub_start = indent:len() + 1
   for i, line in ipairs(lines) do
@@ -44,19 +54,29 @@ local function remove_indent(lines, language)
       lines[i] = line:sub(sub_start)
     end
   end
-  return indent
+  surrounding.indent = indent
+  return surrounding
 end
 
 ---@param lines string[]?
----@param indentation string?
-local function apply_indent(lines, indentation)
-  if not lines or not indentation then
+---@param surrounding conform.Injected.Surrounding
+local function restore_surrounding(lines, surrounding)
+  if not lines then
     return
   end
-  for i, line in ipairs(lines) do
-    if line ~= "" then
-      lines[i] = indentation .. line
+
+  local indent = surrounding.indent
+  if indent then
+    for i, line in ipairs(lines) do
+      if line ~= "" then
+        lines[i] = indent .. line
+      end
     end
+  end
+
+  local postfix = surrounding.postfix
+  if postfix then
+    table.insert(lines, postfix)
   end
 end
 
@@ -274,11 +294,11 @@ return {
         local idx = num_format
         log.debug("Injected format %s:%d:%d: %s", lang, start_lnum, end_lnum, formatter_names)
         log.trace("Injected format lines %s", input_lines)
-        local indent = remove_indent(input_lines, buf_lang)
+        local surrounding = remove_surrounding(input_lines, buf_lang)
         -- Create a temporary buffer. This is only needed because some formatters rely on the file
         -- extension to determine a run mode (see https://github.com/stevearc/conform.nvim/issues/194)
-        -- This is using the language name as the file extension, but that is a reasonable
-        -- approximation for now. We can add special cases as the need arises.
+        -- This is using lang_to_ext to map the language name to the file extension, and falls back
+        -- to using the language name itself.
         local extension = options.lang_to_ext[lang] or lang
         local buf =
           vim.fn.bufadd(string.format("%s.%d.%s", vim.api.nvim_buf_get_name(ctx.buf), i, extension))
@@ -289,7 +309,7 @@ return {
         conform.format_lines(formatter_names, input_lines, format_opts, function(err, new_lines)
           log.trace("Injected %s:%d:%d formatted lines %s", lang, start_lnum, end_lnum, new_lines)
           -- Preserve indentation in case the code block is indented
-          apply_indent(new_lines, indent)
+          restore_surrounding(new_lines, surrounding)
           vim.schedule_wrap(formatter_cb)(err, idx, region, input_lines, new_lines)
         end)
       end
