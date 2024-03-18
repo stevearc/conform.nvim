@@ -300,6 +300,7 @@ FORMATTERS                                                    *conform-formatter
 `puppet-lint` - Check that your Puppet manifests conform to the style guide.
 `reorder-python-imports` - Rewrites source to reorder python imports
 `rescript-format` - The built-in ReScript formatter.
+`roc` - A fast, friendly, functional language.
 `rubocop` - Ruby static code analyzer and formatter, based on the community Ruby
           style guide.
 `rubyfmt` - Ruby Autoformatter! (Written in Rust)
