@@ -298,6 +298,7 @@ FORMATTERS                                                    *conform-formatter
 `prettierd` - prettier, as a daemon, for ludicrous formatting speed.
 `pretty-php` - The opinionated PHP code formatter.
 `puppet-lint` - Check that your Puppet manifests conform to the style guide.
+`purs-tidy` - A syntax tidy-upper for PureScript.
 `reorder-python-imports` - Rewrites source to reorder python imports
 `rescript-format` - The built-in ReScript formatter.
 `rubocop` - Ruby static code analyzer and formatter, based on the community Ruby
