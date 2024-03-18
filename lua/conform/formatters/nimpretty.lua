@@ -1,3 +1,4 @@
+---@type conform.FileFormatterConfig
 return {
   meta = {
     url = "https://github.com/nim-lang/nim",
