@@ -266,6 +266,7 @@ You can view this list in vim with `:help conform-formatters`
 - [prettierd](https://github.com/fsouza/prettierd) - prettier, as a daemon, for ludicrous formatting speed.
 - [pretty-php](https://github.com/lkrms/pretty-php) - The opinionated PHP code formatter.
 - [puppet-lint](https://github.com/puppetlabs/puppet-lint) - Check that your Puppet manifests conform to the style guide.
+- [purs-tidy](https://github.com/natefaubion/purescript-tidy) - A syntax tidy-upper for PureScript.
 - [reorder-python-imports](https://github.com/asottile/reorder-python-imports) - Rewrites source to reorder python imports
 - [rescript-format](https://rescript-lang.org/) - The built-in ReScript formatter.
 - [roc](https://github.com/roc-lang/roc) - A fast, friendly, functional language.
