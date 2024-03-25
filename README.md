@@ -272,8 +272,8 @@ You can view this list in vim with `:help conform-formatters`
 - [roc](https://github.com/roc-lang/roc) - A fast, friendly, functional language.
 - [rubocop](https://github.com/rubocop/rubocop) - Ruby static code analyzer and formatter, based on the community Ruby style guide.
 - [rubyfmt](https://github.com/fables-tales/rubyfmt) - Ruby Autoformatter! (Written in Rust)
-- [ruff_fix](https://beta.ruff.rs/docs/) - An extremely fast Python linter, written in Rust. Fix lint errors.
-- [ruff_format](https://beta.ruff.rs/docs/) - An extremely fast Python linter, written in Rust. Formatter subcommand.
+- [ruff_fix](https://docs.astral.sh/ruff/) - An extremely fast Python linter, written in Rust. Fix lint errors.
+- [ruff_format](https://docs.astral.sh/ruff/) - An extremely fast Python linter, written in Rust. Formatter subcommand.
 - [rufo](https://github.com/ruby-formatter/rufo) - Rufo is an opinionated ruby formatter.
 - [rustfmt](https://github.com/rust-lang/rustfmt) - A tool for formatting rust code according to style guidelines.
 - [rustywind](https://github.com/avencera/rustywind) - A tool for formatting Tailwind CSS classes.
