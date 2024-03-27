@@ -5,5 +5,5 @@ return {
     description = "The terraform-fmt command rewrites `terraform` configuration files to a canonical format and style.",
   },
   command = "terraform",
-  args = { "fmt", "-" },
+  args = { "fmt", "-no-color", "-" },
 }
