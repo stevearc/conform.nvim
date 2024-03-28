@@ -203,7 +203,7 @@ FORMATTERS                                                    *conform-formatter
              with a standard convention.
 `cabal_fmt` - Format cabal files with cabal-fmt
 `cbfmt` - A tool to format codeblocks inside markdown and org documents.
-`clang_format` - Tool to format C/C++/… code according to a set of rules and
+`clang-format` - Tool to format C/C++/… code according to a set of rules and
                heuristics.
 `cljstyle` - Formatter for Clojure code.
 `cmake_format` - Parse cmake listfiles and format them nicely.
