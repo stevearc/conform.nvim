@@ -233,7 +233,7 @@ You can view this list in vim with `:help conform-formatters`
 - [htmlbeautifier](https://github.com/threedaymonk/htmlbeautifier) - A normaliser/beautifier for HTML that also understands embedded Ruby. Ideal for tidying up Rails templates.
 - [indent](https://www.gnu.org/software/indent/) - GNU Indent.
 - [injected](doc/advanced_topics.md#injected-language-formatting-code-blocks) - Format treesitter injected languages.
-- [inko](https://inko-lang.org/) - A language for building concurrent software with confidence.
+- [inko](https://inko-lang.org/) - A language for building concurrent software with confidence
 - [isort](https://github.com/PyCQA/isort) - Python utility / library to sort imports alphabetically and automatically separate them into sections and by type.
 - [joker](https://github.com/candid82/joker) - Small Clojure interpreter, linter and formatter.
 - [jq](https://github.com/stedolan/jq) - Command-line JSON processor.
