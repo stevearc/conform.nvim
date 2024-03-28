@@ -319,6 +319,7 @@ FORMATTERS                                                    *conform-formatter
 `shellcheck` - A static analysis tool for shell scripts.
 `shellharden` - The corrective bash syntax highlighter.
 `shfmt` - A shell parser, formatter, and interpreter with `bash` support.
+`smlfmt` - A custom parser and code formatter for Standard ML.
 `sql_formatter` - A whitespace formatter for different query languages.
 `sqlfluff` - A modular SQL linter and auto-formatter with support for multiple
            dialects and templated code.

@@ -282,6 +282,7 @@ You can view this list in vim with `:help conform-formatters`
 - [shellcheck](https://github.com/koalaman/shellcheck) - A static analysis tool for shell scripts.
 - [shellharden](https://github.com/anordal/shellharden) - The corrective bash syntax highlighter.
 - [shfmt](https://github.com/mvdan/sh) - A shell parser, formatter, and interpreter with `bash` support.
+- [smlfmt](https://github.com/shwestrick/smlfmt) - A custom parser and code formatter for Standard ML.
 - [sql_formatter](https://github.com/sql-formatter-org/sql-formatter) - A whitespace formatter for different query languages.
 - [sqlfluff](https://github.com/sqlfluff/sqlfluff) - A modular SQL linter and auto-formatter with support for multiple dialects and templated code.
 - [sqlfmt](https://docs.sqlfmt.com) - sqlfmt formats your dbt SQL files so you don't have to. It is similar in nature to Black, gofmt, and rustfmt (but for SQL)
