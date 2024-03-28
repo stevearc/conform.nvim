@@ -1,5 +1,26 @@
 # Changelog
 
+## [5.6.0](https://github.com/stevearc/conform.nvim/compare/v5.5.0...v5.6.0) (2024-03-28)
+
+
+### Features
+
+* a formatter for SML (Standard ML) ([#353](https://github.com/stevearc/conform.nvim/issues/353)) ([ae6a069](https://github.com/stevearc/conform.nvim/commit/ae6a069e33027fc522151bf656ab06cf93abca46))
+* add formatter for Inko ([#351](https://github.com/stevearc/conform.nvim/issues/351)) ([6874087](https://github.com/stevearc/conform.nvim/commit/68740871bd1b7aecc3759136d576ecb704c4a636))
+* add ocp-indent for OCaml formatting ([#335](https://github.com/stevearc/conform.nvim/issues/335)) ([551d02f](https://github.com/stevearc/conform.nvim/commit/551d02f472b646cb82657700e3459f16d9933005))
+* add support for nimpretty ([#343](https://github.com/stevearc/conform.nvim/issues/343)) ([67f7fb2](https://github.com/stevearc/conform.nvim/commit/67f7fb2fe82d170c681e6c0da67aa848e6f5a742))
+* add support for purs-tidy ([#345](https://github.com/stevearc/conform.nvim/issues/345)) ([bf109f0](https://github.com/stevearc/conform.nvim/commit/bf109f061fc3cd75394b7823923187ae045cbf22))
+* add support for roc format ([#342](https://github.com/stevearc/conform.nvim/issues/342)) ([293236a](https://github.com/stevearc/conform.nvim/commit/293236aa7445fb24aba56d8e9a03be54d0c1c2e8))
+* **prettier, prettierd:** add mjs files to supported config files ([#350](https://github.com/stevearc/conform.nvim/issues/350)) ([ac4a022](https://github.com/stevearc/conform.nvim/commit/ac4a022c9e10e9697235f657f166372326139e8b))
+* support crystal tool format ([#344](https://github.com/stevearc/conform.nvim/issues/344)) ([f8c64b8](https://github.com/stevearc/conform.nvim/commit/f8c64b835f60a80639375500a80e8cd303d8eda6))
+
+
+### Bug Fixes
+
+* **injected:** ignore indentation of final whitespace line ([#340](https://github.com/stevearc/conform.nvim/issues/340)) ([0a530b3](https://github.com/stevearc/conform.nvim/commit/0a530b31acacf10eca9f9a74b2434ece4d232ca3))
+* **terraform_fmt:** do not output color escape codes ([#354](https://github.com/stevearc/conform.nvim/issues/354)) ([f3363ad](https://github.com/stevearc/conform.nvim/commit/f3363ad4b1453b0c9a591d2571c540ed145323d7))
+* use `--force-exclude` with Ruff ([#348](https://github.com/stevearc/conform.nvim/issues/348)) ([93f3d4c](https://github.com/stevearc/conform.nvim/commit/93f3d4cabe41473477a314c731e635175458f591))
+
 ## [5.5.0](https://github.com/stevearc/conform.nvim/compare/v5.4.0...v5.5.0) (2024-03-17)
 
 
