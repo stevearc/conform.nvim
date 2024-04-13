@@ -190,6 +190,8 @@ FORMATTERS                                                    *conform-formatter
               same, minimal column.
 `beautysh` - A Bash beautifier for the masses.
 `bibtex-tidy` - Cleaner and Formatter for BibTeX files.
+`bicep` - Bicep is a Domain Specific Language (DSL) for deploying Azure
+        resources declaratively.
 `biome` - A toolchain for web projects, aimed to provide functionalities to
         maintain them.
 `biome-check` - A toolchain for web projects, aimed to provide functionalities
