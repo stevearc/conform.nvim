@@ -345,6 +345,11 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, opts, c
           output = vim.split(content, "\r?\n", {})
         else
           output = stdout
+          -- trim trailing \r in every line
+          -- so that both branches of this if block behaves the same
+          for i, line in ipairs(output) do
+            output[i] = string.gsub(line, "\r$", "")
+          end
         end
         -- Remove the trailing newline from the output to convert back to vim lines representation
         if add_extra_newline and output[#output] == "" then
