@@ -274,6 +274,7 @@ FORMATTERS                                                    *conform-formatter
                     interface for linting Markdown/CommonMark files with the
                     markdownlint library.
 `mdformat` - An opinionated Markdown formatter.
+`mdsf` - Format markdown code blocks using your favorite code formatters.
 `mdslw` - Prepare your markdown for easy diff'ing by adding line breaks after
         every sentence.
 `mix` - Format Elixir files using the mix format command.
