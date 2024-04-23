@@ -133,11 +133,15 @@ M.extend_args = function(args, extra_args, opts)
       if type(extra_args) == "string" then
         error("extra_args must be a table when args is a table")
       end
+      local ret = {}
       if opts.append then
-        return vim.tbl_flatten({ args, extra_args })
+        vim.list_extend(ret, args)
+        vim.list_extend(ret, extra_args)
       else
-        return vim.tbl_flatten({ extra_args, args })
+        vim.list_extend(ret, extra_args)
+        vim.list_extend(ret, args)
       end
+      return ret
     end
   end
 end

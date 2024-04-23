@@ -1,3 +1,4 @@
+local islist = vim.islist or vim.tbl_islist
 local M = {}
 
 ---@class (exact) conform.FormatterInfo
@@ -266,7 +267,7 @@ M.list_formatters_for_buffer = function(bufnr)
         dedupe_formatters(ft_formatters(bufnr), formatters)
       else
         -- support the old structure where formatters could be a subkey
-        if not vim.tbl_islist(ft_formatters) then
+        if not islist(ft_formatters) then
           vim.notify_once(
             "Using deprecated structure for formatters_by_ft. See :help conform-options for details.",
             vim.log.levels.ERROR
@@ -534,7 +535,7 @@ M.list_all_formatters = function()
       ft_formatters = ft_formatters(0)
     end
     -- support the old structure where formatters could be a subkey
-    if not vim.tbl_islist(ft_formatters) then
+    if not islist(ft_formatters) then
       vim.notify_once(
         "Using deprecated structure for formatters_by_ft. See :help conform-options for details.",
         vim.log.levels.ERROR

@@ -5,6 +5,7 @@ local health_start = vim.health.start or vim.health.report_start
 local health_warn = vim.health.warn or vim.health.report_warn
 local health_info = vim.health.info or vim.health.report_info
 local health_ok = vim.health.ok or vim.health.report_ok
+local islist = vim.islist or vim.tbl_islist
 
 ---@param name string
 ---@return string[]
@@ -15,7 +16,7 @@ local function get_formatter_filetypes(name)
     if type(formatters) == "function" then
       formatters = formatters(0)
     -- support the old structure where formatters could be a subkey
-    elseif not vim.tbl_islist(formatters) then
+    elseif not islist(formatters) then
       vim.notify_once(
         "Using deprecated structure for formatters_by_ft. See :help conform-options for details.",
         vim.log.levels.ERROR
