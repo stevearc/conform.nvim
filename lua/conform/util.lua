@@ -135,11 +135,11 @@ M.extend_args = function(args, extra_args, opts)
       end
       local ret = {}
       if opts.append then
-        vim.list_extend(ret, args)
-        vim.list_extend(ret, extra_args)
+        vim.list_extend(ret, args or {})
+        vim.list_extend(ret, extra_args or {})
       else
-        vim.list_extend(ret, extra_args)
-        vim.list_extend(ret, args)
+        vim.list_extend(ret, extra_args or {})
+        vim.list_extend(ret, args or {})
       end
       return ret
     end
