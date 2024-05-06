@@ -10,5 +10,6 @@ return {
   args = { "check", "--apply", "--stdin-file-path", "$FILENAME" },
   cwd = util.root_file({
     "biome.json",
+    "biome.jsonc",
   }),
 }
