@@ -33,8 +33,17 @@ M.build_cmd = function(formatter_name, ctx, config)
     end
   end
 
+  local cwd
+  if config.cwd then
+    cwd = config.cwd(config, ctx)
+  end
+  local relative_filename = fs.relative_path(cwd or vim.fn.getcwd(), ctx.filename)
+
   if type(args) == "string" then
-    local interpolated = args:gsub("$FILENAME", ctx.filename):gsub("$DIRNAME", ctx.dirname)
+    local interpolated = args
+      :gsub("$FILENAME", ctx.filename)
+      :gsub("$DIRNAME", ctx.dirname)
+      :gsub("$RELATIVE_FILEPATH", relative_filename)
     return command .. " " .. interpolated
   else
     local cmd = { command }
@@ -44,6 +53,8 @@ M.build_cmd = function(formatter_name, ctx, config)
         v = ctx.filename
       elseif v == "$DIRNAME" then
         v = ctx.dirname
+      elseif v == "$RELATIVE_FILEPATH" then
+        v = relative_filename
       end
       table.insert(cmd, v)
     end

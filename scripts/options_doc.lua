@@ -48,7 +48,7 @@ require("conform").setup({
       -- Return a single string instead of a list to run the command in a shell
       args = { "--stdin-from-filename", "$FILENAME" },
       -- If the formatter supports range formatting, create the range arguments here
-      range_args = function(ctx)
+      range_args = function(self, ctx)
         return { "--line-start", ctx.range.start[1], "--line-end", ctx.range["end"][1] }
       end,
       -- Send file contents to stdin, read new contents from stdout (default true)
@@ -62,7 +62,7 @@ require("conform").setup({
       -- When stdin=false, use this template to generate the temporary file that gets formatted
       tmpfile_format = ".conform.$RANDOM.$FILENAME",
       -- When returns false, the formatter will not be used
-      condition = function(ctx)
+      condition = function(self, ctx)
         return vim.fs.basename(ctx.filename) ~= "README.md"
       end,
       -- Exit codes that indicate success (default { 0 })
