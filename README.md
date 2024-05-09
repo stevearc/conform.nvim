@@ -316,6 +316,7 @@ You can view this list in vim with `:help conform-formatters`
 - [yamlfix](https://github.com/lyz-code/yamlfix) - A configurable YAML formatter that keeps comments.
 - [yamlfmt](https://github.com/google/yamlfmt) - yamlfmt is an extensible command line tool or library to format yaml files.
 - [yapf](https://github.com/google/yapf) - Yet Another Python Formatter.
+- [yew-fmt](https://github.com/schvv31n/yew-fmt) - Code formatter for the Yew framework.
 - [yq](https://github.com/mikefarah/yq) - YAML/JSON processor
 - [zigfmt](https://github.com/ziglang/zig) - Reformat Zig source into canonical form.
 - [zprint](https://github.com/kkinnear/zprint) - Formatter for Clojure and EDN.
