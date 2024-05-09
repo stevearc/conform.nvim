@@ -10,7 +10,7 @@ return {
   command = "yew-fmt",
   options = {
     -- The default edition of Rust to use when no Cargo.toml file is found
-    default_edition = rustfmt.default_edition,
+    default_edition = rustfmt.options.default_edition,
   },
   args = rustfmt.args,
 }
