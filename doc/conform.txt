@@ -372,7 +372,7 @@ FORMATTERS                                                    *conform-formatter
 `yapf` - Yet Another Python Formatter.
 `yq` - YAML/JSON processor
 `zigfmt` - Reformat Zig source into canonical form.
-`zprint` - Formatter for Clojure and END.
+`zprint` - Formatter for Clojure and EDN.
 
 ================================================================================
 vim:tw=80:ts=2:ft=help:norl:syntax=help:

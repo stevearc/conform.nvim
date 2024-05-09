@@ -319,7 +319,7 @@ You can view this list in vim with `:help conform-formatters`
 - [yapf](https://github.com/google/yapf) - Yet Another Python Formatter.
 - [yq](https://github.com/mikefarah/yq) - YAML/JSON processor
 - [zigfmt](https://github.com/ziglang/zig) - Reformat Zig source into canonical form.
-- [zprint](https://github.com/kkinnear/zprint) - Formatter for Clojure and END.
+- [zprint](https://github.com/kkinnear/zprint) - Formatter for Clojure and EDN.
 <!-- /FORMATTERS -->
 
 </details>
