@@ -219,7 +219,8 @@ You can view this list in vim with `:help conform-formatters`
 - [fish_indent](https://fishshell.com/docs/current/cmds/fish_indent.html) - Indent or otherwise prettify a piece of fish code.
 - [fixjson](https://github.com/rhysd/fixjson) - JSON Fixer for Humans using (relaxed) JSON5.
 - [fnlfmt](https://git.sr.ht/~technomancy/fnlfmt) - A formatter for Fennel code.
-- [fourmolu](https://hackage.haskell.org/package/fourmolu) - Fourmolu is a formatter for Haskell source code.
+- [ormolu](https://hackage.haskell.org/package/ormolu) - A formatter for Haskell source code.
+- [fourmolu](https://hackage.haskell.org/package/fourmolu) - A fourk of ormolu that uses four space indentation and allows arbitrary configuration.
 - [gci](https://github.com/daixiang0/gci) - GCI, a tool that controls Go package import order and makes it always deterministic.
 - [gdformat](https://github.com/Scony/godot-gdscript-toolkit) - A formatter for Godot's gdscript.
 - [gersemi](https://github.com/BlankSpruce/gersemi) - A formatter to make your CMake code the real treasure.
@@ -318,7 +319,7 @@ You can view this list in vim with `:help conform-formatters`
 - [yapf](https://github.com/google/yapf) - Yet Another Python Formatter.
 - [yq](https://github.com/mikefarah/yq) - YAML/JSON processor
 - [zigfmt](https://github.com/ziglang/zig) - Reformat Zig source into canonical form.
-- [zprint](https://github.com/kkinnear/zprint) - Formatter for Clojure and EDN.
+- [zprint](https://github.com/kkinnear/zprint) - Formatter for Clojure and END.
 <!-- /FORMATTERS -->
 
 </details>
