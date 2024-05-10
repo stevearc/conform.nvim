@@ -219,8 +219,7 @@ You can view this list in vim with `:help conform-formatters`
 - [fish_indent](https://fishshell.com/docs/current/cmds/fish_indent.html) - Indent or otherwise prettify a piece of fish code.
 - [fixjson](https://github.com/rhysd/fixjson) - JSON Fixer for Humans using (relaxed) JSON5.
 - [fnlfmt](https://git.sr.ht/~technomancy/fnlfmt) - A formatter for Fennel code.
-- [ormolu](https://hackage.haskell.org/package/ormolu) - A formatter for Haskell source code.
-- [fourmolu](https://hackage.haskell.org/package/fourmolu) - A fourk of ormolu that uses four space indentation and allows arbitrary configuration.
+- [fourmolu](https://hackage.haskell.org/package/fourmolu) - A fork of ormolu that uses four space indentation and allows arbitrary configuration.
 - [gci](https://github.com/daixiang0/gci) - GCI, a tool that controls Go package import order and makes it always deterministic.
 - [gdformat](https://github.com/Scony/godot-gdscript-toolkit) - A formatter for Godot's gdscript.
 - [gersemi](https://github.com/BlankSpruce/gersemi) - A formatter to make your CMake code the real treasure.
@@ -258,6 +257,7 @@ You can view this list in vim with `:help conform-formatters`
 - [ocamlformat](https://github.com/ocaml-ppx/ocamlformat) - Auto-formatter for OCaml code.
 - [ocp-indent](https://github.com/OCamlPro/ocp-indent) - Automatic indentation of OCaml source files.
 - [opa_fmt](https://www.openpolicyagent.org/docs/latest/cli/#opa-fmt) - Format Rego files using `opa fmt` command.
+- [ormolu](https://hackage.haskell.org/package/ormolu) - A formatter for Haskell source code.
 - [packer_fmt](https://developer.hashicorp.com/packer/docs/commands/fmt) - The packer fmt Packer command is used to format HCL2 configuration files to a canonical format and style.
 - [pangu](https://github.com/vinta/pangu.py) - Insert whitespace between CJK and half-width characters.
 - [perlimports](https://github.com/perl-ide/App-perlimports) - Make implicit Perl imports explicit.
