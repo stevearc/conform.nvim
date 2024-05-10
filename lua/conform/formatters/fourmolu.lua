@@ -2,7 +2,7 @@
 return {
   meta = {
     url = "https://hackage.haskell.org/package/fourmolu",
-    description = "A fourk of ormolu that uses four space indentation and allows arbitrary configuration.",
+    description = "A fork of ormolu that uses four space indentation and allows arbitrary configuration.",
   },
   command = "fourmolu",
   args = { "--stdin-input-file", "$FILENAME" },
