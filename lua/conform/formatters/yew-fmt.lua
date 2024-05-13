@@ -1,5 +1,4 @@
--- yew-fmt is a fork of rustfmt
-local rustfmt = require("conform.formatters.rustfmt")
+local util = require("conform.util")
 
 ---@type conform.FileFormatterConfig
 return {
@@ -10,7 +9,13 @@ return {
   command = "yew-fmt",
   options = {
     -- The default edition of Rust to use when no Cargo.toml file is found
-    default_edition = rustfmt.options.default_edition,
+    default_edition = "2021",
   },
-  args = rustfmt.args,
+  args = function(self, ctx)
+    local args = { "--emit=stdout" }
+    local edition = util.parse_rust_edition(ctx.dirname) or self.options.default_edition
+    table.insert(args, "--edition=" .. edition)
+
+    return args
+  end,
 }
