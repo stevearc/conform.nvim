@@ -101,6 +101,12 @@ M.setup = function(opts)
           format_args, callback = format_args(args.buf)
         end
         if format_args then
+          if format_args.async then
+            vim.notify_once(
+              "Conform format_on_save cannot use async=true. Use format_after_save instead.",
+              vim.log.levels.ERROR
+            )
+          end
           M.format(
             vim.tbl_deep_extend("force", format_args, {
               buf = args.buf,
@@ -148,6 +154,12 @@ M.setup = function(opts)
         if format_args then
           exit_timeout = format_args.timeout_ms or exit_timeout
           num_running_format_jobs = num_running_format_jobs + 1
+          if format_args.async == false then
+            vim.notify_once(
+              "Conform format_after_save cannot use async=false. Use format_on_save instead.",
+              vim.log.levels.ERROR
+            )
+          end
           M.format(
             vim.tbl_deep_extend("force", format_args, {
               buf = args.buf,
