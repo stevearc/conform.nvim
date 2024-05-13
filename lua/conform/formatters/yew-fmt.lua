@@ -3,10 +3,10 @@ local util = require("conform.util")
 ---@type conform.FileFormatterConfig
 return {
   meta = {
-    url = "https://github.com/rust-lang/rustfmt",
-    description = "A tool for formatting rust code according to style guidelines.",
+    url = "https://github.com/schvv31n/yew-fmt",
+    description = "Code formatter for the Yew framework.",
   },
-  command = "rustfmt",
+  command = "yew-fmt",
   options = {
     -- The default edition of Rust to use when no Cargo.toml file is found
     default_edition = "2021",
