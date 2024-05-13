@@ -73,7 +73,15 @@ M.relative_path = function(source, target)
   while not M.is_subpath(source, target) do
     table.insert(path, "..")
     local new_source = vim.fs.dirname(source)
-    assert(source ~= new_source)
+
+    -- If source is a root directory, we can't go up further so there is no relative path to the
+    -- target. This should only happen on Windows, which prohibits relative paths between drives.
+    if source == new_source then
+      local log = require("conform.log")
+      log.warn("Could not find relative path from %s to %s", source, target)
+      return target
+    end
+
     source = new_source
   end
 
