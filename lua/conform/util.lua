@@ -187,4 +187,21 @@ M.buf_get_changedtick = function(bufnr)
   end
 end
 
+---Parse the rust edition from the Cargo.toml file
+---@param dir string
+---@return string?
+M.parse_rust_edition = function(dir)
+  local manifest = vim.fs.find("Cargo.toml", { upward = true, path = dir })[1]
+  if manifest then
+    for line in io.lines(manifest) do
+      if line:match("^edition *=") then
+        local edition = line:match("%d+")
+        if edition then
+          return edition
+        end
+      end
+    end
+  end
+end
+
 return M

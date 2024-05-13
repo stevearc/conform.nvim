@@ -1,15 +1,4 @@
----@param manifest string
----@return nil|string
-local function parse_edition(manifest)
-  for line in io.lines(manifest) do
-    if line:match("^edition *=") then
-      local edition = line:match("%d+")
-      if edition then
-        return edition
-      end
-    end
-  end
-end
+local util = require("conform.util")
 
 ---@type conform.FileFormatterConfig
 return {
@@ -24,14 +13,7 @@ return {
   },
   args = function(self, ctx)
     local args = { "--emit=stdout" }
-    local edition
-    local manifest = vim.fs.find("Cargo.toml", { upward = true, path = ctx.dirname })[1]
-    if manifest then
-      edition = parse_edition(manifest)
-    end
-    if not edition then
-      edition = self.options.default_edition
-    end
+    local edition = util.parse_rust_edition(ctx.dirname) or self.options.default_edition
     table.insert(args, "--edition=" .. edition)
 
     return args
