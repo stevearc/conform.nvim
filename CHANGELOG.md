@@ -1,5 +1,36 @@
 # Changelog
 
+## [5.7.0](https://github.com/stevearc/conform.nvim/compare/v5.6.0...v5.7.0) (2024-05-16)
+
+
+### Features
+
+* add hcl formatter (hclfmt) ([#402](https://github.com/stevearc/conform.nvim/issues/402)) ([37cbcea](https://github.com/stevearc/conform.nvim/commit/37cbceab0a3b4979c4f0f1ae7aede0d0fa84c1d1))
+* add ktfmt formatter for Kotlin ([#392](https://github.com/stevearc/conform.nvim/issues/392)) ([b72f650](https://github.com/stevearc/conform.nvim/commit/b72f650206ddfeadd6c7df0f775a928e82ece353))
+* add ormolu formatter for Haskell ([#377](https://github.com/stevearc/conform.nvim/issues/377)) ([#397](https://github.com/stevearc/conform.nvim/issues/397)) ([6207f41](https://github.com/stevearc/conform.nvim/commit/6207f41e8f3813d72ef4499a8132c11d8baabe9f))
+* add snakefmt formatter for snakemake files ([#399](https://github.com/stevearc/conform.nvim/issues/399)) ([dc950e5](https://github.com/stevearc/conform.nvim/commit/dc950e5717f1da65b1fcd986b1bbff0d6bd0e2ee))
+* add support for bicep ([#368](https://github.com/stevearc/conform.nvim/issues/368)) ([588f357](https://github.com/stevearc/conform.nvim/commit/588f357d305943371de5c945aea65959fd4d80b9))
+* add support for bpfmt ([#405](https://github.com/stevearc/conform.nvim/issues/405)) ([3c278a7](https://github.com/stevearc/conform.nvim/commit/3c278a7e09e135e524545adcd725f89bfcc7ffbd))
+* add support for mdsf ([#380](https://github.com/stevearc/conform.nvim/issues/380)) ([34d3c5f](https://github.com/stevearc/conform.nvim/commit/34d3c5f58017b1a7e1cd23739b263d7af0f66d7c))
+* add support for yew-fmt ([#398](https://github.com/stevearc/conform.nvim/issues/398)) ([b52d462](https://github.com/stevearc/conform.nvim/commit/b52d462cb7bea5e81174ece43eb349357add2f11))
+* add verible formatter for SystemVerilog ([#391](https://github.com/stevearc/conform.nvim/issues/391)) ([fb2d35f](https://github.com/stevearc/conform.nvim/commit/fb2d35f2875967b92af9e1e7d31724ce0456fa83))
+* formatters can use $RELATIVE_FILEPATH in args ([#349](https://github.com/stevearc/conform.nvim/issues/349)) ([6dc1603](https://github.com/stevearc/conform.nvim/commit/6dc1603ea408f476a57937bbeaf7f86520a21a98))
+
+
+### Bug Fixes
+
+* **biome-check:** use safe fixes ([#373](https://github.com/stevearc/conform.nvim/issues/373)) ([500a6ae](https://github.com/stevearc/conform.nvim/commit/500a6ae6c10b2a96e85e64045ad9f3b16e2af7f8))
+* **biome:** support biome.jsonc file ([#394](https://github.com/stevearc/conform.nvim/issues/394)) ([3cd1135](https://github.com/stevearc/conform.nvim/commit/3cd1135cb2978c9d45b8dc6afc80045fb8a93157))
+* handle windows line ending when config.stdin is true ([#361](https://github.com/stevearc/conform.nvim/issues/361)) ([820eec9](https://github.com/stevearc/conform.nvim/commit/820eec990d5f332d30cf939954c8672a43a0459e))
+* **isort:** explicitly pass line endings ([#395](https://github.com/stevearc/conform.nvim/issues/395)) ([a3e3e0e](https://github.com/stevearc/conform.nvim/commit/a3e3e0e2966a9fa477bbc86487e920ee0c34f133))
+* lazily compute relative filepath ([40faaa8](https://github.com/stevearc/conform.nvim/commit/40faaa8fdd0b7f98f58070943306fd93abb5caad))
+* **mix:** allow mix formatter to format different filetypes ([#389](https://github.com/stevearc/conform.nvim/issues/389)) ([12b3995](https://github.com/stevearc/conform.nvim/commit/12b3995537f52ba2810a9857e8ca256881febbda))
+* **prettierd:** correctly find prettierd executable on windows ([#378](https://github.com/stevearc/conform.nvim/issues/378)) ([a6965ac](https://github.com/stevearc/conform.nvim/commit/a6965ac128eba75537ec2bc5ddd5d5e357062bdc))
+* refactor deprecated methods in neovim 0.10 ([7a205c9](https://github.com/stevearc/conform.nvim/commit/7a205c944d228ca0a5ec67656f59d20ba11ccca2))
+* **util:** new function throwing an error when the given extended value is nil ([#385](https://github.com/stevearc/conform.nvim/issues/385)) ([4660e53](https://github.com/stevearc/conform.nvim/commit/4660e534bf7678ee0f85879aa75fdcb6855612c2))
+* warning messages for improper async in format_on_save ([#401](https://github.com/stevearc/conform.nvim/issues/401)) ([59d0dd2](https://github.com/stevearc/conform.nvim/commit/59d0dd233a2cafacfa1235ab22054c4d80a72319))
+* **windows:** assertion failure when computing relative path ([#400](https://github.com/stevearc/conform.nvim/issues/400)) ([4f0cdf0](https://github.com/stevearc/conform.nvim/commit/4f0cdf07b5498935c34d6cfefde059a3a91584c4))
+
 ## [5.6.0](https://github.com/stevearc/conform.nvim/compare/v5.5.0...v5.6.0) (2024-03-28)
 
 
