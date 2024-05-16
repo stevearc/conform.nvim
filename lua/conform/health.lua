@@ -1,5 +1,6 @@
 local M = {}
 
+---@diagnostic disable: deprecated
 -- The "report_" functions have been deprecated, so use the new ones if defined.
 local health_start = vim.health.start or vim.health.report_start
 local health_warn = vim.health.warn or vim.health.report_warn

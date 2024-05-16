@@ -17,6 +17,7 @@ Log.get_logfile = function()
   if not ok then
     stdpath = vim.fn.stdpath("cache")
   end
+  assert(type(stdpath) == "string")
   return fs.join(stdpath, "conform.log")
 end
 

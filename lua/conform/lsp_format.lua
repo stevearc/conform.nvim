@@ -49,6 +49,7 @@ function M.get_format_clients(options)
       method = method,
     })
   else
+    ---@diagnostic disable-next-line: deprecated
     clients = vim.lsp.get_active_clients({
       id = options.id,
       bufnr = options.bufnr,

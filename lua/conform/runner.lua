@@ -169,6 +169,9 @@ end
 ---@param only_apply_range boolean
 ---@return boolean any_changes
 M.apply_format = function(bufnr, original_lines, new_lines, range, only_apply_range, dry_run)
+  if bufnr == 0 then
+    bufnr = vim.api.nvim_get_current_buf()
+  end
   if not vim.api.nvim_buf_is_valid(bufnr) then
     return false
   end
@@ -197,7 +200,7 @@ M.apply_format = function(bufnr, original_lines, new_lines, range, only_apply_ra
     result_type = "indices",
     algorithm = "histogram",
   })
-  assert(indices)
+  assert(type(indices) == "table")
   log.trace("Diff indices %s", indices)
   local text_edits = {}
   for _, idx in ipairs(indices) do
