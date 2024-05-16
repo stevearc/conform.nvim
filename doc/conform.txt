@@ -200,7 +200,7 @@ FORMATTERS                                                    *conform-formatter
 `blade-formatter` - An opinionated blade template formatter for Laravel that
                   respects readability.
 `blue` - The slightly less uncompromising Python code formatter.
-`bpfmt` - The Android Blueprint file formatter.
+`bpfmt` - Android Blueprint file formatter.
 `buf` - A new way of working with Protocol Buffers.
 `buildifier` - buildifier is a tool for formatting bazel BUILD and .bzl files
              with a standard convention.
