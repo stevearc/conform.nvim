@@ -489,11 +489,17 @@ M.format = function(opts, callback)
   end
 end
 
+---@class conform.FormatLinesOpts
+---@field timeout_ms nil|integer Time in milliseconds to block for formatting. Defaults to 1000. No effect if async = true.
+---@field bufnr nil|integer use this as the working buffer (default 0)
+---@field async nil|boolean If true the method won't block. Defaults to false. If the buffer is modified before the formatter completes, the formatting will be discarded.
+---@field quiet nil|boolean Don't show any notifications for warnings or failures. Defaults to false.
+
 ---Process lines with formatters
 ---@private
 ---@param formatter_names string[]
 ---@param lines string[]
----@param opts? table
+---@param opts? conform.FormatLinesOpts
 ---    timeout_ms nil|integer Time in milliseconds to block for formatting. Defaults to 1000. No effect if async = true.
 ---    bufnr nil|integer use this as the working buffer (default 0)
 ---    async nil|boolean If true the method won't block. Defaults to false. If the buffer is modified before the formatter completes, the formatting will be discarded.
