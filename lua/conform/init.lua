@@ -363,8 +363,21 @@ M.resolve_formatters = function(names, bufnr, warn_on_missing)
   return all_info
 end
 
+---@class conform.FormatOpts
+---@field timeout_ms nil|integer Time in milliseconds to block for formatting. Defaults to 1000. No effect if async = true.
+---@field bufnr nil|integer Format this buffer (default 0)
+---@field async nil|boolean If true the method won't block. Defaults to false. If the buffer is modified before the formatter completes, the formatting will be discarded.
+---@field dry_run nil|boolean If true don't apply formatting changes to the buffer
+---@field formatters nil|string[] List of formatters to run. Defaults to all formatters for the buffer filetype.
+---@field lsp_fallback nil|boolean|"always" Attempt LSP formatting if no formatters are available. Defaults to false. If "always", will attempt LSP formatting even if formatters are available.
+---@field quiet nil|boolean Don't show any notifications for warnings or failures. Defaults to false.
+---@field range nil|table Range to format. Table must contain `start` and `end` keys with {row, col} tuples using (1,0) indexing. Defaults to current selection in visual mode
+---@field id nil|integer Passed to |vim.lsp.buf.format| when lsp_fallback = true
+---@field name nil|string Passed to |vim.lsp.buf.format| when lsp_fallback = true
+---@field filter nil|fun(client: table): boolean Passed to |vim.lsp.buf.format| when lsp_fallback = true
+
 ---Format a buffer
----@param opts? table
+---@param opts? conform.FormatOpts
 ---    timeout_ms nil|integer Time in milliseconds to block for formatting. Defaults to 1000. No effect if async = true.
 ---    bufnr nil|integer Format this buffer (default 0)
 ---    async nil|boolean If true the method won't block. Defaults to false. If the buffer is modified before the formatter completes, the formatting will be discarded.
