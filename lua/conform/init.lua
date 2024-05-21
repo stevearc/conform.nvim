@@ -364,19 +364,21 @@ M.resolve_formatters = function(names, bufnr, warn_on_missing)
   return all_info
 end
 
+---@class conform.FormatOpts
+---@field timeout_ms nil|integer Time in milliseconds to block for formatting. Defaults to 1000. No effect if async = true.
+---@field bufnr nil|integer Format this buffer (default 0)
+---@field async nil|boolean If true the method won't block. Defaults to false. If the buffer is modified before the formatter completes, the formatting will be discarded.
+---@field dry_run nil|boolean If true don't apply formatting changes to the buffer
+---@field formatters nil|string[] List of formatters to run. Defaults to all formatters for the buffer filetype.
+---@field lsp_fallback nil|boolean|"always" Attempt LSP formatting if no formatters are available. Defaults to false. If "always", will attempt LSP formatting even if formatters are available.
+---@field quiet nil|boolean Don't show any notifications for warnings or failures. Defaults to false.
+---@field range nil|table Range to format. Table must contain `start` and `end` keys with {row, col} tuples using (1,0) indexing. Defaults to current selection in visual mode
+---@field id nil|integer Passed to |vim.lsp.buf.format| when lsp_fallback = true
+---@field name nil|string Passed to |vim.lsp.buf.format| when lsp_fallback = true
+---@field filter nil|fun(client: table): boolean Passed to |vim.lsp.buf.format| when lsp_fallback = true
+
 ---Format a buffer
----@param opts? table
----    timeout_ms nil|integer Time in milliseconds to block for formatting. Defaults to 1000. No effect if async = true.
----    bufnr nil|integer Format this buffer (default 0)
----    async nil|boolean If true the method won't block. Defaults to false. If the buffer is modified before the formatter completes, the formatting will be discarded.
----    dry_run nil|boolean If true don't apply formatting changes to the buffer
----    formatters nil|string[] List of formatters to run. Defaults to all formatters for the buffer filetype.
----    lsp_fallback nil|boolean|"always" Attempt LSP formatting if no formatters are available. Defaults to false. If "always", will attempt LSP formatting even if formatters are available.
----    quiet nil|boolean Don't show any notifications for warnings or failures. Defaults to false.
----    range nil|table Range to format. Table must contain `start` and `end` keys with {row, col} tuples using (1,0) indexing. Defaults to current selection in visual mode
----    id nil|integer Passed to |vim.lsp.buf.format| when lsp_fallback = true
----    name nil|string Passed to |vim.lsp.buf.format| when lsp_fallback = true
----    filter nil|fun(client: table): boolean Passed to |vim.lsp.buf.format| when lsp_fallback = true
+---@param opts? conform.FormatOpts
 ---@param callback? fun(err: nil|string, did_edit: nil|boolean) Called once formatting has completed
 ---@return boolean True if any formatters were attempted
 M.format = function(opts, callback)
@@ -477,15 +479,17 @@ M.format = function(opts, callback)
   end
 end
 
+---@class conform.FormatLinesOpts
+---@field timeout_ms nil|integer Time in milliseconds to block for formatting. Defaults to 1000. No effect if async = true.
+---@field bufnr nil|integer use this as the working buffer (default 0)
+---@field async nil|boolean If true the method won't block. Defaults to false. If the buffer is modified before the formatter completes, the formatting will be discarded.
+---@field quiet nil|boolean Don't show any notifications for warnings or failures. Defaults to false.
+
 ---Process lines with formatters
 ---@private
 ---@param formatter_names string[]
 ---@param lines string[]
----@param opts? table
----    timeout_ms nil|integer Time in milliseconds to block for formatting. Defaults to 1000. No effect if async = true.
----    bufnr nil|integer use this as the working buffer (default 0)
----    async nil|boolean If true the method won't block. Defaults to false. If the buffer is modified before the formatter completes, the formatting will be discarded.
----    quiet nil|boolean Don't show any notifications for warnings or failures. Defaults to false.
+---@param opts? conform.FormatLinesOpts
 ---@param callback? fun(err: nil|conform.Error, lines: nil|string[]) Called once formatting has completed
 ---@return nil|conform.Error error Only present if async = false
 ---@return nil|string[] new_lines Only present if async = false
