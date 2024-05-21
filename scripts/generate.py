@@ -11,11 +11,11 @@ from nvim_doc_tools import (
     dedent,
     generate_md_toc,
     indent,
-    parse_functions,
+    parse_directory,
     read_nvim_json,
     read_section,
-    render_md_api,
-    render_vimdoc_api,
+    render_md_api2,
+    render_vimdoc_api2,
     replace_section,
     wrap,
 )
@@ -122,8 +122,9 @@ def add_md_link_path(path: str, lines: List[str]) -> List[str]:
 
 
 def update_md_api():
-    funcs = parse_functions(os.path.join(ROOT, "lua", "conform", "init.lua"))
-    lines = ["\n"] + render_md_api(funcs, 3)[:-1]  # trim last newline
+    types = parse_directory(os.path.join(ROOT, "lua"))
+    funcs = types.files["conform/init.lua"].functions
+    lines = ["\n"] + render_md_api2(funcs, types, 3)[:-1]  # trim last newline
     replace_section(
         README,
         r"^<!-- API -->$",
@@ -186,11 +187,14 @@ def gen_formatter_vimdoc() -> VimdocSection:
 
 def generate_vimdoc():
     doc = Vimdoc("conform.txt", "conform")
-    funcs = parse_functions(os.path.join(ROOT, "lua", "conform", "init.lua"))
+    types = parse_directory(os.path.join(ROOT, "lua"))
+    funcs = types.files["conform/init.lua"].functions
     doc.sections.extend(
         [
             gen_options_vimdoc(),
-            VimdocSection("API", "conform-api", render_vimdoc_api("conform", funcs)),
+            VimdocSection(
+                "API", "conform-api", render_vimdoc_api2("conform", funcs, types)
+            ),
             gen_formatter_vimdoc(),
         ]
     )

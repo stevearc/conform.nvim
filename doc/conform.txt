@@ -113,7 +113,7 @@ format({opts}, {callback}): boolean                               *conform.forma
     Format a buffer
 
     Parameters:
-      {opts}     `nil|table`
+      {opts}     `nil|conform.FormatOpts`
           {timeout_ms}   `nil|integer` Time in milliseconds to block for
                          formatting. Defaults to 1000. No effect if async =
                          true.
