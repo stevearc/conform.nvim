@@ -245,6 +245,7 @@ You can view this list in vim with `:help conform-formatters`
 - [ktfmt](https://github.com/facebook/ktfmt) - Reformats Kotlin source code to comply with the common community standard conventions.
 - [ktlint](https://ktlint.github.io/) - An anti-bikeshedding Kotlin linter with built-in formatter.
 - [latexindent](https://github.com/cmhughes/latexindent.pl) - A perl script for formatting LaTeX files that is generally included in major TeX distributions.
+- [leptosfmt](https://github.com/bram209/leptosfmt) - A formatter for the Leptos `view!` macro.
 - [liquidsoap-prettier](https://github.com/savonet/liquidsoap-prettier) - A binary to format Liquidsoap scripts
 - [markdown-toc](https://github.com/jonschlinkert/markdown-toc) - API and CLI for generating a markdown TOC (table of contents) for a README or any markdown files.
 - [markdownlint](https://github.com/DavidAnson/markdownlint) - A Node.js style checker and lint tool for Markdown/CommonMark files.
