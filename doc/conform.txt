@@ -362,6 +362,7 @@ FORMATTERS                                                    *conform-formatter
 `twig-cs-fixer` - Automatically fix Twig Coding Standards issues
 `typos` - Source code spell checker
 `typstfmt` - Basic formatter for the Typst language with a future!
+`typstyle` - Beautiful and reliable typst code formatter.
 `uncrustify` - A source code beautifier for C, C++, C#, ObjectiveC, D, Java,
              Pawn and Vala.
 `usort` - Safe, minimal import sorting for Python projects.
