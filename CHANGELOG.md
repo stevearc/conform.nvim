@@ -1,5 +1,15 @@
 # Changelog
 
+## [5.8.0](https://github.com/stevearc/conform.nvim/compare/v5.7.0...v5.8.0) (2024-05-22)
+
+
+### Features
+
+* add `ruff_organize_imports` formatter ([#418](https://github.com/stevearc/conform.nvim/issues/418)) ([184756b](https://github.com/stevearc/conform.nvim/commit/184756b7522f82ccdac0013adff1caa313cb897a))
+* add forge_fmt formatter support for solidity filetype ([#417](https://github.com/stevearc/conform.nvim/issues/417)) ([18a3fa4](https://github.com/stevearc/conform.nvim/commit/18a3fa45d841c941399b4559ef60b39f2e3ded7c))
+* add support for leptosfmt ([#415](https://github.com/stevearc/conform.nvim/issues/415)) ([b999fad](https://github.com/stevearc/conform.nvim/commit/b999fad66fd797a57d745c1a999d000b889bd587))
+* add support for typstyle ([#412](https://github.com/stevearc/conform.nvim/issues/412)) ([e47dcde](https://github.com/stevearc/conform.nvim/commit/e47dcde340c80645ab32b09da2c492174e6660c4))
+
 ## [5.7.0](https://github.com/stevearc/conform.nvim/compare/v5.6.0...v5.7.0) (2024-05-16)
 
 
