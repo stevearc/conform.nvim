@@ -270,7 +270,7 @@ FORMATTERS                                                    *conform-formatter
 `ktlint` - An anti-bikeshedding Kotlin linter with built-in formatter.
 `latexindent` - A perl script for formatting LaTeX files that is generally
               included in major TeX distributions.
-`leptosfmt` - A formatter for the Leptos `view!` macro.
+`leptosfmt` - A formatter for the Leptos view! macro.
 `liquidsoap-prettier` - A binary to format Liquidsoap scripts
 `markdown-toc` - API and CLI for generating a markdown TOC (table of contents)
                for a README or any markdown files.
