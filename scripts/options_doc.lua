@@ -38,7 +38,7 @@ require("conform").setup({
   log_level = vim.log.levels.ERROR,
   -- Conform will notify you when a formatter errors
   notify_on_error = true,
-  -- Custom formatters and changes to built-in formatters
+  -- Custom formatters and overrides for built-in formatters
   formatters = {
     my_formatter = {
       -- This can be a string or a function that returns a string.

@@ -30,7 +30,7 @@ M.abspath = function(path)
   return path
 end
 
---- Returns true if candidate is a subpath of root, or if they are the same path.
+---Returns true if candidate is a subpath of root, or if they are the same path.
 ---@param root string
 ---@param candidate string
 ---@return boolean

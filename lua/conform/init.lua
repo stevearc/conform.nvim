@@ -2,67 +2,6 @@
 local islist = vim.islist or vim.tbl_islist
 local M = {}
 
----@class (exact) conform.FormatterInfo
----@field name string
----@field command string
----@field cwd? string
----@field available boolean
----@field available_msg? string
-
----@class (exact) conform.JobFormatterConfig
----@field command string|fun(self: conform.JobFormatterConfig, ctx: conform.Context): string
----@field args? string|string[]|fun(self: conform.JobFormatterConfig, ctx: conform.Context): string|string[]
----@field range_args? fun(self: conform.JobFormatterConfig, ctx: conform.RangeContext): string|string[]
----@field cwd? fun(self: conform.JobFormatterConfig, ctx: conform.Context): nil|string
----@field require_cwd? boolean When cwd is not found, don't run the formatter (default false)
----@field stdin? boolean Send buffer contents to stdin (default true)
----@field tmpfile_format? string When stdin=false, use this format for temporary files (default ".conform.$RANDOM.$FILENAME")
----@field condition? fun(self: conform.JobFormatterConfig, ctx: conform.Context): boolean
----@field exit_codes? integer[] Exit codes that indicate success (default {0})
----@field env? table<string, any>|fun(self: conform.JobFormatterConfig, ctx: conform.Context): table<string, any>
----@field options? table
-
----@class (exact) conform.LuaFormatterConfig
----@field format fun(self: conform.LuaFormatterConfig, ctx: conform.Context, lines: string[], callback: fun(err: nil|string, new_lines: nil|string[]))
----@field condition? fun(self: conform.LuaFormatterConfig, ctx: conform.Context): boolean
----@field options? table
-
----@class (exact) conform.FileLuaFormatterConfig : conform.LuaFormatterConfig
----@field meta conform.FormatterMeta
-
----@class (exact) conform.FileFormatterConfig : conform.JobFormatterConfig
----@field meta conform.FormatterMeta
-
----@alias conform.FormatterConfig conform.JobFormatterConfig|conform.LuaFormatterConfig
-
----@class (exact) conform.FormatterConfigOverride : conform.JobFormatterConfig
----@field inherit? boolean
----@field command? string|fun(self: conform.FormatterConfig, ctx: conform.Context): string
----@field prepend_args? string|string[]|fun(self: conform.FormatterConfig, ctx: conform.Context): string|string[]
----@field format? fun(self: conform.LuaFormatterConfig, ctx: conform.Context, lines: string[], callback: fun(err: nil|string, new_lines: nil|string[])) Mutually exclusive with command
----@field options? table
-
----@class (exact) conform.FormatterMeta
----@field url string
----@field description string
----@field deprecated? boolean
-
----@class (exact) conform.Context
----@field buf integer
----@field filename string
----@field dirname string
----@field range? conform.Range
-
----@class (exact) conform.RangeContext : conform.Context
----@field range conform.Range
-
----@class (exact) conform.Range
----@field start integer[]
----@field end integer[]
-
----@alias conform.FormatterUnit string|string[]
----@alias conform.FiletypeFormatter conform.FormatterUnit[]|fun(bufnr: integer): string[]
-
 ---@type table<string, conform.FiletypeFormatter>
 M.formatters_by_ft = {}
 
@@ -71,6 +10,7 @@ M.formatters = {}
 
 M.notify_on_error = true
 
+---@param opts? conform.setupOpts
 M.setup = function(opts)
   opts = opts or {}
 
@@ -80,8 +20,9 @@ M.setup = function(opts)
   if opts.log_level then
     require("conform.log").level = opts.log_level
   end
-  if opts.notify_on_error ~= nil then
-    M.notify_on_error = opts.notify_on_error
+  local notify_on_error = opts.notify_on_error
+  if notify_on_error ~= nil then
+    M.notify_on_error = notify_on_error
   end
 
   local aug = vim.api.nvim_create_augroup("Conform", { clear = true })

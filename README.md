@@ -15,6 +15,7 @@ Lightweight yet powerful formatter plugin for Neovim
 - [Options](#options)
 - [Formatter options](#formatter-options)
 - [API](#api)
+  - [setup(opts)](#setupopts)
   - [format(opts, callback)](#formatopts-callback)
   - [list_formatters(bufnr)](#list_formattersbufnr)
   - [list_all_formatters()](#list_all_formatters)
@@ -463,7 +464,7 @@ require("conform").setup({
   log_level = vim.log.levels.ERROR,
   -- Conform will notify you when a formatter errors
   notify_on_error = true,
-  -- Custom formatters and changes to built-in formatters
+  -- Custom formatters and overrides for built-in formatters
   formatters = {
     my_formatter = {
       -- This can be a string or a function that returns a string.
@@ -534,6 +535,20 @@ require("conform").formatters.my_formatter = {
 ## API
 
 <!-- API -->
+
+### setup(opts)
+
+`setup(opts)`
+
+| Param | Type                     | Desc                                                                                                             |                                                                                                                                                                           |
+| ----- | ------------------------ | ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| opts  | `nil\|conform.setupOpts` |                                                                                                                  |                                                                                                                                                                           |
+|       | formatters_by_ft         | `nil\|table<string, conform.FiletypeFormatter>`                                                                  | Map of filetype to formatters                                                                                                                                             |
+|       | format_on_save           | `nil\|conform.FormatOpts\|fun(bufnr: integer): conform.FormatOpts`                                               | If this is set, Conform will run the formatter on save. It will pass the table to conform.format(). This can also be a function that returns the table.                   |
+|       | format_after_save        | `nil\|conform.FormatOpts\|fun(bufnr: integer): conform.FormatOpts`                                               | If this is set, Conform will run the formatter asynchronously after save. It will pass the table to conform.format(). This can also be a function that returns the table. |
+|       | log_level                | `nil\|integer`                                                                                                   | Set the log level (e.g. `vim.log.levels.DEBUG`). Use `:ConformInfo` to see the location of the log file.                                                                  |
+|       | notify_on_error          | `nil\|boolean`                                                                                                   | Conform will notify you when a formatter errors (default true).                                                                                                           |
+|       | formatters               | `nil\|table<string, conform.FormatterConfigOverride\|fun(bufnr: integer): nil\|conform.FormatterConfigOverride>` | Custom formatters and overrides for built-in formatters.                                                                                                                  |
 
 ### format(opts, callback)
 
