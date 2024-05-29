@@ -5,6 +5,5 @@ return {
     description = "Code formatter for Lua.",
   },
   command = "lua-format",
-  args = { "-i", "$FILENAME" },
-  stdin = false,
+  stdin = true,
 }
