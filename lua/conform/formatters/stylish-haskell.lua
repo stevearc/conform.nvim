@@ -5,6 +5,6 @@ return {
     description = "Haskell code prettifier.",
   },
   command = "stylish-haskell",
-  args = { "-i", "$FILENAME" },
-  stdin = false,
+  args = {},
+  stdin = true,
 }
