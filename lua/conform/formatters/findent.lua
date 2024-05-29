@@ -4,6 +4,6 @@ return {
     url = "https://github.com/wvermin/findent",
     description = "Indent, relabel and convert Fortran sources.",
   },
-  command = "wfindent",
-  stdin = false,
+  command = "findent",
+  stdin = true,
 }
