@@ -5,9 +5,10 @@ return {
     description = "Tree-sitter query formatter",
   },
   condition = function()
+    ---@diagnostic disable-next-line: param-type-mismatch
     local ok, _ = pcall(vim.treesitter.language.inspect("query"))
 
-    return ok or vim.api.nvim_get_runtime_file("scripts/format-queries.lua", false)[1] ~= nil
+    return ok and vim.api.nvim_get_runtime_file("scripts/format-queries.lua", false)[1] ~= nil
   end,
   command = "nvim",
   args = function()
