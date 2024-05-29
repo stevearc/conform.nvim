@@ -291,6 +291,7 @@ FORMATTERS                                                    *conform-formatter
 `jq` - Command-line JSON processor.
 `jsonnetfmt` - jsonnetfmt is a command line tool to format jsonnet files.
 `just` - Format Justfile.
+`kcl` - The KCL Format tool modifies the files according to the KCL code style
 `ktfmt` - Reformats Kotlin source code to comply with the common community
         standard conventions.
 `ktlint` - An anti-bikeshedding Kotlin linter with built-in formatter.
