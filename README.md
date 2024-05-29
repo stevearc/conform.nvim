@@ -235,6 +235,7 @@ You can view this list in vim with `:help conform-formatters`
 - [golines](https://github.com/segmentio/golines) - A golang formatter that fixes long lines.
 - [google-java-format](https://github.com/google/google-java-format) - Reformats Java source code according to Google Java Style.
 - [hcl](https://github.com/hashicorp/hcl) - A formatter for HCL files.
+- [hindent](https://github.com/mihaimaruseac/hindent) - Haskell pretty printer.
 - [htmlbeautifier](https://github.com/threedaymonk/htmlbeautifier) - A normaliser/beautifier for HTML that also understands embedded Ruby. Ideal for tidying up Rails templates.
 - [indent](https://www.gnu.org/software/indent/) - GNU Indent.
 - [injected](doc/advanced_topics.md#injected-language-formatting-code-blocks) - Format treesitter injected languages.
