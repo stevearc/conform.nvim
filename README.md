@@ -223,6 +223,7 @@ You can view this list in vim with `:help conform-formatters`
 - [fnlfmt](https://git.sr.ht/~technomancy/fnlfmt) - A formatter for Fennel code.
 - [forge_fmt](https://github.com/foundry-rs/foundry) - Forge is a command-line tool that ships with Foundry. Forge tests, builds, and deploys your smart contracts.
 - [fourmolu](https://hackage.haskell.org/package/fourmolu) - A fork of ormolu that uses four space indentation and allows arbitrary configuration.
+- [fprettify](https://github.com/fortran-lang/fprettify) - Auto-formatter for modern fortran source code.
 - [gci](https://github.com/daixiang0/gci) - GCI, a tool that controls Go package import order and makes it always deterministic.
 - [gdformat](https://github.com/Scony/godot-gdscript-toolkit) - A formatter for Godot's gdscript.
 - [gersemi](https://github.com/BlankSpruce/gersemi) - A formatter to make your CMake code the real treasure.
