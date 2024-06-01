@@ -257,6 +257,7 @@ FORMATTERS                                                    *conform-formatter
 `erlfmt` - An automated code formatter for Erlang.
 `eslint_d` - Like ESLint, but faster.
 `fantomas` - F# source code formatter.
+`findent` - Indent, relabel and convert Fortran sources.
 `fish_indent` - Indent or otherwise prettify a piece of fish code.
 `fixjson` - JSON Fixer for Humans using (relaxed) JSON5.
 `fnlfmt` - A formatter for Fennel code.
@@ -377,7 +378,6 @@ FORMATTERS                                                    *conform-formatter
                  `cat -s`.
 `standardjs` - JavaScript Standard style guide, linter, and formatter.
 `standardrb` - Ruby's bikeshed-proof linter and formatter.
-`findent` - Indent, relabel and convert Fortran sources.
 `stylelint` - A mighty CSS linter that helps you avoid errors and enforce
             conventions.
 `styler` - R formatter and linter.
