@@ -280,6 +280,7 @@ FORMATTERS                                                    *conform-formatter
 `google-java-format` - Reformats Java source code according to Google Java
                      Style.
 `hcl` - A formatter for HCL files.
+`hindent` - Haskell pretty printer.
 `htmlbeautifier` - A normaliser/beautifier for HTML that also understands
                  embedded Ruby. Ideal for tidying up Rails templates.
 `indent` - GNU Indent.
