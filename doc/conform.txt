@@ -315,6 +315,8 @@ FORMATTERS                                                    *conform-formatter
 `nixfmt` - nixfmt is a formatter for Nix code, intended to apply a uniform
          style.
 `nixpkgs_fmt` - nixpkgs-fmt is a Nix code formatter for nixpkgs.
+`npm-groovy-lint` - Lint, format and auto-fix your Groovy / Jenkinsfile / Gradle
+                  files using command line.
 `ocamlformat` - Auto-formatter for OCaml code.
 `ocp-indent` - Automatic indentation of OCaml source files.
 `opa_fmt` - Format Rego files using `opa fmt` command.
