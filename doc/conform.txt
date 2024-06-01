@@ -348,6 +348,7 @@ FORMATTERS                                                    *conform-formatter
 `pretty-php` - The opinionated PHP code formatter.
 `puppet-lint` - Check that your Puppet manifests conform to the style guide.
 `purs-tidy` - A syntax tidy-upper for PureScript.
+`pyink` - Pyink, pronounced pī-ˈiŋk, is a Python formatter, forked from Black with a few different formatting behaviors.
 `reorder-python-imports` - Rewrites source to reorder python imports
 `rescript-format` - The built-in ReScript formatter.
 `roc` - A fast, friendly, functional language.
