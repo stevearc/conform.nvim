@@ -196,6 +196,7 @@ M.apply_format = function(bufnr, original_lines, new_lines, range, only_apply_ra
   end
 
   log.trace("Comparing lines %s and %s", original_lines, new_lines)
+  ---@diagnostic disable-next-line: missing-fields
   local indices = vim.diff(original_text, new_text, {
     result_type = "indices",
     algorithm = "histogram",
