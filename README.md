@@ -245,7 +245,7 @@ You can view this list in vim with `:help conform-formatters`
 - [jq](https://github.com/stedolan/jq) - Command-line JSON processor.
 - [jsonnetfmt](https://github.com/google/go-jsonnet/tree/master/cmd/jsonnetfmt) - jsonnetfmt is a command line tool to format jsonnet files.
 - [just](https://github.com/casey/just) - Format Justfile.
-- [kcl](https://www.kcl-lang.io/docs/tools/cli/kcl/fmt) - The KCL Format tool modifies the files according to the KCL code style
+- [kcl](https://www.kcl-lang.io/docs/tools/cli/kcl/fmt) - The KCL Format tool modifies the files according to the KCL code style.
 - [ktfmt](https://github.com/facebook/ktfmt) - Reformats Kotlin source code to comply with the common community standard conventions.
 - [ktlint](https://ktlint.github.io/) - An anti-bikeshedding Kotlin linter with built-in formatter.
 - [latexindent](https://github.com/cmhughes/latexindent.pl) - A perl script for formatting LaTeX files that is generally included in major TeX distributions.
