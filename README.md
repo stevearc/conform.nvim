@@ -220,6 +220,7 @@ You can view this list in vim with `:help conform-formatters`
 - [erlfmt](https://github.com/WhatsApp/erlfmt) - An automated code formatter for Erlang.
 - [eslint_d](https://github.com/mantoni/eslint_d.js/) - Like ESLint, but faster.
 - [fantomas](https://github.com/fsprojects/fantomas) - F# source code formatter.
+- [findent](https://github.com/wvermin/findent) - Indent, relabel and convert Fortran sources.
 - [fish_indent](https://fishshell.com/docs/current/cmds/fish_indent.html) - Indent or otherwise prettify a piece of fish code.
 - [fixjson](https://github.com/rhysd/fixjson) - JSON Fixer for Humans using (relaxed) JSON5.
 - [fnlfmt](https://git.sr.ht/~technomancy/fnlfmt) - A formatter for Fennel code.

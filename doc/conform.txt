@@ -377,6 +377,7 @@ FORMATTERS                                                    *conform-formatter
                  `cat -s`.
 `standardjs` - JavaScript Standard style guide, linter, and formatter.
 `standardrb` - Ruby's bikeshed-proof linter and formatter.
+`findent` - Indent, relabel and convert Fortran sources.
 `stylelint` - A mighty CSS linter that helps you avoid errors and enforce
             conventions.
 `styler` - R formatter and linter.
