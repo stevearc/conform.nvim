@@ -254,6 +254,7 @@ FORMATTERS                                                    *conform-formatter
              rules based on the official [Elm Style Guide](https://elm-
              lang.org/docs/style-guide).
 `erb_format` - Format ERB files with speed and precision.
+`erlfmt` - An automated code formatter for Erlang.
 `eslint_d` - Like ESLint, but faster.
 `fantomas` - F# source code formatter.
 `fish_indent` - Indent or otherwise prettify a piece of fish code.

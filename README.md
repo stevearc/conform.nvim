@@ -217,6 +217,7 @@ You can view this list in vim with `:help conform-formatters`
 - [efmt](https://github.com/sile/efmt) - Erlang code formatter.
 - [elm_format](https://github.com/avh4/elm-format) - elm-format formats Elm source code according to a standard set of rules based on the official [Elm Style Guide](https://elm-lang.org/docs/style-guide).
 - [erb_format](https://github.com/nebulab/erb-formatter) - Format ERB files with speed and precision.
+- [erlfmt](https://github.com/WhatsApp/erlfmt) - An automated code formatter for Erlang.
 - [eslint_d](https://github.com/mantoni/eslint_d.js/) - Like ESLint, but faster.
 - [fantomas](https://github.com/fsprojects/fantomas) - F# source code formatter.
 - [fish_indent](https://fishshell.com/docs/current/cmds/fish_indent.html) - Indent or otherwise prettify a piece of fish code.
