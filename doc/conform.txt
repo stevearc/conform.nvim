@@ -300,6 +300,7 @@ FORMATTERS                                                    *conform-formatter
               included in major TeX distributions.
 `leptosfmt` - A formatter for the Leptos view! macro.
 `liquidsoap-prettier` - A binary to format Liquidsoap scripts
+`lua-format` - Code formatter for Lua.
 `markdown-toc` - API and CLI for generating a markdown TOC (table of contents)
                for a README or any markdown files.
 `markdownlint` - A Node.js style checker and lint tool for Markdown/CommonMark
