@@ -1,24 +1,21 @@
+---@return nil|string
+local function get_format_script()
+  return vim.api.nvim_get_runtime_file("scripts/format-queries.lua", false)[1]
+end
+
 ---@type conform.FileFormatterConfig
 return {
   meta = {
     url = "https://github.com/nvim-treesitter/nvim-treesitter/blob/main/CONTRIBUTING.md#formatting",
-    description = "Tree-sitter query formatter",
+    description = "Tree-sitter query formatter.",
   },
   condition = function()
-    ---@diagnostic disable-next-line: param-type-mismatch
-    local ok, _ = pcall(vim.treesitter.language.inspect("query"))
-
-    return ok and vim.api.nvim_get_runtime_file("scripts/format-queries.lua", false)[1] ~= nil
+    local ok = pcall(vim.treesitter.language.inspect, "query")
+    return ok and get_format_script() ~= nil
   end,
   command = "nvim",
   args = function()
-    local args = { "-l" }
-    local exe = vim.api.nvim_get_runtime_file("scripts/format-queries.lua", false)[1]
-
-    table.insert(args, exe)
-    table.insert(args, "$FILENAME")
-
-    return args
+    return { "-l", get_format_script(), "$FILENAME" }
   end,
   stdin = false,
 }
