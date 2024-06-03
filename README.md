@@ -290,6 +290,7 @@ You can view this list in vim with `:help conform-formatters`
 - [reorder-python-imports](https://github.com/asottile/reorder-python-imports) - Rewrites source to reorder python imports
 - [rescript-format](https://rescript-lang.org/) - The built-in ReScript formatter.
 - [roc](https://github.com/roc-lang/roc) - A fast, friendly, functional language.
+- [rstfmt](https://github.com/dzhu/rstfmt) - A formatter for reStructuredText.
 - [rubocop](https://github.com/rubocop/rubocop) - Ruby static code analyzer and formatter, based on the community Ruby style guide.
 - [rubyfmt](https://github.com/fables-tales/rubyfmt) - Ruby Autoformatter! (Written in Rust)
 - [ruff_fix](https://docs.astral.sh/ruff/) - An extremely fast Python linter, written in Rust. Fix lint errors.
