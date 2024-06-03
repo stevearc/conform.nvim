@@ -15,7 +15,12 @@ return {
   end,
   command = "nvim",
   args = function()
-    return { "-l", get_format_script(), "$FILENAME" }
+    local script = get_format_script()
+    assert(script)
+    -- Manually set the runtimepath to put nvim-treesitter first. The format-queries script relies
+    -- on the nvim-treesitter parser; the one bundled with Neovim may be outdated.
+    local rtp = vim.fn.fnamemodify(script, ":h:h")
+    return { "-c", "set rtp^=" .. rtp, "-l", script, "$FILENAME" }
   end,
   stdin = false,
 }
