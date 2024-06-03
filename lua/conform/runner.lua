@@ -1,5 +1,6 @@
 local errors = require("conform.errors")
 local fs = require("conform.fs")
+local ft_to_ext = require("conform.ft_to_ext")
 local log = require("conform.log")
 local util = require("conform.util")
 local uv = vim.uv or vim.loop
@@ -457,7 +458,7 @@ M.build_context = function(bufnr, config, range)
     filename = fs.join(dirname, "unnamed_temp")
     local ft = vim.bo[bufnr].filetype
     if ft and ft ~= "" then
-      filename = filename .. "." .. ft
+      filename = filename .. "." .. (ft_to_ext[ft] or ft)
     end
   else
     dirname = vim.fs.dirname(filename)
