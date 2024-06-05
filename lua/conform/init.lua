@@ -592,7 +592,7 @@ M.get_formatter_info = function(formatter, bufnr)
       name = formatter,
       command = formatter,
       available = false,
-      available_msg = "No config found",
+      available_msg = "Formatter config missing or incomplete",
     }
   end
 
