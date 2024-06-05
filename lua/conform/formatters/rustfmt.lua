@@ -18,4 +18,8 @@ return {
 
     return args
   end,
+  cwd = util.root_file({
+    "rustfmt.toml",
+    ".rustfmt.toml",
+  }),
 }
