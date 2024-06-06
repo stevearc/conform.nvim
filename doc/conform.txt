@@ -238,6 +238,7 @@ FORMATTERS                                                    *conform-formatter
 `crystal` - Format Crystal code.
 `csharpier` - The opinionated C# code formatter.
 `cue_fmt` - Format CUE files using `cue fmt` command.
+`d2` - D2 diagram formatter.
 `darker` - Run black only on changed lines.
 `dart_format` - Replace the whitespace in your program with formatting that
               follows Dart guidelines.
