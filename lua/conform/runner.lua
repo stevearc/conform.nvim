@@ -330,6 +330,8 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, opts, c
   log.debug("Run command: %s", cmd)
   if cwd then
     log.debug("Run CWD: %s", cwd)
+  else
+    log.debug("Run default CWD: %s", vim.fn.getcwd())
   end
   if env then
     log.debug("Run ENV: %s", env)
