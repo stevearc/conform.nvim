@@ -258,7 +258,7 @@ You can view this list in vim with `:help conform-formatters`
 - [latexindent](https://github.com/cmhughes/latexindent.pl) - A perl script for formatting LaTeX files that is generally included in major TeX distributions.
 - [leptosfmt](https://github.com/bram209/leptosfmt) - A formatter for the Leptos view! macro.
 - [liquidsoap-prettier](https://github.com/savonet/liquidsoap-prettier) - A binary to format Liquidsoap scripts
-- [llf](https://repo.or.cz/llf.git) - A LaTeX reformatter / beautifier
+- [llf](https://repo.or.cz/llf.git) - A LaTeX reformatter / beautifier.
 - [lua-format](https://github.com/Koihik/LuaFormatter) - Code formatter for Lua.
 - [markdown-toc](https://github.com/jonschlinkert/markdown-toc) - API and CLI for generating a markdown TOC (table of contents) for a README or any markdown files.
 - [markdownlint](https://github.com/DavidAnson/markdownlint) - A Node.js style checker and lint tool for Markdown/CommonMark files.
