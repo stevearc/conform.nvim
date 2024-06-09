@@ -1,19 +1,33 @@
-local function find_local_config()
-  local current_file = vim.api.nvim_buf_get_name(0)
-  local local_configs = { ".vsg.yaml", ".vsg.yml", ".vsg.json" }
-  return vim.fs.find(local_configs, {
-    path = vim.fs.dirname(current_file),
-    upward = true,
-  })[1]
-end
+local config_files = {
+  "vsg_config.yaml",
+  "vsg_config.yml",
+  "vsg_config.json",
+  "vsg.yaml",
+  "vsg.yml",
+  "vsg.json",
+  ".vsg_config.yaml",
+  ".vsg_config.yml",
+  ".vsg_config.json",
+  ".vsg.yaml",
+  ".vsg.yml",
+  ".vsg.json",
+}
 
-local function find_global_config()
-  local xdg_config_home = os.getenv("XDG_CONFIG_HOME") or os.getenv("HOME") .. "/.config"
-  local global_configs = { "vsg.yaml", "vsg.yml", "vsg.json" }
-  return vim.fs.find(global_configs, {
-    path = xdg_config_home .. "/vsg",
-    upward = false,
-  })[1]
+local function find_config(dirname)
+  local paths = {
+    dirname,
+    (os.getenv("XDG_CONFIG_HOME") or os.getenv("HOME") .. "/.config") .. "/vsg",
+  }
+
+  for _, path in ipairs(paths) do
+    local config = vim.fs.find(config_files, {
+      path = path,
+      upward = path == dirname,
+    })[1]
+    if config then
+      return config
+    end
+  end
 end
 
 ---@type conform.FileFormatterConfig
@@ -24,9 +38,9 @@ return {
   },
   command = "vsg",
   stdin = false,
-  args = function()
+  args = function(_, ctx)
     local args = { "-of", "syntastic", "--fix", "-f", "$FILENAME" }
-    local config_file = find_local_config() or find_global_config()
+    local config_file = find_config(ctx.dirname)
 
     if config_file then
       table.insert(args, "-c")
