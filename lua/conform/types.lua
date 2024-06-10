@@ -35,6 +35,7 @@
 ---@field inherit? boolean
 ---@field command? string|fun(self: conform.FormatterConfig, ctx: conform.Context): string
 ---@field prepend_args? string|string[]|fun(self: conform.FormatterConfig, ctx: conform.Context): string|string[]
+---@field append_args? string|string[]|fun(self: conform.FormatterConfig, ctx: conform.Context): string|string[]
 ---@field format? fun(self: conform.LuaFormatterConfig, ctx: conform.Context, lines: string[], callback: fun(err: nil|string, new_lines: nil|string[])) Mutually exclusive with command
 ---@field options? table
 
