@@ -1,5 +1,39 @@
 # Changelog
 
+## [5.9.0](https://github.com/stevearc/conform.nvim/compare/v5.8.0...v5.9.0) (2024-06-10)
+
+
+### Features
+
+* add support for d2 ([#445](https://github.com/stevearc/conform.nvim/issues/445)) ([5e7a000](https://github.com/stevearc/conform.nvim/commit/5e7a000e4f239b56077e5a38680c5e9a0bf60e6a))
+* add support for efmt ([#428](https://github.com/stevearc/conform.nvim/issues/428)) ([a1d3c0a](https://github.com/stevearc/conform.nvim/commit/a1d3c0aff306b974bc07b4cdf52f1766dd89fc90))
+* add support for for vsg ([#451](https://github.com/stevearc/conform.nvim/issues/451)) ([cf562dd](https://github.com/stevearc/conform.nvim/commit/cf562dd160c27a7fc5342dfce7e1227746dd3aaa))
+* add support for fprettify ([#429](https://github.com/stevearc/conform.nvim/issues/429)) ([7999faf](https://github.com/stevearc/conform.nvim/commit/7999faf7bbec7461f62dabd57cccb784c8d804b5))
+* add support for hindent ([#430](https://github.com/stevearc/conform.nvim/issues/430)) ([9f46982](https://github.com/stevearc/conform.nvim/commit/9f46982b8dc2bf1e267d386ccd096f896369e323))
+* add support for kcl fmt ([#431](https://github.com/stevearc/conform.nvim/issues/431)) ([03a07d5](https://github.com/stevearc/conform.nvim/commit/03a07d58be09a681ab162f3a069dc9e86589bacb))
+* add support for npm-groovy-lint ([#433](https://github.com/stevearc/conform.nvim/issues/433)) ([8fd894c](https://github.com/stevearc/conform.nvim/commit/8fd894cdc248cad64dbfeac6b89e03db9f737a35))
+* add treesitter query formatter ([#425](https://github.com/stevearc/conform.nvim/issues/425)) ([63e0a32](https://github.com/stevearc/conform.nvim/commit/63e0a32c85a39484813957dc480f171907aa90b9))
+* **erlang:** support erlfmt ([#436](https://github.com/stevearc/conform.nvim/issues/436)) ([948c83b](https://github.com/stevearc/conform.nvim/commit/948c83b00eb81bf16b54c6a092ddd88be46793cd))
+* formatter override can use  ([#453](https://github.com/stevearc/conform.nvim/issues/453)) ([a28a425](https://github.com/stevearc/conform.nvim/commit/a28a4255e5c5631ee9c58537592fca05447f0503))
+* **fortran:** support findent ([#426](https://github.com/stevearc/conform.nvim/issues/426)) ([969cdf5](https://github.com/stevearc/conform.nvim/commit/969cdf50b011bec08b4fb8bd3ea3031df183501b))
+* **haskell:** support stylish-haskell ([#435](https://github.com/stevearc/conform.nvim/issues/435)) ([dc612fb](https://github.com/stevearc/conform.nvim/commit/dc612fbf6194fcb3ef401871db1cae74134e9423))
+* **latex:** support llf ([#446](https://github.com/stevearc/conform.nvim/issues/446)) ([1743ee6](https://github.com/stevearc/conform.nvim/commit/1743ee6f9fc52825bdee9493e246876bed591bc1))
+* **lua:** support lua-format ([#432](https://github.com/stevearc/conform.nvim/issues/432)) ([b421e95](https://github.com/stevearc/conform.nvim/commit/b421e95a31e6c3b064a964292255e3b9c762fddd))
+* **python:** support pyink ([#427](https://github.com/stevearc/conform.nvim/issues/427)) ([8b147ca](https://github.com/stevearc/conform.nvim/commit/8b147ca7abccbb19dd952dbb7aeebcdd56b02aee))
+* **rst:** support rstfmt ([#434](https://github.com/stevearc/conform.nvim/issues/434)) ([294bd1d](https://github.com/stevearc/conform.nvim/commit/294bd1d4d32d4c4b797bfc997ea0e4c1a7019ce5))
+* support docstrfmt ([#441](https://github.com/stevearc/conform.nvim/issues/441)) ([c841697](https://github.com/stevearc/conform.nvim/commit/c84169717ee74698f9df20c6437fa06df03bf1fe))
+
+
+### Bug Fixes
+
+* always add cwd to debug logs ([44879ff](https://github.com/stevearc/conform.nvim/commit/44879ffd0268ba931532537b1ee44ed77cd90a5d))
+* **dprint:** add support for binary in node_modules ([#422](https://github.com/stevearc/conform.nvim/issues/422)) ([b1285c7](https://github.com/stevearc/conform.nvim/commit/b1285c7c24559688a9e02d3828d9b72f553b3549))
+* **format-queries:** update query formatter for breaking changes in nvim-treesitter ([7159a23](https://github.com/stevearc/conform.nvim/commit/7159a23d19fb982269dae2e8147ebbe34965095b))
+* improve error message when formatter config is missing ([3f61023](https://github.com/stevearc/conform.nvim/commit/3f610236caf3db6576a0dd7760e5b0731659db68))
+* **rustfmt:** add a default cwd when config file is detected ([#419](https://github.com/stevearc/conform.nvim/issues/419)) ([355049b](https://github.com/stevearc/conform.nvim/commit/355049bc318c3c968b2b434cea9a5bcdf6bf8ea7))
+* set correct file extension for unsaved buffer temp files ([#440](https://github.com/stevearc/conform.nvim/issues/440)) ([88b699b](https://github.com/stevearc/conform.nvim/commit/88b699b595703f1ae9d9061c050e52b1fe7c33f1))
+* use vim.fs.root in neovim 0.10 ([584adfe](https://github.com/stevearc/conform.nvim/commit/584adfe7c665827601f4245c0c40273e8bc9e7cb))
+
 ## [5.8.0](https://github.com/stevearc/conform.nvim/compare/v5.7.0...v5.8.0) (2024-05-22)
 
 
