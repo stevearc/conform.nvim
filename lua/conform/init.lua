@@ -305,33 +305,58 @@ M.resolve_formatters = function(names, bufnr, warn_on_missing)
   return all_info
 end
 
+---Check if there are any formatters configured specifically for the buffer's filetype
+---@param bufnr integer
+---@return boolean
+local function has_filetype_formatters(bufnr)
+  local matching_filetype = get_matching_filetype(bufnr)
+  return matching_filetype ~= nil and matching_filetype ~= "_"
+end
+
+---@param opts table
+---@return boolean
+local function has_lsp_formatter(opts)
+  local lsp_format = require("conform.lsp_format")
+  return not vim.tbl_isempty(lsp_format.get_format_clients(opts))
+end
+
 ---@class conform.FormatOpts
 ---@field timeout_ms nil|integer Time in milliseconds to block for formatting. Defaults to 1000. No effect if async = true.
 ---@field bufnr nil|integer Format this buffer (default 0)
 ---@field async nil|boolean If true the method won't block. Defaults to false. If the buffer is modified before the formatter completes, the formatting will be discarded.
 ---@field dry_run nil|boolean If true don't apply formatting changes to the buffer
 ---@field formatters nil|string[] List of formatters to run. Defaults to all formatters for the buffer filetype.
----@field lsp_fallback nil|boolean|"always" Attempt LSP formatting if no formatters are available. Defaults to false. If "always", will attempt LSP formatting even if formatters are available.
+---@field lsp_format? "never"|"fallback"|"prefer"|"first"|"last" "fallback" LSP formatting when no other formatters are available, "prefer" only LSP formatting when available, "first" LSP formatting then other formatters, "last" other formatters then LSP.
 ---@field quiet nil|boolean Don't show any notifications for warnings or failures. Defaults to false.
 ---@field range nil|table Range to format. Table must contain `start` and `end` keys with {row, col} tuples using (1,0) indexing. Defaults to current selection in visual mode
----@field id nil|integer Passed to |vim.lsp.buf.format| when lsp_fallback = true
----@field name nil|string Passed to |vim.lsp.buf.format| when lsp_fallback = true
----@field filter nil|fun(client: table): boolean Passed to |vim.lsp.buf.format| when lsp_fallback = true
+---@field id nil|integer Passed to |vim.lsp.buf.format| when using LSP formatting
+---@field name nil|string Passed to |vim.lsp.buf.format| when using LSP formatting
+---@field filter nil|fun(client: table): boolean Passed to |vim.lsp.buf.format| when using LSP formatting
 
 ---Format a buffer
 ---@param opts? conform.FormatOpts
 ---@param callback? fun(err: nil|string, did_edit: nil|boolean) Called once formatting has completed
 ---@return boolean True if any formatters were attempted
 M.format = function(opts, callback)
-  ---@type {timeout_ms: integer, bufnr: integer, async: boolean, dry_run: boolean, lsp_fallback: boolean|"always", quiet: boolean, formatters?: string[], range?: conform.Range}
+  ---@type {timeout_ms: integer, bufnr: integer, async: boolean, dry_run: boolean, lsp_format: "never"|"first"|"last"|"prefer"|"fallback", quiet: boolean, formatters?: string[], range?: conform.Range}
   opts = vim.tbl_extend("keep", opts or {}, {
     timeout_ms = 1000,
     bufnr = 0,
     async = false,
     dry_run = false,
-    lsp_fallback = false,
+    lsp_format = "never",
     quiet = false,
   })
+
+  -- For backwards compatibility
+  ---@diagnostic disable-next-line: undefined-field
+  if opts.lsp_fallback == true then
+    opts.lsp_format = "fallback"
+    ---@diagnostic disable-next-line: undefined-field
+  elseif opts.lsp_fallback == "always" then
+    opts.lsp_format = "last"
+  end
+
   if opts.bufnr == 0 then
     opts.bufnr = vim.api.nvim_get_current_buf()
   end
@@ -349,71 +374,85 @@ M.format = function(opts, callback)
   local formatter_names = opts.formatters or M.list_formatters_for_buffer(opts.bufnr)
   local formatters =
     M.resolve_formatters(formatter_names, opts.bufnr, not opts.quiet and explicit_formatters)
+  local has_lsp = has_lsp_formatter(opts)
 
-  local any_formatters = not vim.tbl_isempty(formatters)
-  if not explicit_formatters and opts.lsp_fallback == true and M.will_fallback_lsp(opts) then
-    -- use the LSP formatter when the configured formatters are from the fallback "_" filetype
-    any_formatters = false
-  else
+  ---@param err? conform.Error
+  ---@param did_edit? boolean
+  local function handle_result(err, did_edit)
+    if err then
+      local level = errors.level_for_code(err.code)
+      log.log(level, err.message)
+      local should_notify = not opts.quiet and level >= vim.log.levels.WARN
+      -- Execution errors have special handling. Maybe should reconsider this.
+      local notify_msg = err.message
+      if errors.is_execution_error(err.code) then
+        should_notify = should_notify and M.notify_on_error and not err.debounce_message
+        notify_msg = "Formatter failed. See :ConformInfo for details"
+      end
+      if should_notify then
+        vim.notify(notify_msg, level)
+      end
+    end
+    local err_message = err and err.message
+    if not err_message and not vim.api.nvim_buf_is_valid(opts.bufnr) then
+      err_message = "buffer was deleted"
+    end
+    if err_message then
+      return callback(err_message)
+    end
+
+    if opts.dry_run and did_edit then
+      callback(nil, true)
+    elseif opts.lsp_format == "last" and has_lsp then
+      log.debug("Running LSP formatter on %s", vim.api.nvim_buf_get_name(opts.bufnr))
+      lsp_format.format(opts, callback)
+    else
+      callback(nil, did_edit)
+    end
+  end
+  local function run_cli_formatters(cb)
     local resolved_names = vim.tbl_map(function(f)
       return f.name
     end, formatters)
     log.debug("Running formatters on %s: %s", vim.api.nvim_buf_get_name(opts.bufnr), resolved_names)
-  end
-
-  if any_formatters then
-    ---@param err? conform.Error
-    ---@param did_edit? boolean
-    local function handle_result(err, did_edit)
-      if err then
-        local level = errors.level_for_code(err.code)
-        log.log(level, err.message)
-        local should_notify = not opts.quiet and level >= vim.log.levels.WARN
-        -- Execution errors have special handling. Maybe should reconsider this.
-        local notify_msg = err.message
-        if errors.is_execution_error(err.code) then
-          should_notify = should_notify and M.notify_on_error and not err.debounce_message
-          notify_msg = "Formatter failed. See :ConformInfo for details"
-        end
-        if should_notify then
-          vim.notify(notify_msg, level)
-        end
-      end
-      local err_message = err and err.message
-      if not err_message and not vim.api.nvim_buf_is_valid(opts.bufnr) then
-        err_message = "buffer was deleted"
-      end
-      if err_message then
-        return callback(err_message)
-      end
-
-      if opts.dry_run and did_edit then
-        callback(nil, true)
-      elseif
-        opts.lsp_fallback == "always" and not vim.tbl_isempty(lsp_format.get_format_clients(opts))
-      then
-        log.debug("Running LSP formatter on %s", vim.api.nvim_buf_get_name(opts.bufnr))
-        lsp_format.format(opts, callback)
-      else
-        callback(nil, did_edit)
-      end
-    end
-
     local run_opts = { exclusive = true, dry_run = opts.dry_run }
     if opts.async then
-      runner.format_async(opts.bufnr, formatters, opts.range, run_opts, handle_result)
+      runner.format_async(opts.bufnr, formatters, opts.range, run_opts, cb)
     else
       local err, did_edit =
         runner.format_sync(opts.bufnr, formatters, opts.timeout_ms, opts.range, run_opts)
-      handle_result(err, did_edit)
+      cb(err, did_edit)
     end
-    return true
-  elseif opts.lsp_fallback and not vim.tbl_isempty(lsp_format.get_format_clients(opts)) then
+  end
+
+  if
+    has_lsp
+    and (
+      opts.lsp_format == "prefer"
+      or (opts.lsp_format ~= "never" and not has_filetype_formatters(opts.bufnr))
+    )
+  then
+    -- LSP formatting only
     log.debug("Running LSP formatter on %s", vim.api.nvim_buf_get_name(opts.bufnr))
     lsp_format.format(opts, callback)
     return true
+  elseif has_lsp and opts.lsp_format == "first" then
+    -- LSP formatting, then other formatters
+    log.debug("Running LSP formatter on %s", vim.api.nvim_buf_get_name(opts.bufnr))
+    lsp_format.format(opts, function(err, did_edit)
+      if err or (did_edit and opts.dry_run) then
+        return callback(err, did_edit)
+      end
+      run_cli_formatters(function(err2, did_edit2)
+        handle_result(err2, did_edit or did_edit2)
+      end)
+    end)
+    return true
+  elseif not vim.tbl_isempty(formatters) then
+    run_cli_formatters(handle_result)
+    return true
   else
-    local level = vim.tbl_isempty(formatter_names) and "debug" or "warn"
+    local level = explicit_formatters and "warn" or "debug"
     log[level]("No formatters found for %s", vim.api.nvim_buf_get_name(opts.bufnr))
     callback("No formatters found for buffer")
     return false
@@ -647,7 +686,7 @@ M.get_formatter_info = function(formatter, bufnr)
   }
 end
 
----Check if the buffer will use LSP formatting when lsp_fallback = true
+---Check if the buffer will use LSP formatting when lsp_format = "fallback"
 ---@param options? table Options passed to |vim.lsp.buf.format|
 ---@return boolean
 M.will_fallback_lsp = function(options)
@@ -657,18 +696,15 @@ M.will_fallback_lsp = function(options)
   if options.bufnr == 0 then
     options.bufnr = vim.api.nvim_get_current_buf()
   end
-  local matching_filetype = get_matching_filetype(options.bufnr)
-  local has_primary_formatters = matching_filetype and matching_filetype ~= "_"
-  local lsp_clients = require("conform.lsp_format").get_format_clients(options)
-  return not has_primary_formatters and not vim.tbl_isempty(lsp_clients)
+  return not has_filetype_formatters(options.bufnr) and has_lsp_formatter(options)
 end
 
 M.formatexpr = function(opts)
-  local lsp_format = require("conform.lsp_format")
   -- Change the defaults slightly from conform.format
   opts = vim.tbl_deep_extend("keep", opts or {}, {
     timeout_ms = 500,
-    lsp_fallback = true,
+    lsp_format = "fallback",
+    bufnr = vim.api.nvim_get_current_buf(),
   })
   -- Force async = false
   opts.async = false
@@ -697,15 +733,8 @@ M.formatexpr = function(opts)
     }
   end
 
-  if M.format(opts) then
-    return 0
-  elseif opts.lsp_fallback and not vim.tbl_isempty(lsp_format.get_format_clients(opts)) then
-    -- No formatters were available; fall back to lsp formatter
-    return vim.lsp.formatexpr({ timeout_ms = opts.timeout_ms })
-  else
-    -- Do not fallback to built-in formatter.
-    return 0
-  end
+  M.format(opts)
+  return 0
 end
 
 return M

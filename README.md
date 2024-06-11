@@ -153,7 +153,7 @@ require("conform").setup({
   format_on_save = {
     -- These options will be passed to conform.format()
     timeout_ms = 500,
-    lsp_fallback = true,
+    lsp_format = "fallback",
   },
 })
 ```
@@ -467,14 +467,14 @@ require("conform").setup({
   -- This can also be a function that returns the table.
   format_on_save = {
     -- I recommend these options. See :help conform.format for details.
-    lsp_fallback = true,
+    lsp_format = "fallback",
     timeout_ms = 500,
   },
   -- If this is set, Conform will run the formatter asynchronously after save.
   -- It will pass the table to conform.format().
   -- This can also be a function that returns the table.
   format_after_save = {
-    lsp_fallback = true,
+    lsp_format = "fallback",
   },
   -- Set the log level. Use `:ConformInfo` to see the location of the log file.
   log_level = vim.log.levels.ERROR,
@@ -575,21 +575,21 @@ require("conform").formatters.my_formatter = {
 `format(opts, callback): boolean` \
 Format a buffer
 
-| Param    | Type                                                 | Desc                                 |                                                                                                                                                      |
-| -------- | ---------------------------------------------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| opts     | `nil\|conform.FormatOpts`                            |                                      |                                                                                                                                                      |
-|          | timeout_ms                                           | `nil\|integer`                       | Time in milliseconds to block for formatting. Defaults to 1000. No effect if async = true.                                                           |
-|          | bufnr                                                | `nil\|integer`                       | Format this buffer (default 0)                                                                                                                       |
-|          | async                                                | `nil\|boolean`                       | If true the method won't block. Defaults to false. If the buffer is modified before the formatter completes, the formatting will be discarded.       |
-|          | dry_run                                              | `nil\|boolean`                       | If true don't apply formatting changes to the buffer                                                                                                 |
-|          | formatters                                           | `nil\|string[]`                      | List of formatters to run. Defaults to all formatters for the buffer filetype.                                                                       |
-|          | lsp_fallback                                         | `nil\|boolean\|"always"`             | Attempt LSP formatting if no formatters are available. Defaults to false. If "always", will attempt LSP formatting even if formatters are available. |
-|          | quiet                                                | `nil\|boolean`                       | Don't show any notifications for warnings or failures. Defaults to false.                                                                            |
-|          | range                                                | `nil\|table`                         | Range to format. Table must contain `start` and `end` keys with {row, col} tuples using (1,0) indexing. Defaults to current selection in visual mode |
-|          | id                                                   | `nil\|integer`                       | Passed to vim.lsp.buf.format when lsp_fallback = true                                                                                                |
-|          | name                                                 | `nil\|string`                        | Passed to vim.lsp.buf.format when lsp_fallback = true                                                                                                |
-|          | filter                                               | `nil\|fun(client: table): boolean`   | Passed to vim.lsp.buf.format when lsp_fallback = true                                                                                                |
-| callback | `nil\|fun(err: nil\|string, did_edit: nil\|boolean)` | Called once formatting has completed |                                                                                                                                                      |
+| Param    | Type                                                 | Desc                                                  |                                                                                                                                                                                                |
+| -------- | ---------------------------------------------------- | ----------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| opts     | `nil\|conform.FormatOpts`                            |                                                       |                                                                                                                                                                                                |
+|          | timeout_ms                                           | `nil\|integer`                                        | Time in milliseconds to block for formatting. Defaults to 1000. No effect if async = true.                                                                                                     |
+|          | bufnr                                                | `nil\|integer`                                        | Format this buffer (default 0)                                                                                                                                                                 |
+|          | async                                                | `nil\|boolean`                                        | If true the method won't block. Defaults to false. If the buffer is modified before the formatter completes, the formatting will be discarded.                                                 |
+|          | dry_run                                              | `nil\|boolean`                                        | If true don't apply formatting changes to the buffer                                                                                                                                           |
+|          | formatters                                           | `nil\|string[]`                                       | List of formatters to run. Defaults to all formatters for the buffer filetype.                                                                                                                 |
+|          | lsp_format                                           | `nil\|"never"\|"fallback"\|"prefer"\|"first"\|"last"` | "fallback" LSP formatting when no other formatters are available, "prefer" only LSP formatting when available, "first" LSP formatting then other formatters, "last" other formatters then LSP. |
+|          | quiet                                                | `nil\|boolean`                                        | Don't show any notifications for warnings or failures. Defaults to false.                                                                                                                      |
+|          | range                                                | `nil\|table`                                          | Range to format. Table must contain `start` and `end` keys with {row, col} tuples using (1,0) indexing. Defaults to current selection in visual mode                                           |
+|          | id                                                   | `nil\|integer`                                        | Passed to vim.lsp.buf.format when using LSP formatting                                                                                                                                         |
+|          | name                                                 | `nil\|string`                                         | Passed to vim.lsp.buf.format when using LSP formatting                                                                                                                                         |
+|          | filter                                               | `nil\|fun(client: table): boolean`                    | Passed to vim.lsp.buf.format when using LSP formatting                                                                                                                                         |
+| callback | `nil\|fun(err: nil\|string, did_edit: nil\|boolean)` | Called once formatting has completed                  |                                                                                                                                                                                                |
 
 Returns:
 
@@ -625,7 +625,7 @@ Get information about a formatter (including availability)
 ### will_fallback_lsp(options)
 
 `will_fallback_lsp(options): boolean` \
-Check if the buffer will use LSP formatting when lsp_fallback = true
+Check if the buffer will use LSP formatting when lsp_format = "fallback"
 
 | Param   | Type         | Desc                                 |
 | ------- | ------------ | ------------------------------------ |

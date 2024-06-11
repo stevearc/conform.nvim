@@ -24,7 +24,7 @@ vim.api.nvim_create_user_command("Format", function(args)
       ["end"] = { args.line2, end_line:len() },
     }
   end
-  require("conform").format({ async = true, lsp_fallback = true, range = range })
+  require("conform").format({ async = true, lsp_format = "fallback", range = range })
 end, { range = true })
 ```
 
@@ -53,7 +53,7 @@ require("conform").setup({
       return
     end
     -- ...additional logic...
-    return { timeout_ms = 500, lsp_fallback = true }
+    return { timeout_ms = 500, lsp_format = "fallback" }
   end,
 })
 
@@ -65,7 +65,7 @@ require("conform").setup({
       return
     end
     -- ...additional logic...
-    return { lsp_fallback = true }
+    return { lsp_format = "fallback" }
   end,
 })
 ```
@@ -83,7 +83,7 @@ require("conform").setup({
     if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
       return
     end
-    return { timeout_ms = 500, lsp_fallback = true }
+    return { timeout_ms = 500, lsp_format = "fallback" }
   end,
 })
 
@@ -123,14 +123,14 @@ require("conform").setup({
       end
     end
 
-    return { timeout_ms = 200, lsp_fallback = true }, on_format
+    return { timeout_ms = 200, lsp_format = "fallback" }, on_format
   end,
 
   format_after_save = function(bufnr)
     if not slow_format_filetypes[vim.bo[bufnr].filetype] then
       return
     end
-    return { lsp_fallback = true }
+    return { lsp_format = "fallback" }
   end,
 })
 ```
@@ -149,7 +149,7 @@ return {
       -- Customize or remove this keymap to your liking
       "<leader>f",
       function()
-        require("conform").format({ async = true, lsp_fallback = true })
+        require("conform").format({ async = true, lsp_format = "fallback" })
       end,
       mode = "",
       desc = "Format buffer",
@@ -164,7 +164,7 @@ return {
       javascript = { { "prettierd", "prettier" } },
     },
     -- Set up format-on-save
-    format_on_save = { timeout_ms = 500, lsp_fallback = true },
+    format_on_save = { timeout_ms = 500, lsp_format = "fallback" },
     -- Customize formatters
     formatters = {
       shfmt = {
