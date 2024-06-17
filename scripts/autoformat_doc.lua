@@ -16,7 +16,7 @@ require("conform").setup({
       return
     end
     -- ...additional logic...
-    return { timeout_ms = 500, lsp_fallback = true }
+    return { timeout_ms = 500, lsp_format = "fallback" }
   end,
 })
 
@@ -28,6 +28,6 @@ require("conform").setup({
       return
     end
     -- ...additional logic...
-    return { lsp_fallback = true }
+    return { lsp_format = "fallback" }
   end,
 })
