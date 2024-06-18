@@ -119,11 +119,11 @@ setup({opts})                                                      *conform.setu
       {opts} `nil|conform.setupOpts`
           {formatters_by_ft} `nil|table<string, conform.FiletypeFormatter>` Map
                              of filetype to formatters
-          {format_on_save}   `nil|conform.FormatOpts|fun(bufnr: integer): conform.FormatOpts` I
+          {format_on_save}   `nil|conform.FormatOpts|fun(bufnr: integer): nil|conform.FormatOpts` I
                              f this is set, Conform will run the formatter on
                              save. It will pass the table to conform.format().
                              This can also be a function that returns the table.
-          {format_after_save} `nil|conform.FormatOpts|fun(bufnr: integer): conform.FormatOpts` I
+          {format_after_save} `nil|conform.FormatOpts|fun(bufnr: integer): nil|conform.FormatOpts` I
                              f this is set, Conform will run the formatter
                              asynchronously after save. It will pass the table
                              to conform.format(). This can also be a function

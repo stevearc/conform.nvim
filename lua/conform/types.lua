@@ -62,8 +62,8 @@
 
 ---@class (exact) conform.setupOpts
 ---@field formatters_by_ft? table<string, conform.FiletypeFormatter> Map of filetype to formatters
----@field format_on_save? conform.FormatOpts|fun(bufnr: integer): conform.FormatOpts If this is set, Conform will run the formatter on save. It will pass the table to conform.format(). This can also be a function that returns the table.
----@field format_after_save? conform.FormatOpts|fun(bufnr: integer): conform.FormatOpts If this is set, Conform will run the formatter asynchronously after save. It will pass the table to conform.format(). This can also be a function that returns the table.
+---@field format_on_save? conform.FormatOpts|fun(bufnr: integer): nil|conform.FormatOpts If this is set, Conform will run the formatter on save. It will pass the table to conform.format(). This can also be a function that returns the table.
+---@field format_after_save? conform.FormatOpts|fun(bufnr: integer): nil|conform.FormatOpts If this is set, Conform will run the formatter asynchronously after save. It will pass the table to conform.format(). This can also be a function that returns the table.
 ---@field log_level? integer Set the log level (e.g. `vim.log.levels.DEBUG`). Use `:ConformInfo` to see the location of the log file.
 ---@field notify_on_error? boolean Conform will notify you when a formatter errors (default true).
 ---@field formatters? table<string, conform.FormatterConfigOverride|fun(bufnr: integer): nil|conform.FormatterConfigOverride> Custom formatters and overrides for built-in formatters.
