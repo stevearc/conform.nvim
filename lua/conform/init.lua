@@ -177,7 +177,7 @@ local function get_matching_filetype(bufnr)
   table.insert(filetypes, "_")
   for _, filetype in ipairs(filetypes) do
     local ft_formatters = M.formatters_by_ft[filetype]
-    if ft_formatters then
+    if ft_formatters and not vim.tbl_isempty(ft_formatters) then
       return filetype
     end
   end
