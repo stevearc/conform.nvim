@@ -451,6 +451,9 @@ M.format = function(opts, callback)
   elseif not vim.tbl_isempty(formatters) then
     run_cli_formatters(handle_result)
     return true
+  elseif opts.lsp_format == "fallback" and M.will_fallback_lsp(opts) then
+    lsp_format.format(opts, callback)
+    return true
   else
     local level = explicit_formatters and "warn" or "debug"
     log[level]("No formatters found for %s", vim.api.nvim_buf_get_name(opts.bufnr))
@@ -696,7 +699,7 @@ M.will_fallback_lsp = function(options)
   if options.bufnr == 0 then
     options.bufnr = vim.api.nvim_get_current_buf()
   end
-  return not has_filetype_formatters(options.bufnr) and has_lsp_formatter(options)
+  return has_lsp_formatter(options)
 end
 
 M.formatexpr = function(opts)
