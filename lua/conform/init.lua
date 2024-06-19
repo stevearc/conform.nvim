@@ -166,6 +166,12 @@ M.setup = function(opts)
   end, { desc = "Show information about Conform formatters" })
 end
 
+---@param obj any
+---@return boolean
+local function is_empty_table(obj)
+  return type(obj) == "table" and vim.tbl_isempty(obj)
+end
+
 ---Get the configured formatter filetype for a buffer
 ---@param bufnr? integer
 ---@return nil|string filetype or nil if no formatter is configured
@@ -177,7 +183,9 @@ local function get_matching_filetype(bufnr)
   table.insert(filetypes, "_")
   for _, filetype in ipairs(filetypes) do
     local ft_formatters = M.formatters_by_ft[filetype]
-    if ft_formatters then
+    -- Sometimes people put an empty table here, and that should not count as configuring formatters
+    -- for a filetype.
+    if ft_formatters and not is_empty_table(ft_formatters) then
       return filetype
     end
   end
@@ -425,12 +433,13 @@ M.format = function(opts, callback)
     end
   end
 
+  -- check if formatters were configured for this buffer's filetype specifically (i.e. not the "_"
+  -- or "*" formatters) AND that at least one of the configured formatters is available
+  local any_formatters = has_filetype_formatters(opts.bufnr) and not vim.tbl_isempty(formatters)
+
   if
     has_lsp
-    and (
-      opts.lsp_format == "prefer"
-      or (opts.lsp_format ~= "never" and not has_filetype_formatters(opts.bufnr))
-    )
+    and (opts.lsp_format == "prefer" or (opts.lsp_format ~= "never" and not any_formatters))
   then
     -- LSP formatting only
     log.debug("Running LSP formatter on %s", vim.api.nvim_buf_get_name(opts.bufnr))
