@@ -378,6 +378,9 @@ M.format = function(opts, callback)
   local lsp_format = require("conform.lsp_format")
   local runner = require("conform.runner")
 
+  if is_empty_table(opts.formatters) then
+    opts.formatters = nil
+  end
   local explicit_formatters = opts.formatters ~= nil
   local formatter_names = opts.formatters or M.list_formatters_for_buffer(opts.bufnr)
   local formatters =
