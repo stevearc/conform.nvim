@@ -328,13 +328,20 @@ local function has_lsp_formatter(opts)
   return not vim.tbl_isempty(lsp_format.get_format_clients(opts))
 end
 
+---@alias conform.LspFormatOpts
+---| '"never"' # never use the LSP for formatting (default)
+---| '"fallback"' # LSP formatting is used when no other formatters are available
+---| '"prefer"' # use only LSP formatting when available
+---| '"first"' # LSP formatting is used when available and then other formatters
+---| '"last"' # other formatters are used then LSP formatting when available
+
 ---@class conform.FormatOpts
 ---@field timeout_ms nil|integer Time in milliseconds to block for formatting. Defaults to 1000. No effect if async = true.
 ---@field bufnr nil|integer Format this buffer (default 0)
 ---@field async nil|boolean If true the method won't block. Defaults to false. If the buffer is modified before the formatter completes, the formatting will be discarded.
 ---@field dry_run nil|boolean If true don't apply formatting changes to the buffer
 ---@field formatters nil|string[] List of formatters to run. Defaults to all formatters for the buffer filetype.
----@field lsp_format? "never"|"fallback"|"prefer"|"first"|"last" "fallback" LSP formatting when no other formatters are available, "prefer" only LSP formatting when available, "first" LSP formatting then other formatters, "last" other formatters then LSP.
+---@field lsp_format? conform.LspFormatOpts Configure if and when LSP should be used for formatting. Defaults to "never".
 ---@field quiet nil|boolean Don't show any notifications for warnings or failures. Defaults to false.
 ---@field range nil|table Range to format. Table must contain `start` and `end` keys with {row, col} tuples using (1,0) indexing. Defaults to current selection in visual mode
 ---@field id nil|integer Passed to |vim.lsp.buf.format| when using LSP formatting
