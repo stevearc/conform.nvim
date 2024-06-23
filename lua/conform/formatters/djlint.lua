@@ -6,10 +6,10 @@ return {
     description = "✨ HTML Template Linter and Formatter. Django - Jinja - Nunjucks - Handlebars - GoLang.",
   },
   command = "djlint",
-  args = {
-    "--reformat",
-    "-",
-  },
+  args = function(_, ctx)
+    local indent = vim.bo[ctx.buf].tabstop or 4 -- default is 4
+    return { "--reformat", "--indent", indent, "-" }
+  end,
   cwd = util.root_file({
     ".djlintrc",
   }),
