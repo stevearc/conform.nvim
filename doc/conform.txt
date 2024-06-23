@@ -234,6 +234,7 @@ FORMATTERS                                                    *conform-formatter
                   respects readability.
 `blue` - The slightly less uncompromising Python code formatter.
 `bpfmt` - Android Blueprint file formatter.
+`bsfmt` - A code formatter for BrighterScript (and BrightScript).
 `buf` - A new way of working with Protocol Buffers.
 `buildifier` - buildifier is a tool for formatting bazel BUILD and .bzl files
              with a standard convention.
