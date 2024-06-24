@@ -246,6 +246,7 @@ FORMATTERS                                                    *conform-formatter
 `cljstyle` - Formatter for Clojure code.
 `cmake_format` - Parse cmake listfiles and format them nicely.
 `codespell` - Check code for common misspellings.
+`crlfmt` - Formatter for CockroachDB's additions to the Go style guide.
 `crystal` - Format Crystal code.
 `csharpier` - The opinionated C# code formatter.
 `cue_fmt` - Format CUE files using `cue fmt` command.
