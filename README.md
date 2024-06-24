@@ -196,6 +196,7 @@ You can view this list in vim with `:help conform-formatters`
 - [blade-formatter](https://github.com/shufo/blade-formatter) - An opinionated blade template formatter for Laravel that respects readability.
 - [blue](https://github.com/grantjenks/blue) - The slightly less uncompromising Python code formatter.
 - [bpfmt](https://source.android.com/docs/setup/reference/androidbp) - Android Blueprint file formatter.
+- [bsfmt](https://github.com/rokucommunity/brighterscript-formatter) - A code formatter for BrighterScript (and BrightScript).
 - [buf](https://buf.build/docs/reference/cli/buf/format) - A new way of working with Protocol Buffers.
 - [buildifier](https://github.com/bazelbuild/buildtools/tree/master/buildifier) - buildifier is a tool for formatting bazel BUILD and .bzl files with a standard convention.
 - [cabal_fmt](https://hackage.haskell.org/package/cabal-fmt) - Format cabal files with cabal-fmt
@@ -615,7 +616,6 @@ Retrieve the available formatters for a buffer
 `list_all_formatters(): conform.FormatterInfo[]` \
 List information about all filetype-configured formatters
 
-
 ### get_formatter_info(formatter, bufnr)
 
 `get_formatter_info(formatter, bufnr): conform.FormatterInfo` \
@@ -634,6 +634,7 @@ Check if the buffer will use LSP formatting when lsp_format = "fallback"
 | Param   | Type         | Desc                                 |
 | ------- | ------------ | ------------------------------------ |
 | options | `nil\|table` | Options passed to vim.lsp.buf.format |
+
 <!-- /API -->
 
 ## Acknowledgements
