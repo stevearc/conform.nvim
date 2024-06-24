@@ -286,6 +286,7 @@ FORMATTERS                                                    *conform-formatter
 `gdformat` - A formatter for Godot's gdscript.
 `gersemi` - A formatter to make your CMake code the real treasure.
 `gleam` - ⭐️ A friendly language for building type-safe, scalable systems!
+`gluon_fmt` - Code formatting for the gluon programming language.
 `gn` - gn build system.
 `gofmt` - Formats go programs.
 `gofumpt` - Enforce a stricter format than gofmt, while being backwards
