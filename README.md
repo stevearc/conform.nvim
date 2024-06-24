@@ -616,6 +616,7 @@ Retrieve the available formatters for a buffer
 `list_all_formatters(): conform.FormatterInfo[]` \
 List information about all filetype-configured formatters
 
+
 ### get_formatter_info(formatter, bufnr)
 
 `get_formatter_info(formatter, bufnr): conform.FormatterInfo` \
@@ -634,7 +635,6 @@ Check if the buffer will use LSP formatting when lsp_format = "fallback"
 | Param   | Type         | Desc                                 |
 | ------- | ------------ | ------------------------------------ |
 | options | `nil\|table` | Options passed to vim.lsp.buf.format |
-
 <!-- /API -->
 
 ## Acknowledgements
