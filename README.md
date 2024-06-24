@@ -196,14 +196,17 @@ You can view this list in vim with `:help conform-formatters`
 - [blade-formatter](https://github.com/shufo/blade-formatter) - An opinionated blade template formatter for Laravel that respects readability.
 - [blue](https://github.com/grantjenks/blue) - The slightly less uncompromising Python code formatter.
 - [bpfmt](https://source.android.com/docs/setup/reference/androidbp) - Android Blueprint file formatter.
+- [bsfmt](https://github.com/rokucommunity/brighterscript-formatter) - A code formatter for BrighterScript (and BrightScript).
 - [buf](https://buf.build/docs/reference/cli/buf/format) - A new way of working with Protocol Buffers.
 - [buildifier](https://github.com/bazelbuild/buildtools/tree/master/buildifier) - buildifier is a tool for formatting bazel BUILD and .bzl files with a standard convention.
 - [cabal_fmt](https://hackage.haskell.org/package/cabal-fmt) - Format cabal files with cabal-fmt
+- [caramel_fmt](https://caramel.run/manual/reference/cli/fmt.html) - Format Caramel code.
 - [cbfmt](https://github.com/lukas-reineke/cbfmt) - A tool to format codeblocks inside markdown and org documents.
 - [clang-format](https://www.kernel.org/doc/html/latest/process/clang-format.html) - Tool to format C/C++/… code according to a set of rules and heuristics.
 - [cljstyle](https://github.com/greglook/cljstyle) - Formatter for Clojure code.
 - [cmake_format](https://github.com/cheshirekow/cmake_format) - Parse cmake listfiles and format them nicely.
 - [codespell](https://github.com/codespell-project/codespell) - Check code for common misspellings.
+- [crlfmt](https://github.com/cockroachdb/crlfmt) - Formatter for CockroachDB's additions to the Go style guide.
 - [crystal](https://crystal-lang.org/) - Format Crystal code.
 - [csharpier](https://github.com/belav/csharpier) - The opinionated C# code formatter.
 - [cue_fmt](https://cuelang.org) - Format CUE files using `cue fmt` command.
@@ -234,6 +237,7 @@ You can view this list in vim with `:help conform-formatters`
 - [gdformat](https://github.com/Scony/godot-gdscript-toolkit) - A formatter for Godot's gdscript.
 - [gersemi](https://github.com/BlankSpruce/gersemi) - A formatter to make your CMake code the real treasure.
 - [gleam](https://github.com/gleam-lang/gleam) - ⭐️ A friendly language for building type-safe, scalable systems!
+- [gluon_fmt](https://github.com/gluon-lang/gluon) - Code formatting for the gluon programming language.
 - [gn](https://gn.googlesource.com/gn/) - gn build system.
 - [gofmt](https://pkg.go.dev/cmd/gofmt) - Formats go programs.
 - [gofumpt](https://github.com/mvdan/gofumpt) - Enforce a stricter format than gofmt, while being backwards compatible. That is, gofumpt is happy with a subset of the formats that gofmt is happy with.
@@ -267,6 +271,7 @@ You can view this list in vim with `:help conform-formatters`
 - [mdsf](https://github.com/hougesen/mdsf) - Format markdown code blocks using your favorite code formatters.
 - [mdslw](https://github.com/razziel89/mdslw) - Prepare your markdown for easy diff'ing by adding line breaks after every sentence.
 - [mix](https://hexdocs.pm/mix/main/Mix.Tasks.Format.html) - Format Elixir files using the mix format command.
+- [nickel](https://nickel-lang.org/) - Code formatter for the Nickel programming language.
 - [nimpretty](https://github.com/nim-lang/nim) - nimpretty is a Nim source code beautifier that follows the official style guide.
 - [nixfmt](https://github.com/serokell/nixfmt) - nixfmt is a formatter for Nix code, intended to apply a uniform style.
 - [nixpkgs_fmt](https://github.com/nix-community/nixpkgs-fmt) - nixpkgs-fmt is a Nix code formatter for nixpkgs.

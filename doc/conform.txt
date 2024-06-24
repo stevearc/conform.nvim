@@ -234,16 +234,19 @@ FORMATTERS                                                    *conform-formatter
                   respects readability.
 `blue` - The slightly less uncompromising Python code formatter.
 `bpfmt` - Android Blueprint file formatter.
+`bsfmt` - A code formatter for BrighterScript (and BrightScript).
 `buf` - A new way of working with Protocol Buffers.
 `buildifier` - buildifier is a tool for formatting bazel BUILD and .bzl files
              with a standard convention.
 `cabal_fmt` - Format cabal files with cabal-fmt
+`caramel_fmt` - Format Caramel code.
 `cbfmt` - A tool to format codeblocks inside markdown and org documents.
 `clang-format` - Tool to format C/C++/… code according to a set of rules and
                heuristics.
 `cljstyle` - Formatter for Clojure code.
 `cmake_format` - Parse cmake listfiles and format them nicely.
 `codespell` - Check code for common misspellings.
+`crlfmt` - Formatter for CockroachDB's additions to the Go style guide.
 `crystal` - Format Crystal code.
 `csharpier` - The opinionated C# code formatter.
 `cue_fmt` - Format CUE files using `cue fmt` command.
@@ -283,6 +286,7 @@ FORMATTERS                                                    *conform-formatter
 `gdformat` - A formatter for Godot's gdscript.
 `gersemi` - A formatter to make your CMake code the real treasure.
 `gleam` - ⭐️ A friendly language for building type-safe, scalable systems!
+`gluon_fmt` - Code formatting for the gluon programming language.
 `gn` - gn build system.
 `gofmt` - Formats go programs.
 `gofumpt` - Enforce a stricter format than gofmt, while being backwards
@@ -330,6 +334,7 @@ FORMATTERS                                                    *conform-formatter
 `mdslw` - Prepare your markdown for easy diff'ing by adding line breaks after
         every sentence.
 `mix` - Format Elixir files using the mix format command.
+`nickel` - Code formatter for the Nickel programming language.
 `nimpretty` - nimpretty is a Nim source code beautifier that follows the
             official style guide.
 `nixfmt` - nixfmt is a formatter for Nix code, intended to apply a uniform
