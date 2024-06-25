@@ -213,6 +213,8 @@ You can view this list in vim with `:help conform-formatters`
 - [d2](https://github.com/terrastruct/d2) - D2 is a modern diagram scripting language that turns text to diagrams.
 - [darker](https://github.com/akaihola/darker) - Run black only on changed lines.
 - [dart_format](https://dart.dev/tools/dart-format) - Replace the whitespace in your program with formatting that follows Dart guidelines.
+- [dcm_fix](https://dcm.dev/docs/cli/formatting/fix/) - Fixes issues produced by dcm analyze, dcm check-unused-code or dcm check-dependencies commands.
+- [dcm_format](https://dcm.dev/docs/cli/formatting/format/) - Formats *.dart files.
 - [deno_fmt](https://deno.land/manual/tools/formatter) - Use [Deno](https://deno.land/) to format TypeScript, JavaScript/JSON and markdown.
 - [dfmt](https://github.com/dlang-community/dfmt) - Formatter for D source code.
 - [djlint](https://github.com/Riverside-Healthcare/djLint) - ✨ HTML Template Linter and Formatter. Django - Jinja - Nunjucks - Handlebars - GoLang.
