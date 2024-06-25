@@ -1,5 +1,32 @@
 # Changelog
 
+## [6.0.0](https://github.com/stevearc/conform.nvim/compare/v5.9.0...v6.0.0) (2024-06-25)
+
+
+### ⚠ BREAKING CHANGES
+
+* expand options for LSP formatting ([#456](https://github.com/stevearc/conform.nvim/issues/456))
+
+### Features
+
+* add support for caramel fmt ([#469](https://github.com/stevearc/conform.nvim/issues/469)) ([c35f52b](https://github.com/stevearc/conform.nvim/commit/c35f52b04e4436d5525102b2d61150679c967100))
+* **djlint:** use tabstop to set indentation ([#467](https://github.com/stevearc/conform.nvim/issues/467)) ([ac6e142](https://github.com/stevearc/conform.nvim/commit/ac6e142a10c8817762f55a35ed6cb9632671ec79)), closes [#457](https://github.com/stevearc/conform.nvim/issues/457)
+* expand options for LSP formatting ([#456](https://github.com/stevearc/conform.nvim/issues/456)) ([9228b2f](https://github.com/stevearc/conform.nvim/commit/9228b2ff4efd58b6e081defec643bf887ebadff6))
+* support brighterscript-formatter ([#468](https://github.com/stevearc/conform.nvim/issues/468)) ([89af7f0](https://github.com/stevearc/conform.nvim/commit/89af7f00b6e52647c7b0e04eb8cc9bc9cab91e3e))
+* support crlfmt ([#470](https://github.com/stevearc/conform.nvim/issues/470)) ([7394d49](https://github.com/stevearc/conform.nvim/commit/7394d4989cd08ddb72e526c43afae7dd3111d553))
+* support dcm fix and dcm format ([#471](https://github.com/stevearc/conform.nvim/issues/471)) ([b67f273](https://github.com/stevearc/conform.nvim/commit/b67f2732a2d0276454c7623204741d908de5358a))
+* support docformatter ([#472](https://github.com/stevearc/conform.nvim/issues/472)) ([b5ae342](https://github.com/stevearc/conform.nvim/commit/b5ae342ab28919a8083b589a587b030ad859592e))
+* support gluon fmt ([#473](https://github.com/stevearc/conform.nvim/issues/473)) ([d1f9bd4](https://github.com/stevearc/conform.nvim/commit/d1f9bd4823628d26a10b98acc9b3b6dbc7b1c053))
+* support grain format ([#474](https://github.com/stevearc/conform.nvim/issues/474)) ([d2afc5d](https://github.com/stevearc/conform.nvim/commit/d2afc5de7a24dcde7af13209b91d8e3b87a89661))
+* support imba fmt ([#475](https://github.com/stevearc/conform.nvim/issues/475)) ([6856aed](https://github.com/stevearc/conform.nvim/commit/6856aed6d7abf94735739d44a459aef977c2ab44))
+* support nickel format ([#476](https://github.com/stevearc/conform.nvim/issues/476)) ([241c892](https://github.com/stevearc/conform.nvim/commit/241c892b265f7a5906584b34c5be36b48c09a4b8))
+
+
+### Bug Fixes
+
+* deprecate typstfmt formatter ([#458](https://github.com/stevearc/conform.nvim/issues/458)) ([6e5d476](https://github.com/stevearc/conform.nvim/commit/6e5d476e97dbd251cc2233d42fd238c810404701))
+* LSP fallback behavior when formatters not availble ([bde3bee](https://github.com/stevearc/conform.nvim/commit/bde3bee1773c96212b6c49f009e05174f932c23a))
+
 ## [5.9.0](https://github.com/stevearc/conform.nvim/compare/v5.8.0...v5.9.0) (2024-06-10)
 
 
