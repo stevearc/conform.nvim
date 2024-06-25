@@ -248,6 +248,7 @@ You can view this list in vim with `:help conform-formatters`
 - [goimports-reviser](https://github.com/incu6us/goimports-reviser) - Right imports sorting & code formatting tool (goimports alternative).
 - [golines](https://github.com/segmentio/golines) - A golang formatter that fixes long lines.
 - [google-java-format](https://github.com/google/google-java-format) - Reformats Java source code according to Google Java Style.
+- [grain_format](https://grain-lang.org/docs/tooling/grain_cli#grain-format) - Code formatter for the grain programming language.
 - [hcl](https://github.com/hashicorp/hcl) - A formatter for HCL files.
 - [hindent](https://github.com/mihaimaruseac/hindent) - Haskell pretty printer.
 - [htmlbeautifier](https://github.com/threedaymonk/htmlbeautifier) - A normaliser/beautifier for HTML that also understands embedded Ruby. Ideal for tidying up Rails templates.
