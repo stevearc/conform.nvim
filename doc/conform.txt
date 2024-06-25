@@ -262,6 +262,8 @@ FORMATTERS                                                    *conform-formatter
 `dfmt` - Formatter for D source code.
 `djlint` - ✨ HTML Template Linter and Formatter. Django - Jinja - Nunjucks -
          Handlebars - GoLang.
+`docformatter` - docformatter automatically formats docstrings to follow a
+               subset of the PEP 257 conventions.
 `docstrfmt` - reStructuredText formatter.
 `dprint` - Pluggable and configurable code formatting platform written in Rust.
 `easy-coding-standard` - ecs - Use Coding Standard with 0-knowledge of PHP-CS-

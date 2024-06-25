@@ -218,6 +218,7 @@ You can view this list in vim with `:help conform-formatters`
 - [deno_fmt](https://deno.land/manual/tools/formatter) - Use [Deno](https://deno.land/) to format TypeScript, JavaScript/JSON and markdown.
 - [dfmt](https://github.com/dlang-community/dfmt) - Formatter for D source code.
 - [djlint](https://github.com/Riverside-Healthcare/djLint) - ✨ HTML Template Linter and Formatter. Django - Jinja - Nunjucks - Handlebars - GoLang.
+- [docformatter](https://pypi.org/project/docformatter/) - docformatter automatically formats docstrings to follow a subset of the PEP 257 conventions.
 - [docstrfmt](https://github.com/LilSpazJoekp/docstrfmt) - reStructuredText formatter.
 - [dprint](https://github.com/dprint/dprint) - Pluggable and configurable code formatting platform written in Rust.
 - [easy-coding-standard](https://github.com/easy-coding-standard/easy-coding-standard) - ecs - Use Coding Standard with 0-knowledge of PHP-CS-Fixer and PHP_CodeSniffer.
