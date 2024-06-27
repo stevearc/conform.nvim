@@ -7,6 +7,7 @@
 - [Command to toggle format-on-save](#command-to-toggle-format-on-save)
 - [Automatically run slow formatters async](#automatically-run-slow-formatters-async)
 - [Lazy loading with lazy.nvim](#lazy-loading-with-lazynvim)
+- [Display error message](#display-error-message)
 
 <!-- /TOC -->
 
@@ -177,4 +178,52 @@ return {
     vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
   end,
 }
+```
+
+## Display error message
+
+Display formatter output if it fails or explanation if it is unable to run. A message similar to one below will show up on the bottom of the screen (using default `vim.notify`).
+
+```
+Formatter 'rustfmt' error: error: expected `;`, found `bar`
+ --> <stdin>:2:10
+  |
+2 |     foo()
+  |          ^ help: add `;` here
+3 |     bar()
+  |     --- unexpected token
+
+Press ENTER or type command to continue
+```
+
+```lua
+local function notify_on_error(err)
+  if err then
+    vim.notify(err, vim.log.levels.WARN)
+  end
+end
+
+-- Show error message in manual invocation
+vim.keymap.set("<leader>f", function()
+  local format_opts = {
+    -- ...
+  }
+  require("conform").format(format_opts, notify_on_error)
+end, { desc = "Format buffer" })
+
+-- Show error message on/after save
+require("conform").setup({
+  format_on_save = function(bufnr)
+    local format_opts = {
+      -- ...
+    }
+    return format_opts, notify_on_error
+  end,
+  format_after_save = function(bufnr)
+    local format_opts = {
+      -- ...
+    }
+    return format_opts, notify_on_error
+  end,
+})
 ```
