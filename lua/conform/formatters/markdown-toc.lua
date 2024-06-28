@@ -6,10 +6,18 @@ return {
   },
   command = "markdown-toc",
   stdin = false,
-  args = function(self, ctx)
+  args = function(_, ctx)
     -- use the indentation set in the current buffer, effectively allowing us to
     -- use values from .editorconfig
-    local indent = vim.bo[ctx.buf].expandtab and (" "):rep(vim.bo[ctx.buf].tabstop) or "\t"
+    local indent = "\t"
+    local bo = vim.bo[ctx.buf]
+    if bo.expandtab then
+      local indent_size = bo.shiftwidth
+      if indent_size == 0 or not indent_size then
+        indent_size = bo.tabstop or 4 -- default is 4
+      end
+      indent = (" "):rep(indent_size)
+    end
     return { "--indent=" .. indent, "-i", "$FILENAME" }
   end,
 }
