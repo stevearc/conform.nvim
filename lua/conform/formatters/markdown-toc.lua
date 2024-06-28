@@ -9,15 +9,7 @@ return {
   args = function(_, ctx)
     -- use the indentation set in the current buffer, effectively allowing us to
     -- use values from .editorconfig
-    local indent = "\t"
-    local bo = vim.bo[ctx.buf]
-    if bo.expandtab then
-      local indent_size = bo.shiftwidth
-      if indent_size == 0 or not indent_size then
-        indent_size = bo.tabstop or 4 -- default is 4
-      end
-      indent = (" "):rep(indent_size)
-    end
+    local indent = vim.bo[ctx.buf].expandtab and (" "):rep(ctx.shiftwidth) or "\t"
     return { "--indent=" .. indent, "-i", "$FILENAME" }
   end,
 }

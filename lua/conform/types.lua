@@ -49,6 +49,7 @@
 ---@field filename string
 ---@field dirname string
 ---@field range? conform.Range
+---@field shiftwidth integer
 
 ---@class (exact) conform.RangeContext : conform.Context
 ---@field range conform.Range
