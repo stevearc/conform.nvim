@@ -7,7 +7,7 @@ return {
   },
   command = util.from_node_modules("biome"),
   stdin = true,
-  args = { "check", "--apply", "--stdin-file-path", "$FILENAME" },
+  args = { "check", "--write", "--stdin-file-path", "$FILENAME" },
   cwd = util.root_file({
     "biome.json",
     "biome.jsonc",
