@@ -59,11 +59,36 @@ describe("runner", function()
       local config = assert(conform.get_formatter_config("test"))
       local ctx = runner.build_context(0, config)
       local filename = vim.api.nvim_buf_get_name(bufnr)
-      assert.are.same({
-        buf = bufnr,
-        filename = filename,
-        dirname = vim.fs.dirname(filename),
-      }, ctx)
+      assert.equal(bufnr, ctx.buf)
+      assert.equal(filename, ctx.filename)
+      assert.equal(vim.fs.dirname(filename), ctx.dirname)
+    end)
+
+    it("sets the shiftwidth to shiftwidth", function()
+      vim.cmd.edit({ args = { "README.md" } })
+      local bufnr = vim.api.nvim_get_current_buf()
+      vim.bo[bufnr].shiftwidth = 7
+      conform.formatters.test = {
+        meta = { url = "", description = "" },
+        command = "echo",
+      }
+      local config = assert(conform.get_formatter_config("test"))
+      local ctx = runner.build_context(0, config)
+      assert.equal(7, ctx.shiftwidth)
+    end)
+
+    it("sets the shiftwidth to tabstop as fallback", function()
+      vim.cmd.edit({ args = { "README.md" } })
+      local bufnr = vim.api.nvim_get_current_buf()
+      vim.bo[bufnr].shiftwidth = 0
+      vim.bo[bufnr].tabstop = 3
+      conform.formatters.test = {
+        meta = { url = "", description = "" },
+        command = "echo",
+      }
+      local config = assert(conform.get_formatter_config("test"))
+      local ctx = runner.build_context(0, config)
+      assert.equal(3, ctx.shiftwidth)
     end)
 
     it("sets temp file when stdin = false", function()

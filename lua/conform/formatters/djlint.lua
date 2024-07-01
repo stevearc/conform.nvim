@@ -7,8 +7,7 @@ return {
   },
   command = "djlint",
   args = function(_, ctx)
-    local indent = vim.bo[ctx.buf].tabstop or 4 -- default is 4
-    return { "--reformat", "--indent", indent, "-" }
+    return { "--reformat", "--indent", ctx.shiftwidth, "-" }
   end,
   cwd = util.root_file({
     ".djlintrc",

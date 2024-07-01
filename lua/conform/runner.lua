@@ -450,6 +450,11 @@ M.build_context = function(bufnr, config, range)
   end
   local filename = vim.api.nvim_buf_get_name(bufnr)
 
+  local shiftwidth = vim.bo[bufnr].shiftwidth
+  if shiftwidth == 0 then
+    shiftwidth = vim.bo[bufnr].tabstop
+  end
+
   -- Hack around checkhealth. For buffers that are not files, we need to fabricate a filename
   if vim.bo[bufnr].buftype ~= "" then
     filename = ""
@@ -482,6 +487,7 @@ M.build_context = function(bufnr, config, range)
     filename = filename,
     dirname = dirname,
     range = range,
+    shiftwidth = shiftwidth,
   }
 end
 
