@@ -415,6 +415,7 @@ FORMATTERS                                                    *conform-formatter
                `swift build`.
 `swiftformat` - SwiftFormat is a code library and command-line tool for
               reformatting `swift` code on macOS or Linux.
+`swiftlint` - A tool to enforce Swift style and conventions.
 `taplo` - A TOML toolkit written in Rust.
 `templ` - Formats templ template files.
 `terraform_fmt` - The terraform-fmt command rewrites `terraform` configuration
