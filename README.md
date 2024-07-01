@@ -330,6 +330,7 @@ You can view this list in vim with `:help conform-formatters`
 - [stylua](https://github.com/JohnnyMorganz/StyLua) - An opinionated code formatter for Lua.
 - [swift_format](https://github.com/apple/swift-format) - Swift formatter from apple. Requires building from source with `swift build`.
 - [swiftformat](https://github.com/nicklockwood/SwiftFormat) - SwiftFormat is a code library and command-line tool for reformatting `swift` code on macOS or Linux.
+- [swiftlint](https://github.com/realm/SwiftLint)  - A tool to enforce Swift style and conventions.
 - [taplo](https://github.com/tamasfe/taplo) - A TOML toolkit written in Rust.
 - [templ](https://templ.guide/commands-and-tools/cli/#formatting-templ-files) - Formats templ template files.
 - [terraform_fmt](https://www.terraform.io/docs/cli/commands/fmt.html) - The terraform-fmt command rewrites `terraform` configuration files to a canonical format and style.
