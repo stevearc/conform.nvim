@@ -1,5 +1,19 @@
 # Changelog
 
+## [6.1.0](https://github.com/stevearc/conform.nvim/compare/v6.0.0...v6.1.0) (2024-07-01)
+
+
+### Features
+
+* add Swiftlint formatter ([#484](https://github.com/stevearc/conform.nvim/issues/484)) ([bf94a7c](https://github.com/stevearc/conform.nvim/commit/bf94a7cee31df9525239bc7d5ca4910009dfa4ee))
+* **shfmt:** add automatic indentation detection ([#481](https://github.com/stevearc/conform.nvim/issues/481)) ([cd75be8](https://github.com/stevearc/conform.nvim/commit/cd75be867f2331b22905f47d28c0c270a69466aa))
+
+
+### Bug Fixes
+
+* **biome-check:** use --write instead of deprecated --apply ([#482](https://github.com/stevearc/conform.nvim/issues/482)) ([0cdd6a7](https://github.com/stevearc/conform.nvim/commit/0cdd6a7c66a57560c91c816a567bd1d247be53c3))
+* **npm-groovy-lint:** ignore exit code 1 ([#477](https://github.com/stevearc/conform.nvim/issues/477)) ([c26dadf](https://github.com/stevearc/conform.nvim/commit/c26dadf8a47a547768d1048a0d698ecec33494ce))
+
 ## [6.0.0](https://github.com/stevearc/conform.nvim/compare/v5.9.0...v6.0.0) (2024-06-25)
 
 
