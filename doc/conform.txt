@@ -173,6 +173,8 @@ format({opts}, {callback}): boolean                               *conform.forma
                        LSP formatting
           {filter}     `nil|fun(client: table): boolean` Passed to
                        |vim.lsp.buf.format| when using LSP formatting
+          {undojoin}   nil|boolean Performs undojoin before formatting. Only
+                       works for sync formatting. Defaults to false
       {callback} `nil|fun(err: nil|string, did_edit: nil|boolean)` Called once
                  formatting has completed
     Returns:

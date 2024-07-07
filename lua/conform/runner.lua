@@ -9,6 +9,7 @@ local M = {}
 ---@class (exact) conform.RunOpts
 ---@field exclusive boolean If true, ensure only a single formatter is running per buffer
 ---@field dry_run boolean If true, do not apply changes and stop after the first formatter attempts to do so
+---@field undojoin boolean If true, join undo blocks before applying changes
 
 ---@param formatter_name string
 ---@param ctx conform.Context
@@ -168,8 +169,9 @@ end
 ---@param new_lines string[]
 ---@param range? conform.Range
 ---@param only_apply_range boolean
+---@param undojoin boolean
 ---@return boolean any_changes
-M.apply_format = function(bufnr, original_lines, new_lines, range, only_apply_range, dry_run)
+M.apply_format = function(bufnr, original_lines, new_lines, range, only_apply_range, dry_run, undojoin)
   if bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
   end
@@ -251,6 +253,9 @@ M.apply_format = function(bufnr, original_lines, new_lines, range, only_apply_ra
 
   if not dry_run then
     log.trace("Applying text edits: %s", text_edits)
+    if undojoin == true then
+      vim.cmd("undojoin")
+    end
     vim.lsp.util.apply_text_edits(text_edits, bufnr, "utf-8")
     log.trace("Done formatting %s", bufname)
   end
@@ -535,7 +540,8 @@ M.format_async = function(bufnr, formatters, range, opts, callback)
           output_lines,
           range,
           not all_support_range_formatting,
-          opts.dry_run
+          opts.dry_run,
+          opts.undojoin
         )
       end
       callback(err, did_edit)
@@ -609,7 +615,8 @@ M.format_sync = function(bufnr, formatters, timeout_ms, range, opts)
     final_result,
     range,
     not all_support_range_formatting,
-    opts.dry_run
+    opts.dry_run,
+    opts.undojoin
   )
   return err, did_edit
 end

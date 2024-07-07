@@ -340,6 +340,7 @@ end
 ---@field bufnr nil|integer Format this buffer (default 0)
 ---@field async nil|boolean If true the method won't block. Defaults to false. If the buffer is modified before the formatter completes, the formatting will be discarded.
 ---@field dry_run nil|boolean If true don't apply formatting changes to the buffer
+---@field undojoin nil|boolean If true run the formatter with undojoin (default false)
 ---@field formatters nil|string[] List of formatters to run. Defaults to all formatters for the buffer filetype.
 ---@field lsp_format? conform.LspFormatOpts Configure if and when LSP should be used for formatting. Defaults to "never".
 ---@field quiet nil|boolean Don't show any notifications for warnings or failures. Defaults to false.
@@ -353,7 +354,7 @@ end
 ---@param callback? fun(err: nil|string, did_edit: nil|boolean) Called once formatting has completed
 ---@return boolean True if any formatters were attempted
 M.format = function(opts, callback)
-  ---@type {timeout_ms: integer, bufnr: integer, async: boolean, dry_run: boolean, lsp_format: "never"|"first"|"last"|"prefer"|"fallback", quiet: boolean, formatters?: string[], range?: conform.Range}
+  ---@type {timeout_ms: integer, bufnr: integer, async: boolean, dry_run: boolean, lsp_format: "never"|"first"|"last"|"prefer"|"fallback", quiet: boolean, formatters?: string[], range?: conform.Range, undojoin: boolean}
   opts = vim.tbl_extend("keep", opts or {}, {
     timeout_ms = 1000,
     bufnr = 0,
@@ -430,7 +431,7 @@ M.format = function(opts, callback)
       return f.name
     end, formatters)
     log.debug("Running formatters on %s: %s", vim.api.nvim_buf_get_name(opts.bufnr), resolved_names)
-    local run_opts = { exclusive = true, dry_run = opts.dry_run }
+    local run_opts = { exclusive = true, dry_run = opts.dry_run, undojoin = opts.undojoin }
     if opts.async then
       runner.format_async(opts.bufnr, formatters, opts.range, run_opts, cb)
     else
