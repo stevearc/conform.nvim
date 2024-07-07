@@ -4,7 +4,7 @@ local util = require("vim.lsp.util")
 
 local M = {}
 
-local function apply_text_edits(text_edits, bufnr, offset_encoding, dry_run)
+local function apply_text_edits(text_edits, bufnr, offset_encoding, dry_run, undojoin)
   if
     #text_edits == 1
     and text_edits[1].range.start.line == 0
@@ -25,7 +25,8 @@ local function apply_text_edits(text_edits, bufnr, offset_encoding, dry_run)
       new_lines,
       nil,
       false,
-      dry_run
+      dry_run,
+      undojoin
     )
   elseif dry_run then
     return #text_edits > 0
@@ -124,8 +125,13 @@ function M.format(options, callback)
             )
           )
         else
-          local this_did_edit =
-            apply_text_edits(result, ctx.bufnr, client.offset_encoding, options.dry_run)
+          local this_did_edit = apply_text_edits(
+            result,
+            ctx.bufnr,
+            client.offset_encoding,
+            options.dry_run,
+            options.undojoin
+          )
           changedtick = vim.b[bufnr].changedtick
 
           if options.dry_run and this_did_edit then
@@ -145,8 +151,13 @@ function M.format(options, callback)
       local params = set_range(client, util.make_formatting_params(options.formatting_options))
       local result, err = client.request_sync(method, params, timeout_ms, bufnr)
       if result and result.result then
-        local this_did_edit =
-          apply_text_edits(result.result, bufnr, client.offset_encoding, options.dry_run)
+        local this_did_edit = apply_text_edits(
+          result.result,
+          bufnr,
+          client.offset_encoding,
+          options.dry_run,
+          options.undojoin
+        )
         did_edit = did_edit or this_did_edit
 
         if options.dry_run and did_edit then

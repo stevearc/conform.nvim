@@ -171,7 +171,15 @@ end
 ---@param only_apply_range boolean
 ---@param undojoin boolean
 ---@return boolean any_changes
-M.apply_format = function(bufnr, original_lines, new_lines, range, only_apply_range, dry_run, undojoin)
+M.apply_format = function(
+  bufnr,
+  original_lines,
+  new_lines,
+  range,
+  only_apply_range,
+  dry_run,
+  undojoin
+)
   if bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
   end
