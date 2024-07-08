@@ -5,7 +5,6 @@
 - [Format command](#format-command)
 - [Autoformat with extra features](#autoformat-with-extra-features)
 - [Command to toggle format-on-save](#command-to-toggle-format-on-save)
-- [Automatically run slow formatters async](#automatically-run-slow-formatters-async)
 - [Lazy loading with lazy.nvim](#lazy-loading-with-lazynvim)
 - [Leave visual mode after range format](#leave-visual-mode-after-range-format)
 - [Run the first available formatter followed by more formatters](#run-the-first-available-formatter-followed-by-more-formatters)
@@ -105,35 +104,6 @@ vim.api.nvim_create_user_command("FormatEnable", function()
   vim.g.disable_autoformat = false
 end, {
   desc = "Re-enable autoformat-on-save",
-})
-```
-
-## Automatically run slow formatters async
-
-This snippet will automatically detect which formatters take too long to run synchronously and will run them async on save instead.
-
-```lua
-local slow_format_filetypes = {}
-require("conform").setup({
-  format_on_save = function(bufnr)
-    if slow_format_filetypes[vim.bo[bufnr].filetype] then
-      return
-    end
-    local function on_format(err)
-      if err and err:match("timeout$") then
-        slow_format_filetypes[vim.bo[bufnr].filetype] = true
-      end
-    end
-
-    return { timeout_ms = 200, lsp_format = "fallback" }, on_format
-  end,
-
-  format_after_save = function(bufnr)
-    if not slow_format_filetypes[vim.bo[bufnr].filetype] then
-      return
-    end
-    return { lsp_format = "fallback" }
-  end,
 })
 ```
 
