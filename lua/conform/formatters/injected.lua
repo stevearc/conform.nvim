@@ -284,13 +284,21 @@ return {
         ---@type string[]
         local formatter_names
         if type(ft_formatters) == "function" then
-          formatter_names = ft_formatters(ctx.buf)
-        else
-          local formatters = require("conform").resolve_formatters(ft_formatters, ctx.buf, false)
-          formatter_names = vim.tbl_map(function(f)
-            return f.name
-          end, formatters)
+          ft_formatters = ft_formatters(ctx.buf)
         end
+        local stop_after_first = ft_formatters.stop_after_first
+        if stop_after_first == nil then
+          stop_after_first = conform.default_format_opts.stop_after_first
+        end
+        if stop_after_first == nil then
+          stop_after_first = false
+        end
+
+        local formatters =
+          conform.resolve_formatters(ft_formatters, ctx.buf, false, stop_after_first)
+        formatter_names = vim.tbl_map(function(f)
+          return f.name
+        end, formatters)
         local idx = num_format
         log.debug("Injected format %s:%d:%d: %s", lang, start_lnum, end_lnum, formatter_names)
         log.trace("Injected format lines %s", input_lines)

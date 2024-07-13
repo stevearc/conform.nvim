@@ -198,7 +198,7 @@ end
 
 ---@private
 ---@param bufnr? integer
----@return conform.FiletypeFormatterInternal[]
+---@return string[]
 M.list_formatters_for_buffer = function(bufnr)
   if not bufnr or bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
@@ -301,8 +301,9 @@ end
 ---@param names conform.FiletypeFormatterInternal
 ---@param bufnr integer
 ---@param warn_on_missing boolean
+---@param stop_after_first boolean
 ---@return conform.FormatterInfo[]
-M.resolve_formatters = function(names, bufnr, warn_on_missing)
+M.resolve_formatters = function(names, bufnr, warn_on_missing, stop_after_first)
   local all_info = {}
   local function add_info(info, warn)
     if info.available then
@@ -329,6 +330,10 @@ M.resolve_formatters = function(names, bufnr, warn_on_missing)
         end
       end
     end
+
+    if stop_after_first and #all_info > 0 then
+      break
+    end
   end
   return all_info
 end
@@ -353,7 +358,6 @@ end
 ---@param callback? fun(err: nil|string, did_edit: nil|boolean) Called once formatting has completed
 ---@return boolean True if any formatters were attempted
 M.format = function(opts, callback)
-  ---@type {timeout_ms: integer, bufnr: integer, async: boolean, dry_run: boolean, lsp_format: "never"|"first"|"last"|"prefer"|"fallback", quiet: boolean, formatters?: string[], range?: conform.Range, undojoin: boolean}
   opts = opts or {}
   local has_explicit_formatters = opts ~= nil and opts.formatters ~= nil
   if not has_explicit_formatters then
@@ -361,6 +365,7 @@ M.format = function(opts, callback)
   end
 
   opts = vim.tbl_extend("keep", opts, M.default_format_opts)
+  ---@type {timeout_ms: integer, bufnr: integer, async: boolean, dry_run: boolean, lsp_format: "never"|"first"|"last"|"prefer"|"fallback", quiet: boolean, stop_after_first: boolean, formatters?: string[], range?: conform.Range, undojoin: boolean}
   opts = vim.tbl_extend("keep", opts, {
     timeout_ms = 1000,
     bufnr = 0,
@@ -369,6 +374,7 @@ M.format = function(opts, callback)
     lsp_format = "never",
     quiet = false,
     undojoin = false,
+    stop_after_first = false,
   })
 
   -- For backwards compatibility
@@ -394,8 +400,12 @@ M.format = function(opts, callback)
   local runner = require("conform.runner")
 
   local formatter_names = opts.formatters or M.list_formatters_for_buffer(opts.bufnr)
-  local formatters =
-    M.resolve_formatters(formatter_names, opts.bufnr, not opts.quiet and has_explicit_formatters)
+  local formatters = M.resolve_formatters(
+    formatter_names,
+    opts.bufnr,
+    not opts.quiet and has_explicit_formatters,
+    opts.stop_after_first
+  )
   local has_lsp = has_lsp_formatter(opts)
 
   ---@param err? conform.Error
@@ -483,12 +493,6 @@ M.format = function(opts, callback)
   end
 end
 
----@class conform.FormatLinesOpts
----@field timeout_ms nil|integer Time in milliseconds to block for formatting. Defaults to 1000. No effect if async = true.
----@field bufnr nil|integer use this as the working buffer (default 0)
----@field async nil|boolean If true the method won't block. Defaults to false. If the buffer is modified before the formatter completes, the formatting will be discarded.
----@field quiet nil|boolean Don't show any notifications for warnings or failures. Defaults to false.
-
 ---Process lines with formatters
 ---@private
 ---@param formatter_names string[]
@@ -498,18 +502,20 @@ end
 ---@return nil|conform.Error error Only present if async = false
 ---@return nil|string[] new_lines Only present if async = false
 M.format_lines = function(formatter_names, lines, opts, callback)
-  ---@type {timeout_ms: integer, bufnr: integer, async: boolean, quiet: boolean}
+  ---@type {timeout_ms: integer, bufnr: integer, async: boolean, quiet: boolean, stop_after_first: boolean}
   opts = vim.tbl_extend("keep", opts or {}, {
     timeout_ms = 1000,
     bufnr = 0,
     async = false,
     quiet = false,
+    stop_after_first = false,
   })
   callback = callback or function(_err, _lines) end
   local errors = require("conform.errors")
   local log = require("conform.log")
   local runner = require("conform.runner")
-  local formatters = M.resolve_formatters(formatter_names, opts.bufnr, not opts.quiet)
+  local formatters =
+    M.resolve_formatters(formatter_names, opts.bufnr, not opts.quiet, opts.stop_after_first)
   if vim.tbl_isempty(formatters) then
     callback(nil, lines)
     return
@@ -545,7 +551,7 @@ M.list_formatters = function(bufnr)
     bufnr = vim.api.nvim_get_current_buf()
   end
   local formatters = M.list_formatters_for_buffer(bufnr)
-  return M.resolve_formatters(formatters, bufnr, false)
+  return M.resolve_formatters(formatters, bufnr, false, false)
 end
 
 ---List information about all filetype-configured formatters

@@ -79,6 +79,7 @@
 ---@field undojoin? boolean Use undojoin to merge formatting changes with previous edit (default false)
 ---@field formatters? string[] List of formatters to run. Defaults to all formatters for the buffer filetype.
 ---@field lsp_format? conform.LspFormatOpts Configure if and when LSP should be used for formatting. Defaults to "never".
+---@field stop_after_first? boolean Only run the first available formatter in the list. Defaults to false.
 ---@field quiet? boolean Don't show any notifications for warnings or failures. Defaults to false.
 ---@field range? conform.Range Range to format. Table must contain `start` and `end` keys with {row, col} tuples using (1,0) indexing. Defaults to current selection in visual mode
 ---@field id? integer Passed to |vim.lsp.buf.format| when using LSP formatting
@@ -89,6 +90,14 @@
 ---@field timeout_ms? integer Time in milliseconds to block for formatting. Defaults to 1000. No effect if async = true.
 ---@field lsp_format? conform.LspFormatOpts Configure if and when LSP should be used for formatting. Defaults to "never".
 ---@field quiet? boolean Don't show any notifications for warnings or failures. Defaults to false.
+---@field stop_after_first? boolean Only run the first available formatter in the list. Defaults to false.
+
+---@class conform.FormatLinesOpts
+---@field timeout_ms? integer Time in milliseconds to block for formatting. Defaults to 1000. No effect if async = true.
+---@field bufnr? integer use this as the working buffer (default 0)
+---@field async? boolean If true the method won't block. Defaults to false. If the buffer is modified before the formatter completes, the formatting will be discarded.
+---@field quiet? boolean Don't show any notifications for warnings or failures. Defaults to false.
+---@field stop_after_first? boolean Only run the first available formatter in the list. Defaults to false.
 
 ---@class (exact) conform.setupOpts
 ---@field formatters_by_ft? table<string, conform.FiletypeFormatter> Map of filetype to formatters
