@@ -58,9 +58,12 @@
 ---@field start integer[]
 ---@field end integer[]
 
----@alias conform.FormatterUnit string|string[]
----@alias conform.FiletypeFormatter conform.FormatterUnit[]|fun(bufnr: integer): string[]
----
+---@alias conform.FiletypeFormatter conform.FiletypeFormatterInternal|fun(bufnr: integer): conform.FiletypeFormatterInternal
+
+---This list of formatters to run for a filetype, an any associated format options.
+---@class conform.FiletypeFormatterInternal : conform.DefaultFormatOpts
+---@field [integer] string|string[]
+
 ---@alias conform.LspFormatOpts
 ---| '"never"' # never use the LSP for formatting (default)
 ---| '"fallback"' # LSP formatting is used when no other formatters are available

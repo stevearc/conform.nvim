@@ -19,6 +19,8 @@ OPTIONS                                                          *conform-option
         go = { "goimports", "gofmt" },
         -- Use a sub-list to run only the first available formatter
         javascript = { { "prettierd", "prettier" } },
+        -- You can also customize some of the format options for the filetype
+        rust = { "rustfmt", lsp_format = "fallback" },
         -- You can use a function here to determine the formatters dynamically
         python = function(bufnr)
           if require("conform").get_formatter_info("ruff_format", bufnr).available then
@@ -135,6 +137,14 @@ setup({opts})                                                      *conform.setu
                            true.
               {lsp_format} `nil|conform.LspFormatOpts` Configure if and when LSP
                            should be used for formatting. Defaults to "never".
+                  `"never"`    never use the LSP for formatting (default)
+                  `"fallback"` LSP formatting is used when no other formatters
+                             are available
+                  `"prefer"`   use only LSP formatting when available
+                  `"first"`    LSP formatting is used when available and then
+                             other formatters
+                  `"last"`     other formatters are used then LSP formatting
+                             when available
               {quiet}      `nil|boolean` Don't show any notifications for
                            warnings or failures. Defaults to false.
           {format_after_save} `nil|conform.FormatOpts|fun(bufnr: integer): nil|conform.FormatOpts`
@@ -170,6 +180,14 @@ format({opts}, {callback}): boolean                               *conform.forma
                        formatters for the buffer filetype.
           {lsp_format} `nil|conform.LspFormatOpts` Configure if and when LSP
                        should be used for formatting. Defaults to "never".
+              `"never"`    never use the LSP for formatting (default)
+              `"fallback"` LSP formatting is used when no other formatters are
+                         available
+              `"prefer"`   use only LSP formatting when available
+              `"first"`    LSP formatting is used when available and then other
+                         formatters
+              `"last"`     other formatters are used then LSP formatting when
+                         available
           {quiet}      `nil|boolean` Don't show any notifications for warnings
                        or failures. Defaults to false.
           {range}      `nil|conform.Range` Range to format. Table must contain

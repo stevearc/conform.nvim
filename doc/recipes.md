@@ -155,7 +155,9 @@ return {
       desc = "Format buffer",
     },
   },
-  -- Everything in opts will be passed to setup()
+  -- This will provide type hinting with LuaLS
+  ---@module "conform"
+  ---@type conform.setupOpts
   opts = {
     -- Define your formatters
     formatters_by_ft = {
