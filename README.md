@@ -473,6 +473,11 @@ require("conform").setup({
     -- have other formatters configured.
     ["_"] = { "trim_whitespace" },
   },
+  -- Set this to change the default values when calling conform.format()
+  -- This will also affect the default values for format_on_save/format_after_save
+  default_format_opts = {
+    lsp_format = "fallback",
+  },
   -- If this is set, Conform will run the formatter on save.
   -- It will pass the table to conform.format().
   -- This can also be a function that returns the table.
@@ -576,6 +581,7 @@ require("conform").formatters.my_formatter = {
 | opts  | `nil\|conform.setupOpts` |                                                                                                                  |                                                                                                                                                                           |
 |       | formatters_by_ft         | `nil\|table<string, conform.FiletypeFormatter>`                                                                  | Map of filetype to formatters                                                                                                                                             |
 |       | format_on_save           | `nil\|conform.FormatOpts\|fun(bufnr: integer): nil\|conform.FormatOpts`                                          | If this is set, Conform will run the formatter on save. It will pass the table to conform.format(). This can also be a function that returns the table.                   |
+|       | default_format_opts      | `nil\|conform.DefaultFormatOpts`                                                                                 | The default options to use when calling conform.format()                                                                                                                  |
 |       | format_after_save        | `nil\|conform.FormatOpts\|fun(bufnr: integer): nil\|conform.FormatOpts`                                          | If this is set, Conform will run the formatter asynchronously after save. It will pass the table to conform.format(). This can also be a function that returns the table. |
 |       | log_level                | `nil\|integer`                                                                                                   | Set the log level (e.g. `vim.log.levels.DEBUG`). Use `:ConformInfo` to see the location of the log file.                                                                  |
 |       | notify_on_error          | `nil\|boolean`                                                                                                   | Conform will notify you when a formatter errors (default true).                                                                                                           |
@@ -596,13 +602,8 @@ Format a buffer
 |          | undojoin                                             | `nil\|boolean`                       | Use undojoin to merge formatting changes with previous edit (default false)                                                                          |
 |          | formatters                                           | `nil\|string[]`                      | List of formatters to run. Defaults to all formatters for the buffer filetype.                                                                       |
 |          | lsp_format                                           | `nil\|conform.LspFormatOpts`         | Configure if and when LSP should be used for formatting. Defaults to "never".                                                                        |
-|          |                                                      | > `"never"`                          | never use the LSP for formatting (default)                                                                                                           |
-|          |                                                      | > `"fallback"`                       | LSP formatting is used when no other formatters are available                                                                                        |
-|          |                                                      | > `"prefer"`                         | use only LSP formatting when available                                                                                                               |
-|          |                                                      | > `"first"`                          | LSP formatting is used when available and then other formatters                                                                                      |
-|          |                                                      | > `"last"`                           | other formatters are used then LSP formatting when available                                                                                         |
 |          | quiet                                                | `nil\|boolean`                       | Don't show any notifications for warnings or failures. Defaults to false.                                                                            |
-|          | range                                                | `nil\|table`                         | Range to format. Table must contain `start` and `end` keys with {row, col} tuples using (1,0) indexing. Defaults to current selection in visual mode |
+|          | range                                                | `nil\|conform.Range`                 | Range to format. Table must contain `start` and `end` keys with {row, col} tuples using (1,0) indexing. Defaults to current selection in visual mode |
 |          | id                                                   | `nil\|integer`                       | Passed to vim.lsp.buf.format when using LSP formatting                                                                                               |
 |          | name                                                 | `nil\|string`                        | Passed to vim.lsp.buf.format when using LSP formatting                                                                                               |
 |          | filter                                               | `nil\|fun(client: table): boolean`   | Passed to vim.lsp.buf.format when using LSP formatting                                                                                               |

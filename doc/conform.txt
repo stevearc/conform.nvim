@@ -33,6 +33,11 @@ OPTIONS                                                          *conform-option
         -- have other formatters configured.
         ["_"] = { "trim_whitespace" },
       },
+      -- Set this to change the default values when calling conform.format()
+      -- This will also affect the default values for format_on_save/format_after_save
+      default_format_opts = {
+        lsp_format = "fallback",
+      },
       -- If this is set, Conform will run the formatter on save.
       -- It will pass the table to conform.format().
       -- This can also be a function that returns the table.
@@ -123,6 +128,15 @@ setup({opts})                                                      *conform.setu
                              If this is set, Conform will run the formatter on
                              save. It will pass the table to conform.format().
                              This can also be a function that returns the table.
+          {default_format_opts} `nil|conform.DefaultFormatOpts` The default
+                             options to use when calling conform.format()
+              {timeout_ms} `nil|integer` Time in milliseconds to block for
+                           formatting. Defaults to 1000. No effect if async =
+                           true.
+              {lsp_format} `nil|conform.LspFormatOpts` Configure if and when LSP
+                           should be used for formatting. Defaults to "never".
+              {quiet}      `nil|boolean` Don't show any notifications for
+                           warnings or failures. Defaults to false.
           {format_after_save} `nil|conform.FormatOpts|fun(bufnr: integer): nil|conform.FormatOpts`
                              If this is set, Conform will run the formatter
                              asynchronously after save. It will pass the table
@@ -156,19 +170,13 @@ format({opts}, {callback}): boolean                               *conform.forma
                        formatters for the buffer filetype.
           {lsp_format} `nil|conform.LspFormatOpts` Configure if and when LSP
                        should be used for formatting. Defaults to "never".
-              `"never"`    never use the LSP for formatting (default)
-              `"fallback"` LSP formatting is used when no other formatters are
-                         available
-              `"prefer"`   use only LSP formatting when available
-              `"first"`    LSP formatting is used when available and then other
-                         formatters
-              `"last"`     other formatters are used then LSP formatting when
-                         available
           {quiet}      `nil|boolean` Don't show any notifications for warnings
                        or failures. Defaults to false.
-          {range}      `nil|table` Range to format. Table must contain `start`
-                       and `end` keys with {row, col} tuples using (1,0)
+          {range}      `nil|conform.Range` Range to format. Table must contain
+                       `start` and `end` keys with {row, col} tuples using (1,0)
                        indexing. Defaults to current selection in visual mode
+              {start} `integer[]`
+              {end}   `integer[]`
           {id}         `nil|integer` Passed to |vim.lsp.buf.format| when using
                        LSP formatting
           {name}       `nil|string` Passed to |vim.lsp.buf.format| when using

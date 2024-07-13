@@ -10,12 +10,17 @@ M.formatters = {}
 
 M.notify_on_error = true
 
+---@type conform.DefaultFormatOpts
+M.default_format_opts = {}
+
 ---@param opts? conform.setupOpts
 M.setup = function(opts)
   opts = opts or {}
 
   M.formatters = vim.tbl_extend("force", M.formatters, opts.formatters or {})
   M.formatters_by_ft = vim.tbl_extend("force", M.formatters_by_ft, opts.formatters_by_ft or {})
+  M.default_format_opts =
+    vim.tbl_extend("force", M.default_format_opts, opts.default_format_opts or {})
 
   if opts.log_level then
     require("conform.log").level = opts.log_level
@@ -328,34 +333,14 @@ local function has_lsp_formatter(opts)
   return not vim.tbl_isempty(lsp_format.get_format_clients(opts))
 end
 
----@alias conform.LspFormatOpts
----| '"never"' # never use the LSP for formatting (default)
----| '"fallback"' # LSP formatting is used when no other formatters are available
----| '"prefer"' # use only LSP formatting when available
----| '"first"' # LSP formatting is used when available and then other formatters
----| '"last"' # other formatters are used then LSP formatting when available
-
----@class conform.FormatOpts
----@field timeout_ms nil|integer Time in milliseconds to block for formatting. Defaults to 1000. No effect if async = true.
----@field bufnr nil|integer Format this buffer (default 0)
----@field async nil|boolean If true the method won't block. Defaults to false. If the buffer is modified before the formatter completes, the formatting will be discarded.
----@field dry_run nil|boolean If true don't apply formatting changes to the buffer
----@field undojoin nil|boolean Use undojoin to merge formatting changes with previous edit (default false)
----@field formatters nil|string[] List of formatters to run. Defaults to all formatters for the buffer filetype.
----@field lsp_format? conform.LspFormatOpts Configure if and when LSP should be used for formatting. Defaults to "never".
----@field quiet nil|boolean Don't show any notifications for warnings or failures. Defaults to false.
----@field range nil|table Range to format. Table must contain `start` and `end` keys with {row, col} tuples using (1,0) indexing. Defaults to current selection in visual mode
----@field id nil|integer Passed to |vim.lsp.buf.format| when using LSP formatting
----@field name nil|string Passed to |vim.lsp.buf.format| when using LSP formatting
----@field filter nil|fun(client: table): boolean Passed to |vim.lsp.buf.format| when using LSP formatting
-
 ---Format a buffer
 ---@param opts? conform.FormatOpts
 ---@param callback? fun(err: nil|string, did_edit: nil|boolean) Called once formatting has completed
 ---@return boolean True if any formatters were attempted
 M.format = function(opts, callback)
   ---@type {timeout_ms: integer, bufnr: integer, async: boolean, dry_run: boolean, lsp_format: "never"|"first"|"last"|"prefer"|"fallback", quiet: boolean, formatters?: string[], range?: conform.Range, undojoin: boolean}
-  opts = vim.tbl_extend("keep", opts or {}, {
+  opts = vim.tbl_extend("keep", opts or {}, M.default_format_opts)
+  opts = vim.tbl_extend("keep", opts, {
     timeout_ms = 1000,
     bufnr = 0,
     async = false,
