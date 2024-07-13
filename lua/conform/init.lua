@@ -13,6 +13,15 @@ M.notify_on_error = true
 ---@type conform.DefaultFormatOpts
 M.default_format_opts = {}
 
+-- Defer notifications because nvim-notify can throw errors if called immediately
+-- in some contexts (e.g. inside statusline function)
+local notify = vim.schedule_wrap(function(...)
+  vim.notify(...)
+end)
+local notify_once = vim.schedule_wrap(function(...)
+  vim.notify_once(...)
+end)
+
 ---@param opts? conform.setupOpts
 M.setup = function(opts)
   opts = opts or {}
@@ -49,7 +58,7 @@ M.setup = function(opts)
         end
         if format_args then
           if format_args.async then
-            vim.notify_once(
+            notify_once(
               "Conform format_on_save cannot use async=true. Use format_after_save instead.",
               vim.log.levels.ERROR
             )
@@ -102,7 +111,7 @@ M.setup = function(opts)
           exit_timeout = format_args.timeout_ms or exit_timeout
           num_running_format_jobs = num_running_format_jobs + 1
           if format_args.async == false then
-            vim.notify_once(
+            notify_once(
               "Conform format_after_save cannot use async=false. Use format_on_save instead.",
               vim.log.levels.ERROR
             )
@@ -209,8 +218,8 @@ M.list_formatters_for_buffer = function(bufnr)
   local function dedupe_formatters(names, collect)
     for _, name in ipairs(names) do
       if type(name) == "table" then
-        vim.notify_once(
-          "deprecated[conform]: The nested {} syntax to run the first formatter has been replaced by the stop_after_first option. See :help conform.format. Support for the old syntax will be dropped on 2025-01-01.",
+        notify_once(
+          "deprecated[conform]: The nested {} syntax to run the first formatter has been replaced by the stop_after_first option (see :help conform.format).\nSupport for the old syntax will be dropped on 2025-01-01.",
           vim.log.levels.WARN
         )
         local alternation = {}
@@ -313,7 +322,7 @@ M.resolve_formatters = function(names, bufnr, warn_on_missing, stop_after_first)
     if info.available then
       table.insert(all_info, info)
     elseif warn then
-      vim.notify(
+      notify(
         string.format("Formatter '%s' unavailable: %s", info.name, info.available_msg),
         vim.log.levels.WARN
       )
@@ -326,8 +335,8 @@ M.resolve_formatters = function(names, bufnr, warn_on_missing, stop_after_first)
       local info = M.get_formatter_info(name, bufnr)
       add_info(info, warn_on_missing)
     else
-      vim.notify_once(
-        "deprecated[conform]: The nested {} syntax to run the first formatter has been replaced by the stop_after_first option. See :help conform.format. Support for the old syntax will be dropped on 2025-01-01.",
+      notify_once(
+        "deprecated[conform]: The nested {} syntax to run the first formatter has been replaced by the stop_after_first option (see :help conform.format).\nSupport for the old syntax will be dropped on 2025-01-01.",
         vim.log.levels.WARN
       )
       -- If this is an alternation, take the first one that's available
@@ -430,7 +439,7 @@ M.format = function(opts, callback)
         notify_msg = "Formatter failed. See :ConformInfo for details"
       end
       if should_notify then
-        vim.notify(notify_msg, level)
+        notify(notify_msg, level)
       end
     end
     local err_message = err and err.message
@@ -611,7 +620,7 @@ M.get_formatter_config = function(formatter, bufnr)
   if override and override.command and override.format then
     local msg =
       string.format("Formatter '%s' cannot define both 'command' and 'format' function", formatter)
-    vim.notify_once(msg, vim.log.levels.ERROR)
+    notify_once(msg, vim.log.levels.ERROR)
     return nil
   end
 
@@ -633,7 +642,7 @@ M.get_formatter_config = function(formatter, bufnr)
           "Formatter '%s' missing built-in definition\nSet `command` to get rid of this error.",
           formatter
         )
-        vim.notify_once(msg, vim.log.levels.ERROR)
+        notify_once(msg, vim.log.levels.ERROR)
         return nil
       end
     else
