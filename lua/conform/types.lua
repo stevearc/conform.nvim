@@ -62,7 +62,7 @@
 
 ---This list of formatters to run for a filetype, an any associated format options.
 ---@class conform.FiletypeFormatterInternal : conform.DefaultFormatOpts
----@field [integer] string|string[]
+---@field [integer] string
 
 ---@alias conform.LspFormatOpts
 ---| '"never"' # never use the LSP for formatting (default)

@@ -209,6 +209,10 @@ M.list_formatters_for_buffer = function(bufnr)
   local function dedupe_formatters(names, collect)
     for _, name in ipairs(names) do
       if type(name) == "table" then
+        vim.notify_once(
+          "deprecated[conform]: The nested {} syntax to run the first formatter has been replaced by the stop_after_first option. See :help conform.format. Support for the old syntax will be dropped on 2025-01-01.",
+          vim.log.levels.WARN
+        )
         local alternation = {}
         dedupe_formatters(name, alternation)
         if not vim.tbl_isempty(alternation) then
@@ -322,6 +326,10 @@ M.resolve_formatters = function(names, bufnr, warn_on_missing, stop_after_first)
       local info = M.get_formatter_info(name, bufnr)
       add_info(info, warn_on_missing)
     else
+      vim.notify_once(
+        "deprecated[conform]: The nested {} syntax to run the first formatter has been replaced by the stop_after_first option. See :help conform.format. Support for the old syntax will be dropped on 2025-01-01.",
+        vim.log.levels.WARN
+      )
       -- If this is an alternation, take the first one that's available
       for i, v in ipairs(name) do
         local info = M.get_formatter_info(v, bufnr)

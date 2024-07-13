@@ -129,8 +129,10 @@ require("conform").setup({
     lua = { "stylua" },
     -- Conform will run multiple formatters sequentially
     python = { "isort", "black" },
-    -- Use a sub-list to run only the first available formatter
-    javascript = { { "prettierd", "prettier" } },
+    -- You can customize some of the format options for the filetype (:help conform.format)
+    rust = { "rustfmt", lsp_format = "fallback" },
+    -- Conform will run the first available formatter
+    javascript = { "prettierd", "prettier", stop_after_first = true },
   },
 })
 ```
@@ -457,8 +459,6 @@ require("conform").setup({
     lua = { "stylua" },
     -- Conform will run multiple formatters sequentially
     go = { "goimports", "gofmt" },
-    -- Use a sub-list to run only the first available formatter
-    javascript = { { "prettierd", "prettier" } },
     -- You can also customize some of the format options for the filetype
     rust = { "rustfmt", lsp_format = "fallback" },
     -- You can use a function here to determine the formatters dynamically
