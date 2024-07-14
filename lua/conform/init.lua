@@ -9,6 +9,7 @@ M.formatters_by_ft = {}
 M.formatters = {}
 
 M.notify_on_error = true
+M.notify_no_formatters = true
 
 ---@type conform.DefaultFormatOpts
 M.default_format_opts = {}
@@ -37,6 +38,10 @@ M.setup = function(opts)
   local notify_on_error = opts.notify_on_error
   if notify_on_error ~= nil then
     M.notify_on_error = notify_on_error
+  end
+  local notify_no_formatters = opts.notify_no_formatters
+  if notify_no_formatters ~= nil then
+    M.notify_no_formatters = notify_no_formatters
   end
 
   local aug = vim.api.nvim_create_augroup("Conform", { clear = true })
@@ -370,6 +375,8 @@ local function has_lsp_formatter(opts)
   return not vim.tbl_isempty(lsp_format.get_format_clients(opts))
 end
 
+local has_notified_ft_no_formatters = {}
+
 ---Format a buffer
 ---@param opts? conform.FormatOpts
 ---@param callback? fun(err: nil|string, did_edit: nil|boolean) Called once formatting has completed
@@ -504,8 +511,20 @@ M.format = function(opts, callback)
     return true
   else
     local level = has_explicit_formatters and "warn" or "debug"
-    log[level]("No formatters found for %s", vim.api.nvim_buf_get_name(opts.bufnr))
-    callback("No formatters found for buffer")
+    log[level]("Formatters unavailable for %s", vim.api.nvim_buf_get_name(opts.bufnr))
+
+    local ft = vim.bo[opts.bufnr].filetype
+    if
+      not vim.tbl_isempty(formatter_names)
+      and not has_notified_ft_no_formatters[ft]
+      and not opts.quiet
+      and M.notify_no_formatters
+    then
+      notify(string.format("Formatters unavailable for %s file", ft), vim.log.levels.WARN)
+      has_notified_ft_no_formatters[ft] = true
+    end
+
+    callback("No formatters available for buffer")
     return false
   end
 end

@@ -498,6 +498,8 @@ require("conform").setup({
   log_level = vim.log.levels.ERROR,
   -- Conform will notify you when a formatter errors
   notify_on_error = true,
+  -- Conform will notify you when no formatters are available for the buffer
+  notify_no_formatters = true,
   -- Custom formatters and overrides for built-in formatters
   formatters = {
     my_formatter = {
@@ -587,6 +589,7 @@ require("conform").formatters.my_formatter = {
 |       | format_after_save        | `nil\|conform.FormatOpts\|fun(bufnr: integer): nil\|conform.FormatOpts`                                          | If this is set, Conform will run the formatter asynchronously after save. It will pass the table to conform.format(). This can also be a function that returns the table. |
 |       | log_level                | `nil\|integer`                                                                                                   | Set the log level (e.g. `vim.log.levels.DEBUG`). Use `:ConformInfo` to see the location of the log file.                                                                  |
 |       | notify_on_error          | `nil\|boolean`                                                                                                   | Conform will notify you when a formatter errors (default true).                                                                                                           |
+|       | notify_no_formatters     | `nil\|boolean`                                                                                                   | Conform will notify you when no formatters are available for the buffer (default true).                                                                                   |
 |       | formatters               | `nil\|table<string, conform.FormatterConfigOverride\|fun(bufnr: integer): nil\|conform.FormatterConfigOverride>` | Custom formatters and overrides for built-in formatters.                                                                                                                  |
 
 ### format(opts, callback)
