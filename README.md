@@ -18,9 +18,9 @@ Lightweight yet powerful formatter plugin for Neovim
   - [setup(opts)](#setupopts)
   - [format(opts, callback)](#formatopts-callback)
   - [list_formatters(bufnr)](#list_formattersbufnr)
+  - [list_formatters_to_run(bufnr)](#list_formatters_to_runbufnr)
   - [list_all_formatters()](#list_all_formatters)
   - [get_formatter_info(formatter, bufnr)](#get_formatter_infoformatter-bufnr)
-  - [will_fallback_lsp(options)](#will_fallback_lspoptions)
 - [Acknowledgements](#acknowledgements)
 
 <!-- /TOC -->
@@ -536,7 +536,6 @@ require("conform").setup({
       -- Set to false to disable merging the config with the base definition
       inherit = true,
       -- When inherit = true, add these additional arguments to the beginning of the command.
-      -- When inherit = true, add these additional arguments to the command.
       -- This can also be a function, like args
       prepend_args = { "--use-tabs" },
       -- When inherit = true, add these additional arguments to the end of the command.
@@ -635,6 +634,27 @@ Retrieve the available formatters for a buffer
 | ----- | -------------- | ---- |
 | bufnr | `nil\|integer` |      |
 
+### list_formatters_to_run(bufnr)
+
+`list_formatters_to_run(bufnr): conform.FormatterInfo[], boolean` \
+Get the exact formatters that will be run for a buffer.
+
+| Param | Type           | Desc |
+| ----- | -------------- | ---- |
+| bufnr | `nil\|integer` |      |
+
+Returns:
+
+| Type                    | Desc                       |
+| ----------------------- | -------------------------- |
+| conform.FormatterInfo[] |                            |
+| boolean                 | lsp Will use LSP formatter |
+
+**Note:**
+<pre>
+This accounts for stop_after_first, lsp fallback logic, etc.
+</pre>
+
 ### list_all_formatters()
 
 `list_all_formatters(): conform.FormatterInfo[]` \
@@ -650,15 +670,6 @@ Get information about a formatter (including availability)
 | --------- | -------------- | ------------------------- |
 | formatter | `string`       | The name of the formatter |
 | bufnr     | `nil\|integer` |                           |
-
-### will_fallback_lsp(options)
-
-`will_fallback_lsp(options): boolean` \
-Check if the buffer will use LSP formatting when lsp_format = "fallback"
-
-| Param   | Type         | Desc                                 |
-| ------- | ------------ | ------------------------------------ |
-| options | `nil\|table` | Options passed to vim.lsp.buf.format |
 <!-- /API -->
 
 ## Acknowledgements
