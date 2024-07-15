@@ -594,6 +594,43 @@ M.list_formatters = function(bufnr)
   return M.resolve_formatters(formatters, bufnr, false, false)
 end
 
+---Get the exact formatters that will be run for a buffer.
+---@param bufnr? integer
+---@return conform.FormatterInfo[]
+---@return boolean lsp Will use LSP formatter
+---@note
+--- This accounts for stop_after_first, lsp fallback logic, etc.
+M.list_formatters_to_run = function(bufnr)
+  if not bufnr or bufnr == 0 then
+    bufnr = vim.api.nvim_get_current_buf()
+  end
+  ---@type {bufnr: integer, lsp_format: conform.LspFormatOpts, stop_after_first: boolean}
+  local opts = vim.tbl_extend(
+    "keep",
+    get_opts_from_filetype(bufnr) or {},
+    M.default_format_opts,
+    { stop_after_first = false, lsp_format = "never", bufnr = bufnr }
+  )
+  local formatter_names = M.list_formatters_for_buffer(bufnr)
+  local formatters = M.resolve_formatters(formatter_names, bufnr, false, opts.stop_after_first)
+
+  local has_lsp = has_lsp_formatter(opts)
+  local any_formatters = has_filetype_formatters(opts.bufnr) and not vim.tbl_isempty(formatters)
+
+  if
+    has_lsp
+    and (opts.lsp_format == "prefer" or (opts.lsp_format ~= "never" and not any_formatters))
+  then
+    return {}, true
+  elseif has_lsp and opts.lsp_format == "first" then
+    return formatters, true
+  elseif not vim.tbl_isempty(formatters) then
+    return formatters, opts.lsp_format == "last" and has_lsp
+  else
+    return {}, false
+  end
+end
+
 ---List information about all filetype-configured formatters
 ---@return conform.FormatterInfo[]
 M.list_all_formatters = function()
@@ -753,9 +790,14 @@ M.get_formatter_info = function(formatter, bufnr)
 end
 
 ---Check if the buffer will use LSP formatting when lsp_format = "fallback"
+---@deprecated
 ---@param options? table Options passed to |vim.lsp.buf.format|
 ---@return boolean
 M.will_fallback_lsp = function(options)
+  notify_once(
+    "deprecated[conform]: will_fallback_lsp is deprecated. Use list_formatters_to_run instead.\nThis method will be removed on 2025-01-01.",
+    vim.log.levels.WARN
+  )
   options = vim.tbl_deep_extend("keep", options or {}, {
     bufnr = vim.api.nvim_get_current_buf(),
   })
