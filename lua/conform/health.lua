@@ -6,7 +6,6 @@ local health_start = vim.health.start or vim.health.report_start
 local health_warn = vim.health.warn or vim.health.report_warn
 local health_info = vim.health.info or vim.health.report_info
 local health_ok = vim.health.ok or vim.health.report_ok
-local islist = vim.islist or vim.tbl_islist
 
 ---@param name string
 ---@return string[]
