@@ -31,12 +31,33 @@ local function merge_default_opts(a, b)
   return a
 end
 
+---@param conf? conform.FiletypeFormatter
+local function check_for_default_opts(conf)
+  if not conf or type(conf) ~= "table" then
+    return
+  end
+  for k in pairs(conf) do
+    if type(k) == "string" then
+      notify(
+        string.format(
+          'conform.setup: the "_" and "*" keys in formatters_by_ft do not support configuring format options, such as "%s"',
+          k
+        ),
+        vim.log.levels.WARN
+      )
+      break
+    end
+  end
+end
+
 ---@param opts? conform.setupOpts
 M.setup = function(opts)
   opts = opts or {}
 
   M.formatters = vim.tbl_extend("force", M.formatters, opts.formatters or {})
   M.formatters_by_ft = vim.tbl_extend("force", M.formatters_by_ft, opts.formatters_by_ft or {})
+  check_for_default_opts(M.formatters_by_ft["_"])
+  check_for_default_opts(M.formatters_by_ft["*"])
   M.default_format_opts =
     vim.tbl_extend("force", M.default_format_opts, opts.default_format_opts or {})
 
