@@ -136,12 +136,6 @@ return {
     -- (defaults to the value from formatters_by_ft)
     lang_to_formatters = {},
   },
-  condition = function(self, ctx)
-    local ok, parser = pcall(vim.treesitter.get_parser, ctx.buf)
-    -- Require Neovim 0.9 because the treesitter API has changed significantly
-    ---@diagnostic disable-next-line: invisible
-    return ok and parser._injection_query and vim.fn.has("nvim-0.9") == 1
-  end,
   format = function(self, ctx, lines, callback)
     local conform = require("conform")
     local errors = require("conform.errors")

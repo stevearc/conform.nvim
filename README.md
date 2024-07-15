@@ -27,7 +27,7 @@ Lightweight yet powerful formatter plugin for Neovim
 
 ## Requirements
 
-- Neovim 0.8+
+- Neovim 0.9+ (for older versions, use a [nvim-0.x branch](https://github.com/stevearc/conform.nvim/branches))
 
 ## Features
 
@@ -216,7 +216,7 @@ You can view this list in vim with `:help conform-formatters`
 - [darker](https://github.com/akaihola/darker) - Run black only on changed lines.
 - [dart_format](https://dart.dev/tools/dart-format) - Replace the whitespace in your program with formatting that follows Dart guidelines.
 - [dcm_fix](https://dcm.dev/docs/cli/formatting/fix/) - Fixes issues produced by dcm analyze, dcm check-unused-code or dcm check-dependencies commands.
-- [dcm_format](https://dcm.dev/docs/cli/formatting/format/) - Formats *.dart files.
+- [dcm_format](https://dcm.dev/docs/cli/formatting/format/) - Formats .dart files.
 - [deno_fmt](https://deno.land/manual/tools/formatter) - Use [Deno](https://deno.land/) to format TypeScript, JavaScript/JSON and markdown.
 - [dfmt](https://github.com/dlang-community/dfmt) - Formatter for D source code.
 - [djlint](https://github.com/Riverside-Healthcare/djLint) - ✨ HTML Template Linter and Formatter. Django - Jinja - Nunjucks - Handlebars - GoLang.

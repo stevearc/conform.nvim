@@ -301,7 +301,7 @@ FORMATTERS                                                    *conform-formatter
               follows Dart guidelines.
 `dcm_fix` - Fixes issues produced by dcm analyze, dcm check-unused-code or dcm
           check-dependencies commands.
-`dcm_format` - Formats *.dart files.
+`dcm_format` - Formats .dart files.
 `deno_fmt` - Use [Deno](https://deno.land/) to format TypeScript,
            JavaScript/JSON and markdown.
 `dfmt` - Formatter for D source code.

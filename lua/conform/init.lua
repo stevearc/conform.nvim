@@ -52,6 +52,10 @@ end
 
 ---@param opts? conform.setupOpts
 M.setup = function(opts)
+  if vim.fn.has("nvim-0.9") == 0 then
+    notify("conform.nvim requires Neovim 0.9+", vim.log.levels.ERROR)
+    return
+  end
   opts = opts or {}
 
   M.formatters = vim.tbl_extend("force", M.formatters, opts.formatters or {})
