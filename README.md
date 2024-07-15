@@ -433,6 +433,7 @@ require("conform").formatters.shfmt = {
 - [Command to toggle format-on-save](doc/recipes.md#command-to-toggle-format-on-save)
 - [Automatically run slow formatters async](doc/recipes.md#automatically-run-slow-formatters-async)
 - [Lazy loading with lazy.nvim](doc/recipes.md#lazy-loading-with-lazynvim)
+- [Leave visual mode after range format](doc/recipes.md#leave-visual-mode-after-range-format)
 
 <!-- /RECIPES -->
 
