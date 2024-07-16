@@ -9,7 +9,7 @@ local M = {}
 ---@class (exact) conform.RunOpts
 ---@field exclusive boolean If true, ensure only a single formatter is running per buffer
 ---@field dry_run boolean If true, do not apply changes and stop after the first formatter attempts to do so
----@field undojoin boolean If true, join undo blocks before applying changes
+---@field undojoin boolean Use undojoin to merge formatting changes with previous edit
 
 ---@param formatter_name string
 ---@param ctx conform.Context

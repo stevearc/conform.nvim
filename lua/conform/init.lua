@@ -340,7 +340,7 @@ end
 ---@field bufnr nil|integer Format this buffer (default 0)
 ---@field async nil|boolean If true the method won't block. Defaults to false. If the buffer is modified before the formatter completes, the formatting will be discarded.
 ---@field dry_run nil|boolean If true don't apply formatting changes to the buffer
----@field undojoin nil|boolean If true run the formatter with undojoin (default false)
+---@field undojoin nil|boolean Use undojoin to merge formatting changes with previous edit (default false)
 ---@field formatters nil|string[] List of formatters to run. Defaults to all formatters for the buffer filetype.
 ---@field lsp_format? conform.LspFormatOpts Configure if and when LSP should be used for formatting. Defaults to "never".
 ---@field quiet nil|boolean Don't show any notifications for warnings or failures. Defaults to false.
@@ -362,6 +362,7 @@ M.format = function(opts, callback)
     dry_run = false,
     lsp_format = "never",
     quiet = false,
+    undojoin = false,
   })
 
   -- For backwards compatibility
