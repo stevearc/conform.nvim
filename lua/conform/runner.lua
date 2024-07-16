@@ -169,6 +169,7 @@ end
 ---@param new_lines string[]
 ---@param range? conform.Range
 ---@param only_apply_range boolean
+---@param dry_run boolean
 ---@param undojoin boolean
 ---@return boolean any_changes
 M.apply_format = function(
@@ -261,8 +262,8 @@ M.apply_format = function(
 
   if not dry_run then
     log.trace("Applying text edits: %s", text_edits)
-    if undojoin == true then
-      vim.cmd("undojoin")
+    if undojoin then
+      vim.cmd.undojoin()
     end
     vim.lsp.util.apply_text_edits(text_edits, bufnr, "utf-8")
     log.trace("Done formatting %s", bufname)

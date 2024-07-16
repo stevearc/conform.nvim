@@ -431,6 +431,7 @@ M.format = function(opts, callback)
       return f.name
     end, formatters)
     log.debug("Running formatters on %s: %s", vim.api.nvim_buf_get_name(opts.bufnr), resolved_names)
+    ---@type conform.RunOpts
     local run_opts = { exclusive = true, dry_run = opts.dry_run, undojoin = opts.undojoin }
     if opts.async then
       runner.format_async(opts.bufnr, formatters, opts.range, run_opts, cb)
@@ -518,7 +519,8 @@ M.format_lines = function(formatter_names, lines, opts, callback)
     callback(err, new_lines)
   end
 
-  local run_opts = { exclusive = false, dry_run = false }
+  ---@type conform.RunOpts
+  local run_opts = { exclusive = false, dry_run = false, undojoin = false }
   if opts.async then
     runner.format_lines_async(opts.bufnr, formatters, nil, lines, run_opts, handle_err)
   else
