@@ -31,6 +31,9 @@ local function apply_text_edits(text_edits, bufnr, offset_encoding, dry_run, und
   elseif dry_run then
     return #text_edits > 0
   else
+    if undojoin then
+      vim.cmd.undojoin()
+    end
     vim.lsp.util.apply_text_edits(text_edits, bufnr, offset_encoding)
     return #text_edits > 0
   end
