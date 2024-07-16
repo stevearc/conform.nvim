@@ -272,6 +272,12 @@ M.apply_format = function(
   return not vim.tbl_isempty(text_edits)
 end
 
+---@param output? string[]
+---@return boolean
+local function is_empty_output(output)
+  return not output or vim.tbl_isempty(output) or (#output == 1 and output[1] == "")
+end
+
 ---Map of formatter name to if the last run of that formatter produced an error
 ---@type table<string, boolean>
 local last_run_errored = {}
@@ -402,10 +408,12 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, opts, c
         log.debug("%s stdout: %s", formatter.name, stdout)
         log.debug("%s stderr: %s", formatter.name, stderr)
         local err_str
-        if stderr and not vim.tbl_isempty(stderr) then
+        if not is_empty_output(stderr) then
           err_str = table.concat(stderr, "\n")
-        elseif stdout and not vim.tbl_isempty(stdout) then
+        elseif not is_empty_output(stdout) then
           err_str = table.concat(stdout, "\n")
+        else
+          err_str = "unknown error"
         end
         if
           vim.api.nvim_buf_is_valid(bufnr)
