@@ -1,5 +1,23 @@
 # Changelog
 
+## [6.1.0](https://github.com/stevearc/conform.nvim/compare/v6.0.0...v6.1.0) (2024-07-19)
+
+
+### Features
+
+* add Swiftlint formatter ([#484](https://github.com/stevearc/conform.nvim/issues/484)) ([bf94a7c](https://github.com/stevearc/conform.nvim/commit/bf94a7cee31df9525239bc7d5ca4910009dfa4ee))
+* add undojoin as a format option ([#488](https://github.com/stevearc/conform.nvim/issues/488)) ([1d1362b](https://github.com/stevearc/conform.nvim/commit/1d1362b0261d06a0b91872e916c172320bbb988a))
+* **shfmt:** add automatic indentation detection ([#481](https://github.com/stevearc/conform.nvim/issues/481)) ([cd75be8](https://github.com/stevearc/conform.nvim/commit/cd75be867f2331b22905f47d28c0c270a69466aa))
+* support doctoc ([#489](https://github.com/stevearc/conform.nvim/issues/489)) ([4f476ba](https://github.com/stevearc/conform.nvim/commit/4f476ba2247bfa5fe46ad52d934536d271d75431))
+
+
+### Bug Fixes
+
+* **biome-check:** use --write instead of deprecated --apply ([#482](https://github.com/stevearc/conform.nvim/issues/482)) ([0cdd6a7](https://github.com/stevearc/conform.nvim/commit/0cdd6a7c66a57560c91c816a567bd1d247be53c3))
+* display stdout as error message if stderr is empty ([#486](https://github.com/stevearc/conform.nvim/issues/486)) ([310e2e9](https://github.com/stevearc/conform.nvim/commit/310e2e95a4f832163f3f7a9fedebb1a4afc0db69))
+* **npm-groovy-lint:** ignore exit code 1 ([#477](https://github.com/stevearc/conform.nvim/issues/477)) ([c26dadf](https://github.com/stevearc/conform.nvim/commit/c26dadf8a47a547768d1048a0d698ecec33494ce))
+* **shfmt:** don't pass indentation if .editorconfig is present ([#492](https://github.com/stevearc/conform.nvim/issues/492)) ([acc7d93](https://github.com/stevearc/conform.nvim/commit/acc7d93f4a080fec587a99fcb36cffa29adc4bad))
+
 ## [6.0.0](https://github.com/stevearc/conform.nvim/compare/v5.9.0...v6.0.0) (2024-06-25)
 
 
