@@ -8,6 +8,7 @@
 - [Automatically run slow formatters async](#automatically-run-slow-formatters-async)
 - [Lazy loading with lazy.nvim](#lazy-loading-with-lazynvim)
 - [Leave visual mode after range format](#leave-visual-mode-after-range-format)
+- [Run the first available formatter followed by more formatters](#run-the-first-available-formatter-followed-by-more-formatters)
 
 <!-- /TOC -->
 
@@ -201,4 +202,35 @@ vim.keymap.set("", "<leader>f", function()
     end
   end)
 end, { desc = "Format code" })
+```
+
+## Run the first available formatter followed by more formatters
+
+With the refactor in [#491](https://github.com/stevearc/conform.nvim/pull/491) it is now easy to
+just run the first available formatter in a list, but more difficult to do that _and then_ run
+another formatter. For example, "format first with either `prettierd` or `prettier`, _then_ use the
+`injected` formatter". Here is how you can easily do that:
+
+```lua
+---@param bufnr integer
+---@param ... string
+---@return string
+local function first(bufnr, ...)
+  local conform = require("conform")
+  for i = 1, select("#", ...) do
+    local formatter = select(i, ...)
+    if conform.get_formatter_info(formatter, bufnr).available then
+      return formatter
+    end
+  end
+  return select(1, ...)
+end
+
+require("conform").setup({
+  formatters_by_ft = {
+    markdown = function(bufnr)
+      return { first(bufnr, "prettierd", "prettier"), "injected" }
+    end,
+  },
+})
 ```
