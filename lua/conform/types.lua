@@ -58,13 +58,53 @@
 ---@field start integer[]
 ---@field end integer[]
 
----@alias conform.FormatterUnit string|string[]
----@alias conform.FiletypeFormatter conform.FormatterUnit[]|fun(bufnr: integer): string[]
+---@alias conform.FiletypeFormatter conform.FiletypeFormatterInternal|fun(bufnr: integer): conform.FiletypeFormatterInternal
+
+---This list of formatters to run for a filetype, an any associated format options.
+---@class conform.FiletypeFormatterInternal : conform.DefaultFormatOpts
+---@field [integer] string
+
+---@alias conform.LspFormatOpts
+---| '"never"' # never use the LSP for formatting (default)
+---| '"fallback"' # LSP formatting is used when no other formatters are available
+---| '"prefer"' # use only LSP formatting when available
+---| '"first"' # LSP formatting is used when available and then other formatters
+---| '"last"' # other formatters are used then LSP formatting when available
+
+---@class (exact) conform.FormatOpts
+---@field timeout_ms? integer Time in milliseconds to block for formatting. Defaults to 1000. No effect if async = true.
+---@field bufnr? integer Format this buffer (default 0)
+---@field async? boolean If true the method won't block. Defaults to false. If the buffer is modified before the formatter completes, the formatting will be discarded.
+---@field dry_run? boolean If true don't apply formatting changes to the buffer
+---@field undojoin? boolean Use undojoin to merge formatting changes with previous edit (default false)
+---@field formatters? string[] List of formatters to run. Defaults to all formatters for the buffer filetype.
+---@field lsp_format? conform.LspFormatOpts Configure if and when LSP should be used for formatting. Defaults to "never".
+---@field stop_after_first? boolean Only run the first available formatter in the list. Defaults to false.
+---@field quiet? boolean Don't show any notifications for warnings or failures. Defaults to false.
+---@field range? conform.Range Range to format. Table must contain `start` and `end` keys with {row, col} tuples using (1,0) indexing. Defaults to current selection in visual mode
+---@field id? integer Passed to |vim.lsp.buf.format| when using LSP formatting
+---@field name? string Passed to |vim.lsp.buf.format| when using LSP formatting
+---@field filter? fun(client: table): boolean Passed to |vim.lsp.buf.format| when using LSP formatting
+
+---@class (exact) conform.DefaultFormatOpts
+---@field timeout_ms? integer Time in milliseconds to block for formatting. Defaults to 1000. No effect if async = true.
+---@field lsp_format? conform.LspFormatOpts Configure if and when LSP should be used for formatting. Defaults to "never".
+---@field quiet? boolean Don't show any notifications for warnings or failures. Defaults to false.
+---@field stop_after_first? boolean Only run the first available formatter in the list. Defaults to false.
+
+---@class conform.FormatLinesOpts
+---@field timeout_ms? integer Time in milliseconds to block for formatting. Defaults to 1000. No effect if async = true.
+---@field bufnr? integer use this as the working buffer (default 0)
+---@field async? boolean If true the method won't block. Defaults to false. If the buffer is modified before the formatter completes, the formatting will be discarded.
+---@field quiet? boolean Don't show any notifications for warnings or failures. Defaults to false.
+---@field stop_after_first? boolean Only run the first available formatter in the list. Defaults to false.
 
 ---@class (exact) conform.setupOpts
 ---@field formatters_by_ft? table<string, conform.FiletypeFormatter> Map of filetype to formatters
 ---@field format_on_save? conform.FormatOpts|fun(bufnr: integer): nil|conform.FormatOpts If this is set, Conform will run the formatter on save. It will pass the table to conform.format(). This can also be a function that returns the table.
+---@field default_format_opts? conform.DefaultFormatOpts The default options to use when calling conform.format()
 ---@field format_after_save? conform.FormatOpts|fun(bufnr: integer): nil|conform.FormatOpts If this is set, Conform will run the formatter asynchronously after save. It will pass the table to conform.format(). This can also be a function that returns the table.
 ---@field log_level? integer Set the log level (e.g. `vim.log.levels.DEBUG`). Use `:ConformInfo` to see the location of the log file.
 ---@field notify_on_error? boolean Conform will notify you when a formatter errors (default true).
+---@field notify_no_formatters? boolean Conform will notify you when no formatters are available for the buffer (default true).
 ---@field formatters? table<string, conform.FormatterConfigOverride|fun(bufnr: integer): nil|conform.FormatterConfigOverride> Custom formatters and overrides for built-in formatters.

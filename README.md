@@ -18,16 +18,16 @@ Lightweight yet powerful formatter plugin for Neovim
   - [setup(opts)](#setupopts)
   - [format(opts, callback)](#formatopts-callback)
   - [list_formatters(bufnr)](#list_formattersbufnr)
+  - [list_formatters_to_run(bufnr)](#list_formatters_to_runbufnr)
   - [list_all_formatters()](#list_all_formatters)
   - [get_formatter_info(formatter, bufnr)](#get_formatter_infoformatter-bufnr)
-  - [will_fallback_lsp(options)](#will_fallback_lspoptions)
 - [Acknowledgements](#acknowledgements)
 
 <!-- /TOC -->
 
 ## Requirements
 
-- Neovim 0.8+
+- Neovim 0.9+ (for older versions, use a [nvim-0.x branch](https://github.com/stevearc/conform.nvim/branches))
 
 ## Features
 
@@ -129,8 +129,10 @@ require("conform").setup({
     lua = { "stylua" },
     -- Conform will run multiple formatters sequentially
     python = { "isort", "black" },
-    -- Use a sub-list to run only the first available formatter
-    javascript = { { "prettierd", "prettier" } },
+    -- You can customize some of the format options for the filetype (:help conform.format)
+    rust = { "rustfmt", lsp_format = "fallback" },
+    -- Conform will run the first available formatter
+    javascript = { "prettierd", "prettier", stop_after_first = true },
   },
 })
 ```
@@ -214,7 +216,7 @@ You can view this list in vim with `:help conform-formatters`
 - [darker](https://github.com/akaihola/darker) - Run black only on changed lines.
 - [dart_format](https://dart.dev/tools/dart-format) - Replace the whitespace in your program with formatting that follows Dart guidelines.
 - [dcm_fix](https://dcm.dev/docs/cli/formatting/fix/) - Fixes issues produced by dcm analyze, dcm check-unused-code or dcm check-dependencies commands.
-- [dcm_format](https://dcm.dev/docs/cli/formatting/format/) - Formats *.dart files.
+- [dcm_format](https://dcm.dev/docs/cli/formatting/format/) - Formats .dart files.
 - [deno_fmt](https://deno.land/manual/tools/formatter) - Use [Deno](https://deno.land/) to format TypeScript, JavaScript/JSON and markdown.
 - [dfmt](https://github.com/dlang-community/dfmt) - Formatter for D source code.
 - [djlint](https://github.com/Riverside-Healthcare/djLint) - ✨ HTML Template Linter and Formatter. Django - Jinja - Nunjucks - Handlebars - GoLang.
@@ -431,6 +433,7 @@ require("conform").formatters.shfmt = {
 - [Command to toggle format-on-save](doc/recipes.md#command-to-toggle-format-on-save)
 - [Automatically run slow formatters async](doc/recipes.md#automatically-run-slow-formatters-async)
 - [Lazy loading with lazy.nvim](doc/recipes.md#lazy-loading-with-lazynvim)
+- [Leave visual mode after range format](doc/recipes.md#leave-visual-mode-after-range-format)
 
 <!-- /RECIPES -->
 
@@ -457,8 +460,8 @@ require("conform").setup({
     lua = { "stylua" },
     -- Conform will run multiple formatters sequentially
     go = { "goimports", "gofmt" },
-    -- Use a sub-list to run only the first available formatter
-    javascript = { { "prettierd", "prettier" } },
+    -- You can also customize some of the format options for the filetype
+    rust = { "rustfmt", lsp_format = "fallback" },
     -- You can use a function here to determine the formatters dynamically
     python = function(bufnr)
       if require("conform").get_formatter_info("ruff_format", bufnr).available then
@@ -472,6 +475,11 @@ require("conform").setup({
     -- Use the "_" filetype to run formatters on filetypes that don't
     -- have other formatters configured.
     ["_"] = { "trim_whitespace" },
+  },
+  -- Set this to change the default values when calling conform.format()
+  -- This will also affect the default values for format_on_save/format_after_save
+  default_format_opts = {
+    lsp_format = "fallback",
   },
   -- If this is set, Conform will run the formatter on save.
   -- It will pass the table to conform.format().
@@ -491,6 +499,8 @@ require("conform").setup({
   log_level = vim.log.levels.ERROR,
   -- Conform will notify you when a formatter errors
   notify_on_error = true,
+  -- Conform will notify you when no formatters are available for the buffer
+  notify_no_formatters = true,
   -- Custom formatters and overrides for built-in formatters
   formatters = {
     my_formatter = {
@@ -527,7 +537,6 @@ require("conform").setup({
       -- Set to false to disable merging the config with the base definition
       inherit = true,
       -- When inherit = true, add these additional arguments to the beginning of the command.
-      -- When inherit = true, add these additional arguments to the command.
       -- This can also be a function, like args
       prepend_args = { "--use-tabs" },
       -- When inherit = true, add these additional arguments to the end of the command.
@@ -576,9 +585,11 @@ require("conform").formatters.my_formatter = {
 | opts  | `nil\|conform.setupOpts` |                                                                                                                  |                                                                                                                                                                           |
 |       | formatters_by_ft         | `nil\|table<string, conform.FiletypeFormatter>`                                                                  | Map of filetype to formatters                                                                                                                                             |
 |       | format_on_save           | `nil\|conform.FormatOpts\|fun(bufnr: integer): nil\|conform.FormatOpts`                                          | If this is set, Conform will run the formatter on save. It will pass the table to conform.format(). This can also be a function that returns the table.                   |
+|       | default_format_opts      | `nil\|conform.DefaultFormatOpts`                                                                                 | The default options to use when calling conform.format()                                                                                                                  |
 |       | format_after_save        | `nil\|conform.FormatOpts\|fun(bufnr: integer): nil\|conform.FormatOpts`                                          | If this is set, Conform will run the formatter asynchronously after save. It will pass the table to conform.format(). This can also be a function that returns the table. |
 |       | log_level                | `nil\|integer`                                                                                                   | Set the log level (e.g. `vim.log.levels.DEBUG`). Use `:ConformInfo` to see the location of the log file.                                                                  |
 |       | notify_on_error          | `nil\|boolean`                                                                                                   | Conform will notify you when a formatter errors (default true).                                                                                                           |
+|       | notify_no_formatters     | `nil\|boolean`                                                                                                   | Conform will notify you when no formatters are available for the buffer (default true).                                                                                   |
 |       | formatters               | `nil\|table<string, conform.FormatterConfigOverride\|fun(bufnr: integer): nil\|conform.FormatterConfigOverride>` | Custom formatters and overrides for built-in formatters.                                                                                                                  |
 
 ### format(opts, callback)
@@ -601,8 +612,9 @@ Format a buffer
 |          |                                                      | > `"prefer"`                         | use only LSP formatting when available                                                                                                               |
 |          |                                                      | > `"first"`                          | LSP formatting is used when available and then other formatters                                                                                      |
 |          |                                                      | > `"last"`                           | other formatters are used then LSP formatting when available                                                                                         |
+|          | stop_after_first                                     | `nil\|boolean`                       | Only run the first available formatter in the list. Defaults to false.                                                                               |
 |          | quiet                                                | `nil\|boolean`                       | Don't show any notifications for warnings or failures. Defaults to false.                                                                            |
-|          | range                                                | `nil\|table`                         | Range to format. Table must contain `start` and `end` keys with {row, col} tuples using (1,0) indexing. Defaults to current selection in visual mode |
+|          | range                                                | `nil\|conform.Range`                 | Range to format. Table must contain `start` and `end` keys with {row, col} tuples using (1,0) indexing. Defaults to current selection in visual mode |
 |          | id                                                   | `nil\|integer`                       | Passed to vim.lsp.buf.format when using LSP formatting                                                                                               |
 |          | name                                                 | `nil\|string`                        | Passed to vim.lsp.buf.format when using LSP formatting                                                                                               |
 |          | filter                                               | `nil\|fun(client: table): boolean`   | Passed to vim.lsp.buf.format when using LSP formatting                                                                                               |
@@ -623,6 +635,27 @@ Retrieve the available formatters for a buffer
 | ----- | -------------- | ---- |
 | bufnr | `nil\|integer` |      |
 
+### list_formatters_to_run(bufnr)
+
+`list_formatters_to_run(bufnr): conform.FormatterInfo[], boolean` \
+Get the exact formatters that will be run for a buffer.
+
+| Param | Type           | Desc |
+| ----- | -------------- | ---- |
+| bufnr | `nil\|integer` |      |
+
+Returns:
+
+| Type                    | Desc                       |
+| ----------------------- | -------------------------- |
+| conform.FormatterInfo[] |                            |
+| boolean                 | lsp Will use LSP formatter |
+
+**Note:**
+<pre>
+This accounts for stop_after_first, lsp fallback logic, etc.
+</pre>
+
 ### list_all_formatters()
 
 `list_all_formatters(): conform.FormatterInfo[]` \
@@ -638,15 +671,6 @@ Get information about a formatter (including availability)
 | --------- | -------------- | ------------------------- |
 | formatter | `string`       | The name of the formatter |
 | bufnr     | `nil\|integer` |                           |
-
-### will_fallback_lsp(options)
-
-`will_fallback_lsp(options): boolean` \
-Check if the buffer will use LSP formatting when lsp_format = "fallback"
-
-| Param   | Type         | Desc                                 |
-| ------- | ------------ | ------------------------------------ |
-| options | `nil\|table` | Options passed to vim.lsp.buf.format |
 <!-- /API -->
 
 ## Acknowledgements

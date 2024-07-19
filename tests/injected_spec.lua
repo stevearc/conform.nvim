@@ -4,11 +4,6 @@ local injected = require("conform.formatters.injected")
 local runner = require("conform.runner")
 local test_util = require("tests.test_util")
 
--- injected formatter only supported on neovim 0.9+
-if vim.fn.has("nvim-0.9") == 0 then
-  return
-end
-
 ---@param dir string
 ---@return string[]
 local function list_test_files(dir)

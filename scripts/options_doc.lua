@@ -4,8 +4,8 @@ require("conform").setup({
     lua = { "stylua" },
     -- Conform will run multiple formatters sequentially
     go = { "goimports", "gofmt" },
-    -- Use a sub-list to run only the first available formatter
-    javascript = { { "prettierd", "prettier" } },
+    -- You can also customize some of the format options for the filetype
+    rust = { "rustfmt", lsp_format = "fallback" },
     -- You can use a function here to determine the formatters dynamically
     python = function(bufnr)
       if require("conform").get_formatter_info("ruff_format", bufnr).available then
@@ -19,6 +19,11 @@ require("conform").setup({
     -- Use the "_" filetype to run formatters on filetypes that don't
     -- have other formatters configured.
     ["_"] = { "trim_whitespace" },
+  },
+  -- Set this to change the default values when calling conform.format()
+  -- This will also affect the default values for format_on_save/format_after_save
+  default_format_opts = {
+    lsp_format = "fallback",
   },
   -- If this is set, Conform will run the formatter on save.
   -- It will pass the table to conform.format().
@@ -38,6 +43,8 @@ require("conform").setup({
   log_level = vim.log.levels.ERROR,
   -- Conform will notify you when a formatter errors
   notify_on_error = true,
+  -- Conform will notify you when no formatters are available for the buffer
+  notify_no_formatters = true,
   -- Custom formatters and overrides for built-in formatters
   formatters = {
     my_formatter = {
@@ -74,7 +81,6 @@ require("conform").setup({
       -- Set to false to disable merging the config with the base definition
       inherit = true,
       -- When inherit = true, add these additional arguments to the beginning of the command.
-      -- When inherit = true, add these additional arguments to the command.
       -- This can also be a function, like args
       prepend_args = { "--use-tabs" },
       -- When inherit = true, add these additional arguments to the end of the command.

@@ -6,7 +6,6 @@ local health_start = vim.health.start or vim.health.report_start
 local health_warn = vim.health.warn or vim.health.report_warn
 local health_info = vim.health.info or vim.health.report_info
 local health_ok = vim.health.ok or vim.health.report_ok
-local islist = vim.islist or vim.tbl_islist
 
 ---@param name string
 ---@return string[]
@@ -16,14 +15,6 @@ local function get_formatter_filetypes(name)
   for filetype, formatters in pairs(conform.formatters_by_ft) do
     if type(formatters) == "function" then
       formatters = formatters(0)
-    -- support the old structure where formatters could be a subkey
-    elseif not islist(formatters) then
-      vim.notify_once(
-        "Using deprecated structure for formatters_by_ft. See :help conform-options for details.",
-        vim.log.levels.ERROR
-      )
-      ---@diagnostic disable-next-line: undefined-field
-      formatters = formatters.formatters
     end
 
     for _, ft_name in ipairs(formatters) do
@@ -61,7 +52,7 @@ M.check = function()
   end
 end
 
----@param formatters conform.FormatterUnit[]
+---@param formatters conform.FiletypeFormatterInternal
 ---@return string[]
 local function flatten_formatters(formatters)
   local flat = {}

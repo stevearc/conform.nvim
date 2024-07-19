@@ -7,6 +7,7 @@
 - [Command to toggle format-on-save](#command-to-toggle-format-on-save)
 - [Automatically run slow formatters async](#automatically-run-slow-formatters-async)
 - [Lazy loading with lazy.nvim](#lazy-loading-with-lazynvim)
+- [Leave visual mode after range format](#leave-visual-mode-after-range-format)
 
 <!-- /TOC -->
 
@@ -149,22 +150,28 @@ return {
       -- Customize or remove this keymap to your liking
       "<leader>f",
       function()
-        require("conform").format({ async = true, lsp_format = "fallback" })
+        require("conform").format({ async = true })
       end,
       mode = "",
       desc = "Format buffer",
     },
   },
-  -- Everything in opts will be passed to setup()
+  -- This will provide type hinting with LuaLS
+  ---@module "conform"
+  ---@type conform.setupOpts
   opts = {
     -- Define your formatters
     formatters_by_ft = {
       lua = { "stylua" },
       python = { "isort", "black" },
-      javascript = { { "prettierd", "prettier" } },
+      javascript = { "prettierd", "prettier", stop_after_first = true },
+    },
+    -- Set default options
+    default_format_opts = {
+      lsp_format = "fallback",
     },
     -- Set up format-on-save
-    format_on_save = { timeout_ms = 500, lsp_format = "fallback" },
+    format_on_save = { timeout_ms = 500 },
     -- Customize formatters
     formatters = {
       shfmt = {
@@ -177,4 +184,21 @@ return {
     vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
   end,
 }
+```
+
+## Leave visual mode after range format
+
+If you call `conform.format` when in visual mode, conform will perform a range format on the selected region. If you want it to leave visual mode afterwards (similar to the default `gw` or `gq` behavior), use this mapping:
+
+```lua
+vim.keymap.set("", "<leader>f", function()
+  require("conform").format({ async = true }, function(err)
+    if not err then
+      local mode = vim.api.nvim_get_mode().mode
+      if vim.startswith(string.lower(mode), "v") then
+        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", true)
+      end
+    end
+  end)
+end, { desc = "Format code" })
 ```
