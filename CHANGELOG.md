@@ -1,5 +1,33 @@
 # Changelog
 
+## [7.0.0](https://github.com/stevearc/conform.nvim/compare/v6.1.0...v7.0.0) (2024-07-23)
+
+
+### ⚠ BREAKING CHANGES
+
+* drop support for nvim 0.8
+
+### cleanup
+
+* drop support for nvim 0.8 ([54ea60d](https://github.com/stevearc/conform.nvim/commit/54ea60d1591486e7e56183addf1f45b03244386d))
+
+
+### Features
+
+* add sleek, a SQL formatter ([#496](https://github.com/stevearc/conform.nvim/issues/496)) ([8925292](https://github.com/stevearc/conform.nvim/commit/8925292a1e18430a0176671552394d819642b9d9))
+* allow configuring conform.format() args on a per-filetype basis ([3a0e9b4](https://github.com/stevearc/conform.nvim/commit/3a0e9b44076514ffba6c81ca28685107928b55f7))
+* allow customizing format() defaults ([d7de350](https://github.com/stevearc/conform.nvim/commit/d7de350233e8f686b9affac9c1e106a6602f5fe8))
+* deprecate will_fallback_lsp in favor of list_formatters_to_run ([1b590cd](https://github.com/stevearc/conform.nvim/commit/1b590cda290bbabdb116397cb241d20530281b87))
+* format parameter to only run the first available formatter ([0b3d259](https://github.com/stevearc/conform.nvim/commit/0b3d25969e2da2f5de90cc02ccd6446aa68dd895))
+* notify when no formatters available for a buffer ([8c226d9](https://github.com/stevearc/conform.nvim/commit/8c226d917918ffe92e0f30f4e13acfc088a5faa7))
+
+
+### Bug Fixes
+
+* crash in nvim-notify ([c16c749](https://github.com/stevearc/conform.nvim/commit/c16c749612fb34a9c1dcc6e4a0f40e24e37d5cfb))
+* ensure only expected options get passed through ([834d42c](https://github.com/stevearc/conform.nvim/commit/834d42c17687541750447046b94193d47386665d))
+* warn user when they are attempting unsupported behavior ([8b0e62b](https://github.com/stevearc/conform.nvim/commit/8b0e62b731429ecd89cdb6c6b8f004f8468bcf71))
+
 ## [6.1.0](https://github.com/stevearc/conform.nvim/compare/v6.0.0...v6.1.0) (2024-07-19)
 
 
