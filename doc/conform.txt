@@ -393,6 +393,7 @@ FORMATTERS                                                    *conform-formatter
             official style guide.
 `nixfmt` - nixfmt is a formatter for Nix code, intended to apply a uniform
          style.
+`nixfmt-rfc-style` - The official (but not yet stable) formatter for Nix code.
 `nixpkgs_fmt` - nixpkgs-fmt is a Nix code formatter for nixpkgs.
 `npm-groovy-lint` - Lint, format and auto-fix your Groovy / Jenkinsfile / Gradle
                   files using command line.
