@@ -378,6 +378,7 @@ FORMATTERS                                                    *conform-formatter
 `lua-format` - Code formatter for Lua.
 `markdown-toc` - API and CLI for generating a markdown TOC (table of contents)
                for a README or any markdown files.
+`markdownfmt` - Like gofmt, but for Markdown.
 `markdownlint` - A Node.js style checker and lint tool for Markdown/CommonMark
                files.
 `markdownlint-cli2` - A fast, flexible, configuration-based command-line
