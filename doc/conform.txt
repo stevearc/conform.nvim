@@ -391,9 +391,7 @@ FORMATTERS                                                    *conform-formatter
 `nickel` - Code formatter for the Nickel programming language.
 `nimpretty` - nimpretty is a Nim source code beautifier that follows the
             official style guide.
-`nixfmt` - nixfmt is a formatter for Nix code, intended to apply a uniform
-         style.
-`nixfmt-rfc-style` - The official (but not yet stable) formatter for Nix code.
+`nixfmt` - The official (but not yet stable) formatter for Nix code.
 `nixpkgs_fmt` - nixpkgs-fmt is a Nix code formatter for nixpkgs.
 `npm-groovy-lint` - Lint, format and auto-fix your Groovy / Jenkinsfile / Gradle
                   files using command line.

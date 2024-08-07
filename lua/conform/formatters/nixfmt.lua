@@ -1,8 +1,8 @@
 ---@type conform.FileFormatterConfig
 return {
   meta = {
-    url = "https://github.com/serokell/nixfmt",
-    description = "nixfmt is a formatter for Nix code, intended to apply a uniform style.",
+    url = "https://github.com/NixOS/nixfmt",
+    description = "The official (but not yet stable) formatter for Nix code",
   },
   command = "nixfmt",
 }
