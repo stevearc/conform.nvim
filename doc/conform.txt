@@ -289,7 +289,7 @@ FORMATTERS                                                    *conform-formatter
 `clang-format` - Tool to format C/C++/… code according to a set of rules and
                heuristics.
 `cljfmt` - cljfmt is a tool for detecting and fixing formatting errors in
-         Clojure code
+         Clojure code.
 `cljstyle` - Formatter for Clojure code.
 `cmake_format` - Parse cmake listfiles and format them nicely.
 `codespell` - Check code for common misspellings.

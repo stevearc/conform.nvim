@@ -205,7 +205,7 @@ You can view this list in vim with `:help conform-formatters`
 - [caramel_fmt](https://caramel.run/manual/reference/cli/fmt.html) - Format Caramel code.
 - [cbfmt](https://github.com/lukas-reineke/cbfmt) - A tool to format codeblocks inside markdown and org documents.
 - [clang-format](https://www.kernel.org/doc/html/latest/process/clang-format.html) - Tool to format C/C++/… code according to a set of rules and heuristics.
-- [cljfmt](https://github.com/weavejester/cljfmt) - cljfmt is a tool for detecting and fixing formatting errors in Clojure code
+- [cljfmt](https://github.com/weavejester/cljfmt) - cljfmt is a tool for detecting and fixing formatting errors in Clojure code.
 - [cljstyle](https://github.com/greglook/cljstyle) - Formatter for Clojure code.
 - [cmake_format](https://github.com/cheshirekow/cmake_format) - Parse cmake listfiles and format them nicely.
 - [codespell](https://github.com/codespell-project/codespell) - Check code for common misspellings.
