@@ -26,6 +26,7 @@ README = os.path.join(ROOT, "README.md")
 DOC = os.path.join(ROOT, "doc")
 RECIPES = os.path.join(DOC, "recipes.md")
 ADVANCED = os.path.join(DOC, "advanced_topics.md")
+DEBUGGING = os.path.join(DOC, "debugging.md")
 FORMATTER_OPTIONS = os.path.join(DOC, "formatter_options.md")
 VIMDOC = os.path.join(DOC, "conform.txt")
 OPTIONS = os.path.join(ROOT, "scripts", "options_doc.lua")
@@ -143,21 +144,22 @@ def update_readme_toc():
     )
 
 
-def update_recipes_toc():
+def update_tocs():
     toc = ["\n"] + generate_md_toc(RECIPES) + ["\n"]
     replace_section(RECIPES, r"^<!-- TOC -->$", r"^<!-- /TOC -->$", toc)
     subtoc = add_md_link_path("doc/recipes.md", toc)
     replace_section(README, r"^<!-- RECIPES -->$", r"^<!-- /RECIPES -->$", subtoc)
 
-
-def update_advanced_toc():
     toc = ["\n"] + generate_md_toc(ADVANCED) + ["\n"]
     replace_section(ADVANCED, r"^<!-- TOC -->$", r"^<!-- /TOC -->$", toc)
     subtoc = add_md_link_path("doc/advanced_topics.md", toc)
     replace_section(README, r"^<!-- ADVANCED -->$", r"^<!-- /ADVANCED -->$", subtoc)
 
+    toc = ["\n"] + generate_md_toc(DEBUGGING) + ["\n"]
+    replace_section(DEBUGGING, r"^<!-- TOC -->$", r"^<!-- /TOC -->$", toc)
+    subtoc = add_md_link_path("doc/debugging.md", toc)
+    replace_section(README, r"^<!-- DEBUGGING -->$", r"^<!-- /DEBUGGING -->$", subtoc)
 
-def update_formatter_options_toc():
     toc = ["\n"] + generate_md_toc(FORMATTER_OPTIONS) + ["\n"]
     replace_section(FORMATTER_OPTIONS, r"^<!-- TOC -->$", r"^<!-- /TOC -->$", toc)
     subtoc = add_md_link_path("doc/formatter_options.md", toc)
@@ -210,8 +212,6 @@ def main() -> None:
     update_autocmd_md()
     update_formatter_options_md()
     update_md_api()
-    update_recipes_toc()
-    update_advanced_toc()
-    update_formatter_options_toc()
+    update_tocs()
     update_readme_toc()
     generate_vimdoc()

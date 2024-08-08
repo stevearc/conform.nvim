@@ -113,7 +113,7 @@ M.show_window = function()
       table.insert(lines, line)
       table.insert(
         highlights,
-        { "DiagnosticInfo", #lines, formatter.name:len(), formatter.name:len() + 6 }
+        { "DiagnosticOk", #lines, formatter.name:len(), formatter.name:len() + 6 }
       )
       table.insert(highlights, {
         "DiagnosticInfo",

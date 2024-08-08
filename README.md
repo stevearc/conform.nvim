@@ -11,6 +11,7 @@ Lightweight yet powerful formatter plugin for Neovim
 - [Formatters](#formatters)
 - [Customizing formatters](#customizing-formatters)
 - [Recipes](#recipes)
+- [Debugging](#debugging)
 - [Advanced topics](#advanced-topics)
 - [Options](#options)
 - [Formatter options](#formatter-options)
@@ -440,6 +441,16 @@ require("conform").formatters.shfmt = {
 - [Run the first available formatter followed by more formatters](doc/recipes.md#run-the-first-available-formatter-followed-by-more-formatters)
 
 <!-- /RECIPES -->
+
+## Debugging
+
+<!-- DEBUGGING -->
+
+- [Background](doc/debugging.md#background)
+- [Tools](doc/debugging.md#tools)
+- [Testing the formatter](doc/debugging.md#testing-the-formatter)
+
+<!-- /DEBUGGING -->
 
 ## Advanced topics
 
