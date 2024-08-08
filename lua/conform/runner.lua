@@ -48,7 +48,7 @@ M.build_cmd = function(formatter_name, ctx, config)
       :gsub("$FILENAME", ctx.filename)
       :gsub("$DIRNAME", ctx.dirname)
       :gsub("$RELATIVE_FILEPATH", compute_relative_filepath)
-      :gsub("$EXTENSION", ({ ctx.filename:match("(.*)(%..*)") })[2] or "")
+      :gsub("$EXTENSION", ctx.filename:match(".*(%..*)$") or "")
     return command .. " " .. interpolated
   else
     local cmd = { command }
@@ -61,8 +61,7 @@ M.build_cmd = function(formatter_name, ctx, config)
       elseif v == "$RELATIVE_FILEPATH" then
         v = compute_relative_filepath()
       elseif v == "$EXTENSION" then
-        local _, right = ctx.filename:match("(.*)(%..*)")
-        v = right or ""
+        v = ctx.filename:match(".*(%..*)$") or ""
       end
       table.insert(cmd, v)
     end
