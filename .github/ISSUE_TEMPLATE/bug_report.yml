@@ -21,7 +21,7 @@ body:
       required: true
   - type: checkboxes
     attributes:
-      label: Read [debugging tips](https://github.com/stevearc/conform.nvim/blob/master/doc/debugging.md)
+      label: Read debugging tips
       options:
         - label: I have read through the [debugging tips](https://github.com/stevearc/conform.nvim/blob/master/doc/debugging.md).
           required: true
