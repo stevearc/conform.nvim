@@ -6,9 +6,10 @@ return {
     description = "✨ HTML Template Linter and Formatter. Django - Jinja - Nunjucks - Handlebars - GoLang.",
   },
   command = "djlint",
-  args = function(_, ctx)
-    return { "--reformat", "--indent", ctx.shiftwidth, "-" }
-  end,
+  args = {
+    "--reformat",
+    "-",
+  },
   cwd = util.root_file({
     ".djlintrc",
   }),
