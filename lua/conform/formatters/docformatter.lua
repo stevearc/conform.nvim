@@ -7,4 +7,5 @@ return {
   command = "docformatter",
   args = { "--in-place", "$FILENAME" },
   stdin = false,
+  exit_codes = { 0, 3 },
 }
