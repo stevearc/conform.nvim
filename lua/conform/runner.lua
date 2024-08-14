@@ -20,6 +20,10 @@ M.build_cmd = function(formatter_name, ctx, config)
   if type(command) == "function" then
     command = command(config, ctx)
   end
+  local exepath = vim.fn.exepath(command)
+  if exepath ~= "" then
+    command = exepath
+  end
   ---@type string|string[]
   local args = {}
   if ctx.range and config.range_args then
