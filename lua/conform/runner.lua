@@ -518,7 +518,7 @@ M.format_async = function(bufnr, formatters, range, opts, callback)
   -- kill previous jobs for buffer
   local prev_jid = vim.b[bufnr].conform_jid
   if prev_jid and opts.exclusive then
-    if vim.fn.jobstop(prev_jid) == 1 then
+    if uv.kill(prev_jid) == 0 then
       log.info("Canceled previous format job for %s", vim.api.nvim_buf_get_name(bufnr))
     end
   end
@@ -610,7 +610,7 @@ M.format_sync = function(bufnr, formatters, timeout_ms, range, opts)
   -- kill previous jobs for buffer
   local prev_jid = vim.b[bufnr].conform_jid
   if prev_jid and opts.exclusive then
-    if vim.fn.jobstop(prev_jid) == 1 then
+    if uv.kill(prev_jid) == 0 then
       log.info("Canceled previous format job for %s", vim.api.nvim_buf_get_name(bufnr))
     end
   end
@@ -682,7 +682,7 @@ M.format_lines_sync = function(bufnr, formatters, timeout_ms, range, input_lines
 
     if not wait_result then
       if jid then
-        vim.fn.jobstop(jid)
+        uv.kill(jid)
       end
       if wait_reason == -1 then
         return errors.coalesce(final_err, {
