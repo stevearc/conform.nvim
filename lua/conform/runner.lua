@@ -359,91 +359,74 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, opts, c
   if env then
     log.debug("Run ENV: %s", env)
   end
-  local stdout
-  local stderr
   local exit_codes = config.exit_codes or { 0 }
   local jid
-  local ok, jid_or_err = pcall(vim.fn.jobstart, cmd, {
+  local ok, job_or_err = pcall(vim.system, cmd, {
     cwd = cwd,
     env = env,
-    stdout_buffered = true,
-    stderr_buffered = true,
-    stdin = config.stdin and "pipe" or "null",
-    on_stdout = function(_, data)
-      if config.stdin then
-        stdout = data
+    stdin = config.stdin and buffer_text,
+  }, function(result)
+    local code = result.code
+    local stdout = result.stdout and vim.split(result.stdout, "\r?\n") or {}
+    local stderr = result.stderr and vim.split(result.stderr, "\r?\n") or {}
+    if vim.tbl_contains(exit_codes, code) then
+      local output = stdout
+      if not config.stdin then
+        local fd = assert(uv.fs_open(ctx.filename, "r", 448)) -- 0700
+        local stat = assert(uv.fs_fstat(fd))
+        local content = assert(uv.fs_read(fd, stat.size))
+        uv.fs_close(fd)
+        output = vim.split(content, "\r?\n")
       end
-    end,
-    on_stderr = function(_, data)
-      stderr = data
-    end,
-    on_exit = function(_, code)
-      if vim.tbl_contains(exit_codes, code) then
-        local output
-        if not config.stdin then
-          local fd = assert(uv.fs_open(ctx.filename, "r", 448)) -- 0700
-          local stat = assert(uv.fs_fstat(fd))
-          local content = assert(uv.fs_read(fd, stat.size))
-          uv.fs_close(fd)
-          output = vim.split(content, "\r?\n", {})
-        else
-          output = stdout
-          -- trim trailing \r in every line
-          -- so that both branches of this if block behaves the same
-          for i, line in ipairs(output) do
-            output[i] = string.gsub(line, "\r$", "")
-          end
-        end
-        -- Remove the trailing newline from the output to convert back to vim lines representation
-        if add_extra_newline and output[#output] == "" then
-          table.remove(output)
-        end
-        -- Vim will never let the lines array be empty. An empty file will still look like { "" }
-        if #output == 0 then
-          table.insert(output, "")
-        end
-        log.debug("%s exited with code %d", formatter.name, code)
-        log.trace("Output lines: %s", output)
-        log.trace("%s stderr: %s", formatter.name, stderr)
-        callback(nil, output)
+      -- Remove the trailing newline from the output to convert back to vim lines representation
+      if add_extra_newline and output[#output] == "" then
+        table.remove(output)
+      end
+      -- Vim will never let the lines array be empty. An empty file will still look like { "" }
+      if #output == 0 then
+        table.insert(output, "")
+      end
+      log.debug("%s exited with code %d", formatter.name, code)
+      log.trace("Output lines: %s", output)
+      log.trace("%s stderr: %s", formatter.name, stderr)
+      callback(nil, output)
+    else
+      log.info("%s exited with code %d", formatter.name, code)
+      log.debug("%s stdout: %s", formatter.name, stdout)
+      log.debug("%s stderr: %s", formatter.name, stderr)
+      local err_str
+      if not is_empty_output(stderr) then
+        err_str = table.concat(stderr, "\n")
+      elseif not is_empty_output(stdout) then
+        err_str = table.concat(stdout, "\n")
       else
-        log.info("%s exited with code %d", formatter.name, code)
-        log.debug("%s stdout: %s", formatter.name, stdout)
-        log.debug("%s stderr: %s", formatter.name, stderr)
-        local err_str
-        if not is_empty_output(stderr) then
-          err_str = table.concat(stderr, "\n")
-        elseif not is_empty_output(stdout) then
-          err_str = table.concat(stdout, "\n")
-        else
-          err_str = "unknown error"
-        end
-        if
-          vim.api.nvim_buf_is_valid(bufnr)
-          and jid ~= vim.b[bufnr].conform_jid
-          and opts.exclusive
-        then
-          callback({
-            code = errors.ERROR_CODE.INTERRUPTED,
-            message = string.format("Formatter '%s' was interrupted", formatter.name),
-          })
-        else
-          callback({
-            code = errors.ERROR_CODE.RUNTIME,
-            message = string.format("Formatter '%s' error: %s", formatter.name, err_str),
-          })
-        end
+        err_str = "unknown error"
       end
-    end,
-  })
+      if
+        vim.api.nvim_buf_is_valid(bufnr)
+        and jid ~= vim.b[bufnr].conform_jid
+        and opts.exclusive
+      then
+        callback({
+          code = errors.ERROR_CODE.INTERRUPTED,
+          message = string.format("Formatter '%s' was interrupted", formatter.name),
+        })
+      else
+        callback({
+          code = errors.ERROR_CODE.RUNTIME,
+          message = string.format("Formatter '%s' error: %s", formatter.name, err_str),
+        })
+      end
+    end
+  end)
   if not ok then
     callback({
-      code = errors.ERROR_CODE.JOBSTART,
-      message = string.format("Formatter '%s' error in jobstart: %s", formatter.name, jid_or_err),
+      code = errors.ERROR_CODE.VIM_SYSTEM,
+      message = string.format("Formatter '%s' error in vim.system: %s", formatter.name, job_or_err),
     })
     return
   end
-  jid = jid_or_err
+  jid = job_or_err.pid
   if jid == 0 then
     callback({
       code = errors.ERROR_CODE.INVALID_ARGS,
@@ -454,9 +437,6 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, opts, c
       code = errors.ERROR_CODE.NOT_EXECUTABLE,
       message = string.format("Formatter '%s' command is not executable", formatter.name),
     })
-  elseif config.stdin then
-    vim.api.nvim_chan_send(jid, buffer_text)
-    vim.fn.chanclose(jid, "stdin")
   end
   if opts.exclusive then
     vim.b[bufnr].conform_jid = jid
@@ -542,7 +522,7 @@ M.format_async = function(bufnr, formatters, range, opts, callback)
     range,
     original_lines,
     opts,
-    function(err, output_lines, all_support_range_formatting)
+    vim.schedule_wrap(function(err, output_lines, all_support_range_formatting)
       local did_edit = nil
       -- discard formatting if buffer has changed
       if not vim.api.nvim_buf_is_valid(bufnr) or changedtick ~= util.buf_get_changedtick(bufnr) then
@@ -565,7 +545,7 @@ M.format_async = function(bufnr, formatters, range, opts, callback)
         )
       end
       callback(err, did_edit)
-    end
+    end)
   )
 end
 

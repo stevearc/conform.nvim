@@ -11,8 +11,8 @@ M.ERROR_CODE = {
   INVALID_ARGS = 1,
   -- Command was not executable
   NOT_EXECUTABLE = 2,
-  -- Error occurred during when calling jobstart
-  JOBSTART = 3,
+  -- Error occurred during when calling vim.system
+  VIM_SYSTEM = 3,
   -- Command timed out during execution
   TIMEOUT = 4,
   -- Command was pre-empted by another call to format
@@ -42,7 +42,7 @@ M.is_execution_error = function(code)
   return code == M.ERROR_CODE.RUNTIME
     or code == M.ERROR_CODE.NOT_EXECUTABLE
     or code == M.ERROR_CODE.INVALID_ARGS
-    or code == M.ERROR_CODE.JOBSTART
+    or code == M.ERROR_CODE.VIM_SYSTEM
 end
 
 ---@param err1? conform.Error
