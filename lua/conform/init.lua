@@ -52,8 +52,8 @@ end
 
 ---@param opts? conform.setupOpts
 M.setup = function(opts)
-  if vim.fn.has("nvim-0.9") == 0 then
-    notify("conform.nvim requires Neovim 0.9+", vim.log.levels.ERROR)
+  if vim.fn.has("nvim-0.10") == 0 then
+    notify("conform.nvim requires Neovim 0.10+", vim.log.levels.ERROR)
     return
   end
   opts = opts or {}
