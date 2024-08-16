@@ -14,7 +14,7 @@ local M = {}
 ---@param formatter_name string
 ---@param ctx conform.Context
 ---@param config conform.JobFormatterConfig
----@return string|string[]
+---@return string[]
 M.build_cmd = function(formatter_name, ctx, config)
   local command = config.command
   if type(command) == "function" then
@@ -33,8 +33,7 @@ M.build_cmd = function(formatter_name, ctx, config)
     local computed_args = config.args
     if type(computed_args) == "function" then
       args = computed_args(config, ctx)
-    else
-      ---@diagnostic disable-next-line: cast-local-type
+    elseif computed_args then
       args = computed_args
     end
   end
@@ -53,10 +52,13 @@ M.build_cmd = function(formatter_name, ctx, config)
       :gsub("$DIRNAME", ctx.dirname)
       :gsub("$RELATIVE_FILEPATH", compute_relative_filepath)
       :gsub("$EXTENSION", ctx.filename:match(".*(%..*)$") or "")
-    return command .. " " .. interpolated
+    return {
+      vim.o.shell,
+      vim.o.shellcmdflag,
+      string.format("{%s %s}", command, interpolated),
+    }
   else
     local cmd = { command }
-    ---@diagnostic disable-next-line: param-type-mismatch
     for _, v in ipairs(args) do
       if v == "$FILENAME" then
         v = ctx.filename
@@ -372,11 +374,12 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, opts, c
       cwd = cwd,
       env = env,
       stdin = config.stdin and buffer_text,
+      text = true,
     },
     vim.schedule_wrap(function(result)
       local code = result.code
-      local stdout = result.stdout and vim.split(result.stdout, "\r?\n") or {}
-      local stderr = result.stderr and vim.split(result.stderr, "\r?\n") or {}
+      local stdout = result.stdout and vim.split(result.stdout, "\n") or {}
+      local stderr = result.stderr and vim.split(result.stderr, "\n") or {}
       if vim.tbl_contains(exit_codes, code) then
         local output = stdout
         if not config.stdin then
