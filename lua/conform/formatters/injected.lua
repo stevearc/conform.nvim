@@ -112,6 +112,7 @@ return {
     url = "doc/advanced_topics.md#injected-language-formatting-code-blocks",
     description = "Format treesitter injected languages.",
   },
+  ---@type conform.InjectedFormatterOptions
   options = {
     -- Set to true to ignore errors
     ignore_errors = false,
@@ -151,8 +152,8 @@ return {
       callback("No treesitter parser for buffer")
       return
     end
-    ---@type conform.InjectedFormatterOptions
     local options = self.options
+    ---@cast options conform.InjectedFormatterOptions
 
     ---@param lang string
     ---@return nil|conform.FiletypeFormatter
