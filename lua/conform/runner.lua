@@ -436,17 +436,6 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, opts, c
     return
   end
   jid = job_or_err.pid
-  if jid == 0 then
-    callback({
-      code = errors.ERROR_CODE.INVALID_ARGS,
-      message = string.format("Formatter '%s' invalid arguments", formatter.name),
-    })
-  elseif jid == -1 then
-    callback({
-      code = errors.ERROR_CODE.NOT_EXECUTABLE,
-      message = string.format("Formatter '%s' command is not executable", formatter.name),
-    })
-  end
   if opts.exclusive then
     vim.b[bufnr].conform_jid = jid
   end
