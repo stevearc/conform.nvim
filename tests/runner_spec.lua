@@ -8,8 +8,8 @@ local util = require("conform.util")
 ---@return string[]
 local function shell(cmd)
   return {
-    vim.o.shell,
-    vim.o.shellcmdflag,
+    vim.split(vim.o.shell, " "),
+    vim.split(vim.o.shellcmdflag, " "),
     string.format("{%s}", cmd),
   }
 end
