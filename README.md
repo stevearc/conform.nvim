@@ -28,7 +28,7 @@ Lightweight yet powerful formatter plugin for Neovim
 
 ## Requirements
 
-- Neovim 0.9+ (for older versions, use a [nvim-0.x branch](https://github.com/stevearc/conform.nvim/branches))
+- Neovim 0.10+ (for older versions, use a [nvim-0.x branch](https://github.com/stevearc/conform.nvim/branches))
 
 ## Features
 
