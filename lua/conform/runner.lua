@@ -364,7 +364,7 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, opts, c
     log.debug("Run ENV: %s", env)
   end
   local exit_codes = config.exit_codes or { 0 }
-  local jid
+  local pid
   local ok, job_or_err = pcall(
     vim.system,
     cmd,
@@ -412,7 +412,7 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, opts, c
         end
         if
           vim.api.nvim_buf_is_valid(bufnr)
-          and jid ~= vim.b[bufnr].conform_jid
+          and pid ~= vim.b[bufnr].conform_pid
           and opts.exclusive
         then
           callback({
@@ -435,12 +435,12 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, opts, c
     })
     return
   end
-  jid = job_or_err.pid
+  pid = job_or_err.pid
   if opts.exclusive then
-    vim.b[bufnr].conform_jid = jid
+    vim.b[bufnr].conform_pid = pid
   end
 
-  return jid
+  return pid
 end
 
 ---@param bufnr integer
@@ -505,9 +505,9 @@ M.format_async = function(bufnr, formatters, range, opts, callback)
   end
 
   -- kill previous jobs for buffer
-  local prev_jid = vim.b[bufnr].conform_jid
-  if prev_jid and opts.exclusive then
-    if uv.kill(prev_jid) == 0 then
+  local prev_pid = vim.b[bufnr].conform_pid
+  if prev_pid and opts.exclusive then
+    if uv.kill(prev_pid) == 0 then
       log.info("Canceled previous format job for %s", vim.api.nvim_buf_get_name(bufnr))
     end
   end
@@ -597,9 +597,9 @@ M.format_sync = function(bufnr, formatters, timeout_ms, range, opts)
   local original_lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
 
   -- kill previous jobs for buffer
-  local prev_jid = vim.b[bufnr].conform_jid
-  if prev_jid and opts.exclusive then
-    if uv.kill(prev_jid) == 0 then
+  local prev_pid = vim.b[bufnr].conform_pid
+  if prev_pid and opts.exclusive then
+    if uv.kill(prev_pid) == 0 then
       log.info("Canceled previous format job for %s", vim.api.nvim_buf_get_name(bufnr))
     end
   end
@@ -650,7 +650,7 @@ M.format_lines_sync = function(bufnr, formatters, timeout_ms, range, input_lines
     ---@type conform.FormatterConfig
     local config = assert(require("conform").get_formatter_config(formatter.name, bufnr))
     local ctx = M.build_context(bufnr, config, range)
-    local jid = run_formatter(
+    local pid = run_formatter(
       bufnr,
       formatter,
       config,
@@ -670,8 +670,8 @@ M.format_lines_sync = function(bufnr, formatters, timeout_ms, range, input_lines
     end, 5)
 
     if not wait_result then
-      if jid then
-        uv.kill(jid)
+      if pid then
+        uv.kill(pid)
       end
       if wait_reason == -1 then
         return errors.coalesce(final_err, {
