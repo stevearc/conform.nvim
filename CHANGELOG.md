@@ -1,5 +1,22 @@
 # Changelog
 
+## [7.1.0](https://github.com/stevearc/conform.nvim/compare/v7.0.0...v7.1.0) (2024-08-16)
+
+
+### Features
+
+* add support for cljfmt ([#500](https://github.com/stevearc/conform.nvim/issues/500)) ([42e10a3](https://github.com/stevearc/conform.nvim/commit/42e10a38cbb427f418ac17f8a472b3c7315517ba))
+* add support for markdownfmt ([#511](https://github.com/stevearc/conform.nvim/issues/511)) ([960f51b](https://github.com/stevearc/conform.nvim/commit/960f51becccadc36825b2c2db266c8cffaeadbde))
+* add variable for args to insert the file extension ([#510](https://github.com/stevearc/conform.nvim/issues/510)) ([0f4f299](https://github.com/stevearc/conform.nvim/commit/0f4f299dfea09d2adfd7a1da05149a0844ac8eee))
+
+
+### Bug Fixes
+
+* **djlint:** remove default indentation arguments ([#517](https://github.com/stevearc/conform.nvim/issues/517)) ([38e5f06](https://github.com/stevearc/conform.nvim/commit/38e5f062f241d89ba44f6d67d16b4bf55d3c477e))
+* **docformatter:** update exit_codes, 3 is correct in in-place formatting ([#518](https://github.com/stevearc/conform.nvim/issues/518)) ([667102f](https://github.com/stevearc/conform.nvim/commit/667102f26106709cddd2dff1f699610df5b94d7f))
+* **nixfmt:** update repo link and description ([#505](https://github.com/stevearc/conform.nvim/issues/505)) ([2122fe2](https://github.com/stevearc/conform.nvim/commit/2122fe2ff01e9a542fc358ee9398ce2cbddf345d))
+* **sqlfluff:** don't assume ansi dialect and require config ([#519](https://github.com/stevearc/conform.nvim/issues/519)) ([bb10949](https://github.com/stevearc/conform.nvim/commit/bb10949d80dd0f60d03572f04953322785f39f7a))
+
 ## [7.0.0](https://github.com/stevearc/conform.nvim/compare/v6.1.0...v7.0.0) (2024-07-23)
 
 
