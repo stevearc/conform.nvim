@@ -4,16 +4,6 @@ local runner = require("conform.runner")
 local test_util = require("tests.test_util")
 local util = require("conform.util")
 
----@param cmd string
----@return string[]
-local function shell(cmd)
-  return {
-    vim.split(vim.o.shell, " "),
-    vim.split(vim.o.shellcmdflag, " "),
-    string.format("{%s}", cmd),
-  }
-end
-
 describe("runner", function()
   local OUTPUT_FILE
   local CLEANUP_FILES = {}
@@ -178,7 +168,7 @@ describe("runner", function()
       local config = assert(conform.get_formatter_config("test"))
       local ctx = runner.build_context(0, config)
       local cmd = runner.build_cmd("", ctx, config)
-      assert.are.same(shell(vim.fn.exepath("echo") .. " | patch"), cmd)
+      assert.are.same(util.shell_build_argv(vim.fn.exepath("echo") .. " | patch"), cmd)
     end)
   end)
 

@@ -1,3 +1,5 @@
+local ffi = require("ffi")
+
 local M = {}
 
 ---Find a command in node_modules
@@ -207,6 +209,25 @@ M.parse_rust_edition = function(dir)
       end
     end
   end
+end
+
+ffi.cdef([[
+char** shell_build_argv(const char* cmd, const char* extra_args);
+void shell_free_argv(char** argv);
+]])
+
+---@param cmd string
+---@return string[]
+M.shell_build_argv = function(cmd)
+  local cargv = ffi.C.shell_build_argv(cmd, nil)
+  local argv = {}
+  local i = 0
+  while cargv[i] ~= nil do
+    table.insert(argv, ffi.string(cargv[i]))
+    i = i + 1
+  end
+  ffi.C.shell_free_argv(cargv)
+  return argv
 end
 
 return M

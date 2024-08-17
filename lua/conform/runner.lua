@@ -52,11 +52,7 @@ M.build_cmd = function(formatter_name, ctx, config)
       :gsub("$DIRNAME", ctx.dirname)
       :gsub("$RELATIVE_FILEPATH", compute_relative_filepath)
       :gsub("$EXTENSION", ctx.filename:match(".*(%..*)$") or "")
-    return {
-      vim.split(vim.o.shell, " "),
-      vim.split(vim.o.shellcmdflag, " "),
-      string.format("{%s %s}", command, interpolated),
-    }
+    return util.shell_build_argv(command .. " " .. interpolated)
   else
     local cmd = { command }
     for _, v in ipairs(args) do
