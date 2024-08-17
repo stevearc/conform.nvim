@@ -395,5 +395,13 @@ print("a")
         assert.are.same({ "a", "d", "c" }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
       end)
     end)
+
+    it("can run the format command in the shell", function()
+      conform.formatters.test = {
+        command = "echo",
+        args = '-e "world\nhello" | sort',
+      }
+      run_formatter_test("", "hello\nworld")
+    end)
   end)
 end)
