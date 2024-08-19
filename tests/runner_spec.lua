@@ -121,7 +121,7 @@ describe("runner", function()
       local config = assert(conform.get_formatter_config("test"))
       local ctx = runner.build_context(0, config)
       local cmd = runner.build_cmd("", ctx, config)
-      assert.are.same({ "echo", vim.api.nvim_buf_get_name(bufnr) }, cmd)
+      assert.are.same({ vim.fn.exepath("echo"), vim.api.nvim_buf_get_name(bufnr) }, cmd)
     end)
 
     it("replaces $DIRNAME in args", function()
@@ -135,7 +135,10 @@ describe("runner", function()
       local config = assert(conform.get_formatter_config("test"))
       local ctx = runner.build_context(0, config)
       local cmd = runner.build_cmd("", ctx, config)
-      assert.are.same({ "echo", vim.fs.dirname(vim.api.nvim_buf_get_name(bufnr)) }, cmd)
+      assert.are.same(
+        { vim.fn.exepath("echo"), vim.fs.dirname(vim.api.nvim_buf_get_name(bufnr)) },
+        cmd
+      )
     end)
 
     it("resolves arg function", function()
@@ -150,35 +153,7 @@ describe("runner", function()
       local config = assert(conform.get_formatter_config("test"))
       local ctx = runner.build_context(0, config)
       local cmd = runner.build_cmd("", ctx, config)
-      assert.are.same({ "echo", "--stdin" }, cmd)
-    end)
-
-    it("replaces $FILENAME in string args", function()
-      vim.cmd.edit({ args = { "README.md" } })
-      local bufnr = vim.api.nvim_get_current_buf()
-      conform.formatters.test = {
-        meta = { url = "", description = "" },
-        command = "echo",
-        args = "$FILENAME | patch",
-      }
-      local config = assert(conform.get_formatter_config("test"))
-      local ctx = runner.build_context(0, config)
-      local cmd = runner.build_cmd("", ctx, config)
-      assert.equal("echo " .. vim.api.nvim_buf_get_name(bufnr) .. " | patch", cmd)
-    end)
-
-    it("replaces $DIRNAME in string args", function()
-      vim.cmd.edit({ args = { "README.md" } })
-      local bufnr = vim.api.nvim_get_current_buf()
-      conform.formatters.test = {
-        meta = { url = "", description = "" },
-        command = "echo",
-        args = "$DIRNAME | patch",
-      }
-      local config = assert(conform.get_formatter_config("test"))
-      local ctx = runner.build_context(0, config)
-      local cmd = runner.build_cmd("", ctx, config)
-      assert.equal("echo " .. vim.fs.dirname(vim.api.nvim_buf_get_name(bufnr)) .. " | patch", cmd)
+      assert.are.same({ vim.fn.exepath("echo"), "--stdin" }, cmd)
     end)
 
     it("resolves arg function with string results", function()
@@ -193,7 +168,7 @@ describe("runner", function()
       local config = assert(conform.get_formatter_config("test"))
       local ctx = runner.build_context(0, config)
       local cmd = runner.build_cmd("", ctx, config)
-      assert.equal("echo | patch", cmd)
+      assert.are.same(util.shell_build_argv(vim.fn.exepath("echo") .. " | patch"), cmd)
     end)
   end)
 
@@ -409,6 +384,14 @@ print("a")
         )
         assert.are.same({ "a", "d", "c" }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
       end)
+    end)
+
+    it("can run the format command in the shell", function()
+      conform.formatters.test = {
+        command = "echo",
+        args = '-e "world\nhello" | sort',
+      }
+      run_formatter_test("", "hello\nworld")
     end)
   end)
 end)
