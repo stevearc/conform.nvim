@@ -21,7 +21,7 @@ buffer contents with that output. There are a few fancy things happening with [m
 diffs](advanced_topics.md#minimal-format-diffs), but in practice there are almost never problems
 with that system so you can mostly ignore it.
 
-Conform runs the formatters using `:help jobstart()`, and does one of two things. Some formatters
+Conform runs the formatters using `:help vim.system()`, and does one of two things. Some formatters
 support formatting _from_ stdin and _to_ stdout. For these, we pipe the buffer text to the process
 via stdin, and read the stdout back as the new buffer contents. For formatters that don't support
 stdin/out, we create a temporary file in the same directory, write the buffer to it, run the
@@ -67,7 +67,7 @@ run. It should look like this:
 21:50:31[DEBUG] Run default CWD: /Users/stevearc/dotfiles/vimplugins/conform.nvim
 ```
 
-This is logging the lua table that is passed to `jobstart()`. The first thing to do is to take this
+This is logging the lua table that is passed to `vim.system()`. The first thing to do is to take this
 command and run it directly in your shell and see what happens. For formatters using stdin/out, it
 will look like this:
 
