@@ -1,5 +1,6 @@
 require("plenary.async").tests.add_to_env()
 local conform = require("conform")
+local fs = require("conform.fs")
 local runner = require("conform.runner")
 local test_util = require("tests.test_util")
 local util = require("conform.util")
@@ -387,11 +388,20 @@ print("a")
     end)
 
     it("can run the format command in the shell", function()
-      conform.formatters.test = {
-        command = "seq",
-        args = "3 1 | sort",
-      }
-      run_formatter_test("", "1\n2\n3")
+      -- Mac echo doesn't seem to support -e, but the linux ci runner apparently doesn't have seq
+      if fs.is_mac then
+        conform.formatters.test = {
+          command = "seq",
+          args = "3 1 | sort",
+        }
+        run_formatter_test("", "1\n2\n3")
+      else
+        conform.formatters.test = {
+          command = "echo",
+          args = '-e "World\nHello" | sort',
+        }
+        run_formatter_test("", "Hello\nWorld")
+      end
     end)
   end)
 end)
