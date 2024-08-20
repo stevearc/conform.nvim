@@ -388,10 +388,10 @@ print("a")
 
     it("can run the format command in the shell", function()
       conform.formatters.test = {
-        command = "echo",
-        args = '-e "world\nhello" | sort',
+        command = "seq",
+        args = "3 1 | sort",
       }
-      run_formatter_test("", "hello\nworld")
+      run_formatter_test("", "1\n2\n3")
     end)
   end)
 end)
