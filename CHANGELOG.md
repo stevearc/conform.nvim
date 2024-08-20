@@ -1,5 +1,16 @@
 # Changelog
 
+## [8.0.0](https://github.com/stevearc/conform.nvim/compare/v7.1.0...v8.0.0) (2024-08-20)
+
+
+### ⚠ BREAKING CHANGES
+
+* Require Neovim 0.10+
+
+### Code Refactoring
+
+* Require Neovim 0.10+ ([d31323d](https://github.com/stevearc/conform.nvim/commit/d31323db3fa4a33d203dcb05150d98bd0153c42c))
+
 ## [7.1.0](https://github.com/stevearc/conform.nvim/compare/v7.0.0...v7.1.0) (2024-08-16)
 
 
