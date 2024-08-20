@@ -49,13 +49,7 @@ end
 ---@return fun(self: conform.FormatterConfig, ctx: conform.Context): nil|string
 M.root_file = function(files)
   return function(self, ctx)
-    if vim.fn.has("nvim-0.10") == 1 then
-      return vim.fs.root(ctx.dirname, files)
-    end
-    local found = vim.fs.find(files, { upward = true, path = ctx.dirname })[1]
-    if found then
-      return vim.fs.dirname(found)
-    end
+    return vim.fs.root(ctx.dirname, files)
   end
 end
 

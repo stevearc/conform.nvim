@@ -407,6 +407,13 @@ local has_notified_ft_no_formatters = {}
 ---@param callback? fun(err: nil|string, did_edit: nil|boolean) Called once formatting has completed
 ---@return boolean True if any formatters were attempted
 M.format = function(opts, callback)
+  if vim.fn.has("nvim-0.10") == 0 then
+    notify_once("conform.nvim requires Neovim 0.10+", vim.log.levels.ERROR)
+    if callback then
+      callback("conform.nvim requires Neovim 0.10+")
+    end
+    return false
+  end
   opts = opts or {}
   local has_explicit_formatters = opts.formatters ~= nil
   -- If formatters were not passed in directly, fetch any options from formatters_by_ft
