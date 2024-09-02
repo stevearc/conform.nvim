@@ -4,6 +4,7 @@ local extensions = {
   json = "json",
   jsonc = "jsonc",
   markdown = "md",
+  esmodule = "mjs",
   typescript = "ts",
   typescriptreact = "tsx",
 }
