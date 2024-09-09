@@ -362,6 +362,7 @@ You can view this list in vim with `:help conform-formatters`
 - [yew-fmt](https://github.com/schvv31n/yew-fmt) - Code formatter for the Yew framework.
 - [yq](https://github.com/mikefarah/yq) - YAML/JSON processor
 - [zigfmt](https://github.com/ziglang/zig) - Reformat Zig source into canonical form.
+- [ziggy](https://github.com/kristoff-it/ziggy) - A data serialization language for expressing clear API messages, config files, etc.
 - [zprint](https://github.com/kkinnear/zprint) - Formatter for Clojure and EDN.
 <!-- /FORMATTERS -->
 
