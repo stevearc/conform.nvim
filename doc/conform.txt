@@ -461,6 +461,7 @@ FORMATTERS                                                    *conform-formatter
 `styler` - R formatter and linter.
 `stylish-haskell` - Haskell code prettifier.
 `stylua` - An opinionated code formatter for Lua.
+`superhtml` - HTML Language Server and Templating Language Library
 `swift_format` - Swift formatter from apple. Requires building from source with
                `swift build`.
 `swiftformat` - SwiftFormat is a code library and command-line tool for

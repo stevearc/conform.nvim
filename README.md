@@ -335,6 +335,7 @@ You can view this list in vim with `:help conform-formatters`
 - [styler](https://github.com/devOpifex/r.nvim) - R formatter and linter.
 - [stylish-haskell](https://github.com/haskell/stylish-haskell) - Haskell code prettifier.
 - [stylua](https://github.com/JohnnyMorganz/StyLua) - An opinionated code formatter for Lua.
+- [superhtml](https://github.com/kristoff-it/superhtml) - HTML Language Server and Templating Language Library
 - [swift_format](https://github.com/apple/swift-format) - Swift formatter from apple. Requires building from source with `swift build`.
 - [swiftformat](https://github.com/nicklockwood/SwiftFormat) - SwiftFormat is a code library and command-line tool for reformatting `swift` code on macOS or Linux.
 - [swiftlint](https://github.com/realm/SwiftLint) - A tool to enforce Swift style and conventions.
