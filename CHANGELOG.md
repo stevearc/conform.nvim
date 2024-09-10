@@ -1,5 +1,18 @@
 # Changelog
 
+## [8.1.0](https://github.com/stevearc/conform.nvim/compare/v8.0.0...v8.1.0) (2024-09-10)
+
+
+### Features
+
+* **deno:** add support for .mjs files ([#528](https://github.com/stevearc/conform.nvim/issues/528)) ([e82b7b1](https://github.com/stevearc/conform.nvim/commit/e82b7b13b0ed348ce4dbf1495f9b1872d33f9d3f))
+* **zine:** add superhtml and ziggy support ([#531](https://github.com/stevearc/conform.nvim/issues/531)) ([392fc98](https://github.com/stevearc/conform.nvim/commit/392fc98c475b4f0552078104624e509b4826d197))
+
+
+### Bug Fixes
+
+* **log:** prepend date to log lines ([#529](https://github.com/stevearc/conform.nvim/issues/529)) ([c6728c5](https://github.com/stevearc/conform.nvim/commit/c6728c55d1e07da3138beea453d4078668719ee0))
+
 ## [8.0.0](https://github.com/stevearc/conform.nvim/compare/v7.1.0...v8.0.0) (2024-08-20)
 
 
