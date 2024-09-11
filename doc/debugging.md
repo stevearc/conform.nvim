@@ -9,6 +9,7 @@ questions like "why isn't my formatter working?" and "why is my formatter using 
 - [Background](#background)
 - [Tools](#tools)
 - [Testing the formatter](#testing-the-formatter)
+- [Testing vim.system](#testing-vimsystem)
 
 <!-- /TOC -->
 
@@ -92,3 +93,41 @@ configuring the formatter, Neovim, or conform. By confirming that the format com
 shell, we can eliminate some of those possibilities. If the format command _doesn't_ work in the
 shell, you will need to iterate on that until you can find one that works. Please DO NOT file an
 issue on this repo until you have a functioning format command in your shell.
+
+## Testing vim.system
+
+What to do if the formatting command works on the command line? Well, now we need to determine if the issue is with conform or if it's with the underlying Neovim utilities. To isolate this, we're going to attempt to run the command using raw Neovim APIs the same way that conform would. If this succeeds, we can be confident that something is wrong with conform. If this fails, then it is likely that there is an upstream issue with `vim.system`, or possibly that conform needs to call `vim.system` in a different way.
+
+Copy this script into a lua file, edit the bottom to match your use case, and run it with `:source`.
+
+```lua
+-- Copy these helper functions directly
+local function run_formatter(cmd, cwd, buffer_text)
+  local proc = vim.system(cmd, {
+    cwd = cwd,
+    stdin = buffer_text,
+    text = true,
+  })
+  local ret = proc:wait()
+  if ret.code == 0 then
+    print("Success\n--------")
+  else
+    print("Failure\n--------")
+  end
+  print(ret.stdout)
+  print(ret.stderr)
+end
+
+local function read_file(path)
+  local file = assert(io.open(path, "r"))
+  local content = file:read("*a")
+  file:close()
+  return content
+end
+
+-- Edit these lines to match the values you see in your conform log file
+-- To test a stdin formatter
+run_formatter({ "formatter_command", "arg1", "arg2" }, "/path/to/cwd", read_file("/path/to/file.txt"))
+-- To test a non-stdin formatter
+run_formatter({ "formatter_command", "arg1", "arg2" }, "/path/to/cwd")
+```

@@ -451,6 +451,7 @@ require("conform").formatters.shfmt = {
 - [Background](doc/debugging.md#background)
 - [Tools](doc/debugging.md#tools)
 - [Testing the formatter](doc/debugging.md#testing-the-formatter)
+- [Testing vim.system](doc/debugging.md#testing-vimsystem)
 
 <!-- /DEBUGGING -->
 
