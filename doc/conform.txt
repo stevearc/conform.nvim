@@ -372,6 +372,7 @@ FORMATTERS                                                    *conform-formatter
 `ktfmt` - Reformats Kotlin source code to comply with the common community
         standard conventions.
 `ktlint` - An anti-bikeshedding Kotlin linter with built-in formatter.
+`kulala-fmt` - An opinionated .http and .rest files linter and formatter.
 `latexindent` - A perl script for formatting LaTeX files that is generally
               included in major TeX distributions.
 `leptosfmt` - A formatter for the Leptos view! macro.
