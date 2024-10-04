@@ -1,5 +1,19 @@
 # Changelog
 
+## [8.2.0](https://github.com/stevearc/conform.nvim/compare/v8.1.0...v8.2.0) (2024-10-04)
+
+
+### Features
+
+* add kulala-fmt ([#534](https://github.com/stevearc/conform.nvim/issues/534)) ([555a5c4](https://github.com/stevearc/conform.nvim/commit/555a5c4638957400fe59bf8125e09576bbc6ea86))
+* add mojo format ([#540](https://github.com/stevearc/conform.nvim/issues/540)) ([9bde4fb](https://github.com/stevearc/conform.nvim/commit/9bde4fbbbbc80351e96ff91adc92ad566294ad4c))
+
+
+### Bug Fixes
+
+* health checks error for old Neovim versions ([936f241](https://github.com/stevearc/conform.nvim/commit/936f2413e6c57185cd873623a29a0685bce4b423))
+* more notifications when Neovim is below supported version ([130e0d6](https://github.com/stevearc/conform.nvim/commit/130e0d68fdc7f4b8ff7114648f3fa0899bb5fa0f))
+
 ## [8.1.0](https://github.com/stevearc/conform.nvim/compare/v8.0.0...v8.1.0) (2024-09-10)
 
 
