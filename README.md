@@ -353,6 +353,7 @@ You can view this list in vim with `:help conform-formatters`
 - [twig-cs-fixer](https://github.com/VincentLanglet/Twig-CS-Fixer) - Automatically fix Twig Coding Standards issues
 - [typos](https://github.com/crate-ci/typos) - Source code spell checker
 - [typstyle](https://github.com/Enter-tainer/typstyle) - Beautiful and reliable typst code formatter.
+- [ufmt](https://github.com/omnilib/ufmt) - Safe, atomic formatting with black and µsort.
 - [uncrustify](https://github.com/uncrustify/uncrustify) - A source code beautifier for C, C++, C#, ObjectiveC, D, Java, Pawn and Vala.
 - [usort](https://github.com/facebook/usort) - Safe, minimal import sorting for Python projects.
 - [verible](https://github.com/chipsalliance/verible/blob/master/verilog/tools/formatter/README.md) - The SystemVerilog formatter.
