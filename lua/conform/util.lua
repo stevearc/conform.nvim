@@ -45,7 +45,7 @@ M.find_executable = function(paths, default)
   end
 end
 
----@param files string|string[]
+---@param markerFilesOrFn string|string[]|fun(name: string, path: string):boolean
 ---@return fun(self: conform.FormatterConfig, ctx: conform.Context): nil|string
 M.root_file = function(files)
   return function(self, ctx)
