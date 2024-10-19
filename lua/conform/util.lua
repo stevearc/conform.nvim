@@ -45,11 +45,79 @@ M.find_executable = function(paths, default)
   end
 end
 
----@param markerFilesOrFn string|string[]|fun(name: string, path: string):boolean
+--[[
+-- Answers if a file under a specified file path contains specific vim pattern in the file content.
+--
+-- @param file path path to the file
+-- @param regex vim pattern to match against the file content
+--]]
+local function file_contains_regex(filePath, regex)
+  if vim.fn.filereadable(filePath) == 1 then
+    local lines = vim.fn.readfile(filePath)
+    for _, line in ipairs(lines) do
+      if vim.fn.match(line, regex) > -1 then
+        return true
+      end
+    end
+  end
+
+  return false
+end
+
+-- TODO: improve markerFilesOrFn types
+---@param markerFilesOrFn string|(string|table)[]|fun(name: string, path: string):boolean
 ---@return fun(self: conform.FormatterConfig, ctx: conform.Context): nil|string
-M.root_file = function(files)
+M.root_file = function(markerFilesOrFn)
+  local markerFn
+
+  if type(markerFilesOrFn) == "function" then
+    markerFn = markerFilesOrFn
+  else
+    local file_names = {}
+    local files_with_options = {}
+
+    if type(markerFilesOrFn) == "string" then
+      markerFilesOrFn = { markerFilesOrFn }
+    end
+
+    for _, file in ipairs(markerFilesOrFn) do
+      if type(file) == "string" then
+        table.insert(file_names, file)
+      else
+        if
+          (type(file) ~= "table")
+          or (type(file[1]) ~= "string")
+          or (type(file[2]) ~= "table" or file[2].contains_regex == nil)
+        then
+          error("Invalid file options")
+        end
+
+        table.insert(files_with_options, file)
+      end
+    end
+
+    markerFn = function(name, path)
+      if vim.tbl_contains(file_names, name) then
+        return true
+      end
+
+      for _, file in ipairs(files_with_options) do
+        if
+          file_contains_regex(
+            vim.fn.fnamemodify(path, ":p") .. "/" .. file[1],
+            file[2].contains_regex
+          )
+        then
+          return true
+        end
+      end
+
+      return false
+    end
+  end
+
   return function(self, ctx)
-    return vim.fs.root(ctx.dirname, files)
+    return vim.fs.root(ctx.dirname, markerFn)
   end
 end
 
