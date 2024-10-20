@@ -1,12 +1,18 @@
 local extensions = {
+  css = "css",
   esmodule = "mjs",
+  html = "html",
   javascript = "js",
   javascriptreact = "jsx",
   json = "json",
   jsonc = "jsonc",
+  less = "less",
   markdown = "md",
+  sass = "sass",
+  scss = "scss",
   typescript = "ts",
   typescriptreact = "tsx",
+  yaml = "yml",
 }
 ---@type conform.FileFormatterConfig
 return {
