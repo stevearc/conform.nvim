@@ -99,7 +99,8 @@ describe("util", function()
         shiftwidth = 2,
       })
 
-      assert.equal(vim.fn.fnamemodify(TMP_DIR, ":p:h"), cwd)
+      ---@diagnostic disable-next-line: param-type-mismatch
+      assert.equal(vim.fn.fnamemodify(TMP_DIR, ":p:h"), (vim.fn.fnamemodify(cwd, ":p:h")))
     end)
 
     describe("single file", function()
@@ -126,7 +127,8 @@ describe("util", function()
           shiftwidth = 2,
         })
 
-        assert.equal(vim.fn.fnamemodify(TMP_DIR, ":p:h"), cwd)
+        ---@diagnostic disable-next-line: param-type-mismatch
+        assert.equal(vim.fn.fnamemodify(TMP_DIR, ":p:h"), (vim.fn.fnamemodify(cwd, ":p:h")))
       end)
     end)
 
@@ -154,7 +156,8 @@ describe("util", function()
           shiftwidth = 2,
         })
 
-        assert.equal(vim.fn.fnamemodify(TMP_DIR, ":p:h"), cwd)
+        ---@diagnostic disable-next-line: param-type-mismatch
+        assert.equal(vim.fn.fnamemodify(TMP_DIR, ":p:h"), (vim.fn.fnamemodify(cwd, ":p:h")))
       end)
     end)
   end)
