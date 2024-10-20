@@ -1,10 +1,10 @@
 local extensions = {
+  esmodule = "mjs",
   javascript = "js",
   javascriptreact = "jsx",
   json = "json",
   jsonc = "jsonc",
   markdown = "md",
-  esmodule = "mjs",
   typescript = "ts",
   typescriptreact = "tsx",
 }
