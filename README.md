@@ -287,6 +287,7 @@ You can view this list in vim with `:help conform-formatters`
 - [mojo_format](https://docs.modular.com/mojo/cli/format) - Official Formatter for The Mojo Programming Language
 - [nickel](https://nickel-lang.org/) - Code formatter for the Nickel programming language.
 - [nimpretty](https://github.com/nim-lang/nim) - nimpretty is a Nim source code beautifier that follows the official style guide.
+- [nufmt](https://github.com/nushell/nufmt) - The nushell formatter.
 - [nixfmt](https://github.com/NixOS/nixfmt) - The official (but not yet stable) formatter for Nix code.
 - [nixpkgs_fmt](https://github.com/nix-community/nixpkgs-fmt) - nixpkgs-fmt is a Nix code formatter for nixpkgs.
 - [npm-groovy-lint](https://github.com/nvuillam/npm-groovy-lint) - Lint, format and auto-fix your Groovy / Jenkinsfile / Gradle files using command line.
