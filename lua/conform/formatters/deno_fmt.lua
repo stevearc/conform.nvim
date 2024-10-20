@@ -13,6 +13,11 @@ local extensions = {
   typescript = "ts",
   typescriptreact = "tsx",
   yaml = "yml",
+  -- Requires `--unstable-component` flag or
+  -- `"unstable": ["fmt-component]` config option.
+  astro = "astro",
+  svelte = "svelte",
+  vue = "vue",
 }
 ---@type conform.FileFormatterConfig
 return {
