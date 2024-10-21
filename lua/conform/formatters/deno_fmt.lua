@@ -1,6 +1,15 @@
+local conform = require("conform")
 local log = require("conform.log")
 
-local extensions = {
+-- Requires `--unstable-component` flag or
+-- `"unstable": ["fmt-component]` config option.
+-- https://docs.deno.com/runtime/reference/cli/formatter/#formatting-options-unstable-component
+local unstable_extensions = {
+  astro = "astro",
+  svelte = "svelte",
+  vue = "vue",
+}
+local extensions = vim.tbl_extend("keep", {
   css = "css",
   esmodule = "mjs",
   html = "html",
@@ -15,12 +24,8 @@ local extensions = {
   typescript = "ts",
   typescriptreact = "tsx",
   yaml = "yml",
-  -- Requires `--unstable-component` flag or
-  -- `"unstable": ["fmt-component]` config option.
-  astro = "astro",
-  svelte = "svelte",
-  vue = "vue",
-}
+}, unstable_extensions)
+
 ---@type conform.FileFormatterConfig
 return {
   meta = {
@@ -31,10 +36,13 @@ return {
   args = function(self, ctx)
     local extension = extensions[vim.bo[ctx.buf].filetype]
 
-    -- TODO: How do I check if the user has passed in `--unstable-component` with e.g. `append_args` in their config?
-    print("self: " .. vim.inspect(self))
-    print("ctx: " .. vim.inspect(ctx))
-    if true then
+    if
+      vim.tbl_get(unstable_extensions, extension)
+      and not vim.list_contains(
+        vim.tbl_get(conform.formatters, "deno_fmt", "append_args") or {},
+        "--unstable-component"
+      )
+    then
       log.warn(
         "You are trying to format an unstable file type (."
           .. extension
