@@ -38,7 +38,7 @@ return {
       log.warn(
         "You are trying to format an unstable file type (."
           .. extension
-          .. ") without the corresponding `--unstable-component` flag. Add the flag to format the code. See the Deno documentation for more information: https://docs.deno.com/runtime/reference/cli/formatter/#formatting-options-unstable-component"
+          .. ") without the corresponding `--unstable-component` flag. Add the flag to `append_args` to format your code. See the Deno documentation for more information: https://docs.deno.com/runtime/reference/cli/formatter/#formatting-options-unstable-component"
       )
     end
 
