@@ -137,6 +137,11 @@ return {
     -- (defaults to the value from formatters_by_ft)
     lang_to_formatters = {},
   },
+  condition = function(self, ctx)
+    local buf_lang = vim.treesitter.language.get_lang(vim.bo[ctx.buf].filetype)
+    local ok = pcall(vim.treesitter.get_string_parser, "", buf_lang)
+    return ok
+  end,
   format = function(self, ctx, lines, callback)
     local conform = require("conform")
     local errors = require("conform.errors")

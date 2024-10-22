@@ -309,13 +309,20 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, opts, c
     end
   end)
   if config.format then
+    local err_string_cb = function(err, ...)
+      if err then
+        callback({
+          code = errors.ERROR_CODE.RUNTIME,
+          message = err,
+        }, ...)
+      else
+        callback(nil, ...)
+      end
+    end
     ---@cast config conform.LuaFormatterConfig
-    local ok, err = pcall(config.format, config, ctx, input_lines, callback)
+    local ok, err = pcall(config.format, config, ctx, input_lines, err_string_cb)
     if not ok then
-      callback({
-        code = errors.ERROR_CODE.RUNTIME,
-        message = string.format("Formatter '%s' error: %s", formatter.name, err),
-      })
+      err_string_cb(string.format("Formatter '%s' error: %s", formatter.name, err))
     end
     return
   end
