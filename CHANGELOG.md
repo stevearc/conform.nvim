@@ -1,5 +1,25 @@
 # Changelog
 
+## [8.2.0](https://github.com/stevearc/conform.nvim/compare/v8.1.0...v8.2.0) (2024-10-24)
+
+
+### Features
+
+* add kulala-fmt ([#534](https://github.com/stevearc/conform.nvim/issues/534)) ([555a5c4](https://github.com/stevearc/conform.nvim/commit/555a5c4638957400fe59bf8125e09576bbc6ea86))
+* add mojo format ([#540](https://github.com/stevearc/conform.nvim/issues/540)) ([9bde4fb](https://github.com/stevearc/conform.nvim/commit/9bde4fbbbbc80351e96ff91adc92ad566294ad4c))
+* add support for kdlfmt ([#543](https://github.com/stevearc/conform.nvim/issues/543)) ([7b9a88c](https://github.com/stevearc/conform.nvim/commit/7b9a88c9d1cd29cb573029b497a96397b87f3c64)), closes [#509](https://github.com/stevearc/conform.nvim/issues/509)
+* add support for nufmt ([#551](https://github.com/stevearc/conform.nvim/issues/551)) ([ee640e1](https://github.com/stevearc/conform.nvim/commit/ee640e173bb1b7ee1f4e23dc803c841a70d49221))
+* add support for xmlstarlet ([#558](https://github.com/stevearc/conform.nvim/issues/558)) ([bb9c64f](https://github.com/stevearc/conform.nvim/commit/bb9c64fa408cfbbb9f71521f6e158f026da28435))
+* support python-ly ([#549](https://github.com/stevearc/conform.nvim/issues/549)) ([3686f97](https://github.com/stevearc/conform.nvim/commit/3686f974db117e038208c21dbaca6396d112f0f4))
+* support ufmt ([#544](https://github.com/stevearc/conform.nvim/issues/544)) ([8a76eef](https://github.com/stevearc/conform.nvim/commit/8a76eef724ba3c0c17380fd6e1d7f1410f1a87a4))
+
+
+### Bug Fixes
+
+* crash in error handling for function formatters ([#554](https://github.com/stevearc/conform.nvim/issues/554)) ([51e99ef](https://github.com/stevearc/conform.nvim/commit/51e99efa1675bd003a549fb02244b0a54e8de800))
+* health checks error for old Neovim versions ([936f241](https://github.com/stevearc/conform.nvim/commit/936f2413e6c57185cd873623a29a0685bce4b423))
+* more notifications when Neovim is below supported version ([130e0d6](https://github.com/stevearc/conform.nvim/commit/130e0d68fdc7f4b8ff7114648f3fa0899bb5fa0f))
+
 ## [8.1.0](https://github.com/stevearc/conform.nvim/compare/v8.0.0...v8.1.0) (2024-09-10)
 
 
