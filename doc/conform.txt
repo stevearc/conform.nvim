@@ -496,6 +496,8 @@ FORMATTERS                                                    *conform-formatter
             formatting of XML documents.
 `xmllint` - Despite the name, xmllint can be used to format XML files as well as
           lint them.
+`xmlstarlet` - XMLStarlet is a command-line XML toolkit that can be used to
+             format XML files.
 `yamlfix` - A configurable YAML formatter that keeps comments.
 `yamlfmt` - yamlfmt is an extensible command line tool or library to format yaml
           files.
