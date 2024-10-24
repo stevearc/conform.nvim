@@ -1,5 +1,6 @@
 local fs = require("conform.fs")
 local util = require("conform.util")
+
 ---@type conform.FileFormatterConfig
 return {
   meta = {
@@ -26,6 +27,6 @@ return {
     "prettier.config.js",
     "prettier.config.cjs",
     "prettier.config.mjs",
-    "package.json",
+    { "package.json", { contains_regex = '"prettier":\\s\\{-}{' } },
   }),
 }
