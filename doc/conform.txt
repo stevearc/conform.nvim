@@ -397,11 +397,11 @@ FORMATTERS                                                    *conform-formatter
 `nickel` - Code formatter for the Nickel programming language.
 `nimpretty` - nimpretty is a Nim source code beautifier that follows the
             official style guide.
-`nufmt` - The nushell formatter.
 `nixfmt` - The official (but not yet stable) formatter for Nix code.
 `nixpkgs_fmt` - nixpkgs-fmt is a Nix code formatter for nixpkgs.
 `npm-groovy-lint` - Lint, format and auto-fix your Groovy / Jenkinsfile / Gradle
                   files using command line.
+`nufmt` - The nushell formatter.
 `ocamlformat` - Auto-formatter for OCaml code.
 `ocp-indent` - Automatic indentation of OCaml source files.
 `opa_fmt` - Format Rego files using `opa fmt` command.
