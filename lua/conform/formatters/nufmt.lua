@@ -2,7 +2,7 @@
 return {
   meta = {
     url = "https://github.com/nushell/nufmt",
-    description = "The nushell formatter",
+    description = "The nushell formatter.",
   },
   command = "nufmt",
   args = { "$FILENAME" },
