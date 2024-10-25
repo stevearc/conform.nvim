@@ -35,6 +35,12 @@ return {
   command = "deno",
   args = function(self, ctx)
     local extension = extensions[vim.bo[ctx.buf].filetype]
+    local formatter_args = {
+      "fmt",
+      "-",
+      "--ext",
+      extension,
+    }
 
     if
       vim.tbl_get(unstable_extensions, extension)
@@ -43,18 +49,14 @@ return {
         "--unstable-component"
       )
     then
-      log.warn(
-        "You are trying to format an unstable file type (."
+      log.info(
+        "Adding `--unstable-component` to enable formatting of ."
           .. extension
-          .. ") without the corresponding `--unstable-component` flag. Add the flag to `append_args` to format your code. See the Deno documentation for more information: https://docs.deno.com/runtime/reference/cli/formatter/#formatting-options-unstable-component"
+          .. " files. See the Deno documentation for more information: https://docs.deno.com/runtime/reference/cli/formatter/#formatting-options-unstable-component"
       )
+      formatter_args = vim.list_extend(formatter_args, { "--unstable-component" })
     end
 
-    return {
-      "fmt",
-      "-",
-      "--ext",
-      extension,
-    }
+    return formatter_args
   end,
 }
