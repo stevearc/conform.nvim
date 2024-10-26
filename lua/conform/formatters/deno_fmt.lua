@@ -11,7 +11,6 @@ local unstable_extensions = {
 }
 local extensions = vim.tbl_extend("keep", {
   css = "css",
-  esmodule = "mjs",
   html = "html",
   javascript = "js",
   javascriptreact = "jsx",
