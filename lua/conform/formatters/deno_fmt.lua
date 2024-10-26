@@ -42,13 +42,7 @@ return {
       extension,
     }
 
-    if
-      unstable_extensions[extension]
-      and not vim.list_contains(
-        vim.tbl_get(conform.formatters, "deno_fmt", "append_args") or {},
-        "--unstable-component"
-      )
-    then
+    if unstable_extensions[extension] then
       log.info(
         "Adding `--unstable-component` to enable formatting of .%s files. See the Deno documentation for more information: https://docs.deno.com/runtime/reference/cli/formatter/#formatting-options-unstable-component",
         extension
