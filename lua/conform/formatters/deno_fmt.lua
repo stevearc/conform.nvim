@@ -43,16 +43,15 @@ return {
     }
 
     if
-      vim.tbl_get(unstable_extensions, extension)
+      unstable_extensions[extension]
       and not vim.list_contains(
         vim.tbl_get(conform.formatters, "deno_fmt", "append_args") or {},
         "--unstable-component"
       )
     then
       log.info(
-        "Adding `--unstable-component` to enable formatting of ."
-          .. extension
-          .. " files. See the Deno documentation for more information: https://docs.deno.com/runtime/reference/cli/formatter/#formatting-options-unstable-component"
+        "Adding `--unstable-component` to enable formatting of .%s files. See the Deno documentation for more information: https://docs.deno.com/runtime/reference/cli/formatter/#formatting-options-unstable-component",
+        extension
       )
       formatter_args = vim.list_extend(formatter_args, { "--unstable-component" })
     end
