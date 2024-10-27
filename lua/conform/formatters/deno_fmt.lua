@@ -1,4 +1,3 @@
-local conform = require("conform")
 local log = require("conform.log")
 
 -- Requires `--unstable-component` flag or
@@ -32,6 +31,9 @@ return {
     description = "Use [Deno](https://deno.land/) to format TypeScript, JavaScript/JSON and markdown.",
   },
   command = "deno",
+  cond = function(self, ctx)
+    return extensions[vim.bo[ctx.buf].filetype] ~= nil
+  end,
   args = function(self, ctx)
     local extension = extensions[vim.bo[ctx.buf].filetype]
     local formatter_args = {
