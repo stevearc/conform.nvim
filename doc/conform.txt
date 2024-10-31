@@ -394,7 +394,8 @@ FORMATTERS                                                    *conform-formatter
         every sentence.
 `mix` - Format Elixir files using the mix format command.
 `mojo_format` - Official Formatter for The Mojo Programming Language
-`nginxfmt` - nginx config file formatter/beautifier written in Python with no additional dependencies.
+`nginxfmt` - nginx config file formatter/beautifier written in Python with no
+           additional dependencies.
 `nickel` - Code formatter for the Nickel programming language.
 `nimpretty` - nimpretty is a Nim source code beautifier that follows the
             official style guide.
