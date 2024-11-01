@@ -1,5 +1,55 @@
 local fs = require("conform.fs")
 local util = require("conform.util")
+
+local config_file_names = {
+  -- https://prettier.io/docs/en/configuration.html
+  ".prettierrc",
+  ".prettierrc.json",
+  ".prettierrc.yml",
+  ".prettierrc.yaml",
+  ".prettierrc.json5",
+  ".prettierrc.js",
+  ".prettierrc.cjs",
+  ".prettierrc.mjs",
+  ".prettierrc.toml",
+  "prettier.config.js",
+  "prettier.config.cjs",
+  "prettier.config.mjs",
+}
+
+local function read_json(file)
+  local f = io.open(file, "r")
+
+  if f then
+    local file_content = f:read("*all") -- Read entire file contents
+    f:close()
+
+    return vim.fn.json_decode(file_content)
+  else
+    print("Error: Unable to open file " .. file)
+    return nil
+  end
+end
+
+-- TODO: share this with "lua/conform/formatters/prettier.lua"
+local cwd = function(self, ctx)
+  return vim.fs.root(ctx.dirname, function(name, path)
+    if vim.tbl_contains(config_file_names, name) then
+      return true
+    end
+
+    if name == "package.json" then
+      local packageJsonPath = vim.fs.joinpath(path, name)
+
+      local packageJson = read_json(packageJsonPath)
+
+      return packageJson and packageJson.prettier and true or false
+    end
+
+    return false
+  end)
+end
+
 ---@type conform.FileFormatterConfig
 return {
   meta = {
@@ -12,20 +62,5 @@ return {
     local start_offset, end_offset = util.get_offsets_from_range(ctx.buf, ctx.range)
     return { "$FILENAME", "--range-start=" .. start_offset, "--range-end=" .. end_offset }
   end,
-  cwd = util.root_file({
-    -- https://prettier.io/docs/en/configuration.html
-    ".prettierrc",
-    ".prettierrc.json",
-    ".prettierrc.yml",
-    ".prettierrc.yaml",
-    ".prettierrc.json5",
-    ".prettierrc.js",
-    ".prettierrc.cjs",
-    ".prettierrc.mjs",
-    ".prettierrc.toml",
-    "prettier.config.js",
-    "prettier.config.cjs",
-    "prettier.config.mjs",
-    "package.json",
-  }),
+  cwd = cwd,
 }
