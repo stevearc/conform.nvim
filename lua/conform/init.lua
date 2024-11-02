@@ -22,10 +22,22 @@ local notify_once = vim.schedule_wrap(function(...)
 end)
 
 local allowed_default_opts = { "timeout_ms", "lsp_format", "quiet", "stop_after_first" }
-local function merge_default_opts(a, b)
+local allowed_default_filetype_opts = { "name", "id", "filter" }
+---@param a table
+---@param b table
+---@param opts? { allow_filetype_opts?: boolean }
+---@return table
+local function merge_default_opts(a, b, opts)
   for _, key in ipairs(allowed_default_opts) do
     if a[key] == nil then
       a[key] = b[key]
+    end
+  end
+  if opts and opts.allow_filetype_opts then
+    for _, key in ipairs(allowed_default_filetype_opts) do
+      if a[key] == nil then
+        a[key] = b[key]
+      end
     end
   end
   return a
@@ -291,7 +303,7 @@ M.list_formatters_for_buffer = function(bufnr)
 end
 
 ---@param bufnr? integer
----@return nil|conform.DefaultFormatOpts
+---@return nil|conform.DefaultFiletypeFormatOpts
 local function get_opts_from_filetype(bufnr)
   if not bufnr or bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
@@ -306,7 +318,7 @@ local function get_opts_from_filetype(bufnr)
   if type(ft_formatters) == "function" then
     ft_formatters = ft_formatters(bufnr)
   end
-  return merge_default_opts({}, ft_formatters)
+  return merge_default_opts({}, ft_formatters, { allow_filetype_opts = true })
 end
 
 ---@param bufnr integer
@@ -418,7 +430,11 @@ M.format = function(opts, callback)
   local has_explicit_formatters = opts.formatters ~= nil
   -- If formatters were not passed in directly, fetch any options from formatters_by_ft
   if not has_explicit_formatters then
-    merge_default_opts(opts, get_opts_from_filetype(opts.bufnr) or {})
+    merge_default_opts(
+      opts,
+      get_opts_from_filetype(opts.bufnr) or {},
+      { allow_filetype_opts = true }
+    )
   end
   merge_default_opts(opts, M.default_format_opts)
   ---@type {timeout_ms: integer, bufnr: integer, async: boolean, dry_run: boolean, lsp_format: "never"|"first"|"last"|"prefer"|"fallback", quiet: boolean, stop_after_first: boolean, formatters?: string[], range?: conform.Range, undojoin: boolean}

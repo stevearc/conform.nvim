@@ -61,7 +61,7 @@
 ---@alias conform.FiletypeFormatter conform.FiletypeFormatterInternal|fun(bufnr: integer): conform.FiletypeFormatterInternal
 
 ---This list of formatters to run for a filetype, an any associated format options.
----@class conform.FiletypeFormatterInternal : conform.DefaultFormatOpts
+---@class conform.FiletypeFormatterInternal : conform.DefaultFiletypeFormatOpts
 ---@field [integer] string
 
 ---@alias conform.LspFormatOpts
@@ -91,6 +91,11 @@
 ---@field lsp_format? conform.LspFormatOpts Configure if and when LSP should be used for formatting. Defaults to "never".
 ---@field quiet? boolean Don't show any notifications for warnings or failures. Defaults to false.
 ---@field stop_after_first? boolean Only run the first available formatter in the list. Defaults to false.
+
+---@class (exact) conform.DefaultFiletypeFormatOpts : conform.DefaultFormatOpts
+---@field id? integer Passed to |vim.lsp.buf.format| when using LSP formatting
+---@field name? string Passed to |vim.lsp.buf.format| when using LSP formatting
+---@field filter? fun(client: table): boolean Passed to |vim.lsp.buf.format| when using LSP formatting
 
 ---@class conform.FormatLinesOpts
 ---@field timeout_ms? integer Time in milliseconds to block for formatting. Defaults to 1000. No effect if async = true.
