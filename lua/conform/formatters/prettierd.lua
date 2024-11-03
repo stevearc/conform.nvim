@@ -17,6 +17,8 @@ local config_file_names = {
   "prettier.config.mjs",
 }
 
+---@param file string
+---@return nil|table
 local function read_json(file)
   local f = io.open(file, "r")
 
