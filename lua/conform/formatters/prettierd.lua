@@ -26,7 +26,7 @@ local function read_json(file)
     local file_content = f:read("*all") -- Read entire file contents
     f:close()
 
-    return vim.fn.json_decode(file_content)
+    return vim.json.decode(file_content)
   else
     print("Error: Unable to open file " .. file)
     return nil
