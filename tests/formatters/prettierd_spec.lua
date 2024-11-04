@@ -5,7 +5,7 @@ local test_util = require("tests.test_util")
 
 local TMP_DIR = "./tmp/formatters/prettierd/"
 
-describe("prettier", function()
+describe("formatters/prettierd", function()
   before_each(function()
     vim.fn.mkdir(TMP_DIR, "p")
   end)
