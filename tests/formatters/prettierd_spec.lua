@@ -61,6 +61,27 @@ describe("prettier", function()
     end)
 
     describe("package.json", function()
+      it("handles syntax error", function()
+        vim.fn.writefile({ "plain text" }, vim.fs.joinpath(TMP_DIR, "package.json"))
+        local jsfile = vim.fs.joinpath(TMP_DIR, "some.js")
+        vim.fn.writefile({ "" }, jsfile)
+
+        vim.cmd("e " .. jsfile)
+
+        local log = {}
+        require("conform.log").set_handler(function(text)
+          table.insert(log, text)
+        end)
+
+        local info = conform.get_formatter_info("prettierd")
+
+        assert.equal(nil, info.cwd)
+
+        assert.is_true(#log == 1)
+
+        assert.no_nil(string.find(log[1], "[ERROR] Unable to parse json file", 1, true))
+      end)
+
       it("recognizes prettier field", function()
         vim.fn.writefile({ '{"prettier": {}}' }, vim.fs.joinpath(TMP_DIR, "package.json"))
         local jsfile = vim.fs.joinpath(TMP_DIR, "some.js")

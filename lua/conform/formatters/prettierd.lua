@@ -21,16 +21,25 @@ local config_file_names = {
 ---@return nil|table
 local function read_json(file)
   local f = io.open(file, "r")
+  if not f then
+    error("Unable to open file " .. file)
+  end
 
-  if f then
-    local file_content = f:read("*all") -- Read entire file contents
-    f:close()
+  local file_content = f:read("*all") -- Read entire file contents
+  f:close()
 
+  local ok, json = pcall(function()
     return vim.json.decode(file_content)
-  else
-    print("Error: Unable to open file " .. file)
+  end)
+
+  if not ok then
+    local log = require("conform.log")
+    log.error("Unable to parse json file " .. file)
+
     return nil
   end
+
+  return json
 end
 
 -- TODO: share this with "lua/conform/formatters/prettier.lua"
