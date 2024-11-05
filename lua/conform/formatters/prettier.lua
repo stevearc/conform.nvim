@@ -72,6 +72,5 @@ return {
     ".prettierrc.toml",
     "prettier.config.js",
     "prettier.config.cjs",
-    "package.json",
   }),
 }
