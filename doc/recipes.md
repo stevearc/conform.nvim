@@ -5,8 +5,9 @@
 - [Format command](#format-command)
 - [Autoformat with extra features](#autoformat-with-extra-features)
 - [Command to toggle format-on-save](#command-to-toggle-format-on-save)
-- [Automatically run slow formatters async](#automatically-run-slow-formatters-async)
 - [Lazy loading with lazy.nvim](#lazy-loading-with-lazynvim)
+- [Leave visual mode after range format](#leave-visual-mode-after-range-format)
+- [Run the first available formatter followed by more formatters](#run-the-first-available-formatter-followed-by-more-formatters)
 
 <!-- /TOC -->
 
@@ -24,7 +25,7 @@ vim.api.nvim_create_user_command("Format", function(args)
       ["end"] = { args.line2, end_line:len() },
     }
   end
-  require("conform").format({ async = true, lsp_fallback = true, range = range })
+  require("conform").format({ async = true, lsp_format = "fallback", range = range })
 end, { range = true })
 ```
 
@@ -53,7 +54,7 @@ require("conform").setup({
       return
     end
     -- ...additional logic...
-    return { timeout_ms = 500, lsp_fallback = true }
+    return { timeout_ms = 500, lsp_format = "fallback" }
   end,
 })
 
@@ -65,7 +66,7 @@ require("conform").setup({
       return
     end
     -- ...additional logic...
-    return { lsp_fallback = true }
+    return { lsp_format = "fallback" }
   end,
 })
 ```
@@ -83,7 +84,7 @@ require("conform").setup({
     if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
       return
     end
-    return { timeout_ms = 500, lsp_fallback = true }
+    return { timeout_ms = 500, lsp_format = "fallback" }
   end,
 })
 
@@ -106,35 +107,6 @@ end, {
 })
 ```
 
-## Automatically run slow formatters async
-
-This snippet will automatically detect which formatters take too long to run synchronously and will run them async on save instead.
-
-```lua
-local slow_format_filetypes = {}
-require("conform").setup({
-  format_on_save = function(bufnr)
-    if slow_format_filetypes[vim.bo[bufnr].filetype] then
-      return
-    end
-    local function on_format(err)
-      if err and err:match("timeout$") then
-        slow_format_filetypes[vim.bo[bufnr].filetype] = true
-      end
-    end
-
-    return { timeout_ms = 200, lsp_fallback = true }, on_format
-  end,
-
-  format_after_save = function(bufnr)
-    if not slow_format_filetypes[vim.bo[bufnr].filetype] then
-      return
-    end
-    return { lsp_fallback = true }
-  end,
-})
-```
-
 ## Lazy loading with lazy.nvim
 
 Here is the recommended config for lazy-loading using lazy.nvim
@@ -149,22 +121,28 @@ return {
       -- Customize or remove this keymap to your liking
       "<leader>f",
       function()
-        require("conform").format({ async = true, lsp_fallback = true })
+        require("conform").format({ async = true })
       end,
       mode = "",
       desc = "Format buffer",
     },
   },
-  -- Everything in opts will be passed to setup()
+  -- This will provide type hinting with LuaLS
+  ---@module "conform"
+  ---@type conform.setupOpts
   opts = {
     -- Define your formatters
     formatters_by_ft = {
       lua = { "stylua" },
       python = { "isort", "black" },
-      javascript = { { "prettierd", "prettier" } },
+      javascript = { "prettierd", "prettier", stop_after_first = true },
+    },
+    -- Set default options
+    default_format_opts = {
+      lsp_format = "fallback",
     },
     -- Set up format-on-save
-    format_on_save = { timeout_ms = 500, lsp_fallback = true },
+    format_on_save = { timeout_ms = 500 },
     -- Customize formatters
     formatters = {
       shfmt = {
@@ -177,4 +155,52 @@ return {
     vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
   end,
 }
+```
+
+## Leave visual mode after range format
+
+If you call `conform.format` when in visual mode, conform will perform a range format on the selected region. If you want it to leave visual mode afterwards (similar to the default `gw` or `gq` behavior), use this mapping:
+
+```lua
+vim.keymap.set("", "<leader>f", function()
+  require("conform").format({ async = true }, function(err)
+    if not err then
+      local mode = vim.api.nvim_get_mode().mode
+      if vim.startswith(string.lower(mode), "v") then
+        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", true)
+      end
+    end
+  end)
+end, { desc = "Format code" })
+```
+
+## Run the first available formatter followed by more formatters
+
+With the refactor in [#491](https://github.com/stevearc/conform.nvim/pull/491) it is now easy to
+just run the first available formatter in a list, but more difficult to do that _and then_ run
+another formatter. For example, "format first with either `prettierd` or `prettier`, _then_ use the
+`injected` formatter". Here is how you can easily do that:
+
+```lua
+---@param bufnr integer
+---@param ... string
+---@return string
+local function first(bufnr, ...)
+  local conform = require("conform")
+  for i = 1, select("#", ...) do
+    local formatter = select(i, ...)
+    if conform.get_formatter_info(formatter, bufnr).available then
+      return formatter
+    end
+  end
+  return select(1, ...)
+end
+
+require("conform").setup({
+  formatters_by_ft = {
+    markdown = function(bufnr)
+      return { first(bufnr, "prettierd", "prettier"), "injected" }
+    end,
+  },
+})
 ```

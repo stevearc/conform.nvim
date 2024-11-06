@@ -10,7 +10,7 @@ body:
   - type: input
     attributes:
       label: "Neovim version (nvim -v)"
-      placeholder: "0.8.0 commit db1b0ee3b30f"
+      placeholder: "NVIM v0.10.1"
     validations:
       required: true
   - type: input
@@ -19,6 +19,12 @@ body:
       placeholder: "MacOS 11.5"
     validations:
       required: true
+  - type: checkboxes
+    attributes:
+      label: Read debugging tips
+      options:
+        - label: I have read through the [debugging tips](https://github.com/stevearc/conform.nvim/blob/master/doc/debugging.md).
+          required: true
   - type: checkboxes
     attributes:
       label: Add the debug logs

@@ -13,7 +13,7 @@ jobs:
     name: Luacheck
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Prepare
         run: |
@@ -29,8 +29,8 @@ jobs:
     name: typecheck
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
-      - uses: stevearc/nvim-typecheck-action@v1
+      - uses: actions/checkout@v4
+      - uses: stevearc/nvim-typecheck-action@v2
         with:
           path: lua
 
@@ -38,27 +38,26 @@ jobs:
     name: StyLua
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Stylua
-        uses: JohnnyMorganz/stylua-action@v3
+        uses: JohnnyMorganz/stylua-action@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          version: v0.18.2
+          version: v0.20.0
           args: --check lua tests
 
   run_tests:
     strategy:
       matrix:
         include:
-          - nvim_tag: v0.8.3
-          - nvim_tag: v0.9.1
+          - nvim_tag: v0.10.0
 
     name: Run tests
     runs-on: ubuntu-22.04
     env:
       NVIM_TAG: ${{ matrix.nvim_tag }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Install Neovim and dependencies
         run: |
@@ -72,7 +71,7 @@ jobs:
     name: Update docs
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Install Neovim and dependencies
         run: |
@@ -109,12 +108,11 @@ jobs:
       - update_docs
     runs-on: ubuntu-22.04
     steps:
-      - uses: google-github-actions/release-please-action@v3
+      - uses: googleapis/release-please-action@v4
         id: release
         with:
           release-type: simple
-          package-name: conform.nvim
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: rickstaa/action-create-tag@v1
         if: ${{ steps.release.outputs.release_created }}
         with:

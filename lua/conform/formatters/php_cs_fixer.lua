@@ -12,4 +12,5 @@ return {
   }, "php-cs-fixer"),
   args = { "fix", "$FILENAME" },
   stdin = false,
+  cwd = util.root_file({ "composer.json" }),
 }

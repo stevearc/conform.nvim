@@ -57,7 +57,7 @@ return {
   end,
   range_args = function(self, ctx)
     local start_offset, end_offset = util.get_offsets_from_range(ctx.buf, ctx.range)
-    local args = eval_parser(self, ctx) or { "$FILENAME" }
+    local args = eval_parser(self, ctx) or { "--stdin-filepath", "$FILENAME" }
     return vim.list_extend(args, { "--range-start=" .. start_offset, "--range-end=" .. end_offset })
   end,
   cwd = util.root_file({
@@ -69,8 +69,10 @@ return {
     ".prettierrc.json5",
     ".prettierrc.js",
     ".prettierrc.cjs",
+    ".prettierrc.mjs",
     ".prettierrc.toml",
     "prettier.config.js",
     "prettier.config.cjs",
+    "prettier.config.mjs",
   }),
 }

@@ -9,10 +9,10 @@ return {
   command = util.find_executable({
     "vendor/bin/phpcbf",
   }, "phpcbf"),
-  args = function(self, ctx)
-    return { "-q", "--stdin-path=" .. ctx.filename, "-" }
-  end,
-  stdin = true,
+  args = { "$FILENAME" },
+  stdin = false,
+  -- phpcbf ignores hidden files, so we have to override the default here
+  tmpfile_format = "conform.$RANDOM.$FILENAME",
   -- 0: no errors found
   -- 1: errors found
   -- 2: fixable errors found

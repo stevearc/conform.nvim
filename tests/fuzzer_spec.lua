@@ -25,7 +25,7 @@ describe("fuzzer", function()
     vim.api.nvim_set_current_buf(bufnr)
     vim.api.nvim_buf_set_lines(bufnr, 0, -1, true, buf_content)
     vim.bo[bufnr].modified = false
-    runner.apply_format(0, buf_content, expected, nil, false)
+    runner.apply_format(0, buf_content, expected, nil, false, false, false)
     assert.are.same(expected, vim.api.nvim_buf_get_lines(0, 0, -1, false))
   end
 

@@ -1,9 +1,14 @@
----@type conform.FileFormatterConfig
+---@type conform.FileLuaFormatterConfig
 return {
   meta = {
-    url = "https://www.gnu.org/software/gawk/manual/gawk.html",
-    description = "Trim new lines with awk.",
+    url = "https://github.com/stevearc/conform.nvim/blob/master/lua/conform/formatters/trim_whitespace.lua",
+    description = "Trim empty lines at the end of the file.",
   },
-  command = "awk",
-  args = { 'NF{print s $0; s=""; next} {s=s ORS}' },
+  format = function(self, ctx, lines, callback)
+    local out_lines = vim.deepcopy(lines)
+    while #out_lines > 0 and out_lines[#out_lines] == "" do
+      table.remove(out_lines)
+    end
+    callback(nil, out_lines)
+  end,
 }

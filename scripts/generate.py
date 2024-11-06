@@ -11,11 +11,11 @@ from nvim_doc_tools import (
     dedent,
     generate_md_toc,
     indent,
-    parse_functions,
+    parse_directory,
     read_nvim_json,
     read_section,
-    render_md_api,
-    render_vimdoc_api,
+    render_md_api2,
+    render_vimdoc_api2,
     replace_section,
     wrap,
 )
@@ -26,6 +26,7 @@ README = os.path.join(ROOT, "README.md")
 DOC = os.path.join(ROOT, "doc")
 RECIPES = os.path.join(DOC, "recipes.md")
 ADVANCED = os.path.join(DOC, "advanced_topics.md")
+DEBUGGING = os.path.join(DOC, "debugging.md")
 FORMATTER_OPTIONS = os.path.join(DOC, "formatter_options.md")
 VIMDOC = os.path.join(DOC, "conform.txt")
 OPTIONS = os.path.join(ROOT, "scripts", "options_doc.lua")
@@ -122,8 +123,9 @@ def add_md_link_path(path: str, lines: List[str]) -> List[str]:
 
 
 def update_md_api():
-    funcs = parse_functions(os.path.join(ROOT, "lua", "conform", "init.lua"))
-    lines = ["\n"] + render_md_api(funcs, 3)[:-1]  # trim last newline
+    types = parse_directory(os.path.join(ROOT, "lua"))
+    funcs = types.files["conform/init.lua"].functions
+    lines = ["\n"] + render_md_api2(funcs, types, 3)[:-1]  # trim last newline
     replace_section(
         README,
         r"^<!-- API -->$",
@@ -142,21 +144,22 @@ def update_readme_toc():
     )
 
 
-def update_recipes_toc():
+def update_tocs():
     toc = ["\n"] + generate_md_toc(RECIPES) + ["\n"]
     replace_section(RECIPES, r"^<!-- TOC -->$", r"^<!-- /TOC -->$", toc)
     subtoc = add_md_link_path("doc/recipes.md", toc)
     replace_section(README, r"^<!-- RECIPES -->$", r"^<!-- /RECIPES -->$", subtoc)
 
-
-def update_advanced_toc():
     toc = ["\n"] + generate_md_toc(ADVANCED) + ["\n"]
     replace_section(ADVANCED, r"^<!-- TOC -->$", r"^<!-- /TOC -->$", toc)
     subtoc = add_md_link_path("doc/advanced_topics.md", toc)
     replace_section(README, r"^<!-- ADVANCED -->$", r"^<!-- /ADVANCED -->$", subtoc)
 
+    toc = ["\n"] + generate_md_toc(DEBUGGING) + ["\n"]
+    replace_section(DEBUGGING, r"^<!-- TOC -->$", r"^<!-- /TOC -->$", toc)
+    subtoc = add_md_link_path("doc/debugging.md", toc)
+    replace_section(README, r"^<!-- DEBUGGING -->$", r"^<!-- /DEBUGGING -->$", subtoc)
 
-def update_formatter_options_toc():
     toc = ["\n"] + generate_md_toc(FORMATTER_OPTIONS) + ["\n"]
     replace_section(FORMATTER_OPTIONS, r"^<!-- TOC -->$", r"^<!-- /TOC -->$", toc)
     subtoc = add_md_link_path("doc/formatter_options.md", toc)
@@ -176,44 +179,6 @@ def gen_options_vimdoc() -> VimdocSection:
     return section
 
 
-def gen_self_compat_vimdoc() -> VimdocSection:
-    section = VimdocSection("self argument migration", "conform-self-args", ["\n"])
-    section.body.extend(
-        wrap(
-            "The function arguments for formatter config functions have changed. Previously, they took a single `ctx` argument."
-        )
-    )
-    section.body.append(
-        """>lua
-    {
-        command = "phpcbf",
-        args = function(ctx)
-            return { "-q", "--stdin-path=" .. ctx.filename, "-" }
-        end
-    }
-<"""
-    )
-    section.body.extend(
-        wrap("Now, they take `self` as the first argument, and `ctx` as the second.")
-    )
-    section.body.append(
-        """>lua
-    {
-        command = "phpcbf",
-        args = function(self, ctx)
-            return { "-q", "--stdin-path=" .. ctx.filename, "-" }
-        end
-    }
-<"""
-    )
-    section.body.extend(
-        wrap(
-            "The config values that can be defined as functions are: `command`, `args`, `range_args`, `cwd`, `env`, and `condition`."
-        )
-    )
-    return section
-
-
 def gen_formatter_vimdoc() -> VimdocSection:
     section = VimdocSection("Formatters", "conform-formatters", ["\n"])
     for formatter in get_all_formatters():
@@ -224,13 +189,15 @@ def gen_formatter_vimdoc() -> VimdocSection:
 
 def generate_vimdoc():
     doc = Vimdoc("conform.txt", "conform")
-    funcs = parse_functions(os.path.join(ROOT, "lua", "conform", "init.lua"))
+    types = parse_directory(os.path.join(ROOT, "lua"))
+    funcs = types.files["conform/init.lua"].functions
     doc.sections.extend(
         [
             gen_options_vimdoc(),
-            VimdocSection("API", "conform-api", render_vimdoc_api("conform", funcs)),
+            VimdocSection(
+                "API", "conform-api", render_vimdoc_api2("conform", funcs, types)
+            ),
             gen_formatter_vimdoc(),
-            gen_self_compat_vimdoc(),
         ]
     )
 
@@ -245,8 +212,6 @@ def main() -> None:
     update_autocmd_md()
     update_formatter_options_md()
     update_md_api()
-    update_recipes_toc()
-    update_advanced_toc()
-    update_formatter_options_toc()
+    update_tocs()
     update_readme_toc()
     generate_vimdoc()

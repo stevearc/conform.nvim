@@ -4,6 +4,8 @@
 
 - [injected](#injected)
 - [prettier](#prettier)
+- [rustfmt](#rustfmt)
+- [yew-fmt](#yew-fmt)
 
 <!-- /TOC -->
 
@@ -82,6 +84,24 @@ options = {
   ext_parsers = {
     -- qmd = "markdown",
   },
+}
+```
+
+## rustfmt
+
+```lua
+options = {
+  -- The default edition of Rust to use when no Cargo.toml file is found
+  default_edition = "2021",
+}
+```
+
+## yew-fmt
+
+```lua
+options = {
+  -- The default edition of Rust to use when no Cargo.toml file is found
+  default_edition = "2021",
 }
 ```
 

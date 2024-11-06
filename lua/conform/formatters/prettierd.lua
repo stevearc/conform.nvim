@@ -1,3 +1,4 @@
+local fs = require("conform.fs")
 local util = require("conform.util")
 ---@type conform.FileFormatterConfig
 return {
@@ -5,7 +6,7 @@ return {
     url = "https://github.com/fsouza/prettierd",
     description = "prettier, as a daemon, for ludicrous formatting speed.",
   },
-  command = util.from_node_modules("prettierd"),
+  command = util.from_node_modules(fs.is_windows and "prettierd.cmd" or "prettierd"),
   args = { "$FILENAME" },
   range_args = function(self, ctx)
     local start_offset, end_offset = util.get_offsets_from_range(ctx.buf, ctx.range)
@@ -20,9 +21,11 @@ return {
     ".prettierrc.json5",
     ".prettierrc.js",
     ".prettierrc.cjs",
+    ".prettierrc.mjs",
     ".prettierrc.toml",
     "prettier.config.js",
     "prettier.config.cjs",
+    "prettier.config.mjs",
     "package.json",
   }),
 }

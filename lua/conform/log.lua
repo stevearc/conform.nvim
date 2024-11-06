@@ -1,6 +1,8 @@
 local uv = vim.uv or vim.loop
-local levels = vim.deepcopy(vim.log.levels)
-vim.tbl_add_reverse_lookup(levels)
+local levels_reverse = {}
+for k, v in pairs(vim.log.levels) do
+  levels_reverse[v] = k
+end
 
 local Log = {}
 
@@ -15,6 +17,7 @@ Log.get_logfile = function()
   if not ok then
     stdpath = vim.fn.stdpath("cache")
   end
+  assert(type(stdpath) == "string")
   return fs.join(stdpath, "conform.log")
 end
 
@@ -33,9 +36,9 @@ local function format(level, msg, ...)
     end
   end
   local ok, text = pcall(string.format, msg, vim.F.unpack_len(args))
-  local timestr = vim.fn.strftime("%H:%M:%S")
+  local timestr = vim.fn.strftime("%Y-%m-%d %H:%M:%S")
   if ok then
-    local str_level = levels[level]
+    local str_level = levels_reverse[level]
     return string.format("%s[%s] %s", timestr, str_level, text)
   else
     return string.format(

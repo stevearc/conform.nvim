@@ -29,14 +29,24 @@ local function get_indent(lines, language)
   return indent
 end
 
+---@class (exact) conform.Injected.Surrounding
+---@field indent string?
+---@field postfix string?
+
 ---Remove leading indentation from lines and return the indentation string
 ---@param lines string[]
 ---@param language? string The language of the buffer
----@return string?
-local function remove_indent(lines, language)
+---@return conform.Injected.Surrounding
+local function remove_surrounding(lines, language)
+  local surrounding = {}
+  if lines[#lines]:match("^%s*$") then
+    surrounding.postfix = lines[#lines]
+    table.remove(lines)
+  end
+
   local indent = get_indent(lines, language)
   if not indent then
-    return
+    return surrounding
   end
   local sub_start = indent:len() + 1
   for i, line in ipairs(lines) do
@@ -44,19 +54,29 @@ local function remove_indent(lines, language)
       lines[i] = line:sub(sub_start)
     end
   end
-  return indent
+  surrounding.indent = indent
+  return surrounding
 end
 
 ---@param lines string[]?
----@param indentation string?
-local function apply_indent(lines, indentation)
-  if not lines or not indentation then
+---@param surrounding conform.Injected.Surrounding
+local function restore_surrounding(lines, surrounding)
+  if not lines then
     return
   end
-  for i, line in ipairs(lines) do
-    if line ~= "" then
-      lines[i] = indentation .. line
+
+  local indent = surrounding.indent
+  if indent then
+    for i, line in ipairs(lines) do
+      if line ~= "" then
+        lines[i] = indent .. line
+      end
     end
+  end
+
+  local postfix = surrounding.postfix
+  if postfix then
+    table.insert(lines, postfix)
   end
 end
 
@@ -92,6 +112,7 @@ return {
     url = "doc/advanced_topics.md#injected-language-formatting-code-blocks",
     description = "Format treesitter injected languages.",
   },
+  ---@type conform.InjectedFormatterOptions
   options = {
     -- Set to true to ignore errors
     ignore_errors = false,
@@ -117,10 +138,9 @@ return {
     lang_to_formatters = {},
   },
   condition = function(self, ctx)
-    local ok, parser = pcall(vim.treesitter.get_parser, ctx.buf)
-    -- Require Neovim 0.9 because the treesitter API has changed significantly
-    ---@diagnostic disable-next-line: invisible
-    return ok and parser._injection_query and vim.fn.has("nvim-0.9") == 1
+    local buf_lang = vim.treesitter.language.get_lang(vim.bo[ctx.buf].filetype)
+    local ok = pcall(vim.treesitter.get_string_parser, "", buf_lang)
+    return ok
   end,
   format = function(self, ctx, lines, callback)
     local conform = require("conform")
@@ -137,8 +157,8 @@ return {
       callback("No treesitter parser for buffer")
       return
     end
-    ---@type conform.InjectedFormatterOptions
     local options = self.options
+    ---@cast options conform.InjectedFormatterOptions
 
     ---@param lang string
     ---@return nil|conform.FiletypeFormatter
@@ -148,9 +168,9 @@ return {
 
     --- Disable diagnostic to pass the typecheck github action
     --- This is available on nightly, but not on stable
-    --- Stable doesn't have any parameters, so it's safe to always pass `false`
+    --- Stable doesn't have any parameters, so it's safe
     ---@diagnostic disable-next-line: redundant-parameter
-    parser:parse(false)
+    parser:parse(true)
     local root_lang = parser:lang()
     ---@type LangRange[]
     local regions = {}
@@ -264,21 +284,29 @@ return {
         ---@type string[]
         local formatter_names
         if type(ft_formatters) == "function" then
-          formatter_names = ft_formatters(ctx.buf)
-        else
-          local formatters = require("conform").resolve_formatters(ft_formatters, ctx.buf, false)
-          formatter_names = vim.tbl_map(function(f)
-            return f.name
-          end, formatters)
+          ft_formatters = ft_formatters(ctx.buf)
         end
+        local stop_after_first = ft_formatters.stop_after_first
+        if stop_after_first == nil then
+          stop_after_first = conform.default_format_opts.stop_after_first
+        end
+        if stop_after_first == nil then
+          stop_after_first = false
+        end
+
+        local formatters =
+          conform.resolve_formatters(ft_formatters, ctx.buf, false, stop_after_first)
+        formatter_names = vim.tbl_map(function(f)
+          return f.name
+        end, formatters)
         local idx = num_format
         log.debug("Injected format %s:%d:%d: %s", lang, start_lnum, end_lnum, formatter_names)
         log.trace("Injected format lines %s", input_lines)
-        local indent = remove_indent(input_lines, buf_lang)
+        local surrounding = remove_surrounding(input_lines, buf_lang)
         -- Create a temporary buffer. This is only needed because some formatters rely on the file
         -- extension to determine a run mode (see https://github.com/stevearc/conform.nvim/issues/194)
-        -- This is using the language name as the file extension, but that is a reasonable
-        -- approximation for now. We can add special cases as the need arises.
+        -- This is using lang_to_ext to map the language name to the file extension, and falls back
+        -- to using the language name itself.
         local extension = options.lang_to_ext[lang] or lang
         local buf =
           vim.fn.bufadd(string.format("%s.%d.%s", vim.api.nvim_buf_get_name(ctx.buf), i, extension))
@@ -289,7 +317,7 @@ return {
         conform.format_lines(formatter_names, input_lines, format_opts, function(err, new_lines)
           log.trace("Injected %s:%d:%d formatted lines %s", lang, start_lnum, end_lnum, new_lines)
           -- Preserve indentation in case the code block is indented
-          apply_indent(new_lines, indent)
+          restore_surrounding(new_lines, surrounding)
           vim.schedule_wrap(formatter_cb)(err, idx, region, input_lines, new_lines)
         end)
       end

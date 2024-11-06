@@ -7,7 +7,7 @@ return {
     description = "A modular SQL linter and auto-formatter with support for multiple dialects and templated code.",
   },
   command = "sqlfluff",
-  args = { "fix", "--force", "--dialect=ansi", "-" },
+  args = { "fix", "-" },
   stdin = true,
   cwd = util.root_file({
     ".sqlfluff",
@@ -16,5 +16,5 @@ return {
     "setup.cfg",
     "tox.ini",
   }),
-  require_cwd = false,
+  require_cwd = true,
 }

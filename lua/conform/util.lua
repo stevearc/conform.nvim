@@ -49,10 +49,7 @@ end
 ---@return fun(self: conform.FormatterConfig, ctx: conform.Context): nil|string
 M.root_file = function(files)
   return function(self, ctx)
-    local found = vim.fs.find(files, { upward = true, path = ctx.dirname })[1]
-    if found then
-      return vim.fs.dirname(found)
-    end
+    return vim.fs.root(ctx.dirname, files)
   end
 end
 
@@ -115,10 +112,10 @@ M.extend_args = function(args, extra_args, opts)
   opts = opts or {}
   return function(self, ctx)
     if type(args) == "function" then
-      args = M.compat_call_with_self("unknown", self, args, ctx)
+      args = args(self, ctx)
     end
     if type(extra_args) == "function" then
-      extra_args = M.compat_call_with_self("unknown", self, extra_args, ctx)
+      extra_args = extra_args(self, ctx)
     end
     if type(args) == "string" then
       if type(extra_args) ~= "string" then
@@ -133,11 +130,15 @@ M.extend_args = function(args, extra_args, opts)
       if type(extra_args) == "string" then
         error("extra_args must be a table when args is a table")
       end
+      local ret = {}
       if opts.append then
-        return vim.tbl_flatten({ args, extra_args })
+        vim.list_extend(ret, args or {})
+        vim.list_extend(ret, extra_args or {})
       else
-        return vim.tbl_flatten({ extra_args, args })
+        vim.list_extend(ret, extra_args or {})
+        vim.list_extend(ret, args or {})
       end
+      return ret
     end
   end
 end
@@ -163,6 +164,8 @@ M.merge_formatter_configs = function(config, override)
   local ret = vim.tbl_deep_extend("force", config, override)
   if override.prepend_args then
     M.add_formatter_args(ret, override.prepend_args, { append = false })
+  elseif override.append_args then
+    M.add_formatter_args(ret, override.append_args, { append = true })
   end
   return ret
 end
@@ -183,46 +186,64 @@ M.buf_get_changedtick = function(bufnr)
   end
 end
 
----Returns true if the function takes no args or has self as the first arg
----@param name string
----@param fn function(...: any): T
----@return boolean
-local function has_self_arg(name, fn)
-  local first_arg_name = nil
-  debug.sethook(function()
-    local info = debug.getinfo(3)
-    if info.name ~= "pcall" then
-      return
+---Parse the rust edition from the Cargo.toml file
+---@param dir string
+---@return string?
+M.parse_rust_edition = function(dir)
+  local manifest = vim.fs.find("Cargo.toml", { upward = true, path = dir })[1]
+  if manifest then
+    for line in io.lines(manifest) do
+      if line:match("^edition *=") then
+        local edition = line:match("%d+")
+        if edition then
+          return edition
+        end
+      end
     end
-    first_arg_name = debug.getlocal(2, 1)
-    error()
-  end, "c")
-  pcall(fn)
-  debug.sethook()
-
-  return first_arg_name == "self" or first_arg_name == nil
+  end
 end
 
----@generic T
----@param formatter_name string
----@param self any
----@param fn fun(...: any): T
----@param ... any
----@return T
-M.compat_call_with_self = function(formatter_name, self, fn, ...)
-  local has_self = has_self_arg(formatter_name, fn)
-  if has_self then
-    return fn(self, ...)
+---@param cmd string
+---@return string[]
+M.shell_build_argv = function(cmd)
+  local argv = {}
+
+  -- If the shell starts with a quote, it contains spaces (from :help 'shell').
+  -- The shell may also have additional arguments in it, separated by spaces.
+  if vim.startswith(vim.o.shell, '"') then
+    local quoted = vim.o.shell:match('^"([^"]+)"')
+    table.insert(argv, quoted)
+    vim.list_extend(argv, vim.split(vim.o.shell:sub(quoted:len() + 3), "%s+", { trimempty = true }))
   else
-    vim.notify_once(
-      string.format(
-        "[conform] formatter %s should take 'self' as the first argument for args, range_args, cwd, condition, and env functions (see :help conform-self-args)\nCompatibility will be dropped on 2024-03-01",
-        formatter_name
-      ),
-      vim.log.levels.WARN
-    )
-    return fn(...)
+    vim.list_extend(argv, vim.split(vim.o.shell, "%s+"))
   end
+
+  vim.list_extend(argv, vim.split(vim.o.shellcmdflag, "%s+", { trimempty = true }))
+
+  if vim.o.shellxquote ~= "" then
+    -- When shellxquote is "(", we should escape the shellxescape characters with '^'
+    -- See :help 'shellxescape'
+    if vim.o.shellxquote == "(" and vim.o.shellxescape ~= "" then
+      cmd = cmd:gsub(".", function(char)
+        if string.find(vim.o.shellxescape, char, 1, true) then
+          return "^" .. char
+        else
+          return char
+        end
+      end)
+    end
+
+    if vim.o.shellxquote == "(" then
+      cmd = "(" .. cmd .. ")"
+    elseif vim.o.shellxquote == '"(' then
+      cmd = '"(' .. cmd .. ')"'
+    else
+      cmd = vim.o.shellxquote .. cmd .. vim.o.shellxquote
+    end
+  end
+
+  table.insert(argv, cmd)
+  return argv
 end
 
 return M
