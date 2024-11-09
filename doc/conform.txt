@@ -462,7 +462,8 @@ FORMATTERS                                                    *conform-formatter
          in nature to Black, gofmt, and rustfmt (but for SQL)
 `squeeze_blanks` - Squeeze repeated blank lines into a single blank line via
                  `cat -s`.
-`standard-clj` - A JavaScript library to format Clojure code according to Standard Clojure Style.
+`standard-clj` - A JavaScript library to format Clojure code according to
+               Standard Clojure Style.
 `standardjs` - JavaScript Standard style guide, linter, and formatter.
 `standardrb` - Ruby's bikeshed-proof linter and formatter.
 `stylelint` - A mighty CSS linter that helps you avoid errors and enforce
