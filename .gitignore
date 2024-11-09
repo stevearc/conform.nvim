@@ -47,3 +47,4 @@ tests/testfile.txt
 tests/fake_formatter_output
 scripts/nvim_doc_tools
 scripts/nvim-typecheck-action
+tmp/
