@@ -1,4 +1,5 @@
 local fs = require("conform.fs")
+local log = require("conform.log")
 local util = require("conform.util")
 
 local config_file_names = {
@@ -22,20 +23,16 @@ local config_file_names = {
 local function read_json(file)
   local f = io.open(file, "r")
   if not f then
-    error("Unable to open file " .. file)
+    log.error("Unable to open file %s", file)
+    return nil
   end
 
   local file_content = f:read("*all") -- Read entire file contents
   f:close()
 
-  local ok, json = pcall(function()
-    return vim.json.decode(file_content)
-  end)
-
+  local ok, json = pcall(vim.json.decode, file_content)
   if not ok then
-    local log = require("conform.log")
-    log.error("Unable to parse json file " .. file)
-
+    log.error("Unable to parse json file %s", file)
     return nil
   end
 
@@ -50,11 +47,9 @@ local cwd = function(self, ctx)
     end
 
     if name == "package.json" then
-      local packageJsonPath = vim.fs.joinpath(path, name)
-
-      local packageJson = read_json(packageJsonPath)
-
-      return packageJson and packageJson.prettier and true or false
+      local full_path = vim.fs.joinpath(path, name)
+      local package_data = read_json(full_path)
+      return package_data and package_data.prettier and true or false
     end
 
     return false
