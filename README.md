@@ -335,6 +335,7 @@ You can view this list in vim with `:help conform-formatters`
 - [sqlfluff](https://github.com/sqlfluff/sqlfluff) - A modular SQL linter and auto-formatter with support for multiple dialects and templated code.
 - [sqlfmt](https://docs.sqlfmt.com) - sqlfmt formats your dbt SQL files so you don't have to. It is similar in nature to Black, gofmt, and rustfmt (but for SQL)
 - [squeeze_blanks](https://www.gnu.org/software/coreutils/manual/html_node/cat-invocation.html#cat-invocation) - Squeeze repeated blank lines into a single blank line via `cat -s`.
+- [standard-clj](https://github.com/oakmac/standard-clojure-style-js) - A JavaScript library to format Clojure code according to Standard Clojure Style.
 - [standardjs](https://standardjs.com) - JavaScript Standard style guide, linter, and formatter.
 - [standardrb](https://github.com/standardrb/standard) - Ruby's bikeshed-proof linter and formatter.
 - [stylelint](https://github.com/stylelint/stylelint) - A mighty CSS linter that helps you avoid errors and enforce conventions.
