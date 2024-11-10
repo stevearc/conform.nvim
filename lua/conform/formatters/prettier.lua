@@ -60,20 +60,5 @@ return {
     local args = eval_parser(self, ctx) or { "--stdin-filepath", "$FILENAME" }
     return vim.list_extend(args, { "--range-start=" .. start_offset, "--range-end=" .. end_offset })
   end,
-  cwd = util.root_file({
-    -- https://prettier.io/docs/en/configuration.html
-    ".prettierrc",
-    ".prettierrc.json",
-    ".prettierrc.yml",
-    ".prettierrc.yaml",
-    ".prettierrc.json5",
-    ".prettierrc.js",
-    ".prettierrc.cjs",
-    ".prettierrc.mjs",
-    ".prettierrc.toml",
-    "prettier.config.js",
-    "prettier.config.cjs",
-    "prettier.config.mjs",
-    "package.json",
-  }),
+  cwd = util.prettier_cwd,
 }
