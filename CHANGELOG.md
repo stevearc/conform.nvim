@@ -1,5 +1,30 @@
 # Changelog
 
+## [8.2.0](https://github.com/stevearc/conform.nvim/compare/v8.1.0...v8.2.0) (2024-11-09)
+
+
+### Features
+
+* add kulala-fmt ([#534](https://github.com/stevearc/conform.nvim/issues/534)) ([555a5c4](https://github.com/stevearc/conform.nvim/commit/555a5c4638957400fe59bf8125e09576bbc6ea86))
+* add mojo format ([#540](https://github.com/stevearc/conform.nvim/issues/540)) ([9bde4fb](https://github.com/stevearc/conform.nvim/commit/9bde4fbbbbc80351e96ff91adc92ad566294ad4c))
+* add support for kdlfmt ([#543](https://github.com/stevearc/conform.nvim/issues/543)) ([7b9a88c](https://github.com/stevearc/conform.nvim/commit/7b9a88c9d1cd29cb573029b497a96397b87f3c64)), closes [#509](https://github.com/stevearc/conform.nvim/issues/509)
+* add support for nginx-config-formatter ([#562](https://github.com/stevearc/conform.nvim/issues/562)) ([4fe4f6a](https://github.com/stevearc/conform.nvim/commit/4fe4f6ac44f80163d17f2fa251c0f006d58efc11))
+* add support for nufmt ([#551](https://github.com/stevearc/conform.nvim/issues/551)) ([ee640e1](https://github.com/stevearc/conform.nvim/commit/ee640e173bb1b7ee1f4e23dc803c841a70d49221))
+* add support for standard-clj ([#568](https://github.com/stevearc/conform.nvim/issues/568)) ([7739b8e](https://github.com/stevearc/conform.nvim/commit/7739b8ee03608f3e7da1760d1b27704b2cd94d06))
+* add support for xmlstarlet ([#558](https://github.com/stevearc/conform.nvim/issues/558)) ([bb9c64f](https://github.com/stevearc/conform.nvim/commit/bb9c64fa408cfbbb9f71521f6e158f026da28435))
+* allow formatters_by_ft to specify name, id, filter ([#565](https://github.com/stevearc/conform.nvim/issues/565)) ([d28ccf9](https://github.com/stevearc/conform.nvim/commit/d28ccf945374edd9f1c34a82f6c22261dbd8ab98))
+* support python-ly ([#549](https://github.com/stevearc/conform.nvim/issues/549)) ([3686f97](https://github.com/stevearc/conform.nvim/commit/3686f974db117e038208c21dbaca6396d112f0f4))
+* support ufmt ([#544](https://github.com/stevearc/conform.nvim/issues/544)) ([8a76eef](https://github.com/stevearc/conform.nvim/commit/8a76eef724ba3c0c17380fd6e1d7f1410f1a87a4))
+
+
+### Bug Fixes
+
+* crash in error handling for function formatters ([#554](https://github.com/stevearc/conform.nvim/issues/554)) ([51e99ef](https://github.com/stevearc/conform.nvim/commit/51e99efa1675bd003a549fb02244b0a54e8de800))
+* **deno_fmt:** add support for more file extensions ([#552](https://github.com/stevearc/conform.nvim/issues/552)) ([6a28c90](https://github.com/stevearc/conform.nvim/commit/6a28c90082a67f62a323ab90d988e000a718a8c7))
+* health checks error for old Neovim versions ([936f241](https://github.com/stevearc/conform.nvim/commit/936f2413e6c57185cd873623a29a0685bce4b423))
+* more notifications when Neovim is below supported version ([130e0d6](https://github.com/stevearc/conform.nvim/commit/130e0d68fdc7f4b8ff7114648f3fa0899bb5fa0f))
+* **prettierd:** respect `prettier` config field in the "package.json" ([#564](https://github.com/stevearc/conform.nvim/issues/564)) ([ed919d3](https://github.com/stevearc/conform.nvim/commit/ed919d3f1d824a7713d182560bc7e2e27c0f349b))
+
 ## [8.1.0](https://github.com/stevearc/conform.nvim/compare/v8.0.0...v8.1.0) (2024-09-10)
 
 
