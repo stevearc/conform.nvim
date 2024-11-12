@@ -41,7 +41,7 @@ end
 
 -- @param self conform.FormatterConfig
 -- @param ctx conform.Context|conform.RangeContext
--- @return string[]|nil args the arguments for setting a `prettier` parser if they exist in the options, nil otherwise
+-- @return string|nil args the arguments for setting a `prettier` parser if they exist in the options, nil otherwise
 local cwd = function(self, ctx)
   return vim.fs.root(ctx.dirname, function(name, path)
     if vim.tbl_contains(config_file_names, name) then
