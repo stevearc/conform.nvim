@@ -376,7 +376,7 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, opts, c
     {
       cwd = cwd,
       env = env,
-      stdin = config.stdin and buffer_text,
+      stdin = config.stdin and buffer_text or nil,
       text = true,
     },
     vim.schedule_wrap(function(result)
