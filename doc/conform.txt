@@ -497,8 +497,8 @@ FORMATTERS                                                    *conform-formatter
 `usort` - Safe, minimal import sorting for Python projects.
 `verible` - The SystemVerilog formatter.
 `vsg` - Style guide enforcement for VHDL.
-`xmlformat` - xmlformatter is an Open Source Python package, which provides
-            formatting of XML documents.
+`xmlformatter` - xmlformatter is an Open Source Python package, which provides
+               formatting of XML documents.
 `xmllint` - Despite the name, xmllint can be used to format XML files as well as
           lint them.
 `xmlstarlet` - XMLStarlet is a command-line XML toolkit that can be used to
