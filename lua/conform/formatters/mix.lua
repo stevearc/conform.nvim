@@ -7,7 +7,6 @@ return {
   command = "mix",
   args = { "format", "--stdin-filename", "$FILENAME", "-" },
   cwd = require("conform.util").root_file({
-    ".formatter.exs",
     "mix.exs",
   }),
 }
