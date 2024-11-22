@@ -4,6 +4,7 @@
 ---@field cwd? string
 ---@field available boolean
 ---@field available_msg? string
+---@field error? boolean
 
 ---@class (exact) conform.JobFormatterConfig
 ---@field command string|fun(self: conform.JobFormatterConfig, ctx: conform.Context): string

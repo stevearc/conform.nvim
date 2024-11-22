@@ -767,6 +767,7 @@ M.get_formatter_info = function(formatter, bufnr)
       command = formatter,
       available = false,
       available_msg = "Unknown formatter. Formatter config missing or incomplete",
+      error = true,
     }
   end
 
