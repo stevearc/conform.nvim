@@ -101,12 +101,15 @@ M.show_window = function()
   ---@param formatter conform.FormatterInfo
   local function append_formatter_info(formatter)
     if not formatter.available then
-      local line = string.format("%s unavailable: %s", formatter.name, formatter.available_msg)
+      local type_label = formatter.error and "error" or "unavailable"
+
+      local line = string.format("%s %s: %s", formatter.name, type_label, formatter.available_msg)
+
       table.insert(lines, line)
-      table.insert(
-        highlights,
-        { "DiagnosticWarn", #lines, formatter.name:len(), formatter.name:len() + 12 }
-      )
+
+      local hl = formatter.error and "DiagnosticError" or "DiagnosticWarn"
+      local hl_start = formatter.name:len() + 1
+      table.insert(highlights, { hl, #lines, hl_start, hl_start + type_label:len() })
     else
       local filetypes = get_formatter_filetypes(formatter.name)
       local filetypes_list = table.concat(filetypes, ", ")
