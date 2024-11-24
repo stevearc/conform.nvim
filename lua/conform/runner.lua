@@ -268,7 +268,9 @@ M.apply_format = function(
   if not dry_run then
     log.trace("Applying text edits: %s", text_edits)
     if undojoin then
-      vim.cmd.undojoin()
+      -- may fail if after undo
+      -- Vim:E790: undojoin is not allowed after undo
+      pcall(vim.cmd.undojoin)
     end
     vim.lsp.util.apply_text_edits(text_edits, bufnr, "utf-8")
     log.trace("Done formatting %s", bufname)
