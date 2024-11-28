@@ -2,8 +2,8 @@
 return {
   meta = {
     url = "https://www.gnu.org/software/gawk/manual/gawk.html",
-    description = "Format awk programs with awk",
+    description = "Format awk programs with gawk",
   },
-  command = "awk",
+  command = "gawk",
   args = { "-f", "-", "-o-" },
 }
