@@ -263,7 +263,7 @@ FORMATTERS                                                    *conform-formatter
             pyflakes.
 `autopep8` - A tool that automatically formats Python code to conform to the PEP
            8 style guide.
-`awk` - Format awk programs with awk
+`gawk` - Format awk programs with gawk.
 `bean-format` - Reformat Beancount files to right-align all the numbers at the
               same, minimal column.
 `beautysh` - A Bash beautifier for the masses.
