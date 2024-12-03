@@ -5,6 +5,6 @@ return {
     description = "Format awk programs with gawk.",
     deprecated = true,
   },
-  command = "gawk",
+  command = "awk",
   args = { "-f", "-", "-o-" },
 }
