@@ -489,7 +489,7 @@ M.build_context = function(bufnr, config, range)
     end
     local basename = vim.fs.basename(filename)
     local tmpname =
-      template:gsub("$FILENAME", basename):gsub("$RANDOM", tostring(math.random(1000000, 9999999)))
+      template:gsub("$RANDOM", tostring(math.random(1000000, 9999999))):gsub("$FILENAME", basename)
     local parent = vim.fs.dirname(filename)
     filename = fs.join(parent, tmpname)
   end
