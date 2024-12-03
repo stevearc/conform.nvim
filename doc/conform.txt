@@ -263,7 +263,6 @@ FORMATTERS                                                    *conform-formatter
             pyflakes.
 `autopep8` - A tool that automatically formats Python code to conform to the PEP
            8 style guide.
-`gawk` - Format awk programs with gawk.
 `bean-format` - Reformat Beancount files to right-align all the numbers at the
               same, minimal column.
 `beautysh` - A Bash beautifier for the masses.
@@ -336,6 +335,7 @@ FORMATTERS                                                    *conform-formatter
 `fourmolu` - A fork of ormolu that uses four space indentation and allows
            arbitrary configuration.
 `fprettify` - Auto-formatter for modern fortran source code.
+`gawk` - Format awk programs with gawk.
 `gci` - GCI, a tool that controls Go package import order and makes it always
       deterministic.
 `gdformat` - A formatter for Godot's gdscript.
