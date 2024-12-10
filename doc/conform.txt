@@ -427,6 +427,7 @@ FORMATTERS                                                    *conform-formatter
            necessary.
 `prettierd` - prettier, as a daemon, for ludicrous formatting speed.
 `pretty-php` - The opinionated PHP code formatter.
+`prettypst` - Formatter for Typst.
 `puppet-lint` - Check that your Puppet manifests conform to the style guide.
 `purs-tidy` - A syntax tidy-upper for PureScript.
 `pyink` - A Python formatter, forked from Black with a few different formatting
