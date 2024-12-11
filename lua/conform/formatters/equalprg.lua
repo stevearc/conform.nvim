@@ -6,8 +6,13 @@ return {
   },
   format = function(self, ctx, lines, callback)
     local cursor_position = vim.api.nvim_win_get_cursor(0)
-    vim.cmd.normal("gg")
-    vim.cmd.normal("=G")
+    if ctx.range then
+      vim.cmd.normal(ctx.range["start"][1] .. "G")
+      vim.cmd.normal("=" .. ctx.range["end"][1] .. "G")
+    else
+      vim.cmd.normal("gg")
+      vim.cmd.normal("=G")
+    end
     vim.api.nvim_win_set_cursor(0, cursor_position)
     callback(nil, nil)
   end,
