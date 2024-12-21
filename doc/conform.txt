@@ -351,6 +351,7 @@ FORMATTERS                                                    *conform-formatter
             unreferenced ones.
 `goimports-reviser` - Right imports sorting & code formatting tool (goimports
                     alternative).
+`gojq` - Pure Go implementation of jq.
 `golines` - A golang formatter that fixes long lines.
 `google-java-format` - Reformats Java source code according to Google Java
                      Style.
