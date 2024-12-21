@@ -238,6 +238,7 @@ You can view this list in vim with `:help conform-formatters`
 - [fixjson](https://github.com/rhysd/fixjson) - JSON Fixer for Humans using (relaxed) JSON5.
 - [fnlfmt](https://git.sr.ht/~technomancy/fnlfmt) - A formatter for Fennel code.
 - [forge_fmt](https://github.com/foundry-rs/foundry) - Forge is a command-line tool that ships with Foundry. Forge tests, builds, and deploys your smart contracts.
+- [format-dune-file](https://github.com/ocaml/dune) - Auto-formatter for Dune files.
 - [format-queries](https://github.com/nvim-treesitter/nvim-treesitter/blob/main/CONTRIBUTING.md#formatting) - Tree-sitter query formatter.
 - [fourmolu](https://hackage.haskell.org/package/fourmolu) - A fork of ormolu that uses four space indentation and allows arbitrary configuration.
 - [fprettify](https://github.com/fortran-lang/fprettify) - Auto-formatter for modern fortran source code.
