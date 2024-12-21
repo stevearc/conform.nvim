@@ -104,6 +104,7 @@ end
 ---@class (exact) conform.InjectedFormatterOptions
 ---@field ignore_errors boolean
 ---@field lang_to_ext table<string, string>
+---@field lang_to_ft table<string, string>
 ---@field lang_to_formatters table<string, conform.FiletypeFormatter>
 
 ---@type conform.FileLuaFormatterConfig
@@ -116,6 +117,10 @@ return {
   options = {
     -- Set to true to ignore errors
     ignore_errors = false,
+    -- Map of treesitter language to filetype
+    lang_to_ft = {
+      bash = "sh",
+    },
     -- Map of treesitter language to file extension
     -- A temporary file name with this extension will be generated during formatting
     -- because some formatters care about the filename.
@@ -163,7 +168,8 @@ return {
     ---@param lang string
     ---@return nil|conform.FiletypeFormatter
     local function get_formatters(lang)
-      return options.lang_to_formatters[lang] or conform.formatters_by_ft[lang]
+      local ft = options.lang_to_ft[lang] or lang
+      return options.lang_to_formatters[ft] or conform.formatters_by_ft[ft]
     end
 
     --- Disable diagnostic to pass the typecheck github action
@@ -180,7 +186,9 @@ return {
         for _, ranges in ipairs(lang_tree:included_regions()) do
           for _, region in ipairs(ranges) do
             local formatters = get_formatters(lang)
-            if formatters ~= nil then
+            if formatters == nil then
+              log.info("No formatters found for injected treesitter language %s", lang)
+            else
               -- The types are wrong. included_regions should be Range[][] not integer[][]
               ---@diagnostic disable-next-line: param-type-mismatch
               local start_row, start_col, _, end_row, end_col, _ = unpack(region)
