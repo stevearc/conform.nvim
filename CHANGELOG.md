@@ -1,5 +1,31 @@
 # Changelog
 
+## [8.3.0](https://github.com/stevearc/conform.nvim/compare/v8.2.0...v8.3.0) (2024-12-21)
+
+
+### Features
+
+* add `prettypst` formatter ([#595](https://github.com/stevearc/conform.nvim/issues/595)) ([676704d](https://github.com/stevearc/conform.nvim/commit/676704d6e6b58cc8cd7321491e99b07a3fd47a1d))
+* add commitmsgfmt ([#579](https://github.com/stevearc/conform.nvim/issues/579)) ([b6b03cb](https://github.com/stevearc/conform.nvim/commit/b6b03cb5c826a9ef310b14edeb8f33b18093f8af))
+* add format-dune-file ([#602](https://github.com/stevearc/conform.nvim/issues/602)) ([880aa37](https://github.com/stevearc/conform.nvim/commit/880aa379f91ed36c328806846f7c1eca9b49241e))
+* add gojq ([#598](https://github.com/stevearc/conform.nvim/issues/598)) ([c5cdc47](https://github.com/stevearc/conform.nvim/commit/c5cdc475c9100933b9e2f6a4876e8baf5ef2735a))
+* add support for syntax_tree ([#578](https://github.com/stevearc/conform.nvim/issues/578)) ([8a8b158](https://github.com/stevearc/conform.nvim/commit/8a8b158ead6dee99c6b3af91ad6a41e7a4c54ef3))
+* add tex-fmt ([#593](https://github.com/stevearc/conform.nvim/issues/593)) ([d2fdcc3](https://github.com/stevearc/conform.nvim/commit/d2fdcc3fa48cf2f2696f13730a5c74f97a7e9677))
+
+
+### Bug Fixes
+
+* **buildifier:** formatting of BUILD file ([#594](https://github.com/stevearc/conform.nvim/issues/594)) ([e76afe8](https://github.com/stevearc/conform.nvim/commit/e76afe8f7976071fae308e31bf426f557a8ef339))
+* catch failure with undojoin after undo ([#584](https://github.com/stevearc/conform.nvim/issues/584)) ([a203480](https://github.com/stevearc/conform.nvim/commit/a203480a350b03092e473bf3001733d547160a73))
+* **elixir mix:** run formatter from project root ([#576](https://github.com/stevearc/conform.nvim/issues/576)) ([f1125f8](https://github.com/stevearc/conform.nvim/commit/f1125f8eace158255cf55772ce039aaf178a6b42))
+* improve error message for unknown formatters ([#583](https://github.com/stevearc/conform.nvim/issues/583)) ([19c7ba1](https://github.com/stevearc/conform.nvim/commit/19c7ba1b4be2ebb768b021c6359700918245fe2d))
+* injected formatter works for bash ([62055b4](https://github.com/stevearc/conform.nvim/commit/62055b40c4d0b001c87559c7adf96a4a464bcdd5))
+* **prettier:** respect "prettier" config field in "package.json" ([#573](https://github.com/stevearc/conform.nvim/issues/573)) ([1a7ff54](https://github.com/stevearc/conform.nvim/commit/1a7ff54dcfbe1af139b11829c6d58f5ffab87707))
+* rename awk formatter to gawk ([#589](https://github.com/stevearc/conform.nvim/issues/589)) ([917bc56](https://github.com/stevearc/conform.nvim/commit/917bc566832d91dff00b6e6a6dc658366fd51bac))
+* **runner:** replace `$FILENAME` last to avoid magic char conflicts ([#591](https://github.com/stevearc/conform.nvim/issues/591)) ([7a3d99e](https://github.com/stevearc/conform.nvim/commit/7a3d99eb151e636670ce4842ab073d7485f7bc61))
+* **stylelint:** support ignored files, node_modules, and cwd ([#577](https://github.com/stevearc/conform.nvim/issues/577)) ([2e281bc](https://github.com/stevearc/conform.nvim/commit/2e281bc8f3833ebc606660081be50c88ccadcbea))
+* **xmlformat:** rename to  xmlformatter ([#572](https://github.com/stevearc/conform.nvim/issues/572)) ([d23765f](https://github.com/stevearc/conform.nvim/commit/d23765f50637529078aca879351a219d6b1d8010))
+
 ## [8.2.0](https://github.com/stevearc/conform.nvim/compare/v8.1.0...v8.2.0) (2024-11-09)
 
 
