@@ -14,7 +14,7 @@ return {
     "--linter-enabled=false",
     "--organize-imports-enabled=true",
     "--stdin-file-path",
-    "$FILENAME"
+    "$FILENAME",
   },
   cwd = util.root_file({
     "biome.json",
