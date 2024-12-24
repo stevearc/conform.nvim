@@ -1,5 +1,12 @@
 # Changelog
 
+## [8.4.0](https://github.com/stevearc/conform.nvim/compare/v8.3.0...v8.4.0) (2024-12-24)
+
+
+### Features
+
+* biome organize imports ([#599](https://github.com/stevearc/conform.nvim/issues/599)) ([06804af](https://github.com/stevearc/conform.nvim/commit/06804af4f2a8ebbc991bb4c7d369c5208e27b0b6))
+
 ## [8.3.0](https://github.com/stevearc/conform.nvim/compare/v8.2.0...v8.3.0) (2024-12-21)
 
 
