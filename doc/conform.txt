@@ -273,6 +273,8 @@ FORMATTERS                                                    *conform-formatter
         maintain them.
 `biome-check` - A toolchain for web projects, aimed to provide functionalities
               to maintain them.
+`biome-organize-imports` - A toolchain for web projects, aimed to provide
+                         functionalities to maintain them.
 `black` - The uncompromising Python code formatter.
 `blade-formatter` - An opinionated blade template formatter for Laravel that
                   respects readability.
