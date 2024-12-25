@@ -14,25 +14,21 @@ M.default_format_opts = {}
 
 -- Defer notifications because nvim-notify can throw errors if called immediately
 -- in some contexts (e.g. inside statusline function)
-local notify = vim.schedule_wrap(function(...)
-  vim.notify(...)
-end)
-local notify_once = vim.schedule_wrap(function(...)
-  vim.notify_once(...)
-end)
+local notify = vim.schedule_wrap(vim.notify)
+local notify_once = vim.schedule_wrap(vim.notify_once)
 
-local allowed_default_opts = { "timeout_ms", "lsp_format", "quiet", "stop_after_first" }
-local allowed_default_filetype_opts = { "name", "id", "filter" }
 ---@param a table
 ---@param b table
 ---@param opts? { allow_filetype_opts?: boolean }
 ---@return table
 local function merge_default_opts(a, b, opts)
+  local allowed_default_opts = { "timeout_ms", "lsp_format", "quiet", "stop_after_first" }
   for _, key in ipairs(allowed_default_opts) do
     if a[key] == nil then
       a[key] = b[key]
     end
   end
+  local allowed_default_filetype_opts = { "name", "id", "filter" }
   if opts and opts.allow_filetype_opts then
     for _, key in ipairs(allowed_default_filetype_opts) do
       if a[key] == nil then
@@ -224,12 +220,6 @@ M.setup = function(opts)
   end
 end
 
----@param obj any
----@return boolean
-local function is_empty_table(obj)
-  return type(obj) == "table" and vim.tbl_isempty(obj)
-end
-
 ---Get the configured formatter filetype for a buffer
 ---@param bufnr? integer
 ---@return nil|string filetype or nil if no formatter is configured. Can be "_".
@@ -240,10 +230,10 @@ local function get_matching_filetype(bufnr)
   local filetypes = vim.split(vim.bo[bufnr].filetype, ".", { plain = true })
   table.insert(filetypes, "_")
   for _, filetype in ipairs(filetypes) do
-    local ft_formatters = M.formatters_by_ft[filetype]
+    local ft_formatters = M.formatters_by_ft[filetype] --[[@as table]]
     -- Sometimes people put an empty table here, and that should not count as configuring formatters
     -- for a filetype.
-    if ft_formatters and not is_empty_table(ft_formatters) then
+    if ft_formatters and not vim.tbl_isempty(ft_formatters) then
       return filetype
     end
   end
@@ -386,7 +376,7 @@ M.resolve_formatters = function(names, bufnr, warn_on_missing, stop_after_first)
       end
     end
 
-    if stop_after_first and #all_info > 0 then
+    if stop_after_first and not vim.tbl_isempty(all_info) then
       break
     end
   end
