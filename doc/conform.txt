@@ -434,6 +434,7 @@ FORMATTERS                                                    *conform-formatter
 `prettypst` - Formatter for Typst.
 `puppet-lint` - Check that your Puppet manifests conform to the style guide.
 `purs-tidy` - A syntax tidy-upper for PureScript.
+`pycln` - A Python formatter for finding and removing unused import statements.
 `pyink` - A Python formatter, forked from Black with a few different formatting
         behaviors.
 `python-ly` - A Python package and commandline tool to manipulate LilyPond
