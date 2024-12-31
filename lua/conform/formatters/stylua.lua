@@ -6,7 +6,7 @@ return {
     description = "An opinionated code formatter for Lua.",
   },
   command = "stylua",
-    args = {
+  args = {
     "--search-parent-directories",
     "--respect-ignores",
     "--stdin-filepath",
