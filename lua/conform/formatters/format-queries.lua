@@ -11,7 +11,7 @@ return {
   },
   condition = function()
     local ok = pcall(vim.treesitter.language.inspect, "query")
-    return ok and get_format_script() ~= nil
+    return ok and pcall(require, "nvim-treesitter") and get_format_script() ~= nil
   end,
   command = "nvim",
   args = function()
