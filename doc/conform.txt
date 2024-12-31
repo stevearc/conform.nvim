@@ -406,6 +406,8 @@ FORMATTERS                                                    *conform-formatter
             official style guide.
 `nixfmt` - The official (but not yet stable) formatter for Nix code.
 `nixpkgs_fmt` - nixpkgs-fmt is a Nix code formatter for nixpkgs.
+`nomad_fmt` - The fmt commands check the syntax and rewrites Nomad configuration
+            and jobspec files to canonical format.
 `npm-groovy-lint` - Lint, format and auto-fix your Groovy / Jenkinsfile / Gradle
                   files using command line.
 `nufmt` - The nushell formatter.

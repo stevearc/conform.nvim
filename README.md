@@ -294,6 +294,7 @@ You can view this list in vim with `:help conform-formatters`
 - [nimpretty](https://github.com/nim-lang/nim) - nimpretty is a Nim source code beautifier that follows the official style guide.
 - [nixfmt](https://github.com/NixOS/nixfmt) - The official (but not yet stable) formatter for Nix code.
 - [nixpkgs_fmt](https://github.com/nix-community/nixpkgs-fmt) - nixpkgs-fmt is a Nix code formatter for nixpkgs.
+- [nomad_fmt](https://developer.hashicorp.com/nomad/docs/commands/fmt) - The fmt commands check the syntax and rewrites Nomad configuration and jobspec files to canonical format.
 - [npm-groovy-lint](https://github.com/nvuillam/npm-groovy-lint) - Lint, format and auto-fix your Groovy / Jenkinsfile / Gradle files using command line.
 - [nufmt](https://github.com/nushell/nufmt) - The nushell formatter.
 - [ocamlformat](https://github.com/ocaml-ppx/ocamlformat) - Auto-formatter for OCaml code.
