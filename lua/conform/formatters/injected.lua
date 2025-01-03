@@ -29,6 +29,19 @@ local function get_indent(lines, language)
   return indent
 end
 
+---@param root_lang string
+---@param lang string
+---@return boolean
+local function include_language_tree(root_lang, lang)
+  -- We should not attempt to format html inside markdown
+  -- See https://github.com/stevearc/conform.nvim/issues/485
+  if root_lang == "markdown" and lang == "html" then
+    return false
+  end
+  -- Don't format the root language with the injected formatter
+  return root_lang ~= lang
+end
+
 ---@class (exact) conform.Injected.Surrounding
 ---@field indent string?
 ---@field postfix string?
@@ -182,7 +195,7 @@ return {
     local regions = {}
 
     for lang, lang_tree in pairs(parser:children()) do
-      if lang ~= root_lang then
+      if include_language_tree(root_lang, lang) then
         for _, ranges in ipairs(lang_tree:included_regions()) do
           for _, region in ipairs(ranges) do
             local formatters = get_formatters(lang)
