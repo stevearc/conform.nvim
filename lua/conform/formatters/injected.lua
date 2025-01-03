@@ -353,7 +353,7 @@ return {
         input_lines[#input_lines] = input_lines[#input_lines]:sub(1, end_col)
         if start_col > 0 then
           local prefix = input_lines[1]:sub(0, start_col)
-          if prefix:match(prefix_pattern(buf_lang)) ~= "" then
+          if prefix:match(prefix_pattern(buf_lang)) == prefix then
             -- The first line in the range doesn't start at col 0, but the text on that line before
             -- it is just indentation nothing semantic.
             -- Update the range to include the indentation so that remove_surrounding() below can
