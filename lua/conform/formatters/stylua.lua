@@ -6,7 +6,13 @@ return {
     description = "An opinionated code formatter for Lua.",
   },
   command = "stylua",
-  args = { "--search-parent-directories", "--stdin-filepath", "$FILENAME", "-" },
+  args = {
+    "--search-parent-directories",
+    "--respect-ignores",
+    "--stdin-filepath",
+    "$FILENAME",
+    "-",
+  },
   range_args = function(self, ctx)
     local start_offset, end_offset = util.get_offsets_from_range(ctx.buf, ctx.range)
     return {
