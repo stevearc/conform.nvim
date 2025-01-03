@@ -7,3 +7,17 @@ bar.innerHTML = `
 baz.innerHTML = `
   <div> world </div>
   `;
+
+baz.innerHTML = `<div>
+  world
+</div>`;
+
+baz.innerHTML = `<div>
+  world
+</div>
+`;
+
+baz.innerHTML = `<div>
+    world
+  </div>
+`;

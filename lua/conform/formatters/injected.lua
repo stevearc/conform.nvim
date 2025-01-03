@@ -6,16 +6,21 @@ local function in_range(range, start_lnum, end_lnum)
   return not range or (start_lnum <= range["end"][1] and range["start"][1] <= end_lnum)
 end
 
+---@param language? string
+local function prefix_pattern(language)
+  -- Handle markdown code blocks that are inside blockquotes
+  -- > ```lua
+  -- > local x = 1
+  -- > ```
+  return language == "markdown" and "^>?%s*" or "^%s*"
+end
+
 ---@param lines string[]
 ---@param language? string The language of the buffer
 ---@return string?
 local function get_indent(lines, language)
   local indent = nil
-  -- Handle markdown code blocks that are inside blockquotes
-  -- > ```lua
-  -- > local x = 1
-  -- > ```
-  local pattern = language == "markdown" and "^>?%s*" or "^%s*"
+  local pattern = prefix_pattern(language)
   for _, line in ipairs(lines) do
     if line ~= "" then
       local whitespace = line:match(pattern)
@@ -93,7 +98,53 @@ local function restore_surrounding(lines, surrounding)
   end
 end
 
----@class LangRange
+---Merge adjacent ranges that have the same language and share a prefix
+---@param regions LangRange[]
+---@param bufnr integer
+---@param buf_lang? string
+---@return LangRange[]
+local function merge_ranges_with_prefix(regions, bufnr, buf_lang)
+  local ret = {}
+
+  local last_range = nil
+  local accum = {}
+
+  local function append_accum()
+    if #accum == 0 then
+      return
+    end
+    local lines = vim.api.nvim_buf_get_lines(bufnr, accum[1][2] - 1, accum[#accum][4], true)
+    local prefix = get_indent(lines, buf_lang)
+    if prefix then
+      local new_range = {
+        accum[1][1],
+        accum[1][2],
+        accum[1][3],
+        accum[#accum][4],
+        accum[#accum][5],
+      }
+      table.insert(ret, new_range)
+    else
+      vim.list_extend(ret, accum)
+    end
+    accum = {}
+  end
+
+  for _, range in ipairs(regions) do
+    if not last_range or range[1] ~= last_range[1] or range[2] ~= last_range[4] then
+      -- This is a new region entirely; new language, or not contiguous
+      append_accum()
+      accum = {}
+    end
+    table.insert(accum, range)
+    last_range = range
+  end
+  append_accum()
+
+  return ret
+end
+
+---@class (exact) LangRange
 ---@field [1] string language
 ---@field [2] integer start lnum
 ---@field [3] integer start col
@@ -212,6 +263,8 @@ return {
       end
     end
 
+    regions = merge_ranges_with_prefix(regions, ctx.buf, buf_lang)
+
     if ctx.range then
       regions = vim.tbl_filter(function(region)
         return in_range(ctx.range, region[2], region[4])
@@ -299,7 +352,17 @@ return {
         local input_lines = util.tbl_slice(lines, start_lnum, end_lnum)
         input_lines[#input_lines] = input_lines[#input_lines]:sub(1, end_col)
         if start_col > 0 then
-          input_lines[1] = input_lines[1]:sub(start_col + 1)
+          local prefix = input_lines[1]:sub(0, start_col)
+          if prefix:match(prefix_pattern(buf_lang)) ~= "" then
+            -- The first line in the range doesn't start at col 0, but the text on that line before
+            -- it is just indentation nothing semantic.
+            -- Update the range to include the indentation so that remove_surrounding() below can
+            -- consider it as part of the indentation for the entire block.
+            start_col = 0
+            region[3] = 0
+          else
+            input_lines[1] = input_lines[1]:sub(start_col + 1)
+          end
         end
         local ft_formatters = assert(get_formatters(lang))
         ---@type string[]

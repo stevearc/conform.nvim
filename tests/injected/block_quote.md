@@ -2,4 +2,5 @@ text
 
 > ```lua
 > local foo = 'bar'
+> local bar = 2
 > ```

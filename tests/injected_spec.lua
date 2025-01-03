@@ -33,20 +33,22 @@ describe("injected formatter", function()
       lua = { "test_mark" },
       html = { "test_mark" },
     }
-    -- A test formatter that bookends lines with "|" so we can check what was passed in
+    -- A test formatter that bookends lines with "><" so we can check what was passed in
     conform.formatters.test_mark = {
       format = function(self, ctx, lines, callback)
-        local ret = {}
-        for i, line in ipairs(lines) do
-          if i == 1 and line == "" then
-            -- Simulate formatters removing starting newline
-          elseif i == #lines and line == "" then
-            -- Simulate formatters removing trailing newline
-          else
-            table.insert(ret, "|" .. line .. "|")
-          end
+        lines = vim.deepcopy(lines)
+        -- Simulate formatters removing starting newline
+        while #lines > 0 and lines[1] == "" do
+          table.remove(lines, 1)
         end
-        callback(nil, ret)
+        -- Simulate formatters removing trailing newline
+        while #lines > 0 and lines[#lines] == "" do
+          table.remove(lines)
+        end
+
+        lines[1] = ">" .. lines[1]
+        lines[#lines] = lines[#lines] .. "<"
+        callback(nil, lines)
       end,
     }
   end)
