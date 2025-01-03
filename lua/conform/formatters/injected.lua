@@ -358,7 +358,6 @@ return {
             -- it is just indentation nothing semantic.
             -- Update the range to include the indentation so that remove_surrounding() below can
             -- consider it as part of the indentation for the entire block.
-            start_col = 0
             region[3] = 0
           else
             input_lines[1] = input_lines[1]:sub(start_col + 1)
