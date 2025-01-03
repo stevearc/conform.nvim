@@ -1,5 +1,23 @@
 # Changelog
 
+## [8.4.0](https://github.com/stevearc/conform.nvim/compare/v8.3.0...v8.4.0) (2025-01-03)
+
+
+### Features
+
+* add nomad_fmt ([#613](https://github.com/stevearc/conform.nvim/issues/613)) ([990d370](https://github.com/stevearc/conform.nvim/commit/990d37017e193fe40bdabf058e598e76f5e7d929))
+* biome organize imports ([#599](https://github.com/stevearc/conform.nvim/issues/599)) ([06804af](https://github.com/stevearc/conform.nvim/commit/06804af4f2a8ebbc991bb4c7d369c5208e27b0b6))
+
+
+### Bug Fixes
+
+* create ConformInfo regardless of setup ([#605](https://github.com/stevearc/conform.nvim/issues/605)) ([9180320](https://github.com/stevearc/conform.nvim/commit/9180320205d250429f0f80e073326c674e2a7149))
+* **format-queries:** require nvim-treesitter before scanning rtp ([#614](https://github.com/stevearc/conform.nvim/issues/614)) ([9941f10](https://github.com/stevearc/conform.nvim/commit/9941f10f8b615ccbaaaaf24cd714e338a9ab9130))
+* **injected:** better handling of formatting indented code blocks ([#606](https://github.com/stevearc/conform.nvim/issues/606)) ([28f7fc7](https://github.com/stevearc/conform.nvim/commit/28f7fc7b679438a7090e8f83aa9ba5f67df18146))
+* **injected:** bug with inline language injections ([53f6ae4](https://github.com/stevearc/conform.nvim/commit/53f6ae4232179fe43eff3bee63d88d981c491695))
+* **injected:** don't format html embedded in markdown ([#485](https://github.com/stevearc/conform.nvim/issues/485)) ([0fbb850](https://github.com/stevearc/conform.nvim/commit/0fbb850657695a1f5df6c803079fc1421002d196))
+* **stylua:** Add `--respect-ignores` to the default args ([#616](https://github.com/stevearc/conform.nvim/issues/616)) ([7001912](https://github.com/stevearc/conform.nvim/commit/70019124aa4f2e6838be9fbd2007f6d13b27a96d))
+
 ## [8.3.0](https://github.com/stevearc/conform.nvim/compare/v8.2.0...v8.3.0) (2024-12-21)
 
 
