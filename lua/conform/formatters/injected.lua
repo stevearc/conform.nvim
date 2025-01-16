@@ -393,6 +393,7 @@ return {
         local extension = options.lang_to_ext[lang] or lang
         local buf =
           vim.fn.bufadd(string.format("%s.%d.%s", vim.api.nvim_buf_get_name(ctx.buf), i, extension))
+        vim.bo[buf].swapfile = false
         -- Actually load the buffer to set the buffer context which is required by some formatters such as `filetype`
         vim.fn.bufload(buf)
         tmp_bufs[buf] = true
