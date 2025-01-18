@@ -340,6 +340,7 @@ You can view this list in vim with `:help conform-formatters`
 - [sql_formatter](https://github.com/sql-formatter-org/sql-formatter) - A whitespace formatter for different query languages.
 - [sqlfluff](https://github.com/sqlfluff/sqlfluff) - A modular SQL linter and auto-formatter with support for multiple dialects and templated code.
 - [sqlfmt](https://docs.sqlfmt.com) - sqlfmt formats your dbt SQL files so you don't have to. It is similar in nature to Black, gofmt, and rustfmt (but for SQL)
+- [sqruff](https://github.com/quarylabs/sqruff) - sqruff is a SQL linter and formatter written in Rust.
 - [squeeze_blanks](https://www.gnu.org/software/coreutils/manual/html_node/cat-invocation.html#cat-invocation) - Squeeze repeated blank lines into a single blank line via `cat -s`.
 - [standard-clj](https://github.com/oakmac/standard-clojure-style-js) - A JavaScript library to format Clojure code according to Standard Clojure Style.
 - [standardjs](https://standardjs.com) - JavaScript Standard style guide, linter, and formatter.
