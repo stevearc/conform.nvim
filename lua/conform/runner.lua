@@ -304,7 +304,7 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, opts, c
     },
   }
   vim.api.nvim_exec_autocmds("User", {
-    pattern = "ConformPreFormatter",
+    pattern = "ConformFormatPre",
     data = autocmd_data,
   })
   log.info("Run %s on %s", formatter.name, vim.api.nvim_buf_get_name(bufnr))
@@ -320,7 +320,7 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, opts, c
     end
     autocmd_data["err"] = err
     vim.api.nvim_exec_autocmds("User", {
-      pattern = "ConformPostFormatter",
+      pattern = "ConformFormatPost",
       data = autocmd_data,
     })
   end)
