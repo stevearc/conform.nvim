@@ -298,9 +298,14 @@ local last_run_errored = {}
 ---@param callback fun(err?: conform.Error, output?: string[])
 ---@return integer? job_id
 local function run_formatter(bufnr, formatter, config, ctx, input_lines, opts, callback)
+  local autocmd_data = {
+    formatter = {
+      name = formatter.name,
+    },
+  }
   vim.api.nvim_exec_autocmds("User", {
     pattern = "ConformPreFormatter",
-    data = { formatter = formatter },
+    data = autocmd_data,
   })
   log.info("Run %s on %s", formatter.name, vim.api.nvim_buf_get_name(bufnr))
   log.trace("Input lines: %s", input_lines)
@@ -313,6 +318,11 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, opts, c
     else
       last_run_errored[formatter.name] = false
     end
+    autocmd_data["err"] = err
+    vim.api.nvim_exec_autocmds("User", {
+      pattern = "ConformPostFormatter",
+      data = autocmd_data,
+    })
   end)
   if config.format then
     local err_string_cb = function(err, ...)
@@ -438,13 +448,6 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, opts, c
           })
         end
       end
-      vim.api.nvim_exec_autocmds("User", {
-        pattern = "ConformPostFormatter",
-        data = {
-          formatter = formatter,
-          success = result.code == 0,
-        },
-      })
     end)
   )
   if not ok then
