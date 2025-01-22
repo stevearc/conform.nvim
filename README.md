@@ -270,7 +270,7 @@ You can view this list in vim with `:help conform-formatters`
 - [isort](https://github.com/PyCQA/isort) - Python utility / library to sort imports alphabetically and automatically separate them into sections and by type.
 - [joker](https://github.com/candid82/joker) - Small Clojure interpreter, linter and formatter.
 - [jq](https://github.com/stedolan/jq) - Command-line JSON processor.
-- [js_beautify](https://github.com/beautifier/js-beautify) - This little beautifier will reformat and re-indent bookmarklets, ugly JavaScript, unpack scripts packed by Dean Edward’s popular packer, as well as partly deobfuscate scripts processed by the npm package javascript-obfuscator.
+- [js_beautify](https://github.com/beautifier/js-beautify) - Beautifier for javascript.
 - [jsonnetfmt](https://github.com/google/go-jsonnet/tree/master/cmd/jsonnetfmt) - jsonnetfmt is a command line tool to format jsonnet files.
 - [just](https://github.com/casey/just) - Format Justfile.
 - [kcl](https://www.kcl-lang.io/docs/tools/cli/kcl/fmt) - The KCL Format tool modifies the files according to the KCL code style.
