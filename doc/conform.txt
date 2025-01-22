@@ -298,10 +298,7 @@ FORMATTERS                                                    *conform-formatter
 `crlfmt` - Formatter for CockroachDB's additions to the Go style guide.
 `crystal` - Format Crystal code.
 `csharpier` - The opinionated C# code formatter.
-`css_beautify` - This little beautifier will reformat and re-indent
-               bookmarklets, ugly JavaScript, unpack scripts packed by Dean
-               Edward’s popular packer, as well as partly deobfuscate scripts
-               processed by the npm package javascript-obfuscator.
+`css_beautify` - Beautifier for css.
 `cue_fmt` - Format CUE files using `cue fmt` command.
 `d2` - D2 is a modern diagram scripting language that turns text to diagrams.
 `darker` - Run black only on changed lines.

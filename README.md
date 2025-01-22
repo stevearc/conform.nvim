@@ -214,7 +214,7 @@ You can view this list in vim with `:help conform-formatters`
 - [crlfmt](https://github.com/cockroachdb/crlfmt) - Formatter for CockroachDB's additions to the Go style guide.
 - [crystal](https://crystal-lang.org/) - Format Crystal code.
 - [csharpier](https://github.com/belav/csharpier) - The opinionated C# code formatter.
-- [css_beautify](https://github.com/beautifier/js-beautify) - This little beautifier will reformat and re-indent bookmarklets, ugly JavaScript, unpack scripts packed by Dean Edward’s popular packer, as well as partly deobfuscate scripts processed by the npm package javascript-obfuscator.
+- [css_beautify](https://github.com/beautifier/js-beautify) - Beautifier for css.
 - [cue_fmt](https://cuelang.org) - Format CUE files using `cue fmt` command.
 - [d2](https://github.com/terrastruct/d2) - D2 is a modern diagram scripting language that turns text to diagrams.
 - [darker](https://github.com/akaihola/darker) - Run black only on changed lines.
