@@ -365,10 +365,7 @@ FORMATTERS                                                    *conform-formatter
 `grain_format` - Code formatter for the grain programming language.
 `hcl` - A formatter for HCL files.
 `hindent` - Haskell pretty printer.
-`html_beautify` - This little beautifier will reformat and re-indent
-                bookmarklets, ugly JavaScript, unpack scripts packed by Dean
-                Edward’s popular packer, as well as partly deobfuscate scripts
-                processed by the npm package javascript-obfuscator.
+`html_beautify` - Beautifier for html.
 `htmlbeautifier` - A normaliser/beautifier for HTML that also understands
                  embedded Ruby. Ideal for tidying up Rails templates.
 `imba_fmt` - Code formatter for the Imba programming language.

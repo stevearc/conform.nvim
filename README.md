@@ -261,7 +261,7 @@ You can view this list in vim with `:help conform-formatters`
 - [grain_format](https://grain-lang.org/docs/tooling/grain_cli#grain-format) - Code formatter for the grain programming language.
 - [hcl](https://github.com/hashicorp/hcl) - A formatter for HCL files.
 - [hindent](https://github.com/mihaimaruseac/hindent) - Haskell pretty printer.
-- [html_beautify](https://github.com/beautifier/js-beautify) - This little beautifier will reformat and re-indent bookmarklets, ugly JavaScript, unpack scripts packed by Dean Edward’s popular packer, as well as partly deobfuscate scripts processed by the npm package javascript-obfuscator.
+- [html_beautify](https://github.com/beautifier/js-beautify) - Beautifier for html.
 - [htmlbeautifier](https://github.com/threedaymonk/htmlbeautifier) - A normaliser/beautifier for HTML that also understands embedded Ruby. Ideal for tidying up Rails templates.
 - [imba_fmt](https://imba.io/) - Code formatter for the Imba programming language.
 - [indent](https://www.gnu.org/software/indent/) - GNU Indent.
