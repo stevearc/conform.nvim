@@ -214,6 +214,7 @@ You can view this list in vim with `:help conform-formatters`
 - [crlfmt](https://github.com/cockroachdb/crlfmt) - Formatter for CockroachDB's additions to the Go style guide.
 - [crystal](https://crystal-lang.org/) - Format Crystal code.
 - [csharpier](https://github.com/belav/csharpier) - The opinionated C# code formatter.
+- [css_beautify](https://github.com/beautifier/js-beautify) - Beautifier for css.
 - [cue_fmt](https://cuelang.org) - Format CUE files using `cue fmt` command.
 - [d2](https://github.com/terrastruct/d2) - D2 is a modern diagram scripting language that turns text to diagrams.
 - [darker](https://github.com/akaihola/darker) - Run black only on changed lines.
@@ -260,6 +261,7 @@ You can view this list in vim with `:help conform-formatters`
 - [grain_format](https://grain-lang.org/docs/tooling/grain_cli#grain-format) - Code formatter for the grain programming language.
 - [hcl](https://github.com/hashicorp/hcl) - A formatter for HCL files.
 - [hindent](https://github.com/mihaimaruseac/hindent) - Haskell pretty printer.
+- [html_beautify](https://github.com/beautifier/js-beautify) - Beautifier for html.
 - [htmlbeautifier](https://github.com/threedaymonk/htmlbeautifier) - A normaliser/beautifier for HTML that also understands embedded Ruby. Ideal for tidying up Rails templates.
 - [imba_fmt](https://imba.io/) - Code formatter for the Imba programming language.
 - [indent](https://www.gnu.org/software/indent/) - GNU Indent.
@@ -268,6 +270,7 @@ You can view this list in vim with `:help conform-formatters`
 - [isort](https://github.com/PyCQA/isort) - Python utility / library to sort imports alphabetically and automatically separate them into sections and by type.
 - [joker](https://github.com/candid82/joker) - Small Clojure interpreter, linter and formatter.
 - [jq](https://github.com/stedolan/jq) - Command-line JSON processor.
+- [js_beautify](https://github.com/beautifier/js-beautify) - Beautifier for javascript.
 - [jsonnetfmt](https://github.com/google/go-jsonnet/tree/master/cmd/jsonnetfmt) - jsonnetfmt is a command line tool to format jsonnet files.
 - [just](https://github.com/casey/just) - Format Justfile.
 - [kcl](https://www.kcl-lang.io/docs/tools/cli/kcl/fmt) - The KCL Format tool modifies the files according to the KCL code style.

@@ -298,6 +298,7 @@ FORMATTERS                                                    *conform-formatter
 `crlfmt` - Formatter for CockroachDB's additions to the Go style guide.
 `crystal` - Format Crystal code.
 `csharpier` - The opinionated C# code formatter.
+`css_beautify` - Beautifier for css.
 `cue_fmt` - Format CUE files using `cue fmt` command.
 `d2` - D2 is a modern diagram scripting language that turns text to diagrams.
 `darker` - Run black only on changed lines.
@@ -361,6 +362,7 @@ FORMATTERS                                                    *conform-formatter
 `grain_format` - Code formatter for the grain programming language.
 `hcl` - A formatter for HCL files.
 `hindent` - Haskell pretty printer.
+`html_beautify` - Beautifier for html.
 `htmlbeautifier` - A normaliser/beautifier for HTML that also understands
                  embedded Ruby. Ideal for tidying up Rails templates.
 `imba_fmt` - Code formatter for the Imba programming language.
@@ -371,6 +373,7 @@ FORMATTERS                                                    *conform-formatter
         automatically separate them into sections and by type.
 `joker` - Small Clojure interpreter, linter and formatter.
 `jq` - Command-line JSON processor.
+`js_beautify` - Beautifier for javascript.
 `jsonnetfmt` - jsonnetfmt is a command line tool to format jsonnet files.
 `just` - Format Justfile.
 `kcl` - The KCL Format tool modifies the files according to the KCL code style.
