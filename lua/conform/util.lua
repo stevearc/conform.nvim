@@ -250,23 +250,25 @@ end
 ---@param formatters_by_ft table<string|string[], conform.FiletypeFormatter>
 ---@return table<string, conform.FiletypeFormatter>
 M.unmarshal_formatters_by_ft = function(formatters_by_ft)
-  local flat_formatters_by_ft = {}
+  local with_table_keys = {}
+  local with_simple_keys = {}
   for ft, formatter in pairs(formatters_by_ft or {}) do
     if type(ft) == "table" then
       for _, ft_inner in ipairs(ft) do
         -- Create a copy of the formatter to allow per-filetype mutation using:
         --  require("conform").formatters_by_ft.<ft>
         if type(formatter) == "table" then
-          flat_formatters_by_ft[ft_inner] = vim.deepcopy(formatter)
+          with_table_keys[ft_inner] = vim.deepcopy(formatter)
         else
-          flat_formatters_by_ft[ft_inner] = formatter
+          with_table_keys[ft_inner] = formatter
         end
       end
     else
-      flat_formatters_by_ft[ft] = formatter
+      with_simple_keys[ft] = formatter
     end
   end
-  return flat_formatters_by_ft
+  -- Simple keys take precedence over tables as keys
+  return vim.tbl_extend("force", with_table_keys, with_simple_keys)
 end
 
 return M
