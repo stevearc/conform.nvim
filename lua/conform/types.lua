@@ -106,7 +106,7 @@
 ---@field stop_after_first? boolean Only run the first available formatter in the list. Defaults to false.
 
 ---@class (exact) conform.setupOpts
----@field formatters_by_ft? table<string, conform.FiletypeFormatter> Map of filetype to formatters
+---@field formatters_by_ft? table<string|string[], conform.FiletypeFormatter> Map of filetype to formatters
 ---@field format_on_save? conform.FormatOpts|fun(bufnr: integer): nil|conform.FormatOpts If this is set, Conform will run the formatter on save. It will pass the table to conform.format(). This can also be a function that returns the table.
 ---@field default_format_opts? conform.DefaultFormatOpts The default options to use when calling conform.format()
 ---@field format_after_save? conform.FormatOpts|fun(bufnr: integer): nil|conform.FormatOpts If this is set, Conform will run the formatter asynchronously after save. It will pass the table to conform.format(). This can also be a function that returns the table.

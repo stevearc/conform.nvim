@@ -70,6 +70,9 @@ M.setup = function(opts)
   end
   opts = opts or {}
 
+  opts.formatters_by_ft =
+    require("conform.util").unmarshal_formatters_by_ft(opts.formatters_by_ft or {})
+
   M.formatters = vim.tbl_extend("force", M.formatters, opts.formatters or {})
   M.formatters_by_ft = vim.tbl_extend("force", M.formatters_by_ft, opts.formatters_by_ft or {})
   check_for_default_opts(M.formatters_by_ft["_"])

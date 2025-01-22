@@ -246,4 +246,27 @@ M.shell_build_argv = function(cmd)
   return argv
 end
 
+---Unmarshals a table of filetype formatters, expanding any array keys into individual filetype entries.
+---@param formatters_by_ft table<string|string[], conform.FiletypeFormatter>
+---@return table<string, conform.FiletypeFormatter>
+M.unmarshal_formatters_by_ft = function(formatters_by_ft)
+  local flat_formatters_by_ft = {}
+  for ft, formatter in pairs(formatters_by_ft or {}) do
+    if type(ft) == "table" then
+      for _, ft_inner in ipairs(ft) do
+        -- Create a copy of the formatter to allow per-filetype mutation using:
+        --  require("conform").formatters_by_ft.<ft>
+        if type(formatter) == "table" then
+          flat_formatters_by_ft[ft_inner] = vim.deepcopy(formatter)
+        else
+          flat_formatters_by_ft[ft_inner] = formatter
+        end
+      end
+    else
+      flat_formatters_by_ft[ft] = formatter
+    end
+  end
+  return flat_formatters_by_ft
+end
+
 return M
