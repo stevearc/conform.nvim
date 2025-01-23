@@ -239,7 +239,8 @@ local function get_matching_filetype(bufnr)
   end
   local filetypes = vim.split(vim.bo[bufnr].filetype, ".", { plain = true })
   table.insert(filetypes, "_")
-  for _, filetype in ipairs(filetypes) do
+  for idx = #filetypes, 1, -1 do
+    local filetype = filetypes[idx]
     local ft_formatters = M.formatters_by_ft[filetype]
     -- Sometimes people put an empty table here, and that should not count as configuring formatters
     -- for a filetype.
