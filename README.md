@@ -134,6 +134,10 @@ require("conform").setup({
     rust = { "rustfmt", lsp_format = "fallback" },
     -- Conform will run the first available formatter
     javascript = { "prettierd", "prettier", stop_after_first = true },
+    -- You can use tables as keys to define multiple file types for the same formatter config
+    [{ "bash", "csh", "ksh", "sh", "zsh" }] = { "beautysh" },
+    -- Simple keys always override tables as keys, regardless of order
+    bash = { "shfmt" },
   },
 })
 ```
@@ -509,6 +513,10 @@ require("conform").setup({
         return { "isort", "black" }
       end
     end,
+    -- You can use tables as keys to define multiple file types for the same formatter config
+    [{ "bash", "csh", "ksh", "sh", "zsh" }] = { "beautysh" },
+    -- Simple keys always override tables as keys, regardless of order
+    bash = { "shfmt" },
     -- Use the "*" filetype to run formatters on all filetypes.
     ["*"] = { "codespell" },
     -- Use the "_" filetype to run formatters on filetypes that don't
