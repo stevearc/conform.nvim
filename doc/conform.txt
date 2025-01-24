@@ -441,6 +441,8 @@ FORMATTERS                                                    *conform-formatter
 `purs-tidy` - A syntax tidy-upper for PureScript.
 `pyink` - A Python formatter, forked from Black with a few different formatting
         behaviors.
+`pyproject-fmt` - Apply a consistent format to your pyproject.toml file with
+                comment support.
 `python-ly` - A Python package and commandline tool to manipulate LilyPond
             files.
 `reorder-python-imports` - Rewrites source to reorder python imports
