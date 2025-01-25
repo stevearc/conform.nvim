@@ -263,6 +263,7 @@ You can view this list in vim with `:help conform-formatters`
 - [hindent](https://github.com/mihaimaruseac/hindent) - Haskell pretty printer.
 - [html_beautify](https://github.com/beautifier/js-beautify) - Beautifier for html.
 - [htmlbeautifier](https://github.com/threedaymonk/htmlbeautifier) - A normaliser/beautifier for HTML that also understands embedded Ruby. Ideal for tidying up Rails templates.
+- [hurlfmt](https://hurl.dev/) - Formats hurl files.
 - [imba_fmt](https://imba.io/) - Code formatter for the Imba programming language.
 - [indent](https://www.gnu.org/software/indent/) - GNU Indent.
 - [injected](doc/advanced_topics.md#injected-language-formatting-code-blocks) - Format treesitter injected languages.
