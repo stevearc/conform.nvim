@@ -75,7 +75,7 @@ M.setup = function(opts)
   check_for_default_opts(M.formatters_by_ft["_"])
   check_for_default_opts(M.formatters_by_ft["*"])
   M.default_format_opts =
-    vim.tbl_extend("force", M.default_format_opts, opts.default_format_opts or {})
+      vim.tbl_extend("force", M.default_format_opts, opts.default_format_opts or {})
 
   if opts.log_level then
     require("conform.log").level = opts.log_level
@@ -145,9 +145,9 @@ M.setup = function(opts)
       group = aug,
       callback = function(args)
         if
-          not vim.api.nvim_buf_is_valid(args.buf)
-          or vim.b[args.buf].conform_applying_formatting
-          or vim.bo[args.buf].buftype ~= ""
+            not vim.api.nvim_buf_is_valid(args.buf)
+            or vim.b[args.buf].conform_applying_formatting
+            or vim.bo[args.buf].buftype ~= ""
         then
           return
         end
@@ -238,9 +238,13 @@ local function get_matching_filetype(bufnr)
     bufnr = vim.api.nvim_get_current_buf()
   end
   local filetypes = vim.split(vim.bo[bufnr].filetype, ".", { plain = true })
-  table.insert(filetypes, "_")
+  -- Reverse the list so we can check the most specific filetypes first
+  local rev_filetypes = {}
   for i = #filetypes, 1, -1 do
-    local filetype = filetypes[i]
+    table.insert(rev_filetypes, filetypes[i])
+  end
+  table.insert(rev_filetypes, "_")
+  for _, filetype in ipairs(rev_filetypes) do
     local ft_formatters = M.formatters_by_ft[filetype]
     -- Sometimes people put an empty table here, and that should not count as configuring formatters
     -- for a filetype.
@@ -510,7 +514,7 @@ M.format = function(opts, callback)
       runner.format_async(opts.bufnr, formatters, opts.range, run_opts, cb)
     else
       local err, did_edit =
-        runner.format_sync(opts.bufnr, formatters, opts.timeout_ms, opts.range, run_opts)
+          runner.format_sync(opts.bufnr, formatters, opts.timeout_ms, opts.range, run_opts)
       cb(err, did_edit)
     end
   end
@@ -520,8 +524,8 @@ M.format = function(opts, callback)
   local any_formatters = has_filetype_formatters(opts.bufnr) and not vim.tbl_isempty(formatters)
 
   if
-    has_lsp
-    and (opts.lsp_format == "prefer" or (opts.lsp_format ~= "never" and not any_formatters))
+      has_lsp
+      and (opts.lsp_format == "prefer" or (opts.lsp_format ~= "never" and not any_formatters))
   then
     -- LSP formatting only
     log.debug("Running LSP formatter on %s", vim.api.nvim_buf_get_name(opts.bufnr))
@@ -548,10 +552,10 @@ M.format = function(opts, callback)
 
     local ft = vim.bo[opts.bufnr].filetype
     if
-      not vim.tbl_isempty(formatter_names)
-      and not has_notified_ft_no_formatters[ft]
-      and not opts.quiet
-      and M.notify_no_formatters
+        not vim.tbl_isempty(formatter_names)
+        and not has_notified_ft_no_formatters[ft]
+        and not opts.quiet
+        and M.notify_no_formatters
     then
       notify(string.format("Formatters unavailable for %s file", ft), vim.log.levels.WARN)
       has_notified_ft_no_formatters[ft] = true
@@ -584,7 +588,7 @@ M.format_lines = function(formatter_names, lines, opts, callback)
   local log = require("conform.log")
   local runner = require("conform.runner")
   local formatters =
-    M.resolve_formatters(formatter_names, opts.bufnr, not opts.quiet, opts.stop_after_first)
+      M.resolve_formatters(formatter_names, opts.bufnr, not opts.quiet, opts.stop_after_first)
   if vim.tbl_isempty(formatters) then
     callback(nil, lines)
     return
@@ -606,7 +610,7 @@ M.format_lines = function(formatter_names, lines, opts, callback)
     runner.format_lines_async(opts.bufnr, formatters, nil, lines, run_opts, handle_err)
   else
     local err, new_lines =
-      runner.format_lines_sync(opts.bufnr, formatters, opts.timeout_ms, nil, lines, run_opts)
+        runner.format_lines_sync(opts.bufnr, formatters, opts.timeout_ms, nil, lines, run_opts)
     handle_err(err, new_lines)
     return err, new_lines
   end
@@ -647,8 +651,8 @@ M.list_formatters_to_run = function(bufnr)
   local any_formatters = has_filetype_formatters(opts.bufnr) and not vim.tbl_isempty(formatters)
 
   if
-    has_lsp
-    and (opts.lsp_format == "prefer" or (opts.lsp_format ~= "never" and not any_formatters))
+      has_lsp
+      and (opts.lsp_format == "prefer" or (opts.lsp_format ~= "never" and not any_formatters))
   then
     return {}, true
   elseif has_lsp and opts.lsp_format == "first" then
@@ -706,7 +710,7 @@ M.get_formatter_config = function(formatter, bufnr)
   end
   if override and override.command and override.format then
     local msg =
-      string.format("Formatter '%s' cannot define both 'command' and 'format' function", formatter)
+        string.format("Formatter '%s' cannot define both 'command' and 'format' function", formatter)
     notify_once(msg, vim.log.levels.ERROR)
     return nil
   end
