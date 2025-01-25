@@ -365,6 +365,7 @@ FORMATTERS                                                    *conform-formatter
 `html_beautify` - Beautifier for html.
 `htmlbeautifier` - A normaliser/beautifier for HTML that also understands
                  embedded Ruby. Ideal for tidying up Rails templates.
+`hurlfmt` - Formats hurl files.
 `imba_fmt` - Code formatter for the Imba programming language.
 `indent` - GNU Indent.
 `injected` - Format treesitter injected languages.
