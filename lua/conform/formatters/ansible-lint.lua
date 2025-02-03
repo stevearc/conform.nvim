@@ -7,5 +7,8 @@ return {
   },
   command = util.from_node_modules("ansible-lint"),
   -- args = { "--fix-to-stdout", "--stdin", "--stdin-filename", "$FILENAME" },
-  args = { "-f", "codeclimate", "--fix=all", "$FILENAME" },
+  args = { "-f", "codeclimate", "-q", "--fix=all", "$FILENAME" },
+  options = {
+    ignore_errors = true,
+  },
 }
