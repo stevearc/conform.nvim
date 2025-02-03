@@ -250,6 +250,9 @@ get_formatter_info({formatter}, {bufnr}): conform.FormatterInfo *conform.get_for
 FORMATTERS                                                    *conform-formatters*
 
 `alejandra` - The Uncompromising Nix Code Formatter.
+`ansible-lint` - ansible-lint checks playbooks for practices and behavior 
+               that could potentially be improved and can fix some of 
+               the most common ones for you 
 `asmfmt` - Go Assembler Formatter
 `ast-grep` - A CLI tool for code structural search, lint and rewriting. Written
            in Rust.
