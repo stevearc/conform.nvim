@@ -9,6 +9,7 @@ return {
   args = { "-f", "codeclimate", "-q", "--fix=all", "$FILENAME" },
   options = {
     ignore_errors = true,
-    timeout_ms = 10000
+    ansync = true
   },
+  exit_codes = { 0, 1, 2, 3, 4 }
 }
