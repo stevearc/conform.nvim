@@ -11,5 +11,6 @@ return {
     ignore_errors = true,
     async = true
   },
+	stdin = false,
   exit_codes = { 0, 1, 2, 3, 4 }
 }
