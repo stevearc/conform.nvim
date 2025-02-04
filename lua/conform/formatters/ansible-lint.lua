@@ -9,7 +9,7 @@ return {
   args = { "-f", "codeclimate", "-q", "--fix=all", "$FILENAME" },
   options = {
     ignore_errors = true,
-    ansync = true
+    async = true
   },
   exit_codes = { 0, 1, 2, 3, 4 }
 }
