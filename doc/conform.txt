@@ -294,6 +294,7 @@ FORMATTERS                                                    *conform-formatter
 `cljstyle` - Formatter for Clojure code.
 `cmake_format` - Parse cmake listfiles and format them nicely.
 `codespell` - Check code for common misspellings.
+`codeql` - Format queries and libraries with CodeQL.
 `commitmsgfmt` - Formats commit messages better than fmt(1) and Vim.
 `crlfmt` - Formatter for CockroachDB's additions to the Go style guide.
 `crystal` - Format Crystal code.
