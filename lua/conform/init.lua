@@ -525,7 +525,7 @@ M.format = function(opts, callback)
 
   if
     has_lsp
-    and (opts.lsp_format == "prefer" or (opts.lsp_format ~= "never" and not any_formatters))
+    and (opts.lsp_format == "prefer" or (opts.lsp_format == "fallback" and not any_formatters))
   then
     -- LSP formatting only
     log.debug("Running LSP formatter on %s", vim.api.nvim_buf_get_name(opts.bufnr))
@@ -540,6 +540,18 @@ M.format = function(opts, callback)
       end
       run_cli_formatters(function(err2, did_edit2)
         handle_result(err2, did_edit or did_edit2)
+      end)
+    end)
+    return true
+  elseif has_lsp and opts.lsp_format == "last" then
+    -- Other formatters, then LSP formatting
+    run_cli_formatters(function(err, did_edit)
+      if err or (did_edit and opts.dry_run) then
+        return callback(err, did_edit)
+      end
+      log.debug("Running LSP formatter on %s", vim.api.nvim_buf_get_name(opts.bufnr))
+      lsp_format.format(opts, function(err2, did_edit2)
+        callback(err2, did_edit or did_edit2)
       end)
     end)
     return true
