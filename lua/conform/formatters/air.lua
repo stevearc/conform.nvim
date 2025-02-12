@@ -3,7 +3,7 @@ local util = require("conform.util")
 return {
   meta = {
     url = "https://github.com/posit-dev/air",
-    description = "R formatter and language server",
+    description = "R formatter and language server.",
   },
   command = "air",
   args = { "format", "$FILENAME" },
