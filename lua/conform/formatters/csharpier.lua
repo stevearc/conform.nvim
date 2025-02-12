@@ -4,7 +4,7 @@ return {
     url = "https://github.com/belav/csharpier",
     description = "The opinionated C# code formatter.",
   },
-  command = "dotnet-csharpier",
-  args = { "--write-stdout" },
+  command = "dotnet",
+  args = { "csharpier", "--write-stdout" },
   stdin = true,
 }
