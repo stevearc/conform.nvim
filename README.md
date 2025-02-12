@@ -210,6 +210,7 @@ You can view this list in vim with `:help conform-formatters`
 - [cljstyle](https://github.com/greglook/cljstyle) - Formatter for Clojure code.
 - [cmake_format](https://github.com/cheshirekow/cmake_format) - Parse cmake listfiles and format them nicely.
 - [codespell](https://github.com/codespell-project/codespell) - Check code for common misspellings.
+- [codeql](https://docs.github.com/en/code-security/codeql-cli/codeql-cli-manual/query-format) - Format queries and libraries with CodeQL.
 - [commitmsgfmt](https://gitlab.com/mkjeldsen/commitmsgfmt) - Formats commit messages better than fmt(1) and Vim.
 - [crlfmt](https://github.com/cockroachdb/crlfmt) - Formatter for CockroachDB's additions to the Go style guide.
 - [crystal](https://crystal-lang.org/) - Format Crystal code.
