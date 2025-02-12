@@ -180,6 +180,7 @@ You can view this list in vim with `:help conform-formatters`
 
 <!-- FORMATTERS -->
 
+- [air](https://github.com/posit-dev/air) - R formatter and language server.
 - [alejandra](https://kamadorueda.com/alejandra/) - The Uncompromising Nix Code Formatter.
 - [asmfmt](https://github.com/klauspost/asmfmt) - Go Assembler Formatter
 - [ast-grep](https://ast-grep.github.io/) - A CLI tool for code structural search, lint and rewriting. Written in Rust.

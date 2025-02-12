@@ -249,6 +249,7 @@ get_formatter_info({formatter}, {bufnr}): conform.FormatterInfo *conform.get_for
 --------------------------------------------------------------------------------
 FORMATTERS                                                    *conform-formatters*
 
+`air` - R formatter and language server.
 `alejandra` - The Uncompromising Nix Code Formatter.
 `asmfmt` - Go Assembler Formatter
 `ast-grep` - A CLI tool for code structural search, lint and rewriting. Written
