@@ -2,7 +2,7 @@
 return {
   meta = {
     url = "https://github.com/ducminh-phan/reformat-gherkin",
-    description = "Reformat-gherkin automatically formats Gherkin files",
+    description = "Formatter for Gherkin language.",
   },
   command = "reformat-gherkin",
   args = { "-" },
