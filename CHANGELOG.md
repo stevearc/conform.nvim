@@ -1,5 +1,35 @@
 # Changelog
 
+## [9.0.0](https://github.com/stevearc/conform.nvim/compare/v8.4.0...v9.0.0) (2025-02-15)
+
+
+### ⚠ BREAKING CHANGES
+
+* remove deprecated syntax and functions
+
+### cleanup
+
+* remove deprecated syntax and functions ([f8d743c](https://github.com/stevearc/conform.nvim/commit/f8d743ce333bedc47821de2cd4d23c43856ecbe5))
+
+
+### Features
+
+* add air format ([#647](https://github.com/stevearc/conform.nvim/issues/647)) ([754150b](https://github.com/stevearc/conform.nvim/commit/754150b63cf8689f46f19d483cca69b508e0fe22))
+* add codeql formatter ([#642](https://github.com/stevearc/conform.nvim/issues/642)) ([65922d8](https://github.com/stevearc/conform.nvim/commit/65922d8b714abcfc2d95ea1738d6fe4ba536c8d8))
+* add hurlfmt (hurl files) ([#632](https://github.com/stevearc/conform.nvim/issues/632)) ([ee323a0](https://github.com/stevearc/conform.nvim/commit/ee323a06ed22de68b45caafae4406e20c1be3dc0))
+* add support for pyproject-fmt ([#629](https://github.com/stevearc/conform.nvim/issues/629)) ([a7c7e8f](https://github.com/stevearc/conform.nvim/commit/a7c7e8fc0fb3bebabd8e597f6906a83f1515af34))
+* **latexindent:** support range formatting ([#654](https://github.com/stevearc/conform.nvim/issues/654)) ([f206389](https://github.com/stevearc/conform.nvim/commit/f2063898e943893b20aeb30a324d5364ebaddff6))
+* support nph ([#643](https://github.com/stevearc/conform.nvim/issues/643)) ([e564be1](https://github.com/stevearc/conform.nvim/commit/e564be103a59b32e211977b0833c12869182be7d))
+* support reformat-gherkin ([#652](https://github.com/stevearc/conform.nvim/issues/652)) ([8ce4bbd](https://github.com/stevearc/conform.nvim/commit/8ce4bbd3526e3fd8d190ea3744f8c397044c0dc8))
+
+
+### Bug Fixes
+
+* **csharpier:** update the command to run `dotnet csharpier` ([#649](https://github.com/stevearc/conform.nvim/issues/649)) ([c309423](https://github.com/stevearc/conform.nvim/commit/c309423479f83f561d68d93d74c899f1683834f7))
+* give priority to most specific piece of compound filetype ([#630](https://github.com/stevearc/conform.nvim/issues/630)) ([7831107](https://github.com/stevearc/conform.nvim/commit/783110741669a52b85cfac41f499c8162c4423fa))
+* incorrect filetype calculation ([b788593](https://github.com/stevearc/conform.nvim/commit/b788593a9fa658b47bc30a04d8f0f7dc98144b14))
+* **ruff_format:** add explicit range format args [#638](https://github.com/stevearc/conform.nvim/issues/638) ([59088eb](https://github.com/stevearc/conform.nvim/commit/59088eb6fea54e5a27e719df160329a0ead86b5c))
+
 ## [8.4.0](https://github.com/stevearc/conform.nvim/compare/v8.3.0...v8.4.0) (2025-01-22)
 
 
