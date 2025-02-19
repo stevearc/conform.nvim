@@ -32,7 +32,7 @@ local function apply_text_edits(text_edits, bufnr, offset_encoding, dry_run, und
     return #text_edits > 0
   else
     if undojoin then
-      vim.cmd.undojoin()
+      pcall(vim.cmd.undojoin)
     end
     vim.lsp.util.apply_text_edits(text_edits, bufnr, offset_encoding)
     return #text_edits > 0
