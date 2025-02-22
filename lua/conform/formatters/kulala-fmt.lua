@@ -5,6 +5,6 @@ return {
     description = "An opinionated .http and .rest files linter and formatter.",
   },
   command = "kulala-fmt",
-  args = { "$FILENAME" },
+  args = { "format", "$FILENAME" },
   stdin = false,
 }
