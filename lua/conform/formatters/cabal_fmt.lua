@@ -4,5 +4,6 @@ return {
     description = "Format cabal files with cabal-fmt",
   },
   command = "cabal-fmt",
-  stdin = true,
+  args = { "--inplace", "$FILENAME" },
+  stdin = false,
 }
