@@ -337,6 +337,7 @@ You can view this list in vim with `:help conform-formatters`
 - [ruff_format](https://docs.astral.sh/ruff/) - An extremely fast Python linter, written in Rust. Formatter subcommand.
 - [ruff_organize_imports](https://docs.astral.sh/ruff/) - An extremely fast Python linter, written in Rust. Organize imports.
 - [rufo](https://github.com/ruby-formatter/rufo) - Rufo is an opinionated ruby formatter.
+- [runic](https://github.com/fredrikekre/Runic.jl) - Julia code formatter.
 - [rustfmt](https://github.com/rust-lang/rustfmt) - A tool for formatting rust code according to style guidelines.
 - [rustywind](https://github.com/avencera/rustywind) - A tool for formatting Tailwind CSS classes.
 - [scalafmt](https://github.com/scalameta/scalafmt) - Code formatter for Scala.
