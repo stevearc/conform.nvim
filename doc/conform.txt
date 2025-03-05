@@ -251,9 +251,7 @@ FORMATTERS                                                    *conform-formatter
 
 `air` - R formatter and language server.
 `alejandra` - The Uncompromising Nix Code Formatter.
-`ansible-lint` - ansible-lint checks playbooks for practices and behavior 
-               that could potentially be improved and can fix some of 
-               the most common ones for you 
+`ansible-lint` - ansible-lint with --fix
 `asmfmt` - Go Assembler Formatter
 `ast-grep` - A CLI tool for code structural search, lint and rewriting. Written
            in Rust.
