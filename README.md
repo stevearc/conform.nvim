@@ -182,6 +182,7 @@ You can view this list in vim with `:help conform-formatters`
 
 - [air](https://github.com/posit-dev/air) - R formatter and language server.
 - [alejandra](https://kamadorueda.com/alejandra/) - The Uncompromising Nix Code Formatter.
+- [ansible-lint](https://github.com/ansible/ansible-lint) - ansible-lint checks playbooks for practices and behavior that could potentially be improved and can fix some of the most common ones for you 
 - [asmfmt](https://github.com/klauspost/asmfmt) - Go Assembler Formatter
 - [ast-grep](https://ast-grep.github.io/) - A CLI tool for code structural search, lint and rewriting. Written in Rust.
 - [astyle](https://astyle.sourceforge.net/astyle.html) - A Free, Fast, and Small Automatic Formatter for C, C++, C++/CLI, Objective-C, C#, and Java Source Code.
