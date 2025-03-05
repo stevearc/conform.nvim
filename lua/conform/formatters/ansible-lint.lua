@@ -2,7 +2,7 @@
 return {
   meta = {
     url = "https://github.com/ansible/ansible-lint",
-    description = "ansible-lint with --fix",
+    description = "ansible-lint with --fix.",
   },
   command = "ansible-lint",
   args = { "-f", "codeclimate", "-q", "--fix=all", "$FILENAME" },
