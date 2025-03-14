@@ -97,6 +97,7 @@ options = {
 options = {
   -- The default edition of Rust to use when no Cargo.toml file is found
   default_edition = "2021",
+  default_toolchain = "stable"
 }
 ```
 
