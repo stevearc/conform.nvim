@@ -731,6 +731,17 @@ Get information about a formatter (including availability)
 | bufnr     | `nil\|integer` |                           |
 <!-- /API -->
 
+## FAQ
+
+**Q:** Instead of passing `lsp_format = "..."`, could you just define a `lsp` formatter? \
+**A:** No. [#61](https://github.com/stevearc/conform.nvim/issues/61)
+
+**Q:** Is it possible to define a custom formatter that runs a lua function? \
+**A:** Yes, but with some very strict constraints. [#653](https://github.com/stevearc/conform.nvim/issues/653)
+
+**Q:** Can I run a command like `:EslintFixAll` or a LSP code action as a formatter? \
+**A:** No. [#502](https://github.com/stevearc/conform.nvim/issues/502), [#466](https://github.com/stevearc/conform.nvim/issues/466), [#222](https://github.com/stevearc/conform.nvim/issues/222)
+
 ## Acknowledgements
 
 Thanks to
