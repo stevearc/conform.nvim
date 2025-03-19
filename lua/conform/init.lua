@@ -792,7 +792,7 @@ M.get_formatter_info = function(formatter, bufnr)
 
   if vim.fn.executable(command) == 0 then
     available = false
-    available_msg = "Command not found"
+    available_msg = string.format("Command '%s' not found", command)
   elseif config.condition and not config.condition(config, ctx) then
     available = false
     available_msg = "Condition failed"
