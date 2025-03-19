@@ -22,6 +22,7 @@ Lightweight yet powerful formatter plugin for Neovim
   - [list_formatters_to_run(bufnr)](#list_formatters_to_runbufnr)
   - [list_all_formatters()](#list_all_formatters)
   - [get_formatter_info(formatter, bufnr)](#get_formatter_infoformatter-bufnr)
+- [FAQ](#faq)
 - [Acknowledgements](#acknowledgements)
 
 <!-- /TOC -->
