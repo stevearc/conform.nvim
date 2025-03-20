@@ -10,6 +10,7 @@ Lightweight yet powerful formatter plugin for Neovim
 - [Setup](#setup)
 - [Formatters](#formatters)
 - [Customizing formatters](#customizing-formatters)
+  - [Magic strings](#magic-strings)
 - [Recipes](#recipes)
 - [Debugging](#debugging)
 - [Advanced topics](#advanced-topics)
@@ -460,6 +461,15 @@ require("conform").formatters.shfmt = {
   args = { "-i", "2", "-filename", "$FILENAME" },
 }
 ```
+
+### Magic strings
+
+The following magic strings are available in `args` and `range_args`. They will be dynamically replaced at runtime with the relevant value.
+
+- `$FILENAME` - absolute path to the file
+- `$DIRNAME` - absolute path to the directory that contains the file
+- `$RELATIVE_FILEPATH` - relative path to the file
+- `$EXTENSION` - the file extension, e.g. `.py`
 
 ## Recipes
 
