@@ -1,5 +1,23 @@
 # Changelog
 
+## [9.1.0](https://github.com/stevearc/conform.nvim/compare/v9.0.0...v9.1.0) (2025-03-20)
+
+
+### Features
+
+* add ansible-lint ([#639](https://github.com/stevearc/conform.nvim/issues/639)) ([4e34573](https://github.com/stevearc/conform.nvim/commit/4e3457308f220dea5dc548e83a59f43c979bd82d))
+* add runic formatter ([#657](https://github.com/stevearc/conform.nvim/issues/657)) ([b443a93](https://github.com/stevearc/conform.nvim/commit/b443a93e6400d1b14f737161b3ad408d3049b57a))
+
+
+### Bug Fixes
+
+* allow '_' to specify keyword options ([f9ef25a](https://github.com/stevearc/conform.nvim/commit/f9ef25a7ef00267b7d13bfc00b0dea22d78702d5))
+* **cabal-fmt:** pass filename to expand pragmas ([#662](https://github.com/stevearc/conform.nvim/issues/662)) ([74e541e](https://github.com/stevearc/conform.nvim/commit/74e541eba7219f31517fbc505f935b068ed8a791))
+* **kulala-fmt:** update args for new version ([#660](https://github.com/stevearc/conform.nvim/issues/660)) ([b5bcbf6](https://github.com/stevearc/conform.nvim/commit/b5bcbf690981f4a4290be55bba2b9b76c8f2f8ba))
+* **latexindent:** regression in `f2063898e9` ([#661](https://github.com/stevearc/conform.nvim/issues/661)) ([db8a4a9](https://github.com/stevearc/conform.nvim/commit/db8a4a9edb217067b1d7a2e0362c74bfe9cc944d))
+* **prettypst:** stdin and stdout args ([#663](https://github.com/stevearc/conform.nvim/issues/663)) ([8512bba](https://github.com/stevearc/conform.nvim/commit/8512bbaefbfac24fb58d6b4f828bf1e986f61d04))
+* uncaught undojoin after undo error ([#658](https://github.com/stevearc/conform.nvim/issues/658)) ([03958a3](https://github.com/stevearc/conform.nvim/commit/03958a37a2e0ae6a3ca2b1cbcf0c91cd6ecbdb46))
+
 ## [9.0.0](https://github.com/stevearc/conform.nvim/compare/v8.4.0...v9.0.0) (2025-02-15)
 
 
