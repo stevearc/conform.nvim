@@ -52,7 +52,7 @@ local function check_for_default_opts(conf)
     if type(k) == "string" then
       notify(
         string.format(
-          'conform.setup: the "_" and "*" keys in formatters_by_ft do not support configuring format options, such as "%s"',
+          'conform.setup: the "*" key in formatters_by_ft does not support configuring format options, such as "%s"',
           k
         ),
         vim.log.levels.WARN
@@ -72,7 +72,6 @@ M.setup = function(opts)
 
   M.formatters = vim.tbl_extend("force", M.formatters, opts.formatters or {})
   M.formatters_by_ft = vim.tbl_extend("force", M.formatters_by_ft, opts.formatters_by_ft or {})
-  check_for_default_opts(M.formatters_by_ft["_"])
   check_for_default_opts(M.formatters_by_ft["*"])
   M.default_format_opts =
     vim.tbl_extend("force", M.default_format_opts, opts.default_format_opts or {})
