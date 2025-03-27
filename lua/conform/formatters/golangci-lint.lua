@@ -2,7 +2,7 @@
 return {
   meta = {
     url = "https://golangci-lint.run/usage/configuration/#fmt",
-    description = "A golang linter and formatter.",
+    description = "Fast linters runner for Go (with formatter).",
   },
   command = "golangci-lint",
   args = { "fmt", "--stdin" },
