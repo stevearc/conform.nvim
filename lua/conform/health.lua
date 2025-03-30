@@ -74,7 +74,7 @@ M.show_window = function()
 
   if vim.fn.has("nvim-0.10") == 0 then
     table.insert(lines, "Neovim 0.10 or later is required")
-    table.insert(highlights, { "DiagnosticError", #lines, 0, -1 })
+    table.insert(highlights, { "DiagnosticError", #lines, 0, #lines[#lines] })
   end
 
   table.insert(lines, string.format("Log file: %s", logfile))
@@ -144,7 +144,7 @@ M.show_window = function()
   end
 
   table.insert(lines, "Formatters for this buffer:")
-  table.insert(highlights, { "Title", #lines, 0, -1 })
+  table.insert(highlights, { "Title", #lines, 0, #lines[#lines] })
   local lsp_clients = lsp_format.get_format_clients({ bufnr = vim.api.nvim_get_current_buf() })
   local has_lsp_formatter = not vim.tbl_isempty(lsp_clients)
   if has_lsp_formatter then
@@ -163,7 +163,7 @@ M.show_window = function()
 
   table.insert(lines, "")
   table.insert(lines, "Other formatters:")
-  table.insert(highlights, { "Title", #lines, 0, -1 })
+  table.insert(highlights, { "Title", #lines, 0, #lines[#lines] })
   for _, formatter in ipairs(conform.list_all_formatters()) do
     if not seen[formatter.name] then
       append_formatter_info(formatter)
@@ -199,7 +199,11 @@ M.show_window = function()
   })
   local ns = vim.api.nvim_create_namespace("conform")
   for _, hl in ipairs(highlights) do
-    vim.api.nvim_buf_add_highlight(bufnr, ns, hl[1], hl[2] - 1, hl[3], hl[4])
+    local group, lnum, col_start, col_end = unpack(hl)
+    vim.api.nvim_buf_set_extmark(bufnr, ns, lnum - 1, col_start, {
+      end_col = col_end,
+      hl_group = group,
+    })
   end
 end
 
