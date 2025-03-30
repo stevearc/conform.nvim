@@ -114,7 +114,14 @@ function M.format(options, callback)
           end
         end,
       })
-      client.request(method, params, function(err, result, ctx, _)
+      local request = vim.fn.has("nvim-0.11") == 1
+          and function(c, ...)
+            return c:request(...)
+          end
+        or function(c, ...)
+          return c.request(...)
+        end
+      request(client, method, params, function(err, result, ctx, _)
         vim.api.nvim_del_autocmd(auto_id)
         if not result then
           return callback(err or "No result returned from LSP formatter")
@@ -150,9 +157,16 @@ function M.format(options, callback)
   else
     local timeout_ms = options.timeout_ms or 1000
     local did_edit = false
+    local request_sync = vim.fn.has("nvim-0.11") == 1
+        and function(c, ...)
+          return c:request_sync(...)
+        end
+      or function(c, ...)
+        return c.request_sync(...)
+      end
     for _, client in pairs(clients) do
       local params = set_range(client, util.make_formatting_params(options.formatting_options))
-      local result, err = client.request_sync(method, params, timeout_ms, bufnr)
+      local result, err = request_sync(client, method, params, timeout_ms, bufnr)
       if result and result.result then
         local this_did_edit = apply_text_edits(
           result.result,
