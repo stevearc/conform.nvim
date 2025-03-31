@@ -237,8 +237,10 @@ local function get_matching_filetype(bufnr)
     bufnr = vim.api.nvim_get_current_buf()
   end
   local filetypes = vim.split(vim.bo[bufnr].filetype, ".", { plain = true })
-  -- Reverse the list so we can check the most specific filetypes first
-  local rev_filetypes = {}
+  -- Reverse the list so we can check the most specific filetypes first.
+  -- Start with the whole filetype, so users can specify an entire compound filetype if they want.
+  -- (e.g. "markdown.vimwiki")
+  local rev_filetypes = { vim.bo[bufnr].filetype }
   for i = #filetypes, 1, -1 do
     table.insert(rev_filetypes, filetypes[i])
   end
