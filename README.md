@@ -261,6 +261,7 @@ You can view this list in vim with `:help conform-formatters`
 - [goimports](https://pkg.go.dev/golang.org/x/tools/cmd/goimports) - Updates your Go import lines, adding missing ones and removing unreferenced ones.
 - [goimports-reviser](https://github.com/incu6us/goimports-reviser) - Right imports sorting & code formatting tool (goimports alternative).
 - [gojq](https://github.com/itchyny/gojq) - Pure Go implementation of jq.
+- [golangci-lint](https://golangci-lint.run/) - Fast linters runner for Go (with formatter).
 - [golines](https://github.com/segmentio/golines) - A golang formatter that fixes long lines.
 - [google-java-format](https://github.com/google/google-java-format) - Reformats Java source code according to Google Java Style.
 - [grain_format](https://grain-lang.org/docs/tooling/grain_cli#grain-format) - Code formatter for the grain programming language.
