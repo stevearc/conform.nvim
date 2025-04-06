@@ -393,6 +393,8 @@ FORMATTERS                                                    *conform-formatter
 `liquidsoap-prettier` - A binary to format Liquidsoap scripts
 `llf` - A LaTeX reformatter / beautifier.
 `lua-format` - Code formatter for Lua.
+`mago_format` - Mago is a toolchain for PHP that aims to provide a set of tools to help developers write better code.
+`mago_lint` - Mago is a toolchain for PHP that aims to provide a set of tools to help developers write better code.
 `markdown-toc` - API and CLI for generating a markdown TOC (table of contents)
                for a README or any markdown files.
 `markdownfmt` - Like gofmt, but for Markdown.
