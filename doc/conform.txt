@@ -518,6 +518,7 @@ FORMATTERS                                                    *conform-formatter
 `trim_newlines` - Trim empty lines at the end of the file.
 `trim_whitespace` - Trim trailing whitespace.
 `twig-cs-fixer` - Automatically fix Twig Coding Standards issues
+`typespec` - TypeSpec compiler and CLI.
 `typos` - Source code spell checker
 `typstyle` - Beautiful and reliable typst code formatter.
 `ufmt` - Safe, atomic formatting with black and µsort.
