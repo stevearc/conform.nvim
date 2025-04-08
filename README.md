@@ -380,6 +380,7 @@ You can view this list in vim with `:help conform-formatters`
 - [trim_newlines](https://github.com/stevearc/conform.nvim/blob/master/lua/conform/formatters/trim_newlines.lua) - Trim empty lines at the end of the file.
 - [trim_whitespace](https://github.com/stevearc/conform.nvim/blob/master/lua/conform/formatters/trim_whitespace.lua) - Trim trailing whitespace.
 - [twig-cs-fixer](https://github.com/VincentLanglet/Twig-CS-Fixer) - Automatically fix Twig Coding Standards issues
+- [typespec](https://github.com/microsoft/typespec) - TypeSpec compiler and CLI.
 - [typos](https://github.com/crate-ci/typos) - Source code spell checker
 - [typstyle](https://github.com/Enter-tainer/typstyle) - Beautiful and reliable typst code formatter.
 - [ufmt](https://github.com/omnilib/ufmt) - Safe, atomic formatting with black and µsort.
