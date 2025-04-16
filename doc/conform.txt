@@ -150,10 +150,12 @@ setup({opts})                                                      *conform.setu
               {stop_after_first} `nil|boolean` Only run the first available
                                  formatter in the list. Defaults to false.
           {format_after_save} `nil|conform.FormatOpts|fun(bufnr: integer): nil|conform.FormatOpts`
+                             , nil|fun(err: nil|string, did_edit: nil|boolean)
                              If this is set, Conform will run the formatter
                              asynchronously after save. It will pass the table
                              to conform.format(). This can also be a function
-                             that returns the table.
+                             that returns the table (and an optional callback
+                             that is run after formatting).
           {log_level}        `nil|integer` Set the log level (e.g.
                              `vim.log.levels.DEBUG`). Use `:ConformInfo` to see
                              the location of the log file.
