@@ -396,6 +396,15 @@ local has_notified_ft_no_formatters = {}
 ---@param opts? conform.FormatOpts
 ---@param callback? fun(err: nil|string, did_edit: nil|boolean) Called once formatting has completed
 ---@return boolean True if any formatters were attempted
+---@example
+--- -- Synchronously format the current buffer
+--- conform.format({ lsp_format = "fallback" })
+--- -- Asynchronously format the current buffer; will not block the UI
+--- conform.format({ async = true }, function(err, did_edit)
+---   -- called after formatting
+--- end
+--- -- Format the current buffer with a specific formatter
+--- conform.format({ formatters = { "ruff_fix" } })
 M.format = function(opts, callback)
   if vim.fn.has("nvim-0.10") == 0 then
     notify_once("conform.nvim requires Neovim 0.10+", vim.log.levels.ERROR)

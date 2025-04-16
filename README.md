@@ -698,6 +698,18 @@ Returns:
 | ------- | ------------------------------------- |
 | boolean | True if any formatters were attempted |
 
+**Examples:**
+```lua
+-- Synchronously format the current buffer
+conform.format({ lsp_format = "fallback" })
+-- Asynchronously format the current buffer; will not block the UI
+conform.format({ async = true }, function(err, did_edit)
+  -- called after formatting
+end
+-- Format the current buffer with a specific formatter
+conform.format({ formatters = { "ruff_fix" } })
+```
+
 ### list_formatters(bufnr)
 
 `list_formatters(bufnr): conform.FormatterInfo[]` \
