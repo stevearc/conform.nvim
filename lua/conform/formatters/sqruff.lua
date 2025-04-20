@@ -7,10 +7,11 @@ return {
     description = "sqruff is a SQL linter and formatter written in Rust.",
   },
   command = "sqruff",
-  args = { "fix", "-" },
+  stdin = false,
+  args = { "fix", "--force", "$FILENAME" },
   cwd = util.root_file({
     -- https://github.com/quarylabs/sqruff/tree/main#configuration
     ".sqruff",
   }),
-  require_cwd = true,
+  require_cwd = false,
 }
