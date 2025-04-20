@@ -2,7 +2,7 @@
 return {
   meta = {
     url = "https://github.com/DanielGavin/ols",
-    description = "Auto-formatter for the Odin programming language",
+    description = "Auto-formatter for the Odin programming language.",
   },
   command = "odinfmt",
   args = {
