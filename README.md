@@ -312,6 +312,7 @@ You can view this list in vim with `:help conform-formatters`
 - [nufmt](https://github.com/nushell/nufmt) - The nushell formatter.
 - [ocamlformat](https://github.com/ocaml-ppx/ocamlformat) - Auto-formatter for OCaml code.
 - [ocp-indent](https://github.com/OCamlPro/ocp-indent) - Automatic indentation of OCaml source files.
+- [odinfmt](https://github.com/DanielGavin/ols) - Auto-formatter for the Odin programming language.
 - [opa_fmt](https://www.openpolicyagent.org/docs/latest/cli/#opa-fmt) - Format Rego files using `opa fmt` command.
 - [ormolu](https://hackage.haskell.org/package/ormolu) - A formatter for Haskell source code.
 - [packer_fmt](https://developer.hashicorp.com/packer/docs/commands/fmt) - The packer fmt Packer command is used to format HCL2 configuration files to a canonical format and style.
