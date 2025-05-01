@@ -5,6 +5,6 @@ return {
     description = "The opinionated C# code formatter.",
   },
   command = "dotnet",
-  args = { "csharpier", "--write-stdout" },
+  args = { "csharpier", "format", "$FILENAME", "--write-stdout" },
   stdin = true,
 }
