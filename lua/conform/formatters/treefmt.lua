@@ -5,5 +5,5 @@ return {
     description = "one CLI to format your repo",
   },
   command = "treefmt",
-			args = { "--stdin", "$FILENAME" },
+  args = { "--stdin", "$FILENAME" },
 }
