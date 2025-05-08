@@ -27,7 +27,6 @@ end
 local function get_command()
   local in_path = vim.fn.executable("csharpier")
 
-  validate_dotnet()
   if not in_path then
     validate_dotnet()
   end
@@ -51,7 +50,7 @@ local function build_args()
 
   local v1_api = major_version >= 1
 
-  local args = v1_api and { "format", "$FILENAME" } or { "--write-stdout" }
+  local args = v1_api and { "format", "$FILENAME", "--write-stdout" } or { "--write-stdout" }
 
   ---@type conform.FileFormatterConfig
   return {
@@ -61,7 +60,7 @@ local function build_args()
     },
     command = command,
     args = args,
-    stdin = not v1_api,
+    stdin = true,
     require_cwd = false,
   }
 end
