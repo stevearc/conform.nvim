@@ -275,6 +275,7 @@ You can view this list in vim with `:help conform-formatters`
 - [injected](doc/advanced_topics.md#injected-language-formatting-code-blocks) - Format treesitter injected languages.
 - [inko](https://inko-lang.org/) - A language for building concurrent software with confidence
 - [isort](https://github.com/PyCQA/isort) - Python utility / library to sort imports alphabetically and automatically separate them into sections and by type.
+- [janet-format](https://github.com/janet-lang/spork) - A formatter for Janet code.
 - [joker](https://github.com/candid82/joker) - Small Clojure interpreter, linter and formatter.
 - [jq](https://github.com/stedolan/jq) - Command-line JSON processor.
 - [js_beautify](https://github.com/beautifier/js-beautify) - Beautifier for javascript.

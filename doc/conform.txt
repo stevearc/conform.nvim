@@ -389,6 +389,7 @@ FORMATTERS                                                    *conform-formatter
 `inko` - A language for building concurrent software with confidence
 `isort` - Python utility / library to sort imports alphabetically and
         automatically separate them into sections and by type.
+`janet-format` - A formatter for Janet code.
 `joker` - Small Clojure interpreter, linter and formatter.
 `jq` - Command-line JSON processor.
 `js_beautify` - Beautifier for javascript.
