@@ -1,5 +1,32 @@
 # Changelog
 
+## [9.1.0](https://github.com/stevearc/conform.nvim/compare/v9.0.0...v9.1.0) (2025-05-09)
+
+
+### Features
+
+* add ansible-lint ([#639](https://github.com/stevearc/conform.nvim/issues/639)) ([4e34573](https://github.com/stevearc/conform.nvim/commit/4e3457308f220dea5dc548e83a59f43c979bd82d))
+* add formatter definition for odinfmt ([#686](https://github.com/stevearc/conform.nvim/issues/686)) ([2b1d8a4](https://github.com/stevearc/conform.nvim/commit/2b1d8a442ca1b75b9c2d5de0f0f7c1ea15a5864d))
+* add golangci-lint fmt ([#678](https://github.com/stevearc/conform.nvim/issues/678)) ([db37c57](https://github.com/stevearc/conform.nvim/commit/db37c57658cd31cefd3aff5208d4b928ec4e52e1))
+* add janet-format for Janet lang ([#706](https://github.com/stevearc/conform.nvim/issues/706)) ([d8497af](https://github.com/stevearc/conform.nvim/commit/d8497af9a7967f6f25c19dd7dc218ced15ba13ab))
+* add runic formatter ([#657](https://github.com/stevearc/conform.nvim/issues/657)) ([b443a93](https://github.com/stevearc/conform.nvim/commit/b443a93e6400d1b14f737161b3ad408d3049b57a))
+* add support for mago ([#684](https://github.com/stevearc/conform.nvim/issues/684)) ([74b8332](https://github.com/stevearc/conform.nvim/commit/74b8332feff2cc18299b6cdf54f256b492637f4e))
+* add support for typespec ([#687](https://github.com/stevearc/conform.nvim/issues/687)) ([372fc52](https://github.com/stevearc/conform.nvim/commit/372fc521f8421b7830ea6db4d6ea3bae1c77548c))
+
+
+### Bug Fixes
+
+* allow '_' to specify keyword options ([f9ef25a](https://github.com/stevearc/conform.nvim/commit/f9ef25a7ef00267b7d13bfc00b0dea22d78702d5))
+* **cabal-fmt:** pass filename to expand pragmas ([#662](https://github.com/stevearc/conform.nvim/issues/662)) ([74e541e](https://github.com/stevearc/conform.nvim/commit/74e541eba7219f31517fbc505f935b068ed8a791))
+* change LSP fallback logic for wildcard filetypes ([d513820](https://github.com/stevearc/conform.nvim/commit/d5138205d085a02602e6922e22e636ba8cee1fbd))
+* deprecated LSP warnings ([#681](https://github.com/stevearc/conform.nvim/issues/681)) ([819c283](https://github.com/stevearc/conform.nvim/commit/819c283db24211fd8ed2732b89a92ff9daa879b6))
+* formatters_by_ft can map entire compound filetype ([#679](https://github.com/stevearc/conform.nvim/issues/679)) ([b1a7532](https://github.com/stevearc/conform.nvim/commit/b1a75324ddf96b7bb84963a297b1ed334db087c0))
+* **kulala-fmt:** update args for new version ([#660](https://github.com/stevearc/conform.nvim/issues/660)) ([b5bcbf6](https://github.com/stevearc/conform.nvim/commit/b5bcbf690981f4a4290be55bba2b9b76c8f2f8ba))
+* **latexindent:** regression in `f2063898e9` ([#661](https://github.com/stevearc/conform.nvim/issues/661)) ([db8a4a9](https://github.com/stevearc/conform.nvim/commit/db8a4a9edb217067b1d7a2e0362c74bfe9cc944d))
+* **prettypst:** stdin and stdout args ([#663](https://github.com/stevearc/conform.nvim/issues/663)) ([8512bba](https://github.com/stevearc/conform.nvim/commit/8512bbaefbfac24fb58d6b4f828bf1e986f61d04))
+* **sqruff:** update args, stdin and require_cwd ([#683](https://github.com/stevearc/conform.nvim/issues/683)) ([54eac08](https://github.com/stevearc/conform.nvim/commit/54eac08b5d00e637e150cfe4b1fac50afcc32eb7))
+* uncaught undojoin after undo error ([#658](https://github.com/stevearc/conform.nvim/issues/658)) ([03958a3](https://github.com/stevearc/conform.nvim/commit/03958a37a2e0ae6a3ca2b1cbcf0c91cd6ecbdb46))
+
 ## [9.0.0](https://github.com/stevearc/conform.nvim/compare/v8.4.0...v9.0.0) (2025-02-15)
 
 
