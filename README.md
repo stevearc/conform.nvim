@@ -228,6 +228,7 @@ You can view this list in vim with `:help conform-formatters`
 - [dcm_format](https://dcm.dev/docs/cli/formatting/format/) - Formats .dart files.
 - [deno_fmt](https://deno.land/manual/tools/formatter) - Use [Deno](https://deno.land/) to format TypeScript, JavaScript/JSON and markdown.
 - [dfmt](https://github.com/dlang-community/dfmt) - Formatter for D source code.
+- [dioxus](https://github.com/dioxuslabs/dioxus) - Format `rsx!` snippets in Rust files.
 - [djlint](https://github.com/Riverside-Healthcare/djLint) - ✨ HTML Template Linter and Formatter. Django - Jinja - Nunjucks - Handlebars - GoLang.
 - [docformatter](https://pypi.org/project/docformatter/) - docformatter automatically formats docstrings to follow a subset of the PEP 257 conventions.
 - [docstrfmt](https://github.com/LilSpazJoekp/docstrfmt) - reStructuredText formatter.
