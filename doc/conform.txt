@@ -333,6 +333,7 @@ FORMATTERS                                                    *conform-formatter
 `docstrfmt` - reStructuredText formatter.
 `doctoc` - Generates table of contents for markdown files inside local git
          repository.
+`dioxus` - Format `rsx!` snippets in Rust files.
 `dprint` - Pluggable and configurable code formatting platform written in Rust.
 `easy-coding-standard` - ecs - Use Coding Standard with 0-knowledge of PHP-CS-
                        Fixer and PHP_CodeSniffer.
