@@ -380,6 +380,7 @@ FORMATTERS                                                    *conform-formatter
 `grain_format` - Code formatter for the grain programming language.
 `hcl` - A formatter for HCL files.
 `hindent` - Haskell pretty printer.
+`hledger-fmt` - An opinionated hledger's journal files formatter.
 `html_beautify` - Beautifier for html.
 `htmlbeautifier` - A normaliser/beautifier for HTML that also understands
                  embedded Ruby. Ideal for tidying up Rails templates.

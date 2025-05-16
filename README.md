@@ -268,6 +268,7 @@ You can view this list in vim with `:help conform-formatters`
 - [grain_format](https://grain-lang.org/docs/tooling/grain_cli#grain-format) - Code formatter for the grain programming language.
 - [hcl](https://github.com/hashicorp/hcl) - A formatter for HCL files.
 - [hindent](https://github.com/mihaimaruseac/hindent) - Haskell pretty printer.
+- [hledger-fmt](https://github.com/mondeja/hledger-fmt) - An opinionated hledger's journal files formatter.
 - [html_beautify](https://github.com/beautifier/js-beautify) - Beautifier for html.
 - [htmlbeautifier](https://github.com/threedaymonk/htmlbeautifier) - A normaliser/beautifier for HTML that also understands embedded Ruby. Ideal for tidying up Rails templates.
 - [hurlfmt](https://hurl.dev/) - Formats hurl files.
