@@ -6,4 +6,5 @@ return {
   },
   command = "cljstyle",
   args = { "pipe" },
+  cwd = require("conform.util").root_file({ ".cljstyle" }),
 }
