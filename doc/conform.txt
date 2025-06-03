@@ -532,6 +532,7 @@ FORMATTERS                                                    *conform-formatter
         formatting.
 `tofu_fmt` - The tofu-fmt command rewrites OpenTofu configuration files to a
            canonical format and style.
+`treefmt` - one CLI to format your repo.
 `trim_newlines` - Trim empty lines at the end of the file.
 `trim_whitespace` - Trim trailing whitespace.
 `twig-cs-fixer` - Automatically fix Twig Coding Standards issues
