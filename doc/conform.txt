@@ -518,8 +518,9 @@ FORMATTERS                                                    *conform-formatter
 `stylish-haskell` - Haskell code prettifier.
 `stylua` - An opinionated code formatter for Lua.
 `superhtml` - HTML Language Server and Templating Language Library.
-`swift_format` - Swift formatter from apple. Requires building from source with
-               `swift build`.
+`swift` - Official Swift formatter. Requires Swift 6.0 or later.
+`swift_format` - Official Swift formatter. For Swift 6.0 or later prefer setting
+               the `swift` formatter instead.
 `swiftformat` - SwiftFormat is a code library and command-line tool for
               reformatting `swift` code on macOS or Linux.
 `swiftlint` - A tool to enforce Swift style and conventions.
