@@ -6,5 +6,6 @@ return {
   },
   command = "dcm",
   args = { "format", "$FILENAME" },
+  exit_codes = { 0, 2 },
   stdin = false,
 }
