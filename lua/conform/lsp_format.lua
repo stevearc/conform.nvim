@@ -70,14 +70,15 @@ function M.get_format_clients(options)
   return clients
 end
 
----@param options table
+---@param options conform.FormatOpts
 ---@param callback fun(err?: string, did_edit?: boolean)
 function M.format(options, callback)
   options = options or {}
-  if not options.bufnr or options.bufnr == 0 then
-    options.bufnr = vim.api.nvim_get_current_buf()
-  end
   local bufnr = options.bufnr
+  if not bufnr or bufnr == 0 then
+    bufnr = vim.api.nvim_get_current_buf()
+    options.bufnr = bufnr
+  end
   local range = options.range
   local method = range and "textDocument/rangeFormatting" or "textDocument/formatting"
 
@@ -104,6 +105,7 @@ function M.format(options, callback)
       if not client then
         return callback(nil, did_edit)
       end
+      --- @diagnostic disable-next-line: param-type-mismatch
       local params = set_range(client, util.make_formatting_params(options.formatting_options))
       local auto_id = vim.api.nvim_create_autocmd("LspDetach", {
         buffer = bufnr,
@@ -165,6 +167,7 @@ function M.format(options, callback)
         return c.request_sync(...)
       end
     for _, client in pairs(clients) do
+      --- @diagnostic disable-next-line: param-type-mismatch
       local params = set_range(client, util.make_formatting_params(options.formatting_options))
       local result, err = request_sync(client, method, params, timeout_ms, bufnr)
       if result and result.result then

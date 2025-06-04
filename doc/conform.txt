@@ -214,6 +214,8 @@ format({opts}, {callback}): boolean                               *conform.forma
                              using LSP formatting
           {filter}           `nil|fun(client: table): boolean` Passed to |vim.ls
                              p.buf.format| when using LSP formatting
+          {formatting_options} `nil|table` Passed to |vim.lsp.buf.format| when
+                             using LSP formatting
       {callback} `nil|fun(err: nil|string, did_edit: nil|boolean)` Called once
                  formatting has completed
     Returns:

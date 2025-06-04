@@ -86,6 +86,7 @@
 ---@field id? integer Passed to |vim.lsp.buf.format| when using LSP formatting
 ---@field name? string Passed to |vim.lsp.buf.format| when using LSP formatting
 ---@field filter? fun(client: table): boolean Passed to |vim.lsp.buf.format| when using LSP formatting
+---@field formatting_options? table Passed to |vim.lsp.buf.format| when using LSP formatting
 
 ---@class (exact) conform.DefaultFormatOpts
 ---@field timeout_ms? integer Time in milliseconds to block for formatting. Defaults to 1000. No effect if async = true.
@@ -97,6 +98,7 @@
 ---@field id? integer Passed to |vim.lsp.buf.format| when using LSP formatting
 ---@field name? string Passed to |vim.lsp.buf.format| when using LSP formatting
 ---@field filter? fun(client: table): boolean Passed to |vim.lsp.buf.format| when using LSP formatting
+---@field formatting_options? table Passed to |vim.lsp.buf.format| when using LSP formatting
 
 ---@class conform.FormatLinesOpts
 ---@field timeout_ms? integer Time in milliseconds to block for formatting. Defaults to 1000. No effect if async = true.
