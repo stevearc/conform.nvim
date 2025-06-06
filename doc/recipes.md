@@ -107,6 +107,54 @@ end, {
 })
 ```
 
+## Organize Imports usign `ts_ls` language server before format
+
+Execute LSP commands before formatting file. Timeout can be reduced if using `prettierd` formatter.
+
+```lua
+require("conform").setup({
+    format_on_save = function(bufnr)
+        if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
+            return
+        end
+        local TIMEOUT = 2000
+        local bufname = vim.api.nvim_buf_get_name(bufnr)
+        if bufname:match("/node_modules/") then
+            return
+        end
+        local opts = {
+            quiet = true,
+            timeout_ms = TIMEOUT,
+            lsp_format = "fallback",
+        }
+        if
+            vim.tbl_contains({
+                "javascript",
+                "javascriptreact",
+                "typescript",
+                "typescriptreact",
+            }, vim.bo[bufnr].filetype)
+        then
+            local client = vim.lsp.get_clients({ name = "ts_ls" })[1]
+            if client then
+                local pos = vim.api.nvim_win_get_cursor(0)
+                client:exec_cmd({
+                    title = "",
+                    command = "_typescript.organizeImports",
+                    arguments = { vim.api.nvim_buf_get_name(0) },
+                }, { bufnr = 0 }, function()
+                        require("conform").format(opts)
+                        vim.cmd("noautocmd update")
+                        vim.api.nvim_win_set_cursor(0, pos)
+                    end)
+            end
+        else
+            return opts
+        end
+    end,
+})
+```
+
 ## Lazy loading with lazy.nvim
 
 Here is the recommended config for lazy-loading using lazy.nvim
