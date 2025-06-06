@@ -107,7 +107,7 @@ end, {
 })
 ```
 
-## Organize Imports usign `ts_ls` language server before format
+## Organize Imports using `ts_ls` language server before format
 
 Execute LSP commands before formatting file. Timeout can be reduced if using `prettierd` formatter.
 
