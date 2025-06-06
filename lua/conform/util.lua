@@ -246,4 +246,17 @@ M.shell_build_argv = function(cmd)
   return argv
 end
 
+---@param bufnr integer
+---@return string
+M.buf_line_ending = function(bufnr)
+  local fileformat = vim.bo[bufnr].fileformat
+  if fileformat == "dos" then
+    return "\r\n"
+  elseif fileformat == "mac" then
+    return "\r"
+  else
+    return "\n"
+  end
+end
+
 return M
