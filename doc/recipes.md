@@ -5,6 +5,7 @@
 - [Format command](#format-command)
 - [Autoformat with extra features](#autoformat-with-extra-features)
 - [Command to toggle format-on-save](#command-to-toggle-format-on-save)
+- [Organize Imports using `ts_ls`](#organize-imports-using-ts_ls)
 - [Lazy loading with lazy.nvim](#lazy-loading-with-lazynvim)
 - [Leave visual mode after range format](#leave-visual-mode-after-range-format)
 - [Run the first available formatter followed by more formatters](#run-the-first-available-formatter-followed-by-more-formatters)
@@ -107,7 +108,7 @@ end, {
 })
 ```
 
-## Organize Imports using `ts_ls` language server before format
+## Organize Imports using `ts_ls`
 
 Execute LSP commands before formatting file. Timeout can be reduced if using `prettierd` formatter.
 
