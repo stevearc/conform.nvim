@@ -304,6 +304,7 @@ FORMATTERS                                                    *conform-formatter
 `cabal_fmt` - Format cabal files with cabal-fmt.
 `caramel_fmt` - Format Caramel code.
 `cbfmt` - A tool to format codeblocks inside markdown and org documents.
+`cedar` - Formats cedar policies.
 `clang-format` - Tool to format C/C++/… code according to a set of rules and
                heuristics.
 `cljfmt` - cljfmt is a tool for detecting and fixing formatting errors in
