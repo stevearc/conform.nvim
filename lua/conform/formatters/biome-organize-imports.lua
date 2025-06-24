@@ -12,7 +12,7 @@ return {
     "--write",
     "--formatter-enabled=false",
     "--linter-enabled=false",
-    "--organize-imports-enabled=true",
+    "--assist-enabled=true",
     "--stdin-file-path",
     "$FILENAME",
   },
