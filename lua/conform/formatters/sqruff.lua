@@ -8,7 +8,7 @@ return {
   },
   command = "sqruff",
   stdin = false,
-  args = { "fix", "--force", "$FILENAME" },
+  args = { "fix", "$FILENAME" },
   cwd = util.root_file({
     -- https://github.com/quarylabs/sqruff/tree/main#configuration
     ".sqruff",
