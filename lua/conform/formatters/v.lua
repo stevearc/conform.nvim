@@ -2,7 +2,7 @@
 return {
   meta = {
     url = "https://vlang.io",
-    description = "Formats the given V codes",
+    description = "V language formatter.",
   },
   command = "v",
   args = { "fmt", "-w", "$FILENAME" },
