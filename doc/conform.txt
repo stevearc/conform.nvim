@@ -548,6 +548,7 @@ FORMATTERS                                                    *conform-formatter
 `uncrustify` - A source code beautifier for C, C++, C#, ObjectiveC, D, Java,
              Pawn and Vala.
 `usort` - Safe, minimal import sorting for Python projects.
+`v` - V language formatter.
 `verible` - The SystemVerilog formatter.
 `vsg` - Style guide enforcement for VHDL.
 `xmlformatter` - xmlformatter is an Open Source Python package, which provides

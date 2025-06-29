@@ -394,6 +394,7 @@ You can view this list in vim with `:help conform-formatters`
 - [ufmt](https://github.com/omnilib/ufmt) - Safe, atomic formatting with black and µsort.
 - [uncrustify](https://github.com/uncrustify/uncrustify) - A source code beautifier for C, C++, C#, ObjectiveC, D, Java, Pawn and Vala.
 - [usort](https://github.com/facebook/usort) - Safe, minimal import sorting for Python projects.
+- [v](https://vlang.io) - V language formatter.
 - [verible](https://github.com/chipsalliance/verible/blob/master/verilog/tools/formatter/README.md) - The SystemVerilog formatter.
 - [vsg](https://github.com/jeremiah-c-leary/vhdl-style-guide) - Style guide enforcement for VHDL.
 - [xmlformatter](https://github.com/pamoller/xmlformatter) - xmlformatter is an Open Source Python package, which provides formatting of XML documents.
