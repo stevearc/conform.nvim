@@ -163,6 +163,9 @@ require("conform").setup({
 })
 ```
 
+If you use this, conform will also set up two commands so you can turn on and off the format-on-save functionality.
+`:ConformEnable` and `:ConformDisable`
+
 See [conform.format()](#formatopts-callback) for more details about the parameters.
 
 Conform also provides a formatexpr, same as the LSP client:
