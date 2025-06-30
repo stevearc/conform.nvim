@@ -476,6 +476,8 @@ FORMATTERS                                                    *conform-formatter
                 comment support.
 `python-ly` - A Python package and commandline tool to manipulate LilyPond
             files.
+`pyupgrade` - A tool to automatically upgrade syntax for newer versions of
+            Python.
 `reformat-gherkin` - Formatter for Gherkin language.
 `reorder-python-imports` - Rewrites source to reorder python imports
 `rescript-format` - The built-in ReScript formatter.

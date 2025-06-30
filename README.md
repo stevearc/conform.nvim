@@ -338,6 +338,7 @@ You can view this list in vim with `:help conform-formatters`
 - [pyink](https://github.com/google/pyink) - A Python formatter, forked from Black with a few different formatting behaviors.
 - [pyproject-fmt](https://github.com/tox-dev/toml-fmt/tree/main/pyproject-fmt) - Apply a consistent format to your pyproject.toml file with comment support.
 - [python-ly](https://github.com/frescobaldi/python-ly) - A Python package and commandline tool to manipulate LilyPond files.
+- [pyupgrade](https://github.com/asottile/pyupgrade) - A tool to automatically upgrade syntax for newer versions of Python.
 - [reformat-gherkin](https://github.com/ducminh-phan/reformat-gherkin) - Formatter for Gherkin language.
 - [reorder-python-imports](https://github.com/asottile/reorder-python-imports) - Rewrites source to reorder python imports
 - [rescript-format](https://rescript-lang.org/) - The built-in ReScript formatter.
