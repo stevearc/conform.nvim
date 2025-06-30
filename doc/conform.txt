@@ -364,6 +364,7 @@ FORMATTERS                                                    *conform-formatter
       deterministic.
 `gdformat` - A formatter for Godot's gdscript.
 `gersemi` - A formatter to make your CMake code the real treasure.
+`ghokin` - Parallelized formatter with no external dependencies for gherkin.
 `gleam` - ⭐️ A friendly language for building type-safe, scalable systems!
 `gluon_fmt` - Code formatting for the gluon programming language.
 `gn` - gn build system.
