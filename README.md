@@ -287,6 +287,7 @@ You can view this list in vim with `:help conform-formatters`
 - [just](https://github.com/casey/just) - Format Justfile.
 - [kcl](https://www.kcl-lang.io/docs/tools/cli/kcl/fmt) - The KCL Format tool modifies the files according to the KCL code style.
 - [kdlfmt](https://github.com/hougesen/kdlfmt) - A formatter for kdl documents.
+- [keep-sorted](https://github.com/google/keep-sorted) - keep-sorted is a language-agnostic formatter that sorts lines between two markers in a larger file.
 - [ktfmt](https://github.com/facebook/ktfmt) - Reformats Kotlin source code to comply with the common community standard conventions.
 - [ktlint](https://ktlint.github.io/) - An anti-bikeshedding Kotlin linter with built-in formatter.
 - [kulala-fmt](https://github.com/mistweaverco/kulala-fmt) - An opinionated .http and .rest files linter and formatter.
