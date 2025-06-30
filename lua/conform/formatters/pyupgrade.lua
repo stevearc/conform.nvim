@@ -6,7 +6,7 @@
 return {
   meta = {
     url = "https://github.com/asottile/pyupgrade",
-    description = "A tool (and pre-commit hook) to automatically upgrade syntax for newer versions of the language.",
+    description = "A tool to automatically upgrade syntax for newer versions of Python.",
   },
   command = "pyupgrade",
   args = { "--exit-zero-even-if-changed", "$FILENAME" },
