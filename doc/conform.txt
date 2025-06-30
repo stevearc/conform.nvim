@@ -403,6 +403,8 @@ FORMATTERS                                                    *conform-formatter
 `just` - Format Justfile.
 `kcl` - The KCL Format tool modifies the files according to the KCL code style.
 `kdlfmt` - A formatter for kdl documents.
+`keep-sorted` - keep-sorted is a language-agnostic formatter that sorts lines
+              between two markers in a larger file.
 `ktfmt` - Reformats Kotlin source code to comply with the common community
         standard conventions.
 `ktlint` - An anti-bikeshedding Kotlin linter with built-in formatter.
