@@ -120,16 +120,6 @@ M.setup = function(opts)
         end
       end,
     })
-    vim.api.nvim_create_autocmd("VimLeavePre", {
-      desc = "conform.nvim hack to work around Neovim bug",
-      pattern = "*",
-      group = aug,
-      callback = function()
-        -- HACK: Work around https://github.com/neovim/neovim/issues/21856
-        -- causing exit code 134 on :wq
-        vim.cmd.sleep({ args = { "1m" } })
-      end,
-    })
   end
 
   if opts.format_after_save then
