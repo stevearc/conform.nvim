@@ -62,6 +62,38 @@ local function check_for_default_opts(conf)
   end
 end
 
+local function create_autoformat_autocmd(aug, format_on_save)
+  return vim.api.nvim_create_autocmd("BufWritePre", {
+    desc = "Format on save",
+    pattern = "*",
+    group = aug,
+    callback = function(args)
+      if not vim.api.nvim_buf_is_valid(args.buf) or vim.bo[args.buf].buftype ~= "" then
+        return
+      end
+      local format_args, callback = format_on_save, nil
+      if type(format_args) == "function" then
+        format_args, callback = format_args(args.buf)
+      end
+      if format_args then
+        if format_args.async then
+          notify_once(
+            "Conform format_on_save cannot use async=true. Use format_after_save instead.",
+            vim.log.levels.ERROR
+          )
+        end
+        M.format(
+          vim.tbl_deep_extend("force", format_args, {
+            buf = args.buf,
+            async = false,
+          }),
+          callback
+        )
+      end
+    end,
+  })
+end
+
 ---@param opts? conform.setupOpts
 M.setup = function(opts)
   if vim.fn.has("nvim-0.10") == 0 then
@@ -91,35 +123,7 @@ M.setup = function(opts)
     if type(opts.format_on_save) == "boolean" then
       opts.format_on_save = {}
     end
-    vim.api.nvim_create_autocmd("BufWritePre", {
-      desc = "Format on save",
-      pattern = "*",
-      group = aug,
-      callback = function(args)
-        if not vim.api.nvim_buf_is_valid(args.buf) or vim.bo[args.buf].buftype ~= "" then
-          return
-        end
-        local format_args, callback = opts.format_on_save, nil
-        if type(format_args) == "function" then
-          format_args, callback = format_args(args.buf)
-        end
-        if format_args then
-          if format_args.async then
-            notify_once(
-              "Conform format_on_save cannot use async=true. Use format_after_save instead.",
-              vim.log.levels.ERROR
-            )
-          end
-          M.format(
-            vim.tbl_deep_extend("force", format_args, {
-              buf = args.buf,
-              async = false,
-            }),
-            callback
-          )
-        end
-      end,
-    })
+    local autoformat_autocmd_ID = create_autoformat_autocmd(aug, opts.format_on_save)
   end
 
   if opts.format_after_save then
