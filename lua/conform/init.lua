@@ -124,6 +124,12 @@ M.setup = function(opts)
       opts.format_on_save = {}
     end
     local autoformat_autocmd_ID = create_autoformat_autocmd(aug, opts.format_on_save)
+    vim.api.nvim_create_user_command("ConformEnable", function()
+      autoformat_autocmd_ID = create_autoformat_autocmd(aug, opts.format_on_save)
+    end, {})
+    vim.api.nvim_create_user_command("ConformDisable", function()
+      vim.api.nvim_del_autocmd(autoformat_autocmd_ID)
+    end, {})
   end
 
   if opts.format_after_save then
