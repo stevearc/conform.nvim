@@ -384,6 +384,7 @@ You can view this list in vim with `:help conform-formatters`
 - [tex-fmt](https://github.com/WGUNDERWOOD/tex-fmt) - An extremely fast LaTeX formatter written in Rust.
 - [tlint](https://github.com/tighten/tlint) - Tighten linter for Laravel conventions with support for auto-formatting.
 - [tofu_fmt](https://opentofu.org/docs/cli/commands/fmt/) - The tofu-fmt command rewrites OpenTofu configuration files to a canonical format and style.
+- [tombi](https://github.com/tombi-toml/tombi) - TOML Formatter / Linter.
 - [treefmt](https://github.com/numtide/treefmt) - one CLI to format your repo.
 - [trim_newlines](https://github.com/stevearc/conform.nvim/blob/master/lua/conform/formatters/trim_newlines.lua) - Trim empty lines at the end of the file.
 - [trim_whitespace](https://github.com/stevearc/conform.nvim/blob/master/lua/conform/formatters/trim_whitespace.lua) - Trim trailing whitespace.
