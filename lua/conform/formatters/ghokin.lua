@@ -2,7 +2,7 @@
 return {
   meta = {
     url = "https://github.com/antham/ghokin",
-    description = "Parallelized formatter with no external dependencies for gherkin (cucumber, behat...)",
+    description = "Parallelized formatter with no external dependencies for gherkin.",
   },
 
   command = "ghokin",
