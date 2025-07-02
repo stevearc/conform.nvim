@@ -122,7 +122,8 @@ local function create_text_edit(
   is_insert,
   is_replace,
   orig_line_start,
-  orig_line_end
+  orig_line_end,
+  line_ending
 )
   local start_line, end_line = orig_line_start - 1, orig_line_end - 1
   local start_char, end_char = 0, 0
@@ -152,7 +153,7 @@ local function create_text_edit(
   if is_insert and start_line < #original_lines then
     table.insert(replacement, "")
   end
-  local new_text = table.concat(replacement, "\n")
+  local new_text = table.concat(replacement, line_ending)
 
   return {
     newText = new_text,
@@ -251,7 +252,8 @@ M.apply_format = function(
         is_insert,
         is_replace,
         orig_line_start,
-        orig_line_end
+        orig_line_end,
+        util.buf_line_ending(bufnr)
       )
       table.insert(text_edits, text_edit)
 
@@ -397,8 +399,8 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, opts, c
     },
     vim.schedule_wrap(function(result)
       local code = result.code
-      local stdout = result.stdout and vim.split(result.stdout, "\n") or {}
-      local stderr = result.stderr and vim.split(result.stderr, "\n") or {}
+      local stdout = result.stdout and vim.split(result.stdout, "\r?\n") or {}
+      local stderr = result.stderr and vim.split(result.stderr, "\r?\n") or {}
       if vim.tbl_contains(exit_codes, code) then
         local output = stdout
         if not config.stdin then
