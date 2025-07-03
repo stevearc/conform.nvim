@@ -209,6 +209,7 @@ You can view this list in vim with `:help conform-formatters`
 - [cabal_fmt](https://hackage.haskell.org/package/cabal-fmt) - Format cabal files with cabal-fmt.
 - [caramel_fmt](https://caramel.run/manual/reference/cli/fmt.html) - Format Caramel code.
 - [cbfmt](https://github.com/lukas-reineke/cbfmt) - A tool to format codeblocks inside markdown and org documents.
+- [cedar](https://github.com/cedar-policy/cedar) - Formats cedar policies.
 - [clang-format](https://clang.llvm.org/docs/ClangFormat.html) - Tool to format C/C++/… code according to a set of rules and heuristics.
 - [cljfmt](https://github.com/weavejester/cljfmt) - cljfmt is a tool for detecting and fixing formatting errors in Clojure code.
 - [cljstyle](https://github.com/greglook/cljstyle) - Formatter for Clojure code.
@@ -254,6 +255,7 @@ You can view this list in vim with `:help conform-formatters`
 - [gci](https://github.com/daixiang0/gci) - GCI, a tool that controls Go package import order and makes it always deterministic.
 - [gdformat](https://github.com/Scony/godot-gdscript-toolkit) - A formatter for Godot's gdscript.
 - [gersemi](https://github.com/BlankSpruce/gersemi) - A formatter to make your CMake code the real treasure.
+- [ghokin](https://github.com/antham/ghokin) - Parallelized formatter with no external dependencies for gherkin.
 - [gleam](https://github.com/gleam-lang/gleam) - ⭐️ A friendly language for building type-safe, scalable systems!
 - [gluon_fmt](https://github.com/gluon-lang/gluon) - Code formatting for the gluon programming language.
 - [gn](https://gn.googlesource.com/gn/) - gn build system.
@@ -285,6 +287,7 @@ You can view this list in vim with `:help conform-formatters`
 - [just](https://github.com/casey/just) - Format Justfile.
 - [kcl](https://www.kcl-lang.io/docs/tools/cli/kcl/fmt) - The KCL Format tool modifies the files according to the KCL code style.
 - [kdlfmt](https://github.com/hougesen/kdlfmt) - A formatter for kdl documents.
+- [keep-sorted](https://github.com/google/keep-sorted) - keep-sorted is a language-agnostic formatter that sorts lines between two markers in a larger file.
 - [ktfmt](https://github.com/facebook/ktfmt) - Reformats Kotlin source code to comply with the common community standard conventions.
 - [ktlint](https://ktlint.github.io/) - An anti-bikeshedding Kotlin linter with built-in formatter.
 - [kulala-fmt](https://github.com/mistweaverco/kulala-fmt) - An opinionated .http and .rest files linter and formatter.
@@ -337,6 +340,7 @@ You can view this list in vim with `:help conform-formatters`
 - [pyink](https://github.com/google/pyink) - A Python formatter, forked from Black with a few different formatting behaviors.
 - [pyproject-fmt](https://github.com/tox-dev/toml-fmt/tree/main/pyproject-fmt) - Apply a consistent format to your pyproject.toml file with comment support.
 - [python-ly](https://github.com/frescobaldi/python-ly) - A Python package and commandline tool to manipulate LilyPond files.
+- [pyupgrade](https://github.com/asottile/pyupgrade) - A tool to automatically upgrade syntax for newer versions of Python.
 - [reformat-gherkin](https://github.com/ducminh-phan/reformat-gherkin) - Formatter for Gherkin language.
 - [reorder-python-imports](https://github.com/asottile/reorder-python-imports) - Rewrites source to reorder python imports
 - [rescript-format](https://rescript-lang.org/) - The built-in ReScript formatter.
@@ -383,6 +387,7 @@ You can view this list in vim with `:help conform-formatters`
 - [tex-fmt](https://github.com/WGUNDERWOOD/tex-fmt) - An extremely fast LaTeX formatter written in Rust.
 - [tlint](https://github.com/tighten/tlint) - Tighten linter for Laravel conventions with support for auto-formatting.
 - [tofu_fmt](https://opentofu.org/docs/cli/commands/fmt/) - The tofu-fmt command rewrites OpenTofu configuration files to a canonical format and style.
+- [tombi](https://github.com/tombi-toml/tombi) - TOML Formatter / Linter.
 - [treefmt](https://github.com/numtide/treefmt) - one CLI to format your repo.
 - [trim_newlines](https://github.com/stevearc/conform.nvim/blob/master/lua/conform/formatters/trim_newlines.lua) - Trim empty lines at the end of the file.
 - [trim_whitespace](https://github.com/stevearc/conform.nvim/blob/master/lua/conform/formatters/trim_whitespace.lua) - Trim trailing whitespace.
@@ -393,6 +398,7 @@ You can view this list in vim with `:help conform-formatters`
 - [ufmt](https://github.com/omnilib/ufmt) - Safe, atomic formatting with black and µsort.
 - [uncrustify](https://github.com/uncrustify/uncrustify) - A source code beautifier for C, C++, C#, ObjectiveC, D, Java, Pawn and Vala.
 - [usort](https://github.com/facebook/usort) - Safe, minimal import sorting for Python projects.
+- [v](https://vlang.io) - V language formatter.
 - [verible](https://github.com/chipsalliance/verible/blob/master/verilog/tools/formatter/README.md) - The SystemVerilog formatter.
 - [vsg](https://github.com/jeremiah-c-leary/vhdl-style-guide) - Style guide enforcement for VHDL.
 - [xmlformatter](https://github.com/pamoller/xmlformatter) - xmlformatter is an Open Source Python package, which provides formatting of XML documents.

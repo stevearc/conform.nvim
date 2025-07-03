@@ -304,6 +304,7 @@ FORMATTERS                                                    *conform-formatter
 `cabal_fmt` - Format cabal files with cabal-fmt.
 `caramel_fmt` - Format Caramel code.
 `cbfmt` - A tool to format codeblocks inside markdown and org documents.
+`cedar` - Formats cedar policies.
 `clang-format` - Tool to format C/C++/… code according to a set of rules and
                heuristics.
 `cljfmt` - cljfmt is a tool for detecting and fixing formatting errors in
@@ -363,6 +364,7 @@ FORMATTERS                                                    *conform-formatter
       deterministic.
 `gdformat` - A formatter for Godot's gdscript.
 `gersemi` - A formatter to make your CMake code the real treasure.
+`ghokin` - Parallelized formatter with no external dependencies for gherkin.
 `gleam` - ⭐️ A friendly language for building type-safe, scalable systems!
 `gluon_fmt` - Code formatting for the gluon programming language.
 `gn` - gn build system.
@@ -401,6 +403,8 @@ FORMATTERS                                                    *conform-formatter
 `just` - Format Justfile.
 `kcl` - The KCL Format tool modifies the files according to the KCL code style.
 `kdlfmt` - A formatter for kdl documents.
+`keep-sorted` - keep-sorted is a language-agnostic formatter that sorts lines
+              between two markers in a larger file.
 `ktfmt` - Reformats Kotlin source code to comply with the common community
         standard conventions.
 `ktlint` - An anti-bikeshedding Kotlin linter with built-in formatter.
@@ -475,6 +479,8 @@ FORMATTERS                                                    *conform-formatter
                 comment support.
 `python-ly` - A Python package and commandline tool to manipulate LilyPond
             files.
+`pyupgrade` - A tool to automatically upgrade syntax for newer versions of
+            Python.
 `reformat-gherkin` - Formatter for Gherkin language.
 `reorder-python-imports` - Rewrites source to reorder python imports
 `rescript-format` - The built-in ReScript formatter.
@@ -536,6 +542,7 @@ FORMATTERS                                                    *conform-formatter
         formatting.
 `tofu_fmt` - The tofu-fmt command rewrites OpenTofu configuration files to a
            canonical format and style.
+`tombi` - TOML Formatter / Linter.
 `treefmt` - one CLI to format your repo.
 `trim_newlines` - Trim empty lines at the end of the file.
 `trim_whitespace` - Trim trailing whitespace.
@@ -547,6 +554,7 @@ FORMATTERS                                                    *conform-formatter
 `uncrustify` - A source code beautifier for C, C++, C#, ObjectiveC, D, Java,
              Pawn and Vala.
 `usort` - Safe, minimal import sorting for Python projects.
+`v` - V language formatter.
 `verible` - The SystemVerilog formatter.
 `vsg` - Style guide enforcement for VHDL.
 `xmlformatter` - xmlformatter is an Open Source Python package, which provides
