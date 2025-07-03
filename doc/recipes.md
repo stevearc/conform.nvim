@@ -5,6 +5,7 @@
 - [Format command](#format-command)
 - [Autoformat with extra features](#autoformat-with-extra-features)
 - [Command to toggle format-on-save](#command-to-toggle-format-on-save)
+- [Run LSP Commands Before Formatting](#run-lsp-commands-before-formatting)
 - [Lazy loading with lazy.nvim](#lazy-loading-with-lazynvim)
 - [Leave visual mode after range format](#leave-visual-mode-after-range-format)
 - [Run the first available formatter followed by more formatters](#run-the-first-available-formatter-followed-by-more-formatters)
@@ -104,6 +105,49 @@ vim.api.nvim_create_user_command("FormatEnable", function()
   vim.g.disable_autoformat = false
 end, {
   desc = "Re-enable autoformat-on-save",
+})
+```
+
+## Run LSP Commands Before Formatting
+
+You can run LSP commands before formatting a file. This example uses the `ts_ls` server to organize imports along with formatting, but the structure is adaptable to any LSP action.
+
+```lua
+require("conform").setup({
+    format_on_save = function(bufnr)
+        local timeout = 2500
+        local filetype = vim.bo[bufnr].filetype
+        local ts_filetypes = {
+            javascript = true,
+            javascriptreact = true,
+            typescript = true,
+            typescriptreact = true,
+        }
+        if ts_filetypes[filetype] then
+            local client = vim.lsp.get_clients({ name = "ts_ls", bufnr = bufnr })[1]
+            if client then
+                -- preserve cursor's position if buffer is visible in a window
+                local win = vim.fn.bufwinid(bufnr)
+                local prev_pos
+                if win ~= -1 then
+                    prev_pos = vim.api.nvim_win_get_cursor(win)
+                end
+
+                client:request_sync("workspace/executeCommand", {
+                    command = "_typescript.organizeImports",
+                    arguments = { bufname },
+                }, timeout, bufnr)
+
+                if win ~= -1 and prev_pos then
+                    local line_count = vim.api.nvim_buf_line_count(bufnr)
+                    local line = math.min(prev_pos[1], line_count)
+                    pcall(vim.api.nvim_win_set_cursor, win, { line, prev_pos[2] })
+                end
+            end
+        end
+
+        return{ timeout_ms = timeout, lsp_format = "fallback", }
+    end,
 })
 ```
 
