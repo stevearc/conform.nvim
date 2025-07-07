@@ -190,15 +190,23 @@ end
 ---@param dir string
 ---@return string?
 M.parse_rust_edition = function(dir)
-  local manifest = vim.fs.find("Cargo.toml", { upward = true, path = dir })[1]
-  if manifest then
+  local manifest_files = vim.fs.find("Cargo.toml", { upward = true, path = dir, limit = math.huge })
+  for _, manifest in ipairs(manifest_files) do
     for line in io.lines(manifest) do
+      -- if a project is part of a workspace edition might be defined top-level
+      local matches = line:match("edition *= *{ *workspace *= *true *}")
+        or line:match("edition.workspace *= *true")
+      if matches then
+        goto upper_cargo_toml
+      end
+      -- read cargo.toml edition
       if line:match("^edition *=") then
         local edition = line:match("%d+")
         if edition then
           return edition
         end
       end
+      ::upper_cargo_toml::
     end
   end
 end
