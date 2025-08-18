@@ -457,13 +457,13 @@ In addition to being able to override any of the original properties on the form
 
 ```lua
 require("conform").formatters.shfmt = {
-  prepend_args = { "-i", "2" },
+  append_args = { "-i", "2" },
   -- The base args are { "-filename", "$FILENAME" } so the final args will be
-  -- { "-i", "2", "-filename", "$FILENAME" }
+  -- { "-filename", "$FILENAME", "-i", "2" }
 }
--- prepend_args can be a function, just like args
+-- append_args can be a function, just like args
 require("conform").formatters.shfmt = {
-  prepend_args = function(self, ctx)
+  append_args = function(self, ctx)
     return { "-i", "2" }
   end,
 }
@@ -475,7 +475,7 @@ If you want to overwrite the entire formatter definition and _not_ merge with th
 require("conform").formatters.shfmt = {
   inherit = false,
   command = "shfmt",
-  args = { "-i", "2", "-filename", "$FILENAME" },
+  args = { "-filename", "$FILENAME", "-i", "2" },
 }
 ```
 

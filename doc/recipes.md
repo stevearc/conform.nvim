@@ -146,7 +146,7 @@ return {
     -- Customize formatters
     formatters = {
       shfmt = {
-        prepend_args = { "-i", "2" },
+        append_args = { "-i", "2" },
       },
     },
   },
