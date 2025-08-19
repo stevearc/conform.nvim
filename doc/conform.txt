@@ -482,6 +482,7 @@ FORMATTERS                                                    *conform-formatter
             files.
 `pyupgrade` - A tool to automatically upgrade syntax for newer versions of
             Python.
+`qmlformat` - A tool that automatically formats QML files.
 `reformat-gherkin` - Formatter for Gherkin language.
 `reorder-python-imports` - Rewrites source to reorder python imports
 `rescript-format` - The built-in ReScript formatter.
