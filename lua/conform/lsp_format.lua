@@ -169,7 +169,7 @@ function M.format(options, callback)
     for _, client in pairs(clients) do
       --- @diagnostic disable-next-line: param-type-mismatch
       local params = set_range(client, util.make_formatting_params(options.formatting_options))
-      local result, err = request_sync(client, method, params, timeout_ms, bufnr)
+      local result, wait_error = request_sync(client, method, params, timeout_ms, bufnr)
       if result and result.result then
         local this_did_edit = apply_text_edits(
           result.result,
@@ -184,11 +184,12 @@ function M.format(options, callback)
           callback(nil, true)
           return true
         end
-      elseif err then
+      else
+        local lsp_error = (result and result.err) or wait_error or "unknown error"
         if not options.quiet then
-          vim.notify(string.format("[LSP][%s] %s", client.name, err), vim.log.levels.WARN)
+          vim.notify(string.format("[LSP][%s] %s", client.name, lsp_error), vim.log.levels.WARN)
         end
-        return callback(string.format("[LSP][%s] %s", client.name, err))
+        return callback(string.format("[LSP][%s] %s", client.name, lsp_error))
       end
     end
     callback(nil, did_edit)
