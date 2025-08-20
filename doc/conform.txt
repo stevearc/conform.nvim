@@ -476,6 +476,7 @@ FORMATTERS                                                    *conform-formatter
 `pycln` - A Python formatter for finding and removing unused import statements.
 `pyink` - A Python formatter, forked from Black with a few different formatting
         behaviors.
+`pymarkdownlnt` - A markdown linter and formatter.
 `pyproject-fmt` - Apply a consistent format to your pyproject.toml file with
                 comment support.
 `python-ly` - A Python package and commandline tool to manipulate LilyPond
