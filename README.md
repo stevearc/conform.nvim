@@ -232,6 +232,7 @@ You can view this list in vim with `:help conform-formatters`
 - [dioxus](https://github.com/dioxuslabs/dioxus) - Format `rsx!` snippets in Rust files.
 - [djlint](https://github.com/Riverside-Healthcare/djLint) - ✨ HTML Template Linter and Formatter. Django - Jinja - Nunjucks - Handlebars - GoLang.
 - [docformatter](https://pypi.org/project/docformatter/) - docformatter automatically formats docstrings to follow a subset of the PEP 257 conventions.
+- [dockerfmt](https://github.com/reteps/dockerfmt) - Dockerfile formatter. a modern dockfmt.
 - [docstrfmt](https://github.com/LilSpazJoekp/docstrfmt) - reStructuredText formatter.
 - [doctoc](https://github.com/thlorenz/doctoc) - Generates table of contents for markdown files inside local git repository.
 - [dprint](https://github.com/dprint/dprint) - Pluggable and configurable code formatting platform written in Rust.

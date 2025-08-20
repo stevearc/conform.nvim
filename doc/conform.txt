@@ -334,6 +334,7 @@ FORMATTERS                                                    *conform-formatter
          Handlebars - GoLang.
 `docformatter` - docformatter automatically formats docstrings to follow a
                subset of the PEP 257 conventions.
+`dockerfmt` - Dockerfile formatter. a modern dockfmt.
 `docstrfmt` - reStructuredText formatter.
 `doctoc` - Generates table of contents for markdown files inside local git
          repository.
