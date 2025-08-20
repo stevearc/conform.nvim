@@ -2,7 +2,7 @@
 return {
   meta = {
     url = "https://github.com/diffplug/spotless",
-    description = "Spotless plugin for Gradle",
+    description = "Spotless plugin for Gradle.",
   },
   stdin = true,
   require_cwd = true,
