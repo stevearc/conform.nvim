@@ -2,7 +2,7 @@
 return {
   meta = {
     url = "https://github.com/diffplug/spotless",
-    description = "Spotless plugin for Maven",
+    description = "Spotless plugin for Maven.",
   },
   stdin = true,
   require_cwd = true,
