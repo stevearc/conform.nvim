@@ -508,6 +508,8 @@ FORMATTERS                                                    *conform-formatter
 `smlfmt` - A custom parser and code formatter for Standard ML.
 `snakefmt` - a formatting tool for Snakemake files following the design of
            Black.
+`spotless_gradle` - Spotless plugin for Gradle.
+`spotless_maven` - Spotless plugin for Maven.
 `sql_formatter` - A whitespace formatter for different query languages.
 `sqlfluff` - A modular SQL linter and auto-formatter with support for multiple
            dialects and templated code.

@@ -364,6 +364,8 @@ You can view this list in vim with `:help conform-formatters`
 - [sleek](https://github.com/nrempel/sleek) - Sleek is a CLI tool for formatting SQL.
 - [smlfmt](https://github.com/shwestrick/smlfmt) - A custom parser and code formatter for Standard ML.
 - [snakefmt](https://github.com/snakemake/snakefmt) - a formatting tool for Snakemake files following the design of Black.
+- [spotless_gradle](https://github.com/diffplug/spotless) - Spotless plugin for Gradle.
+- [spotless_maven](https://github.com/diffplug/spotless) - Spotless plugin for Maven.
 - [sql_formatter](https://github.com/sql-formatter-org/sql-formatter) - A whitespace formatter for different query languages.
 - [sqlfluff](https://github.com/sqlfluff/sqlfluff) - A modular SQL linter and auto-formatter with support for multiple dialects and templated code.
 - [sqlfmt](https://docs.sqlfmt.com) - sqlfmt formats your dbt SQL files so you don't have to. It is similar in nature to Black, gofmt, and rustfmt (but for SQL)
