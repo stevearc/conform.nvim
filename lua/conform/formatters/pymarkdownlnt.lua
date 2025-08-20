@@ -2,7 +2,7 @@
 return {
   meta = {
     url = "https://github.com/jackdewinter/pymarkdown",
-    description = "PyMarkdown is primarily a Markdown linter",
+    description = "A markdown linter and formatter.",
   },
   command = "pymarkdownlnt",
   args = { "--return-code-scheme", "minimal", "fix", "$FILENAME" },
