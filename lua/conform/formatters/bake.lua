@@ -2,7 +2,7 @@
 return {
   meta = {
     url = "https://github.com/EbodShojaei/bake",
-    description = "A Makefile formatter and linter. It only took 50 years!",
+    description = "A Makefile formatter and linter.",
   },
   command = "bake",
   args = { "format", "$FILENAME" },
