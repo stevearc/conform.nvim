@@ -229,7 +229,7 @@ M.apply_format = function(
     local orig_line_end = orig_line_start + orig_line_count
     local new_line_end = new_line_start + new_line_count
     local replacement = util.tbl_slice(new_lines, new_line_start, new_line_end - 1)
-    
+
     -- For replacement edits, convert the end line to be inclusive
     if is_replace then
       orig_line_end = orig_line_end - 1
