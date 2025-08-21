@@ -227,13 +227,13 @@ M.apply_format = function(
     local is_delete = new_line_count == 0
     local is_replace = not is_insert and not is_delete
     local orig_line_end = orig_line_start + orig_line_count
+    local new_line_end = new_line_start + new_line_count
+    local replacement = util.tbl_slice(new_lines, new_line_start, new_line_end - 1)
+    
     -- For replacement edits, convert the end line to be inclusive
     if is_replace then
       orig_line_end = orig_line_end - 1
     end
-    local new_line_end = new_line_start + new_line_count
-
-    local replacement = util.tbl_slice(new_lines, new_line_start, new_line_end - 1)
 
     local should_apply_diff = not only_apply_range
       or not range
