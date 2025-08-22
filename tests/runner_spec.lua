@@ -386,18 +386,6 @@ print("a")
         assert.are.same({ "a", "d", "c" }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
       end)
 
-      it("applies edits that are inserting at the end of the range", function()
-        run_formatter(
-          "a\nb\nc",
-          "a\nb\nc\nd",
-          { range = {
-            start = { 2, 0 },
-            ["end"] = { 3, 0 },
-          } }
-        )
-        assert.are.same({ "a", "b", "c", "d" }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
-      end)
-
       it("applies edits that are inserting at the beginning of the range", function()
         run_formatter(
           "a\nb\nc",
@@ -408,6 +396,18 @@ print("a")
           } }
         )
         assert.are.same({ "d", "a", "b", "c" }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
+      end)
+
+      it("applies edits that are inserting at the end of the range", function()
+        run_formatter(
+          "a\nb\nc",
+          "a\nb\nc\nd",
+          { range = {
+            start = { 2, 0 },
+            ["end"] = { 3, 0 },
+          } }
+        )
+        assert.are.same({ "a", "b", "c", "d" }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
       end)
     end)
 
