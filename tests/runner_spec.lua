@@ -397,6 +397,18 @@ print("a")
         )
         assert.are.same({ "a", "b", "c", "d" }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
       end)
+
+      it("applies edits that are inserting at the beginning of the range", function()
+        run_formatter(
+          "a\nb\nc",
+          "d\na\nb\nc",
+          { range = {
+            start = { 1, 0 },
+            ["end"] = { 2, 0 },
+          } }
+        )
+        assert.are.same({ "d", "a", "b", "c" }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
+      end)
     end)
 
     it("can run the format command in the shell", function()
