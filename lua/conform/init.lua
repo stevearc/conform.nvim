@@ -449,7 +449,7 @@ M.format = function(opts, callback)
   end
 
   local mode = vim.api.nvim_get_mode().mode
-  if not opts.range and mode == "v" or mode == "V" then
+  if not opts.range and (mode == "v" or mode == "V") then
     opts.range = range_from_selection(opts.bufnr, mode)
   end
   callback = callback or function(_err, _did_edit) end
