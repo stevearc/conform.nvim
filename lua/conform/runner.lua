@@ -238,7 +238,8 @@ M.apply_format = function(
 
     local should_apply_diff = not only_apply_range
       or not range
-      or indices_in_range(range, orig_line_start, orig_line_end)
+      or (is_insert and indices_in_range(range, orig_line_start, orig_line_start + 1))
+      or (not is_insert and indices_in_range(range, orig_line_start, orig_line_end))
 
     -- When the diff is an insert, it actually means to insert after the mentioned line
     if is_insert then
