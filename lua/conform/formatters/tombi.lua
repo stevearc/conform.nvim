@@ -6,6 +6,6 @@ return {
     description = "TOML Formatter / Linter.",
   },
   command = "tombi",
-  args = { "format", "-" },
+  args = { "format", "--stdin-filename", "$FILENAME", "-" },
   stdin = true,
 }
