@@ -193,6 +193,13 @@ M.parse_rust_edition = function(dir)
   local manifest = vim.fs.find("Cargo.toml", { upward = true, path = dir })[1]
   if manifest then
     for line in io.lines(manifest) do
+      -- if a project is part of a workspace edition might be defined top-level
+      local matches = line:match("edition *= *{ *workspace *= *true *}")
+        or line:match("edition.workspace *= *true")
+      if matches then
+        local upper_folder = vim.fn.fnamemodify(manifest, ":h:h")
+        return M.parse_rust_edition(upper_folder)
+      end
       if line:match("^edition *=") then
         local edition = line:match("%d+")
         if edition then
