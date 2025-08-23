@@ -323,6 +323,7 @@ You can view this list in vim with `:help conform-formatters`
 - [ocp-indent](https://github.com/OCamlPro/ocp-indent) - Automatic indentation of OCaml source files.
 - [odinfmt](https://github.com/DanielGavin/ols) - Auto-formatter for the Odin programming language.
 - [opa_fmt](https://www.openpolicyagent.org/docs/latest/cli/#opa-fmt) - Format Rego files using `opa fmt` command.
+- [opentofu_fmt](https://opentofu.org/docs/cli/commands/fmt/) - The opentofu_fmt command rewrites `terraform/tofu` configuration files to a canonical format and style.
 - [ormolu](https://hackage.haskell.org/package/ormolu) - A formatter for Haskell source code.
 - [packer_fmt](https://developer.hashicorp.com/packer/docs/commands/fmt) - The packer fmt Packer command is used to format HCL2 configuration files to a canonical format and style.
 - [pangu](https://github.com/vinta/pangu.py) - Insert whitespace between CJK and half-width characters.

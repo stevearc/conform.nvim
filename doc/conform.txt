@@ -453,6 +453,8 @@ FORMATTERS                                                    *conform-formatter
 `ocp-indent` - Automatic indentation of OCaml source files.
 `odinfmt` - Auto-formatter for the Odin programming language.
 `opa_fmt` - Format Rego files using `opa fmt` command.
+`opentofu_fmt` - The opentofu_fmt command rewrites `terraform/tofu` configuration
+                files to a canonical format and style.
 `ormolu` - A formatter for Haskell source code.
 `packer_fmt` - The packer fmt Packer command is used to format HCL2
              configuration files to a canonical format and style.
