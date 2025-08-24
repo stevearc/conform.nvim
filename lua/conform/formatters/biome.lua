@@ -2,8 +2,8 @@ local util = require("conform.util")
 ---@type conform.FileFormatterConfig
 return {
   meta = {
-    url = "https://github.com/biomejs/biome",
-    description = "A toolchain for web projects, aimed to provide functionalities to maintain them.",
+    url = "https://biomejs.dev/reference/cli/#biome-format",
+    description = "A toolchain for web projects, aimed to provide functionalities to maintain them. This config runs formatting *only*. See `biome-check` or `biome-organize-imports` for other options.",
   },
   command = util.from_node_modules("biome"),
   stdin = true,
