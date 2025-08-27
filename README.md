@@ -197,9 +197,9 @@ You can view this list in vim with `:help conform-formatters`
 - [beautysh](https://github.com/lovesegfault/beautysh) - A Bash beautifier for the masses.
 - [bibtex-tidy](https://github.com/FlamingTempura/bibtex-tidy) - Cleaner and Formatter for BibTeX files.
 - [bicep](https://github.com/Azure/bicep) - Bicep is a Domain Specific Language (DSL) for deploying Azure resources declaratively.
-- [biome](https://github.com/biomejs/biome) - A toolchain for web projects, aimed to provide functionalities to maintain them.
-- [biome-check](https://github.com/biomejs/biome) - A toolchain for web projects, aimed to provide functionalities to maintain them.
-- [biome-organize-imports](https://github.com/biomejs/biome) - A toolchain for web projects, aimed to provide functionalities to maintain them.
+- [biome](https://biomejs.dev/reference/cli/#biome-format) - A toolchain for web projects, aimed to provide functionalities to maintain them. This config runs formatting *only*. See `biome-check` or `biome-organize-imports` for other options.
+- [biome-check](https://biomejs.dev/reference/cli/#biome-check) - A toolchain for web projects, aimed to provide functionalities to maintain them. This config runs formatting, linting and import sorting. See `biome` or `biome-organize-imports` for other options.
+- [biome-organize-imports](https://github.com/biomejs/biome) - A toolchain for web projects, aimed to provide functionalities to maintain them. This config runs import sorting *only*. See `biome` or `biome-check` for other options.
 - [black](https://github.com/psf/black) - The uncompromising Python code formatter.
 - [blade-formatter](https://github.com/shufo/blade-formatter) - An opinionated blade template formatter for Laravel that respects readability.
 - [blue](https://github.com/grantjenks/blue) - The slightly less uncompromising Python code formatter.

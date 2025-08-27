@@ -288,11 +288,16 @@ FORMATTERS                                                    *conform-formatter
 `bicep` - Bicep is a Domain Specific Language (DSL) for deploying Azure
         resources declaratively.
 `biome` - A toolchain for web projects, aimed to provide functionalities to
-        maintain them.
+        maintain them. This config runs formatting *only*. See `biome-check` or
+        `biome-organize-imports` for other options.
 `biome-check` - A toolchain for web projects, aimed to provide functionalities
-              to maintain them.
+              to maintain them. This config runs formatting, linting and import
+              sorting. See `biome` or `biome-organize-imports` for other
+              options.
 `biome-organize-imports` - A toolchain for web projects, aimed to provide
-                         functionalities to maintain them.
+                         functionalities to maintain them. This config runs
+                         import sorting *only*. See `biome` or `biome-check` for
+                         other options.
 `black` - The uncompromising Python code formatter.
 `blade-formatter` - An opinionated blade template formatter for Laravel that
                   respects readability.
