@@ -1,5 +1,12 @@
 # Changelog
 
+## [9.2.0](https://github.com/stevearc/conform.nvim/compare/v9.1.0...v9.2.0) (2025-08-27)
+
+
+### Features
+
+* **tombi:** add `stdin-filename` arg ([#763](https://github.com/stevearc/conform.nvim/issues/763)) ([a0ab60e](https://github.com/stevearc/conform.nvim/commit/a0ab60ed666c56b37fd7ed1847d2ac52f2482ce0))
+
 ## [9.1.0](https://github.com/stevearc/conform.nvim/compare/v9.0.0...v9.1.0) (2025-08-22)
 
 
