@@ -3,7 +3,7 @@ local util = require("conform.util")
 return {
   meta = {
     url = "https://biomejs.dev/reference/cli/#biome-check",
-    description = "A toolchain for web projects, aimed to provide functionalities to maintain them. This config runs formating, linting and import sorting. See `biome` or `biome-organize-imports` for other options.",
+    description = "A toolchain for web projects, aimed to provide functionalities to maintain them. This config runs formatting, linting and import sorting. See `biome` or `biome-organize-imports` for other options.",
   },
   command = util.from_node_modules("biome"),
   stdin = true,
