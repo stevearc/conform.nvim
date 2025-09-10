@@ -5,5 +5,5 @@ return {
     description = "A TOML toolkit written in Rust.",
   },
   command = "taplo",
-  args = { "format", "-" },
+  args = { "format", "--stdin-filepath", "$FILENAME", "-" },
 }
