@@ -6,4 +6,6 @@ return {
   },
   command = "treefmt",
   args = { "--stdin", "$FILENAME" },
+  require_cwd = true,
+  cwd = require("conform.util").root_file({ "treefmt.toml", ".treefmt.toml" }),
 }
