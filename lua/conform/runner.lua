@@ -229,22 +229,24 @@ M.apply_format = function(
     local is_replace = not is_insert and not is_delete
     local orig_line_end = orig_line_start + orig_line_count
     local new_line_end = new_line_start + new_line_count
-
-    if is_insert then
-      -- When the diff is an insert, it actually means to insert after the mentioned line
-      orig_line_start = orig_line_start + 1
-      orig_line_end = orig_line_end + 1
-    end
-
     local replacement = util.tbl_slice(new_lines, new_line_start, new_line_end - 1)
 
     -- For replacement edits, convert the end line to be inclusive
     if is_replace then
       orig_line_end = orig_line_end - 1
     end
+
     local should_apply_diff = not only_apply_range
       or not range
-      or indices_in_range(range, orig_line_start, orig_line_end)
+      or (is_insert and indices_in_range(range, orig_line_start, orig_line_start + 1))
+      or (not is_insert and indices_in_range(range, orig_line_start, orig_line_end))
+
+    -- When the diff is an insert, it actually means to insert after the mentioned line
+    if is_insert then
+      orig_line_start = orig_line_start + 1
+      orig_line_end = orig_line_end + 1
+    end
+
     if should_apply_diff then
       local text_edit = create_text_edit(
         original_lines,
