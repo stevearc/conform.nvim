@@ -21,7 +21,8 @@ local notify_once = vim.schedule_wrap(function(...)
   vim.notify_once(...)
 end)
 
-local allowed_default_opts = { "timeout_ms", "lsp_format", "quiet", "stop_after_first" }
+local allowed_default_opts =
+  { "timeout_ms", "lsp_format", "quiet", "stop_after_first", "stop_after_success" }
 local allowed_default_filetype_opts = { "name", "id", "filter" }
 ---@param a table
 ---@param b table
@@ -424,7 +425,7 @@ M.format = function(opts, callback)
     )
   end
   merge_default_opts(opts, M.default_format_opts)
-  ---@type {timeout_ms: integer, bufnr: integer, async: boolean, dry_run: boolean, lsp_format: "never"|"first"|"last"|"prefer"|"fallback", quiet: boolean, stop_after_first: boolean, formatters?: string[], range?: conform.Range, undojoin: boolean}
+  ---@type {timeout_ms: integer, bufnr: integer, async: boolean, dry_run: boolean, lsp_format: "never"|"first"|"last"|"prefer"|"fallback", quiet: boolean, stop_after_first: boolean, formatters?: string[], range?: conform.Range, undojoin: boolean, stop_after_success: boolean}
   opts = vim.tbl_extend("keep", opts, {
     timeout_ms = 1000,
     bufnr = 0,
@@ -434,6 +435,7 @@ M.format = function(opts, callback)
     quiet = false,
     undojoin = false,
     stop_after_first = false,
+    stop_after_success = false,
   })
   if opts.bufnr == 0 then
     opts.bufnr = vim.api.nvim_get_current_buf()
@@ -511,7 +513,12 @@ M.format = function(opts, callback)
     end, formatters)
     log.debug("Running formatters on %s: %s", vim.api.nvim_buf_get_name(opts.bufnr), resolved_names)
     ---@type conform.RunOpts
-    local run_opts = { exclusive = true, dry_run = opts.dry_run, undojoin = opts.undojoin }
+    local run_opts = {
+      exclusive = true,
+      dry_run = opts.dry_run,
+      undojoin = opts.undojoin,
+      stop_after_success = opts.stop_after_success or false,
+    }
     if opts.async then
       runner.format_async(opts.bufnr, formatters, opts.range, run_opts, cb)
     else
@@ -576,13 +583,14 @@ end
 ---@return nil|conform.Error error Only present if async = false
 ---@return nil|string[] new_lines Only present if async = false
 M.format_lines = function(formatter_names, lines, opts, callback)
-  ---@type {timeout_ms: integer, bufnr: integer, async: boolean, quiet: boolean, stop_after_first: boolean}
+  ---@type {timeout_ms: integer, bufnr: integer, async: boolean, quiet: boolean, stop_after_first: boolean, stop_after_success: boolean}
   opts = vim.tbl_extend("keep", opts or {}, {
     timeout_ms = 1000,
     bufnr = 0,
     async = false,
     quiet = false,
     stop_after_first = false,
+    stop_after_success = false,
   })
   callback = callback or function(_err, _lines) end
   local errors = require("conform.errors")
@@ -606,7 +614,13 @@ M.format_lines = function(formatter_names, lines, opts, callback)
   end
 
   ---@type conform.RunOpts
-  local run_opts = { exclusive = false, dry_run = false, undojoin = false }
+  local run_opts = {
+    exclusive = false,
+    dry_run = false,
+    undojoin = false,
+    stop_after_success = opts.stop_after_success,
+  }
+
   if opts.async then
     runner.format_lines_async(opts.bufnr, formatters, nil, lines, run_opts, handle_err)
   else

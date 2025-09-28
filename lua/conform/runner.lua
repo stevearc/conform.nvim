@@ -6,11 +6,6 @@ local util = require("conform.util")
 local uv = vim.uv or vim.loop
 local M = {}
 
----@class (exact) conform.RunOpts
----@field exclusive boolean If true, ensure only a single formatter is running per buffer
----@field dry_run boolean If true, do not apply changes and stop after the first formatter attempts to do so
----@field undojoin boolean Use undojoin to merge formatting changes with previous edit
-
 ---@param formatter_name string
 ---@param ctx conform.Context
 ---@param config conform.JobFormatterConfig
@@ -601,8 +596,13 @@ M.format_lines_async = function(bufnr, formatters, range, input_lines, opts, cal
       if err then
         final_err = errors.coalesce(final_err, err)
       end
+      local succeeded = output ~= nil and not vim.deep_equal(output, input_lines)
       input_lines = output or input_lines
       all_support_range_formatting = all_support_range_formatting and truthy(config.range_args)
+      if opts.stop_after_success and succeeded then
+        callback(final_err, input_lines, all_support_range_formatting)
+        return
+      end
       run_next_formatter()
     end)
   end
@@ -716,7 +716,11 @@ M.format_lines_sync = function(bufnr, formatters, timeout_ms, range, input_lines
       end
     end
 
+    local succeeded = result ~= nil and not vim.deep_equal(result, input_lines)
     input_lines = result or input_lines
+    if opts.stop_after_success and succeeded then
+      return final_err, input_lines, all_support_range_formatting
+    end
   end
 
   return final_err, input_lines, all_support_range_formatting
