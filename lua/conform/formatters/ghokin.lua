@@ -6,5 +6,5 @@ return {
   },
 
   command = "ghokin",
-  args = { "fmt", "stdout" },
+  args = { "fmt", "stdout", "$FILENAME" },
 }
