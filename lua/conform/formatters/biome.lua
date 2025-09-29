@@ -7,7 +7,21 @@ return {
   },
   command = util.from_node_modules("biome"),
   stdin = true,
-  args = { "format", "--stdin-file-path", "$FILENAME" },
+  args = function(self, ctx)
+    if self:cwd(ctx) then
+      return { "format", "--stdin-file-path", "$FILENAME" }
+    end
+    -- only when biome.json{,c} don't exist
+    return {
+      "format",
+      "--stdin-file-path",
+      "$FILENAME",
+      "--indent-style",
+      vim.bo[ctx.buf].expandtab and "space" or "tab",
+      "--indent-width",
+      ctx.shiftwidth,
+    }
+  end,
   cwd = util.root_file({
     "biome.json",
     "biome.jsonc",
