@@ -439,6 +439,7 @@ FORMATTERS                                                    *conform-formatter
 `mdsf` - Format markdown code blocks using your favorite code formatters.
 `mdslw` - Prepare your markdown for easy diff'ing by adding line breaks after
         every sentence.
+`meson` - Format meson source files.
 `mix` - Format Elixir files using the mix format command.
 `mojo_format` - Official Formatter for The Mojo Programming Language
 `nginxfmt` - nginx config file formatter/beautifier written in Python with no
