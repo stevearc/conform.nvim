@@ -193,20 +193,15 @@ M.parse_rust_edition = function(dir)
   local manifest_files = vim.fs.find("Cargo.toml", { upward = true, path = dir, limit = math.huge })
   for _, manifest in ipairs(manifest_files) do
     for line in io.lines(manifest) do
-      -- if a project is part of a workspace edition might be defined top-level
-      local matches = line:match("edition *= *{ *workspace *= *true *}")
+      -- if a project is part of a workspace, the edition might be defined top-level
+      local is_in_workspace = line:match("edition *= *{ *workspace *= *true *}")
         or line:match("edition.workspace *= *true")
-      if matches then
-        goto upper_cargo_toml
+      local edition = line:match("^edition *= *(%d+)")
+      if is_in_workspace then
+        break
+      elseif edition then
+        return edition
       end
-      -- read cargo.toml edition
-      if line:match("^edition *=") then
-        local edition = line:match("%d+")
-        if edition then
-          return edition
-        end
-      end
-      ::upper_cargo_toml::
     end
   end
 end
