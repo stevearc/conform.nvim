@@ -194,9 +194,9 @@ M.parse_rust_edition = function(dir)
   for _, manifest in ipairs(manifest_files) do
     for line in io.lines(manifest) do
       -- if a project is part of a workspace, the edition might be defined top-level
-      local is_in_workspace = line:match("edition *= *{ *workspace *= *true *}")
-        or line:match("edition.workspace *= *true")
-      local edition = line:match("^edition *= *(%d+)")
+      local is_in_workspace = line:match("^edition *= *{ *workspace *= *true *}")
+        or line:match("^edition.workspace *= *true")
+      local edition = line:match('^edition *= *"(%d+)"')
       if is_in_workspace then
         break
       elseif edition then
