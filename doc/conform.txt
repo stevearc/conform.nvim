@@ -24,7 +24,7 @@ OPTIONS                                                          *conform-option
           if require("conform").get_formatter_info("ruff_format", bufnr).available then
             return { "ruff_format" }
           else
-            return { "isort", "black" }
+            return { "isort", "black", stop_after_success = true }
           end
         end,
         -- Use the "*" filetype to run formatters on all filetypes.
@@ -123,20 +123,20 @@ setup({opts})                                                      *conform.setu
 
     Parameters:
       {opts} `nil|conform.setupOpts`
-          {formatters_by_ft} `nil|table<string, conform.FiletypeFormatter>` Map
-                             of filetype to formatters
-          {format_on_save}   `nil|conform.FormatOpts|fun(bufnr: integer): nil|conform.FormatOpts`
-                             If this is set, Conform will run the formatter on
-                             save. It will pass the table to conform.format().
-                             This can also be a function that returns the table.
-          {default_format_opts} `nil|conform.DefaultFormatOpts` The default
-                             options to use when calling conform.format()
-              {timeout_ms}       `nil|integer` Time in milliseconds to block for
-                                 formatting. Defaults to 1000. No effect if
-                                 async = true.
-              {lsp_format}       `nil|conform.LspFormatOpts` Configure if and
-                                 when LSP should be used for formatting.
-                                 Defaults to "never".
+          {formatters_by_ft}      `nil|table<string, conform.FiletypeFormatter>` Map
+                                  of filetype to formatters
+          {format_on_save}        `nil|conform.FormatOpts|fun(bufnr: integer): nil|conform.FormatOpts`
+                                  If this is set, Conform will run the formatter on
+                                  save. It will pass the table to conform.format().
+                                  This can also be a function that returns the table.
+          {default_format_opts}   `nil|conform.DefaultFormatOpts` The default
+                                  options to use when calling conform.format()
+              {timeout_ms}        `nil|integer` Time in milliseconds to block for
+                                  formatting. Defaults to 1000. No effect if
+                                  async = true.
+              {lsp_format}        `nil|conform.LspFormatOpts` Configure if and
+                                  when LSP should be used for formatting.
+                                  Defaults to "never".
                   `"never"`    never use the LSP for formatting (default)
                   `"fallback"` LSP formatting is used when no other formatters
                              are available
@@ -145,28 +145,31 @@ setup({opts})                                                      *conform.setu
                              other formatters
                   `"last"`     other formatters are used then LSP formatting
                              when available
-              {quiet}            `nil|boolean` Don't show any notifications for
-                                 warnings or failures. Defaults to false.
-              {stop_after_first} `nil|boolean` Only run the first available
-                                 formatter in the list. Defaults to false.
-          {format_after_save} `nil|conform.FormatOpts|fun(bufnr: integer): nil|conform.FormatOpts`
-                             , nil|fun(err: nil|string, did_edit: nil|boolean)
-                             If this is set, Conform will run the formatter
-                             asynchronously after save. It will pass the table
-                             to conform.format(). This can also be a function
-                             that returns the table (and an optional callback
-                             that is run after formatting).
-          {log_level}        `nil|integer` Set the log level (e.g.
-                             `vim.log.levels.DEBUG`). Use `:ConformInfo` to see
-                             the location of the log file.
-          {notify_on_error}  `nil|boolean` Conform will notify you when a
-                             formatter errors (default true).
-          {notify_no_formatters} `nil|boolean` Conform will notify you when no
-                             formatters are available for the buffer (default
-                             true).
-          {formatters}       `nil|table<string, conform.FormatterConfigOverride|fun(bufnr: integer): nil|conform.FormatterConfigOverride>`
-                             Custom formatters and overrides for built-in
-                             formatters.
+              {quiet}             `nil|boolean` Don't show any notifications for
+                                  warnings or failures. Defaults to false.
+          {stop_after_first}      `nil|boolean` Only run the first available
+                                  formatter in the list. Defaults to false.
+          {stop_after_success}    `nil|boolean` Run formatters sequentially and stop 
+                                  after the first one that succeeds (makes a 
+                                  change). Defaults to false.
+          {format_after_save}     `nil|conform.FormatOpts|fun(bufnr: integer): nil|conform.FormatOpts`
+                                  , nil|fun(err: nil|string, did_edit: nil|boolean)
+                                  If this is set, Conform will run the formatter
+                                  asynchronously after save. It will pass the table
+                                  to conform.format(). This can also be a function
+                                  that returns the table (and an optional callback
+                                  that is run after formatting).
+          {log_level}             `nil|integer` Set the log level (e.g.
+                                  `vim.log.levels.DEBUG`). Use `:ConformInfo` to see
+                                  the location of the log file.
+          {notify_on_error}       `nil|boolean` Conform will notify you when a
+                                  formatter errors (default true).
+          {notify_no_formatters}  `nil|boolean` Conform will notify you when no
+                                  formatters are available for the buffer (default
+                                  true).
+          {formatters}            `nil|table<string, conform.FormatterConfigOverride|fun(bufnr: integer): nil|conform.FormatterConfigOverride>`
+                                  Custom formatters and overrides for built-in
+                                  formatters.
 
 format({opts}, {callback}): boolean                               *conform.format*
     Format a buffer

@@ -344,6 +344,84 @@ print("a")
       assert.are.same(lines, vim.api.nvim_buf_get_lines(0, 0, -1, false))
     end)
 
+    it("stops after first successful formatter with stop_after_success", function()
+      -- Formatter 1: makes a change
+      conform.formatters.test1 = {
+        command = "tests/fake_formatter.sh",
+        args = function()
+          return { OUTPUT_FILE }
+        end,
+      }
+      -- Formatter 2: would also make a change if run
+      conform.formatters.test2 = {
+        command = "tests/fake_formatter.sh",
+        args = function()
+          return { OUTPUT_FILE }
+        end,
+      }
+      local bufnr = vim.fn.bufadd("testfile")
+      vim.fn.bufload(bufnr)
+      vim.api.nvim_set_current_buf(bufnr)
+      vim.api.nvim_buf_set_lines(bufnr, 0, -1, true, { "foo" })
+      set_formatter_output({ "bar" })
+      conform.format({ formatters = { "test1", "test2" }, stop_after_success = true, quiet = true })
+      assert.are.same({ "bar" }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
+      -- Now set formatter 1 to be a no-op, formatter 2 to make a change
+      conform.formatters.test1 = {
+        command = "cat",
+      }
+      set_formatter_output({ "baz" })
+      vim.api.nvim_buf_set_lines(bufnr, 0, -1, true, { "foo" })
+      conform.format({ formatters = { "test1", "test2" }, stop_after_success = true, quiet = true })
+      assert.are.same({ "baz" }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
+    end)
+
+    it("stops after first successful formatter with stop_after_success (async)", function()
+      conform.formatters.test1 = {
+        command = "tests/fake_formatter.sh",
+        args = function()
+          return { OUTPUT_FILE }
+        end,
+      }
+      conform.formatters.test2 = {
+        command = "tests/fake_formatter.sh",
+        args = function()
+          return { OUTPUT_FILE }
+        end,
+      }
+      local bufnr = vim.fn.bufadd("testfile")
+      vim.fn.bufload(bufnr)
+      vim.api.nvim_set_current_buf(bufnr)
+      vim.api.nvim_buf_set_lines(bufnr, 0, -1, true, { "foo" })
+      set_formatter_output({ "bar" })
+      conform.format({
+        formatters = { "test1", "test2" },
+        stop_after_success = true,
+        async = true,
+        quiet = true,
+      })
+      vim.wait(1000, function()
+        return vim.api.nvim_buf_get_lines(0, 0, -1, false)[1] == "bar"
+      end)
+      assert.are.same({ "bar" }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
+      -- Now set formatter 1 to be a no-op, formatter 2 to make a change
+      conform.formatters.test1 = {
+        command = "cat",
+      }
+      set_formatter_output({ "baz" })
+      vim.api.nvim_buf_set_lines(bufnr, 0, -1, true, { "foo" })
+      conform.format({
+        formatters = { "test1", "test2" },
+        stop_after_success = true,
+        async = true,
+        quiet = true,
+      })
+      vim.wait(1000, function()
+        return vim.api.nvim_buf_get_lines(0, 0, -1, false)[1] == "baz"
+      end)
+      assert.are.same({ "baz" }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
+    end)
+
     it("does not change output if dry_run is true", function()
       run_formatter("hello", "foo", { dry_run = true })
       assert.are.same({ "hello" }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
