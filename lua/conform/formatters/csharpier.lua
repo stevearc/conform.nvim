@@ -1,15 +1,27 @@
 local COMMAND = "dotnet"
 local TOOL = "csharpier"
-local cache = nil -- For performance
+
+--- Ask the system if csharpier is installed as dotnet tool
+--- NOTE: prefer the cached variant
+---@return boolean
+local function is_local_long()
+  if vim.fn.executable(COMMAND) == 0 then
+    return false -- if dotnet itself is not available, assume the csharpier executable
+  end
+
+  local version_check = vim.system({ COMMAND, TOOL, "--version" }):wait()
+  return version_check.code == 0 -- try calling dotnet tool
+end
+
+local is_local_cache = nil
 
 --- Verify if csharpier is installed locally.
 ---@return boolean
 local function is_local()
-  if cache == nil then
-    local obj = vim.system({ COMMAND, TOOL, "--version" }):wait()
-    cache = obj.code == 0
+  if is_local_cache == nil then
+    is_local_cache = is_local_long()
   end
-  return cache
+  return is_local_cache
 end
 
 --- Get command favoring locally installed csharpier.
