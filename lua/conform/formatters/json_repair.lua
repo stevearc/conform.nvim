@@ -5,5 +5,5 @@ return {
     description = "A python module to repair invalid JSON from LLMs.",
   },
   command = "json_repair",
-  args = { "--indent", "2" },
+  args = {},
 }
