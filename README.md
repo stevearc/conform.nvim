@@ -505,6 +505,7 @@ The following magic strings are available in `args` and `range_args`. They will 
 - [Format command](doc/recipes.md#format-command)
 - [Autoformat with extra features](doc/recipes.md#autoformat-with-extra-features)
 - [Command to toggle format-on-save](doc/recipes.md#command-to-toggle-format-on-save)
+- [Run LSP Commands Before Formatting](doc/recipes.md#run-lsp-commands-before-formatting)
 - [Lazy loading with lazy.nvim](doc/recipes.md#lazy-loading-with-lazynvim)
 - [Leave visual mode after range format](doc/recipes.md#leave-visual-mode-after-range-format)
 - [Run the first available formatter followed by more formatters](doc/recipes.md#run-the-first-available-formatter-followed-by-more-formatters)
