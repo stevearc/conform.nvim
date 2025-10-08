@@ -5,6 +5,7 @@
 - [Format command](#format-command)
 - [Autoformat with extra features](#autoformat-with-extra-features)
 - [Command to toggle format-on-save](#command-to-toggle-format-on-save)
+- [Run LSP Commands Before Formatting](#run-lsp-commands-before-formatting)
 - [Lazy loading with lazy.nvim](#lazy-loading-with-lazynvim)
 - [Leave visual mode after range format](#leave-visual-mode-after-range-format)
 - [Run the first available formatter followed by more formatters](#run-the-first-available-formatter-followed-by-more-formatters)
@@ -104,6 +105,39 @@ vim.api.nvim_create_user_command("FormatEnable", function()
   vim.g.disable_autoformat = false
 end, {
   desc = "Re-enable autoformat-on-save",
+})
+```
+
+## Run LSP Commands Before Formatting
+
+You can run LSP commands before formatting a file. This example uses the `ts_ls` server to organize imports along with formatting, but the structure is adaptable to any LSP action.
+
+```lua
+vim.api.nvim_create_autocmd("BufWritePre", {
+	desc = "Format before save",
+	pattern = "*",
+	group = vim.api.nvim_create_augroup("FormatConfig", { clear = true }),
+	callback = function(ev)
+        local conform_opts = { bufnr = ev.buf, lsp_format = "fallback", timeout_ms = 2000 }
+        local client = vim.lsp.get_clients({ name = "ts_ls", bufnr = ev.buf })[1]
+
+        if not client then
+            require("conform").format(conform_opts)
+            return
+        end
+
+        local request_result = client:request_sync("workspace/executeCommand", {
+            command = "_typescript.organizeImports",
+            arguments = { vim.api.nvim_buf_get_name(ev.buf) },
+        })
+
+        if request_result and request_result.err then
+            vim.notify(request_result.err.message, vim.log.levels.ERROR)
+            return
+        end
+
+        require("conform").format(conform_opts)
+    end,
 })
 ```
 
