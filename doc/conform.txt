@@ -407,6 +407,7 @@ FORMATTERS                                                    *conform-formatter
 `joker` - Small Clojure interpreter, linter and formatter.
 `jq` - Command-line JSON processor.
 `js_beautify` - Beautifier for javascript.
+`json_repair` - A python module to repair invalid JSON from LLMs.
 `jsonnetfmt` - jsonnetfmt is a command line tool to format jsonnet files.
 `just` - Format Justfile.
 `kcl` - The KCL Format tool modifies the files according to the KCL code style.
