@@ -370,6 +370,7 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, opts, c
 
   if not config.stdin then
     log.debug("Creating temp file %s", ctx.filename)
+    vim.fn.mkdir(vim.fs.dirname(ctx.filename), "p")
     local fd = assert(uv.fs_open(ctx.filename, "w", 448)) -- 0700
     uv.fs_write(fd, buffer_text)
     uv.fs_close(fd)
@@ -508,8 +509,12 @@ M.build_context = function(bufnr, config, range)
     local basename = vim.fs.basename(filename)
     local tmpname =
       template:gsub("$RANDOM", tostring(math.random(1000000, 9999999))):gsub("$FILENAME", basename)
-    local parent = vim.fs.dirname(filename)
-    filename = fs.join(parent, tmpname)
+    if fs.is_absolute(tmpname) then
+      filename = tmpname
+    else
+      local parent = vim.fs.dirname(filename)
+      filename = fs.join(parent, tmpname)
+    end
   end
   return {
     buf = bufnr,
