@@ -5,4 +5,7 @@ return {
     description = "Command-line JSON processor.",
   },
   command = "jq",
+  args = function(_, ctx)
+    return { "--indent", ctx.shiftwidth }
+  end,
 }
