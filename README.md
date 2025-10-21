@@ -609,6 +609,7 @@ require("conform").setup({
       -- When cwd is not found, don't run the formatter (default false)
       require_cwd = true,
       -- When stdin=false, use this template to generate the temporary file that gets formatted
+      -- This can be an absolute path to control where the file is created.
       tmpfile_format = ".conform.$RANDOM.$FILENAME",
       -- When returns false, the formatter will not be used
       condition = function(self, ctx)
