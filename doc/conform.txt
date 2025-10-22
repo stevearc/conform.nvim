@@ -448,7 +448,7 @@ FORMATTERS                                                    *conform-formatter
 `nickel` - Code formatter for the Nickel programming language.
 `nimpretty` - nimpretty is a Nim source code beautifier that follows the
             official style guide.
-`nixfmt` - The official (but not yet stable) formatter for Nix code.
+`nixfmt` - The official formatter for Nix code.
 `nixpkgs_fmt` - nixpkgs-fmt is a Nix code formatter for nixpkgs.
 `nomad_fmt` - The fmt commands check the syntax and rewrites Nomad configuration
             and jobspec files to canonical format.
