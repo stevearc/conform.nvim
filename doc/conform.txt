@@ -494,6 +494,7 @@ FORMATTERS                                                    *conform-formatter
 `pyupgrade` - A tool to automatically upgrade syntax for newer versions of
             Python.
 `qmlformat` - A tool that automatically formats QML files.
+`racketfmt` - Racket language formatter.
 `reformat-gherkin` - Formatter for Gherkin language.
 `reorder-python-imports` - Rewrites source to reorder python imports
 `rescript-format` - The built-in ReScript formatter.
