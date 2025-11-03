@@ -5,6 +5,5 @@ return {
     description = "A Makefile formatter and linter.",
   },
   command = "mbake",
-  args = { "format", "$FILENAME" },
-  stdin = false,
+  args = { "format", "--stdin" },
 }
