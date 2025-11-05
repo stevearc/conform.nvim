@@ -2,7 +2,7 @@
 return {
   meta = {
     url = "https://github.com/apple/pkl",
-    description = "Official canonical formatter for Pkl",
+    description = "Official canonical formatter for Pkl.",
   },
   command = "pkl",
   args = { "format", "-" },
