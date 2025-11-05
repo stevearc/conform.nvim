@@ -335,6 +335,7 @@ You can view this list in vim with `:help conform-formatters`
 - [phpcbf](https://phpqa.io/projects/phpcbf.html) - PHP Code Beautifier and Fixer fixes violations of a defined coding standard.
 - [phpinsights](https://github.com/nunomaduro/phpinsights) - The perfect starting point to analyze the code quality of your PHP projects.
 - [pint](https://github.com/laravel/pint) - Laravel Pint is an opinionated PHP code style fixer for minimalists.
+- [pkl](https://github.com/apple/pkl) - Official canonical formatter for Pkl.
 - [prettier](https://github.com/prettier/prettier) - Prettier is an opinionated code formatter. It enforces a consistent style by parsing your code and re-printing it with its own rules that take the maximum line length into account, wrapping code when necessary.
 - [prettierd](https://github.com/fsouza/prettierd) - prettier, as a daemon, for ludicrous formatting speed.
 - [pretty-php](https://github.com/lkrms/pretty-php) - The opinionated PHP code formatter.
