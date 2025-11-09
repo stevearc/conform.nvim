@@ -375,8 +375,14 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, opts, c
     uv.fs_write(fd, buffer_text)
     uv.fs_close(fd)
     callback = util.wrap_callback(callback, function()
+      local rel_dirname = vim.fs.dirname(vim.fs.relpath(ctx.dirname, ctx.filename))
       log.debug("Cleaning up temp file %s", ctx.filename)
       uv.fs_unlink(ctx.filename)
+      if rel_dirname ~= "." then
+        local dirname = vim.fs.joinpath(ctx.dirname, rel_dirname)
+        log.debug("Cleaning up temp dir %s", dirname)
+        uv.fs_rmdir(dirname)
+      end
     end)
   end
 
