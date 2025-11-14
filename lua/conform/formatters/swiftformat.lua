@@ -8,12 +8,14 @@ return {
   stdin = true,
   args = { "--stdinpath", "$FILENAME" },
   range_args = function(self, ctx)
-    local startOffset = tonumber(ctx.range.start[1]) - 1
-    local endOffset = tonumber(ctx.range["end"][1]) - 1
+    local startOffset = ctx.range.start[1]
+    local endOffset = ctx.range["end"][1]
 
     return {
       "--linerange",
       startOffset .. "," .. endOffset,
+      "--stdinpath",
+      "$FILENAME",
     }
   end,
   cwd = require("conform.util").root_file({ ".swiftformat", "Package.swift", "buildServer.json" }),
