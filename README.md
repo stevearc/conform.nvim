@@ -393,6 +393,7 @@ You can view this list in vim with `:help conform-formatters`
 - [swiftlint](https://github.com/realm/SwiftLint) - A tool to enforce Swift style and conventions.
 - [syntax_tree](https://github.com/ruby-syntax-tree/syntax_tree) - Syntax Tree is a suite of tools built on top of the internal CRuby parser.
 - [taplo](https://github.com/tamasfe/taplo) - A TOML toolkit written in Rust.
+- [tclfmt](https://github.com/nmoroze/tclint) - A formatter for Tcl scripts, part of the tclint project.
 - [templ](https://templ.guide/developer-tools/cli/#formatting-templ-files) - Formats templ template files.
 - [terraform_fmt](https://www.terraform.io/docs/cli/commands/fmt.html) - The terraform-fmt command rewrites `terraform` configuration files to a canonical format and style.
 - [terragrunt_hclfmt](https://terragrunt.gruntwork.io/docs/reference/cli-options/#hclfmt) - Format hcl files into a canonical format.

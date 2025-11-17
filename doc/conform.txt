@@ -550,6 +550,7 @@ FORMATTERS                                                    *conform-formatter
 `syntax_tree` - Syntax Tree is a suite of tools built on top of the internal
               CRuby parser.
 `taplo` - A TOML toolkit written in Rust.
+`tclfmt` - A formatter for Tcl scripts, part of the tclint project.
 `templ` - Formats templ template files.
 `terraform_fmt` - The terraform-fmt command rewrites `terraform` configuration
                 files to a canonical format and style.
