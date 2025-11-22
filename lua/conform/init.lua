@@ -402,7 +402,7 @@ local has_notified_ft_no_formatters = {}
 --- -- Asynchronously format the current buffer; will not block the UI
 --- conform.format({ async = true }, function(err, did_edit)
 ---   -- called after formatting
---- end
+--- end)
 --- -- Format the current buffer with a specific formatter
 --- conform.format({ formatters = { "ruff_fix" } })
 M.format = function(opts, callback)
@@ -700,6 +700,7 @@ end
 ---@param formatter string
 ---@param bufnr? integer
 ---@return nil|conform.FormatterConfig
+---@return nil|string error_msg
 M.get_formatter_config = function(formatter, bufnr)
   if not bufnr or bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
@@ -710,16 +711,21 @@ M.get_formatter_config = function(formatter, bufnr)
     override = override(bufnr)
   end
   if override and override.command and override.format then
-    local msg =
-      string.format("Formatter '%s' cannot define both 'command' and 'format' function", formatter)
-    notify_once(msg, vim.log.levels.ERROR)
-    return nil
+    return nil, "Cannot define both 'command' and 'format' function"
   end
 
   ---@type nil|conform.FormatterConfig
-  local config = override
-  if not override or override.inherit ~= false then
-    local ok, mod_config = pcall(require, "conform.formatters." .. formatter)
+  local config
+  local inherit = (override or {}).inherit
+  if inherit == nil then
+    inherit = true
+  end
+  if inherit then
+    local parent_formatter_name = formatter
+    if type(inherit) == "string" then
+      parent_formatter_name = inherit
+    end
+    local ok, mod_config = pcall(require, "conform.formatters." .. parent_formatter_name)
     if ok then
       if override then
         config = require("conform.util").merge_formatter_configs(mod_config, override)
@@ -727,15 +733,19 @@ M.get_formatter_config = function(formatter, bufnr)
         config = mod_config
       end
     elseif override then
-      if override.command or override.format then
+      if override.inherit then
+        -- We attempted to explicitly inherit, but the `require` failed
+        return nil,
+          string.format(
+            "Attempting to inherit from non-existent built-in formatter '%s'",
+            parent_formatter_name
+          )
+      elseif override.command or override.format then
+        -- No built-in formatter to inherit from, but this is a complete definition
         config = override
       else
-        local msg = string.format(
-          "Formatter '%s' missing built-in definition\nSet `command` to get rid of this error.",
-          formatter
-        )
-        notify_once(msg, vim.log.levels.ERROR)
-        return nil
+        -- No built-in formatter to inherit from, and this is missing a `command` or `format` function
+        return nil, "Missing built-in definition. Set `command` to get rid of this error."
       end
     else
       return nil
@@ -756,13 +766,14 @@ M.get_formatter_info = function(formatter, bufnr)
   if not bufnr or bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
   end
-  local config = M.get_formatter_config(formatter, bufnr)
+  local config, missing_config_err = M.get_formatter_config(formatter, bufnr)
   if not config then
     return {
       name = formatter,
       command = formatter,
       available = false,
-      available_msg = "Unknown formatter. Formatter config missing or incomplete",
+      available_msg = missing_config_err
+        or "Unknown formatter. Formatter config missing or incomplete",
       error = true,
     }
   end

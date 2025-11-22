@@ -492,6 +492,15 @@ require("conform").formatters.shfmt = {
 }
 ```
 
+You can also specify which formatter to inherit from. This can be useful if you want to define multiple variants of a single formatter with slightly different options.
+
+```lua
+require("conform").formatters.deno_fmt_markdown = {
+  inherit = "deno_fmt",
+  append_args = { "--indent-width", "4" },
+}
+```
+
 ### Magic strings
 
 The following magic strings are available in `args` and `range_args`. They will be dynamically replaced at runtime with the relevant value.
@@ -623,7 +632,8 @@ require("conform").setup({
       env = {
         VAR = "value",
       },
-      -- Set to false to disable merging the config with the base definition
+      -- Set to false to disable merging the config with the base definition.
+      -- Can also be set to the name of the formatter to merge with (e.g. inherit = "black")
       inherit = true,
       -- When inherit = true, add these additional arguments to the beginning of the command.
       -- This can also be a function, like args
@@ -734,7 +744,7 @@ conform.format({ lsp_format = "fallback" })
 -- Asynchronously format the current buffer; will not block the UI
 conform.format({ async = true }, function(err, did_edit)
   -- called after formatting
-end
+end)
 -- Format the current buffer with a specific formatter
 conform.format({ formatters = { "ruff_fix" } })
 ```

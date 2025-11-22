@@ -91,7 +91,8 @@ OPTIONS                                                          *conform-option
           env = {
             VAR = "value",
           },
-          -- Set to false to disable merging the config with the base definition
+          -- Set to false to disable merging the config with the base definition.
+          -- Can also be set to the name of the formatter to merge with (e.g. inherit = "black")
           inherit = true,
           -- When inherit = true, add these additional arguments to the beginning of the command.
           -- This can also be a function, like args
@@ -227,7 +228,7 @@ format({opts}, {callback}): boolean                               *conform.forma
       -- Asynchronously format the current buffer; will not block the UI
       conform.format({ async = true }, function(err, did_edit)
         -- called after formatting
-      end
+      end)
       -- Format the current buffer with a specific formatter
       conform.format({ formatters = { "ruff_fix" } })
 <

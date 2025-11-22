@@ -78,7 +78,8 @@ require("conform").setup({
       env = {
         VAR = "value",
       },
-      -- Set to false to disable merging the config with the base definition
+      -- Set to false to disable merging the config with the base definition.
+      -- Can also be set to the name of the formatter to merge with (e.g. inherit = "black")
       inherit = true,
       -- When inherit = true, add these additional arguments to the beginning of the command.
       -- This can also be a function, like args

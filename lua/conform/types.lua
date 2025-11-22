@@ -33,7 +33,7 @@
 ---@alias conform.FormatterConfig conform.JobFormatterConfig|conform.LuaFormatterConfig
 
 ---@class (exact) conform.FormatterConfigOverride : conform.JobFormatterConfig
----@field inherit? boolean
+---@field inherit? boolean|string False creates an entirely new formatter. True will merge the config with the formatter defined in conform. Use a string name (e.g. "prettier") to inherit from that conform formatter.
 ---@field command? string|fun(self: conform.FormatterConfig, ctx: conform.Context): string
 ---@field prepend_args? string|string[]|fun(self: conform.FormatterConfig, ctx: conform.Context): string|string[]
 ---@field append_args? string|string[]|fun(self: conform.FormatterConfig, ctx: conform.Context): string|string[]
