@@ -205,6 +205,8 @@ M.show_window = function()
       hl_group = group,
     })
   end
+
+  vim.bo[bufnr].filetype = "conform-info"
 end
 
 return M
