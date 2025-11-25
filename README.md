@@ -310,6 +310,7 @@ You can view this list in vim with `:help conform-formatters`
 - [mdsf](https://github.com/hougesen/mdsf) - Format markdown code blocks using your favorite code formatters.
 - [mdslw](https://github.com/razziel89/mdslw) - Prepare your markdown for easy diff'ing by adding line breaks after every sentence.
 - [meson](https://github.com/mesonbuild/meson) - Format meson source files.
+- [mh_style](https://github.com/florianschanda/miss_hit) - A simple coding style checker and code formatter for MATLAB or Octave code.
 - [mix](https://hexdocs.pm/mix/main/Mix.Tasks.Format.html) - Format Elixir files using the mix format command.
 - [mojo_format](https://docs.modular.com/mojo/cli/format) - Official Formatter for The Mojo Programming Language
 - [nginxfmt](https://github.com/slomkowski/nginx-config-formatter) - nginx config file formatter/beautifier written in Python with no additional dependencies.
