@@ -370,35 +370,6 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, opts, c
 
   if not config.stdin then
     log.debug("Creating temp file %s", ctx.filename)
-    -- ctx.filename can contain directories relative to ctx.dirname
-    -- Thus, we check which directories relative to ctx.dirname exist and remove
-    -- the first one that does not exist.
-    local res = vim
-      .iter(
-        vim.split(
-          assert(
-            vim.fs.relpath(ctx.dirname, ctx.filename),
-            "filename " .. ctx.filename .. " is not a child of dirname " .. ctx.dirname
-          ),
-          "/",
-          { plain = true }
-        )
-      )
-      :rskip(1)
-      :fold(
-        { path = ctx.dirname, found_not_exists = false },
-        ---@param path_part string
-        function(acc, path_part)
-          local new_path = vim.fs.joinpath(acc.path, path_part)
-          if not acc.found_not_exists then
-            acc.path = new_path
-          end
-          acc.found_not_exists = vim.fn.isdirectory(new_path) == 0
-          return acc
-        end
-      )
-    local dir_to_remove = res.path
-    local can_remove = res.found_not_exists
 
     vim.fn.mkdir(vim.fs.dirname(ctx.filename), "p")
     local fd = assert(uv.fs_open(ctx.filename, "w", 448)) -- 0700
@@ -407,10 +378,15 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, opts, c
     callback = util.wrap_callback(callback, function()
       log.debug("Cleaning up temp file %s", ctx.filename)
       uv.fs_unlink(ctx.filename)
-      -- If all directories relative to ctx.dirname exist, there are no directories to remove.
-      if can_remove then
-        log.debug("Cleaning up temp dir %s", dir_to_remove)
-        vim.fs.rm(dir_to_remove, { recursive = true })
+      local current = vim.fs.dirname(ctx.filename)
+      -- Remove empty directories from filename to dirname
+      while current and vim.startswith(current, ctx.dirname) and current ~= ctx.dirname do
+        log.debug("Cleaning up temp dir %s", current)
+        local success, err_name, err_msg = uv.fs_rmdir(current)
+        if not success then
+          log.trace("Failed to remove directory %s: %s: %s", current, err_name, err_msg)
+        end
+        current = vim.fs.dirname(current)
       end
     end)
   end
