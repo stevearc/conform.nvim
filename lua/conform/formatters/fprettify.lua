@@ -8,7 +8,7 @@ return {
   args = {
     -- --silent is recommended for editor integrations https://github.com/fortran-lang/fprettify?tab=readme-ov-file#editor-integration
     "--silent",
-    "-",
+    "$FILENAME",
   },
-  stdin = true,
+  stdin = false,
 }
