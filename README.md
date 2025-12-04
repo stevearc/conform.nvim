@@ -327,6 +327,7 @@ You can view this list in vim with `:help conform-formatters`
 - [odinfmt](https://github.com/DanielGavin/ols) - Auto-formatter for the Odin programming language.
 - [opa_fmt](https://www.openpolicyagent.org/docs/latest/cli/#opa-fmt) - Format Rego files using `opa fmt` command.
 - [ormolu](https://hackage.haskell.org/package/ormolu) - A formatter for Haskell source code.
+- [oxlint](https://github.com/oxc-project/oxc) - Oxlint (/oh-eks-lint/) is designed to catch erroneous or useless code without requiring any configurations by default.
 - [packer_fmt](https://developer.hashicorp.com/packer/docs/commands/fmt) - The packer fmt Packer command is used to format HCL2 configuration files to a canonical format and style.
 - [pangu](https://github.com/vinta/pangu.py) - Insert whitespace between CJK and half-width characters.
 - [perlimports](https://github.com/perl-ide/App-perlimports) - Make implicit Perl imports explicit.
