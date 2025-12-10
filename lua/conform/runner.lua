@@ -696,7 +696,7 @@ M.format_lines_sync = function(bufnr, formatters, timeout_ms, range, input_lines
     )
     all_support_range_formatting = all_support_range_formatting and truthy(config.range_args)
 
-    local wait_result, wait_reason = vim.wait(remaining, function()
+    local wait_result, wait_reason = vim.wait(math.ceil(remaining), function()
       return done
     end, 5)
 
