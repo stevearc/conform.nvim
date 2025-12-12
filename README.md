@@ -598,6 +598,8 @@ require("conform").setup({
   log_level = vim.log.levels.ERROR,
   -- Conform will notify you when a formatter errors
   notify_on_error = true,
+  -- Conform will not repeat an error for a formatter if it errors successively
+  debounce_errors = true,
   -- Conform will notify you when no formatters are available for the buffer
   notify_no_formatters = true,
   -- Custom formatters and overrides for built-in formatters
@@ -698,6 +700,7 @@ require("conform").formatters.my_formatter = {
 | >format_after_save    | `nil\|conform.FormatOpts\|fun(bufnr: integer): nil\|conform.FormatOpts`                                          | , nil|fun(err: nil|string, did_edit: nil|boolean) If this is set, Conform will run the formatter asynchronously after save. It will pass the table to conform.format(). This can also be a function that returns the table (and an optional callback that is run after formatting). |
 | >log_level            | `nil\|integer`                                                                                                   | Set the log level (e.g. `vim.log.levels.DEBUG`). Use `:ConformInfo` to see the location of the log file.                                                                                                                                                                            |
 | >notify_on_error      | `nil\|boolean`                                                                                                   | Conform will notify you when a formatter errors (default true).                                                                                                                                                                                                                     |
+| >debounce_errors      | `nil\|boolean`                                                                                                   | Conform will not repeat an error for a formatter if it errors successively (default true).                                                                                                                                                                                                                     |
 | >notify_no_formatters | `nil\|boolean`                                                                                                   | Conform will notify you when no formatters are available for the buffer (default true).                                                                                                                                                                                             |
 | >formatters           | `nil\|table<string, conform.FormatterConfigOverride\|fun(bufnr: integer): nil\|conform.FormatterConfigOverride>` | Custom formatters and overrides for built-in formatters.                                                                                                                                                                                                                            |
 
