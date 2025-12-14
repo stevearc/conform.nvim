@@ -30,7 +30,7 @@ return {
   end,
   args = function()
     if is_local() then
-      return { "csharpier", "format" }
+      return { "csharpier", "format", "--stdin-path", "$FILENAME" }
     else
       return { "format" }
     end
