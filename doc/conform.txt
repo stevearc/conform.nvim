@@ -465,6 +465,7 @@ FORMATTERS                                                    *conform-formatter
 `opa_fmt` - Format Rego files using `opa fmt` command.
 `ormolu` - A formatter for Haskell source code.
 `oxfmt` - A Prettier-compatible code formatter.
+`oxlint` - An oxidized replacement for ESLint that fixes lint errors.
 `packer_fmt` - The packer fmt Packer command is used to format HCL2
              configuration files to a canonical format and style.
 `pangu` - Insert whitespace between CJK and half-width characters.
