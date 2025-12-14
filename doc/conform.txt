@@ -464,6 +464,7 @@ FORMATTERS                                                    *conform-formatter
 `odinfmt` - Auto-formatter for the Odin programming language.
 `opa_fmt` - Format Rego files using `opa fmt` command.
 `ormolu` - A formatter for Haskell source code.
+`oxfmt` - A Prettier-compatible code formatter.
 `packer_fmt` - The packer fmt Packer command is used to format HCL2
              configuration files to a canonical format and style.
 `pangu` - Insert whitespace between CJK and half-width characters.
