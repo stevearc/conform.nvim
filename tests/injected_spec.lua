@@ -57,6 +57,10 @@ describe("injected formatter", function()
     test_util.reset_editor()
   end)
 
+  if vim.fn.has("nvim-0.11") == 0 then
+    -- We need treesitter from 0.11 or newer for the injected formatter
+    return
+  end
   for _, filename in ipairs(list_test_files("tests/injected")) do
     local filepath = "./tests/injected/" .. filename
     local formatted_file = filepath .. ".formatted"

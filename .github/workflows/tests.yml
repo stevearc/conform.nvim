@@ -11,7 +11,7 @@ on:
 jobs:
   luacheck:
     name: Luacheck
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
 
@@ -27,7 +27,7 @@ jobs:
 
   typecheck:
     name: typecheck
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: stevearc/nvim-typecheck-action@v2
@@ -36,7 +36,7 @@ jobs:
 
   stylua:
     name: StyLua
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - name: Stylua
@@ -50,17 +50,19 @@ jobs:
     strategy:
       matrix:
         include:
-          - nvim_tag: v0.10.0
           - nvim_tag: v0.10.4
-          - nvim_tag: v0.11.0
+          - nvim_tag: v0.11.5
 
     name: Run tests
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     env:
       NVIM_TAG: ${{ matrix.nvim_tag }}
     steps:
       - uses: actions/checkout@v4
 
+      - uses: tree-sitter/setup-action@v2
+        with:
+          install-lib: false
       - name: Install Neovim and dependencies
         run: |
           bash ./.github/workflows/install_nvim.sh
@@ -71,7 +73,7 @@ jobs:
 
   update_docs:
     name: Update docs
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
 
@@ -108,7 +110,7 @@ jobs:
       - typecheck
       - run_tests
       - update_docs
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: googleapis/release-please-action@v4
         id: release
