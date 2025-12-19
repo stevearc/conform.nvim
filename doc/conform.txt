@@ -363,7 +363,6 @@ FORMATTERS                                                    *conform-formatter
 `forge_fmt` - Forge is a command-line tool that ships with Foundry. Forge tests,
             builds, and deploys your smart contracts.
 `format-dune-file` - Auto-formatter for Dune files.
-`format-queries` - Tree-sitter query formatter.
 `fourmolu` - A fork of ormolu that uses four space indentation and allows
            arbitrary configuration.
 `fprettify` - Auto-formatter for modern fortran source code.
