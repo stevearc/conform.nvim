@@ -468,6 +468,8 @@ FORMATTERS                                                    *conform-formatter
 `oxlint` - An oxidized replacement for ESLint that fixes lint errors.
 `packer_fmt` - The packer fmt Packer command is used to format HCL2
              configuration files to a canonical format and style.
+`palantir-java-format` - A modern, lambda-friendly, 120 character Java
+                       formatter.
 `pangu` - Insert whitespace between CJK and half-width characters.
 `perlimports` - Make implicit Perl imports explicit.
 `perltidy` - Perl::Tidy, a source code formatter for Perl.
