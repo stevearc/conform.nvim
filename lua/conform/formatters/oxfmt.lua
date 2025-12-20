@@ -13,7 +13,7 @@ return {
     description = "A Prettier-compatible code formatter.",
   },
   command = util.from_node_modules("oxfmt"),
-  args = { "$FILENAME" },
-  stdin = false,
+  args = { "--stdin-filepath", "$FILENAME" },
+  stdin = true,
   cwd = require("conform.util").root_file(config_file_names),
 }
