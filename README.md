@@ -255,6 +255,7 @@ You can view this list in vim with `:help conform-formatters`
 - [gawk](https://www.gnu.org/software/gawk/manual/gawk.html) - Format awk programs with gawk.
 - [gci](https://github.com/daixiang0/gci) - GCI, a tool that controls Go package import order and makes it always deterministic.
 - [gdformat](https://github.com/Scony/godot-gdscript-toolkit) - A formatter for Godot's gdscript.
+- [gdscript-formatter](https://github.com/GDQuest/GDScript-formatter) - A faster code formatter for GDScript and Godot 4.
 - [gersemi](https://github.com/BlankSpruce/gersemi) - A formatter to make your CMake code the real treasure.
 - [ghdl](https://ghdl.github.io/ghdl/) - Open-source analyzer, compiler, simulator and synthesizer for VHDL.
 - [ghokin](https://github.com/antham/ghokin) - Parallelized formatter with no external dependencies for gherkin.
