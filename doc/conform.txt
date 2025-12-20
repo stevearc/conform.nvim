@@ -370,6 +370,7 @@ FORMATTERS                                                    *conform-formatter
 `gci` - GCI, a tool that controls Go package import order and makes it always
       deterministic.
 `gdformat` - A formatter for Godot's gdscript.
+`gdscript-formatter` - A faster code formatter for GDScript and Godot 4.
 `gersemi` - A formatter to make your CMake code the real treasure.
 `ghdl` - Open-source analyzer, compiler, simulator and synthesizer for VHDL.
 `ghokin` - Parallelized formatter with no external dependencies for gherkin.
