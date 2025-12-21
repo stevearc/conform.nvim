@@ -750,6 +750,8 @@ M.get_formatter_config = function(formatter, bufnr)
     else
       return nil
     end
+  else
+    config = override
   end
 
   if config and config.stdin == nil then
