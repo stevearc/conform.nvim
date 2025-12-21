@@ -1,3 +1,4 @@
+local dir_manager = require("conform.dir_manager")
 local errors = require("conform.errors")
 local fs = require("conform.fs")
 local ft_to_ext = require("conform.ft_to_ext")
@@ -293,10 +294,6 @@ end
 ---@type table<string, boolean>
 local last_run_errored = {}
 
----Set of temporary directories to remove after formatting
----@type string[]
-local temp_dirs = {}
-
 ---@param bufnr integer
 ---@param formatter conform.FormatterInfo
 ---@param config conform.FormatterConfig
@@ -374,41 +371,14 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, opts, c
 
   if not config.stdin then
     log.debug("Creating temp file %s", ctx.filename)
-    local current_parent_dir = vim.fs.dirname(ctx.filename)
-    -- Keep track of the current parent directories created, so we can delete them later
-    while
-      current_parent_dir
-      and current_parent_dir ~= ctx.dirname
-      and vim.fn.isdirectory(current_parent_dir) == 0
-    do
-      temp_dirs[#temp_dirs + 1] = current_parent_dir
-      current_parent_dir = vim.fs.dirname(current_parent_dir)
-    end
-
-    vim.fn.mkdir(vim.fs.dirname(ctx.filename), "p")
+    dir_manager.ensure_parent(ctx.filename)
     local fd = assert(uv.fs_open(ctx.filename, "w", 448)) -- 0700
     uv.fs_write(fd, buffer_text)
     uv.fs_close(fd)
     callback = util.wrap_callback(callback, function()
       log.debug("Cleaning up temp file %s", ctx.filename)
       uv.fs_unlink(ctx.filename)
-      local temp_dir_idx = 1
-      while temp_dir_idx <= #temp_dirs do
-        local temp_dir_to_remove = temp_dirs[temp_dir_idx]
-        log.debug("Cleaning up temp dir %s", temp_dir_to_remove)
-        local success, err_name, err_msg = uv.fs_rmdir(temp_dir_to_remove)
-        if not success then
-          log.debug(
-            "Failed to remove temp directory %s: %s: %s",
-            temp_dir_to_remove,
-            err_name,
-            err_msg
-          )
-          temp_dir_idx = temp_dir_idx + 1
-        else
-          table.remove(temp_dirs, temp_dir_idx)
-        end
-      end
+      dir_manager.cleanup()
     end)
   end
 
