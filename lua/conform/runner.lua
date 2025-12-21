@@ -1,3 +1,4 @@
+local dir_manager = require("conform.dir_manager")
 local errors = require("conform.errors")
 local fs = require("conform.fs")
 local ft_to_ext = require("conform.ft_to_ext")
@@ -370,13 +371,14 @@ local function run_formatter(bufnr, formatter, config, ctx, input_lines, opts, c
 
   if not config.stdin then
     log.debug("Creating temp file %s", ctx.filename)
-    vim.fn.mkdir(vim.fs.dirname(ctx.filename), "p")
+    dir_manager.ensure_parent(ctx.filename)
     local fd = assert(uv.fs_open(ctx.filename, "w", 448)) -- 0700
     uv.fs_write(fd, buffer_text)
     uv.fs_close(fd)
     callback = util.wrap_callback(callback, function()
       log.debug("Cleaning up temp file %s", ctx.filename)
       uv.fs_unlink(ctx.filename)
+      dir_manager.cleanup()
     end)
   end
 
