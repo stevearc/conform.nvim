@@ -832,7 +832,7 @@ M.get_formatter_info = function(formatter, bufnr)
 end
 
 M.formatexpr = function(opts)
-  -- Change the defaults slightly from conform.format
+  -- Use the same defaults as conform.format(), but force async = false and handle the range
   opts = vim.tbl_deep_extend("keep", opts or {}, {
     bufnr = vim.api.nvim_get_current_buf(),
   })
