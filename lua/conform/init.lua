@@ -834,8 +834,6 @@ end
 M.formatexpr = function(opts)
   -- Change the defaults slightly from conform.format
   opts = vim.tbl_deep_extend("keep", opts or {}, {
-    timeout_ms = 500,
-    lsp_format = "fallback",
     bufnr = vim.api.nvim_get_current_buf(),
   })
   -- Force async = false
