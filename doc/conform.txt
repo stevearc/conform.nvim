@@ -517,6 +517,7 @@ FORMATTERS                                                    *conform-formatter
 `ruff_organize_imports` - An extremely fast Python linter, written in Rust.
                         Organize imports.
 `rufo` - Rufo is an opinionated ruby formatter.
+`rumdl` - Markdown Linter and Formatter written in Rust.
 `runic` - Julia code formatter.
 `rustfmt` - A tool for formatting rust code according to style guidelines.
 `rustywind` - A tool for formatting Tailwind CSS classes.
