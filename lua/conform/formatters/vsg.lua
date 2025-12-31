@@ -14,9 +14,12 @@ local config_files = {
 }
 
 local function find_config(dirname)
+  local config_dir =
+    vim.fs.normalize(os.getenv("XDG_CONFIG_HOME") or (vim.uv.os_homedir() .. "/.config"))
+
   local paths = {
     dirname,
-    (os.getenv("XDG_CONFIG_HOME") or os.getenv("HOME") .. "/.config") .. "/vsg",
+    (config_dir .. "/vsg"),
   }
 
   for _, path in ipairs(paths) do
