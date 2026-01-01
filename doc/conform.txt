@@ -471,6 +471,7 @@ FORMATTERS                                                    *conform-formatter
 `palantir-java-format` - A modern, lambda-friendly, 120 character Java
                        formatter.
 `pangu` - Insert whitespace between CJK and half-width characters.
+`pasfmt` - Delphi code formatter.
 `perlimports` - Make implicit Perl imports explicit.
 `perltidy` - Perl::Tidy, a source code formatter for Perl.
 `pg_format` - PostgreSQL SQL syntax beautifier.
