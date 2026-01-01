@@ -5,6 +5,6 @@ return {
     description = "Delphi code formatter.",
   },
   command = "pasfmt",
-  args = { "$FILENAME" },
-  stdin = false,
+  args = {},
+  stdin = true,
 }
