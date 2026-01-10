@@ -1,5 +1,56 @@
 # Changelog
 
+## [9.2.0](https://github.com/stevearc/conform.nvim/compare/v9.1.0...v9.2.0) (2026-01-01)
+
+
+### Features
+
+* Add "nightly" option to rustfmt ([#811](https://github.com/stevearc/conform.nvim/issues/811)) ([60df284](https://github.com/stevearc/conform.nvim/commit/60df2841734b420a48b380a19fdd22d8f637311d))
+* add a formatter for meson.build files ([#783](https://github.com/stevearc/conform.nvim/issues/783)) ([5babc9e](https://github.com/stevearc/conform.nvim/commit/5babc9eb5c6bc43540813455154f85a382d6bd38))
+* add gdscript-formatter ([#832](https://github.com/stevearc/conform.nvim/issues/832)) ([fff8579](https://github.com/stevearc/conform.nvim/commit/fff857990581644e4a62f382e9ebc3d7ae5053d7))
+* add json_repair formatter ([#787](https://github.com/stevearc/conform.nvim/issues/787)) ([be50cf3](https://github.com/stevearc/conform.nvim/commit/be50cf36acea84c17fe269eb228d1b2f53bca7f8))
+* add mh_style ([#813](https://github.com/stevearc/conform.nvim/issues/813)) ([bfd4b33](https://github.com/stevearc/conform.nvim/commit/bfd4b3394ee150ef9b4cb1c1f046069959bd903d))
+* add Oxfmt ([#818](https://github.com/stevearc/conform.nvim/issues/818)) ([4bb461b](https://github.com/stevearc/conform.nvim/commit/4bb461babc231e6c9d5cae418e2ab22ed772dd70))
+* add Oxlint autofix ([#819](https://github.com/stevearc/conform.nvim/issues/819)) ([005bd3b](https://github.com/stevearc/conform.nvim/commit/005bd3bb80f4dd144e5fbf0ea8ce8612d6a90150))
+* add palantir-java-format ([#833](https://github.com/stevearc/conform.nvim/issues/833)) ([943e1e8](https://github.com/stevearc/conform.nvim/commit/943e1e8e3fa36a94a267aee6ab3cbe9c42f7d037))
+* add pkl ([#803](https://github.com/stevearc/conform.nvim/issues/803)) ([4a9a734](https://github.com/stevearc/conform.nvim/commit/4a9a734ffb5eefbdea2438fad49ba0a150be5bea))
+* add support for pasfmt ([#841](https://github.com/stevearc/conform.nvim/issues/841)) ([8314f4c](https://github.com/stevearc/conform.nvim/commit/8314f4c9e205e7f30b62147069729f9a1227d8bf))
+* add support for rumdl fmt ([#840](https://github.com/stevearc/conform.nvim/issues/840)) ([d586c3b](https://github.com/stevearc/conform.nvim/commit/d586c3bab46240b7034f5a361761ca9505a5b986))
+* add tclfmt ([#808](https://github.com/stevearc/conform.nvim/issues/808)) ([caf3c31](https://github.com/stevearc/conform.nvim/commit/caf3c314919af3ae36069bd94f7aa7ac88acb6cc))
+* allow tmpfile to be created in a configurable directory ([#788](https://github.com/stevearc/conform.nvim/issues/788)) ([67fc160](https://github.com/stevearc/conform.nvim/commit/67fc160a07530c8b14dbcd44e01eecb02a69578d))
+* formatter config can specify base formatter to extend ([#800](https://github.com/stevearc/conform.nvim/issues/800)) ([afce105](https://github.com/stevearc/conform.nvim/commit/afce105eb47b0869dfafdac90d82f02ef2419d61))
+* **health:** set conform-info filetype in ConformInfo ([#812](https://github.com/stevearc/conform.nvim/issues/812)) ([6208aef](https://github.com/stevearc/conform.nvim/commit/6208aefd675939cc7c8f1a57176135974dad269f))
+* **racket-lang:** add code formatter for Racket lang ([#797](https://github.com/stevearc/conform.nvim/issues/797)) ([9212032](https://github.com/stevearc/conform.nvim/commit/92120320b4b7c30d9cde79c11ddd3be4003deb6b))
+* **tombi:** add `stdin-filename` arg ([#763](https://github.com/stevearc/conform.nvim/issues/763)) ([a0ab60e](https://github.com/stevearc/conform.nvim/commit/a0ab60ed666c56b37fd7ed1847d2ac52f2482ce0))
+
+
+### Bug Fixes
+
+* **bake:** use command 'mbake' for bake formatter ([#796](https://github.com/stevearc/conform.nvim/issues/796)) ([0ea99ee](https://github.com/stevearc/conform.nvim/commit/0ea99ee01225617048125f8cc288599a95fddbdd))
+* **biome:** respect buffer's expandtab/shiftwidth when no config file is found ([#746](https://github.com/stevearc/conform.nvim/issues/746)) ([016bc81](https://github.com/stevearc/conform.nvim/commit/016bc8174a675e1dbf884b06a165cd0c6c03f9af))
+* clean up nested temporary file directories ([#804](https://github.com/stevearc/conform.nvim/issues/804)) ([5420c4b](https://github.com/stevearc/conform.nvim/commit/5420c4b5ea0aeb99c09cfbd4fd0b70d257b44f25))
+* **csharpier:** check if the dotnet command is available ([#772](https://github.com/stevearc/conform.nvim/issues/772)) ([18eea16](https://github.com/stevearc/conform.nvim/commit/18eea16e6330d1595545da8265eb660b304498c2))
+* **csharpier:** include filepath in arguments ([#820](https://github.com/stevearc/conform.nvim/issues/820)) ([9b8fa5e](https://github.com/stevearc/conform.nvim/commit/9b8fa5e0b78168f68bee9bf886dc20f287c61e02))
+* **d2:** format with temp file instead of stdin ([#779](https://github.com/stevearc/conform.nvim/issues/779)) ([e6f20ac](https://github.com/stevearc/conform.nvim/commit/e6f20ac675a5365f965f4df624cb54db699385e3))
+* executable not being checked properly for absolute paths ([#834](https://github.com/stevearc/conform.nvim/issues/834)) ([328c2f1](https://github.com/stevearc/conform.nvim/commit/328c2f1dda56f933d3337a1316e1020ba30ba6aa))
+* **format-queries:** mark it as deprecated ([9a98b68](https://github.com/stevearc/conform.nvim/commit/9a98b68f8fb289ca8671e9866ba4e0309a693994))
+* formatexpr uses the same options as conform.format() ([#837](https://github.com/stevearc/conform.nvim/issues/837)) ([df83eea](https://github.com/stevearc/conform.nvim/commit/df83eeaab265dacd2eef139a78e502a3f8926618))
+* formatters defined with inherit=false ([#835](https://github.com/stevearc/conform.nvim/issues/835)) ([5f5152f](https://github.com/stevearc/conform.nvim/commit/5f5152fae39a57e3a04cbce09fb21e10c49c9d95))
+* **fprettify:** fix config detection ([#816](https://github.com/stevearc/conform.nvim/issues/816)) ([ffe26e8](https://github.com/stevearc/conform.nvim/commit/ffe26e8df8115c9665d24231f8a49fadb2d611ce))
+* **ghokin:** provide a filename argument ([#770](https://github.com/stevearc/conform.nvim/issues/770)) ([279388a](https://github.com/stevearc/conform.nvim/commit/279388a367f3420de7a4cfd238f37ccc2a4c8bd3))
+* inserting lines at the beginning or end of a range ([#714](https://github.com/stevearc/conform.nvim/issues/714)) ([161f9f7](https://github.com/stevearc/conform.nvim/commit/161f9f7aeac6e4caf633791c7e3e182b07cded65))
+* **jq:** limit indetion to [-1,7] ([#807](https://github.com/stevearc/conform.nvim/issues/807)) ([1bf8b5b](https://github.com/stevearc/conform.nvim/commit/1bf8b5b9caee51507aa51eaed3da5b0f2595c6b9))
+* **jq:** use shiftwidth for indent ([#789](https://github.com/stevearc/conform.nvim/issues/789)) ([235dd79](https://github.com/stevearc/conform.nvim/commit/235dd79731c1dc51ec04abb4045cbc54727a172a))
+* **mbake:** format using stdin ([#798](https://github.com/stevearc/conform.nvim/issues/798)) ([26c02e1](https://github.com/stevearc/conform.nvim/commit/26c02e1155a4980900bdccabca4516f4c712aae9))
+* **rust:** edition matching logic ([#785](https://github.com/stevearc/conform.nvim/issues/785)) ([9d6f881](https://github.com/stevearc/conform.nvim/commit/9d6f881a4047a51c7709223dcf24e967633c6523))
+* **rustfmt:** edition not found in workspace ([#747](https://github.com/stevearc/conform.nvim/issues/747)) ([c64cc75](https://github.com/stevearc/conform.nvim/commit/c64cc754ace603e185ab30113aaef174187eacf8))
+* **swiftformat:** fix line range formatting ([#806](https://github.com/stevearc/conform.nvim/issues/806)) ([178b8f0](https://github.com/stevearc/conform.nvim/commit/178b8f0d70ee63db616a8b3bda637218eef121dd))
+* **taplo:** add --stdin-filepath flag ([#771](https://github.com/stevearc/conform.nvim/issues/771)) ([3bad872](https://github.com/stevearc/conform.nvim/commit/3bad87250ed85246fe8c5bc10005ab5a6289ae4c))
+* **terragrunt:** use new format subcommand ([#766](https://github.com/stevearc/conform.nvim/issues/766)) ([c3fe5a0](https://github.com/stevearc/conform.nvim/commit/c3fe5a073b21731317ebd7f3ffe8a632bafab163))
+* **treefmt:** require config file ([#777](https://github.com/stevearc/conform.nvim/issues/777)) ([3bd9996](https://github.com/stevearc/conform.nvim/commit/3bd9996722026041d0fc966ca62590cbafd79410))
+* use stdin with oxfmt ([#829](https://github.com/stevearc/conform.nvim/issues/829)) ([4e2c910](https://github.com/stevearc/conform.nvim/commit/4e2c9102d63abd48b952af415c73f4cc1a4c1ab5))
+* **vsg:** don't error if XDG_CONFIG_HOME or HOME are not defined ([#839](https://github.com/stevearc/conform.nvim/issues/839)) ([4b713b9](https://github.com/stevearc/conform.nvim/commit/4b713b9da0061a54750bfed457e190459be28c7b))
+
 ## [9.1.0](https://github.com/stevearc/conform.nvim/compare/v9.0.0...v9.1.0) (2025-08-22)
 
 
