@@ -168,7 +168,8 @@ M.merge_formatter_configs = function(config, override)
   local ret = vim.tbl_deep_extend("force", config, override)
   if override.prepend_args then
     M.add_formatter_args(ret, override.prepend_args, { append = false })
-  elseif override.append_args then
+  end
+  if override.append_args then
     M.add_formatter_args(ret, override.append_args, { append = true })
   end
   return ret
