@@ -5,5 +5,5 @@ return {
     description = "Formats templ template files.",
   },
   command = "templ",
-  args = { "fmt" },
+  args = { "fmt", "-stdin-filepath", "$FILENAME" },
 }
