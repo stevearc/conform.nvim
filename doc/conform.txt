@@ -573,7 +573,7 @@ FORMATTERS                                                    *conform-formatter
 `treefmt` - one CLI to format your repo.
 `trim_newlines` - Trim empty lines at the end of the file.
 `trim_whitespace` - Trim trailing whitespace.
-`trunk` - Trunk universal formatter
+`trunk` - Trunk universal formatter.
 `twig-cs-fixer` - Automatically fix Twig Coding Standards issues
 `typespec` - TypeSpec compiler and CLI.
 `typos` - Source code spell checker
