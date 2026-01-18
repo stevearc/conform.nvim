@@ -410,6 +410,7 @@ You can view this list in vim with `:help conform-formatters`
 - [treefmt](https://github.com/numtide/treefmt) - one CLI to format your repo.
 - [trim_newlines](https://github.com/stevearc/conform.nvim/blob/master/lua/conform/formatters/trim_newlines.lua) - Trim empty lines at the end of the file.
 - [trim_whitespace](https://github.com/stevearc/conform.nvim/blob/master/lua/conform/formatters/trim_whitespace.lua) - Trim trailing whitespace.
+- [trunk](https://docs.trunk.io/code-quality/overview/getting-started/commands-reference/code-quality#trunk-check-run-format) - Trunk universal formatter
 - [twig-cs-fixer](https://github.com/VincentLanglet/Twig-CS-Fixer) - Automatically fix Twig Coding Standards issues
 - [typespec](https://github.com/microsoft/typespec) - TypeSpec compiler and CLI.
 - [typos](https://github.com/crate-ci/typos) - Source code spell checker
