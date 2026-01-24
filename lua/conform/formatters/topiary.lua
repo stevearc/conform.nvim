@@ -34,6 +34,7 @@ return {
   args = function(self, ctx)
     local ft = vim.bo[ctx.buf].filetype
     local language = self.options.language or ft_to_language[ft]
+    assert(language, "Language must be specified")
 
     return {
       "format",
