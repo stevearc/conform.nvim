@@ -22,11 +22,15 @@ return {
     description = "A universal code formatter based on tree-sitter, supporting multiple languages with a consistent formatting style.",
   },
   command = "topiary",
+  ---@param self conform.JobFormatterConfig
+  ---@param ctx conform.Context
   condition = function(self, ctx)
     local ft = vim.bo[ctx.buf].filetype
     local language = self.options.language or ft_to_language[ft]
     return language ~= nil
   end,
+  ---@param self conform.JobFormatterConfig
+  ---@param ctx conform.Context
   args = function(self, ctx)
     local ft = vim.bo[ctx.buf].filetype
     local language = self.options.language or ft_to_language[ft]
