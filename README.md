@@ -412,6 +412,7 @@ You can view this list in vim with `:help conform-formatters`
 - [trim_whitespace](https://github.com/stevearc/conform.nvim/blob/master/lua/conform/formatters/trim_whitespace.lua) - Trim trailing whitespace.
 - [trunk](https://docs.trunk.io/code-quality/overview/getting-started/commands-reference/code-quality#trunk-check-run-format) - Trunk universal formatter.
 - [twig-cs-fixer](https://github.com/VincentLanglet/Twig-CS-Fixer) - Automatically fix Twig Coding Standards issues
+- [txtpbfmt](https://github.com/protocolbuffers/txtpbfmt) - txtpbfmt parses, edits and formats text proto files in a way that preserves comments.
 - [typespec](https://github.com/microsoft/typespec) - TypeSpec compiler and CLI.
 - [typos](https://github.com/crate-ci/typos) - Source code spell checker
 - [typstyle](https://github.com/Enter-tainer/typstyle) - Beautiful and reliable typst code formatter.
