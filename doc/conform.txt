@@ -575,6 +575,8 @@ FORMATTERS                                                    *conform-formatter
 `trim_whitespace` - Trim trailing whitespace.
 `trunk` - Trunk universal formatter.
 `twig-cs-fixer` - Automatically fix Twig Coding Standards issues
+`txtpbfmt` - txtpbfmt parses, edits and formats text proto files in a way that
+           preserves comments.
 `typespec` - TypeSpec compiler and CLI.
 `typos` - Source code spell checker
 `typstyle` - Beautiful and reliable typst code formatter.
