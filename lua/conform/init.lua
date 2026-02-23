@@ -7,6 +7,7 @@ M.formatters_by_ft = {}
 M.formatters = {}
 
 M.notify_on_error = true
+M.debounce_errors = true
 M.notify_no_formatters = true
 
 ---@type conform.DefaultFormatOpts
@@ -81,6 +82,9 @@ M.setup = function(opts)
   end
   if opts.notify_on_error ~= nil then
     M.notify_on_error = opts.notify_on_error
+  end
+  if opts.debounce_errors ~= nil then
+    M.debounce_errors = opts.debounce_errors
   end
   if opts.notify_no_formatters ~= nil then
     M.notify_no_formatters = opts.notify_no_formatters
@@ -477,7 +481,9 @@ M.format = function(opts, callback)
       -- Execution errors have special handling. Maybe should reconsider this.
       local notify_msg = err.message
       if errors.is_execution_error(err.code) then
-        should_notify = should_notify and M.notify_on_error and not err.debounce_message
+        should_notify = should_notify
+          and M.notify_on_error
+          and (not err.debounce_message or not M.debounce_errors)
         notify_msg = "Formatter failed. See :ConformInfo for details"
       end
       if should_notify then
