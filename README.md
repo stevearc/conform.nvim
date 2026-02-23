@@ -346,6 +346,7 @@ You can view this list in vim with `:help conform-formatters`
 - [pretty-php](https://github.com/lkrms/pretty-php) - The opinionated PHP code formatter.
 - [prettypst](https://github.com/antonWetzel/prettypst) - Formatter for Typst.
 - [prolog](https://github.com/jamesnvc/lsp_server) - Language Server Protocol server and formatter for SWI-Prolog.
+- [pruner](https://github.com/pruner-formatter/pruner) - A language-agnostic, treesitter powered formatter.
 - [puppet-lint](https://github.com/puppetlabs/puppet-lint) - Check that your Puppet manifests conform to the style guide.
 - [purs-tidy](https://github.com/natefaubion/purescript-tidy) - A syntax tidy-upper for PureScript.
 - [pycln](https://github.com/hadialqattan/pycln) - A Python formatter for finding and removing unused import statements.

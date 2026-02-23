@@ -490,6 +490,7 @@ FORMATTERS                                                    *conform-formatter
 `pretty-php` - The opinionated PHP code formatter.
 `prettypst` - Formatter for Typst.
 `prolog` - Language Server Protocol server and formatter for SWI-Prolog.
+`pruner` - A language-agnostic, treesitter powered formatter.
 `puppet-lint` - Check that your Puppet manifests conform to the style guide.
 `purs-tidy` - A syntax tidy-upper for PureScript.
 `pycln` - A Python formatter for finding and removing unused import statements.
