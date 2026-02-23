@@ -110,13 +110,12 @@ M.setup = function(opts)
               vim.log.levels.ERROR
             )
           end
-          M.format(
-            vim.tbl_deep_extend("force", format_args, {
-              buf = args.buf,
-              async = false,
-            }),
-            callback
-          )
+          local sync_format_opts = vim.tbl_deep_extend("force", format_args, {
+            buf = args.buf,
+            async = false,
+          })
+          ---@cast sync_format_opts conform.FormatOpts
+          M.format(sync_format_opts, callback)
         end
       end,
     })
@@ -163,25 +162,24 @@ M.setup = function(opts)
               vim.log.levels.ERROR
             )
           end
-          M.format(
-            vim.tbl_deep_extend("force", format_args, {
-              buf = args.buf,
-              async = true,
-            }),
-            function(err)
-              num_running_format_jobs = num_running_format_jobs - 1
-              if not err and vim.api.nvim_buf_is_valid(args.buf) then
-                vim.api.nvim_buf_call(args.buf, function()
-                  vim.b[args.buf].conform_applying_formatting = true
-                  vim.cmd.update()
-                  vim.b[args.buf].conform_applying_formatting = false
-                end)
-              end
-              if callback then
-                callback(err)
-              end
+          local async_format_opts = vim.tbl_deep_extend("force", format_args, {
+            buf = args.buf,
+            async = true,
+          })
+          ---@cast async_format_opts conform.FormatOpts
+          M.format(async_format_opts, function(err)
+            num_running_format_jobs = num_running_format_jobs - 1
+            if not err and vim.api.nvim_buf_is_valid(args.buf) then
+              vim.api.nvim_buf_call(args.buf, function()
+                vim.b[args.buf].conform_applying_formatting = true
+                vim.cmd.update()
+                vim.b[args.buf].conform_applying_formatting = false
+              end)
             end
-          )
+            if callback then
+              callback(err)
+            end
+          end)
         end
       end,
     })
