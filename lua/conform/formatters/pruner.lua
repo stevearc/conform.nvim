@@ -2,7 +2,7 @@
 return {
   meta = {
     url = "https://github.com/pruner-formatter/pruner",
-    description = "A language-agnostic, treesitter powered formatter",
+    description = "A language-agnostic, treesitter powered formatter.",
   },
   command = "pruner",
   args = function(_, ctx)
