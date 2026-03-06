@@ -19,5 +19,7 @@ return {
   cwd = util.root_file({
     "biome.json",
     "biome.jsonc",
+    ".biome.json",
+    ".biome.jsonc",
   }),
 }
