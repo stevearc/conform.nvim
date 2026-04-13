@@ -326,6 +326,7 @@ You can view this list in vim with `:help conform-formatters`
 - [ocp-indent](https://github.com/OCamlPro/ocp-indent) - Automatic indentation of OCaml source files.
 - [odinfmt](https://github.com/DanielGavin/ols) - Auto-formatter for the Odin programming language.
 - [opa_fmt](https://www.openpolicyagent.org/docs/latest/cli/#opa-fmt) - Format Rego files using `opa fmt` command.
+- [openapi-format](https://github.com/thim81/openapi-format) - Format an OpenAPI document by ordering, formatting and filtering fields.
 - [ormolu](https://hackage.haskell.org/package/ormolu) - A formatter for Haskell source code.
 - [oxfmt](https://github.com/oxc-project/oxc) - A Prettier-compatible code formatter.
 - [oxlint](https://github.com/oxc-project/oxc) - An oxidized replacement for ESLint that fixes lint errors.
