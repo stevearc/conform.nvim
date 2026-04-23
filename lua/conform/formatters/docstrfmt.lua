@@ -5,5 +5,6 @@ return {
     description = "reStructuredText formatter.",
   },
   command = "docstrfmt",
+  args = { "-" },
   stdin = true,
 }
