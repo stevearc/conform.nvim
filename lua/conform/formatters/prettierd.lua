@@ -12,10 +12,16 @@ local config_file_names = {
   ".prettierrc.js",
   ".prettierrc.cjs",
   ".prettierrc.mjs",
+  ".prettierrc.ts",
+  ".prettierrc.cts",
+  ".prettierrc.mts",
   ".prettierrc.toml",
   "prettier.config.js",
   "prettier.config.cjs",
   "prettier.config.mjs",
+  "prettier.config.ts",
+  "prettier.config.cts",
+  "prettier.config.mts",
 }
 
 ---@param file string
