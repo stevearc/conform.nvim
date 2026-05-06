@@ -375,6 +375,7 @@ You can view this list in vim with `:help conform-formatters`
 - [shellcheck](https://github.com/koalaman/shellcheck) - A static analysis tool for shell scripts.
 - [shellharden](https://github.com/anordal/shellharden) - The corrective bash syntax highlighter.
 - [shfmt](https://github.com/mvdan/sh) - A shell parser, formatter, and interpreter with `bash` support.
+- [shuck](https://github.com/ewhauser/shuck) - A lightning fast shell linter and formatter.
 - [sleek](https://github.com/nrempel/sleek) - Sleek is a CLI tool for formatting SQL.
 - [smlfmt](https://github.com/shwestrick/smlfmt) - A custom parser and code formatter for Standard ML.
 - [snakefmt](https://github.com/snakemake/snakefmt) - a formatting tool for Snakemake files following the design of Black.
@@ -407,6 +408,7 @@ You can view this list in vim with `:help conform-formatters`
 - [tlint](https://github.com/tighten/tlint) - Tighten linter for Laravel conventions with support for auto-formatting.
 - [tofu_fmt](https://opentofu.org/docs/cli/commands/fmt/) - The tofu-fmt command rewrites OpenTofu configuration files to a canonical format and style.
 - [tombi](https://github.com/tombi-toml/tombi) - TOML Formatter / Linter.
+- [topiary](https://topiary.tweag.io) - A universal code formatter based on tree-sitter, supporting multiple languages with a consistent formatting style.
 - [treefmt](https://github.com/numtide/treefmt) - one CLI to format your repo.
 - [trim_newlines](https://github.com/stevearc/conform.nvim/blob/master/lua/conform/formatters/trim_newlines.lua) - Trim empty lines at the end of the file.
 - [trim_whitespace](https://github.com/stevearc/conform.nvim/blob/master/lua/conform/formatters/trim_whitespace.lua) - Trim trailing whitespace.
@@ -675,6 +677,7 @@ require("conform").formatters.my_formatter = {
 - [injected](doc/formatter_options.md#injected)
 - [prettier](doc/formatter_options.md#prettier)
 - [rustfmt](doc/formatter_options.md#rustfmt)
+- [topiary](doc/formatter_options.md#topiary)
 - [yew-fmt](doc/formatter_options.md#yew-fmt)
 
 <!-- /FORMATTER_OPTIONS -->

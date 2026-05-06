@@ -5,6 +5,7 @@
 - [injected](#injected)
 - [prettier](#prettier)
 - [rustfmt](#rustfmt)
+- [topiary](#topiary)
 - [yew-fmt](#yew-fmt)
 
 <!-- /TOC -->
@@ -99,6 +100,16 @@ options = {
   default_edition = "2021",
   -- Set to true to use the nightly version of rustfmt
   nightly = false,
+}
+```
+
+## topiary
+
+```lua
+options = {
+  -- Override the detected language for a specific filetype
+  -- Example: { language = "bash" }
+  language = nil,
 }
 ```
 

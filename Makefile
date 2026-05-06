@@ -15,8 +15,8 @@ venv:
 ## doc: generate documentation
 .PHONY: doc
 doc: scripts/nvim_doc_tools venv
-	venv/bin/python scripts/main.py generate
-	venv/bin/python scripts/main.py lint
+	venv/bin/python3 scripts/main.py generate
+	venv/bin/python3 scripts/main.py lint
 
 ## test: run tests
 .PHONY: test
@@ -31,7 +31,7 @@ lint: scripts/nvim-typecheck-action fastlint
 ## fastlint: run only fast linters
 .PHONY: fastlint
 fastlint: scripts/nvim_doc_tools venv
-	venv/bin/python scripts/main.py lint
+	venv/bin/python3 scripts/main.py lint
 	luacheck lua tests --formatter plain
 	stylua --check lua tests
 
