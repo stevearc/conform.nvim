@@ -332,6 +332,7 @@ You can view this list in vim with `:help conform-formatters`
 - [packer_fmt](https://developer.hashicorp.com/packer/docs/commands/fmt) - The packer fmt Packer command is used to format HCL2 configuration files to a canonical format and style.
 - [palantir-java-format](https://github.com/palantir/palantir-java-format) - A modern, lambda-friendly, 120 character Java formatter.
 - [panache](https://github.com/jolars/panache) - A formatter, linter, and language server for Markdown, Quarto, and R Markdown.
+- [panache-fix](https://github.com/jolars/panache) - Linter for Markdown, Quarto, and R Markdown. Applies auto-fixable rule violations.
 - [pangu](https://github.com/vinta/pangu.py) - Insert whitespace between CJK and half-width characters.
 - [pasfmt](https://github.com/integrated-application-development/pasfmt) - Delphi code formatter.
 - [perlimports](https://github.com/perl-ide/App-perlimports) - Make implicit Perl imports explicit.

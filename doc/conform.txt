@@ -472,6 +472,8 @@ FORMATTERS                                                    *conform-formatter
                        formatter.
 `panache` - A formatter, linter, and language server for Markdown, Quarto, and R
           Markdown.
+`panache-fix` - Linter for Markdown, Quarto, and R Markdown. Applies auto-
+              fixable rule violations.
 `pangu` - Insert whitespace between CJK and half-width characters.
 `pasfmt` - Delphi code formatter.
 `perlimports` - Make implicit Perl imports explicit.
