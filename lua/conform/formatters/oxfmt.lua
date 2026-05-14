@@ -4,6 +4,9 @@ local config_file_names = {
   -- https://oxc.rs/docs/guide/usage/formatter.html#configuration-file
   ".oxfmtrc.json",
   ".oxfmtrc.jsonc",
+  -- https://viteplus.dev/guide/fmt#configuration
+   "vite.config.ts",
+  "vite.config.js"
 }
 
 ---@type conform.FileFormatterConfig
