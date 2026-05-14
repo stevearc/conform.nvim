@@ -5,5 +5,17 @@ return {
     description = "An extremely fast LaTeX formatter written in Rust.",
   },
   command = "tex-fmt",
-  args = { "-s" },
+  args = function(self, ctx)
+    local args = {
+      "--stdin",
+      "--tabsize",
+      ctx.shiftwidth,
+    }
+
+    if not vim.bo[ctx.buf].expandtab then
+      table.insert(args, "--usetabs")
+    end
+
+    return args
+  end,
 }
