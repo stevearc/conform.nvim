@@ -196,7 +196,7 @@ M.apply_format = function(
   end
   local bufname = vim.api.nvim_buf_get_name(bufnr)
   log.trace("Applying formatting to %s", bufname)
-  -- The vim.diff algorithm doesn't handle changes in newline-at-end-of-file well. The unified
+  -- The vim.text.diff algorithm doesn't handle changes in newline-at-end-of-file well. The unified
   -- result_type has some text to indicate that the eol changed, but the indices result_type has no
   -- such indication. To work around this, we just add a trailing newline to the end of both the old
   -- and the new text.
@@ -215,11 +215,19 @@ M.apply_format = function(
   end
 
   log.trace("Comparing lines %s and %s", original_lines, new_lines)
-  ---@diagnostic disable-next-line: missing-fields
-  local indices = vim.diff(original_text, new_text, {
-    result_type = "indices",
-    algorithm = "histogram",
-  })
+  local indices
+  if vim.fn.has("nvim-0.12") == 1 then
+    indices = vim.text.diff(original_text, new_text, {
+      result_type = "indices",
+      algorithm = "histogram",
+    })
+  else
+    ---@diagnostic disable-next-line: deprecated
+    indices = vim.diff(original_text, new_text, {
+      result_type = "indices",
+      algorithm = "histogram",
+    })
+  end
   assert(type(indices) == "table")
   log.trace("Diff indices %s", indices)
   local text_edits = {}

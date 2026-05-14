@@ -12,7 +12,7 @@
 
 To understand why this is important and why conform.nvim is different we need a bit of historical context. Formatting tools work by taking in the current state of the file and outputting the same contents, with formatting applied. The way most formatting plugins work is they take the new content and replace the entire buffer. The benefit of this approach is that it's very simple. It's easy to code, it's easy to reason about, and it's easy to debug.
 
-What conform does differently is it leverages `:help vim.diff`, Neovim's lua bindings for xdiff. We use this to compare the formatted lines to the original content and calculate minimal chunks where changes need to be applied. From there, we convert these chunks into LSP TextEdit objects and use `vim.lsp.util.apply_text_edits()` to actually apply the changes. Since we're using the built-in LSP utility, we get the benefits of all the work that was put into improving the LSP formatting experience, such as the preservation of extmarks. The piecewise update also does a better job of preserving cursor position, folds, viewport position, etc.
+What conform does differently is it leverages `:help vim.text.diff`, Neovim's lua bindings for xdiff. We use this to compare the formatted lines to the original content and calculate minimal chunks where changes need to be applied. From there, we convert these chunks into LSP TextEdit objects and use `vim.lsp.util.apply_text_edits()` to actually apply the changes. Since we're using the built-in LSP utility, we get the benefits of all the work that was put into improving the LSP formatting experience, such as the preservation of extmarks. The piecewise update also does a better job of preserving cursor position, folds, viewport position, etc.
 
 ## Range formatting
 
