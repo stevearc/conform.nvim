@@ -125,8 +125,8 @@ function M.format(options, callback)
         end
       request(client, method, params, function(err, result, ctx, _)
         vim.api.nvim_del_autocmd(auto_id)
-        if not result then
-          return callback(err or "No result returned from LSP formatter")
+        if err then
+          return callback(err)
         elseif not vim.api.nvim_buf_is_valid(bufnr) then
           return callback("buffer was deleted")
         elseif changedtick ~= require("conform.util").buf_get_changedtick(bufnr) then
@@ -136,6 +136,8 @@ function M.format(options, callback)
               vim.api.nvim_buf_get_name(bufnr)
             )
           )
+        elseif not result then
+          do_format(next(clients, idx))
         else
           local this_did_edit = apply_text_edits(
             result,
