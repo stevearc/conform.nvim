@@ -8,5 +8,6 @@ return {
   },
   command = util.from_node_modules("oxlint"),
   args = { "--fix", "$FILENAME" },
+  exit_codes = { 0, 1 },
   stdin = false,
 }
