@@ -7,5 +7,5 @@ return {
   command = "ansible-lint",
   args = { "-f", "codeclimate", "-q", "--fix=all", "$FILENAME" },
   stdin = false,
-  exit_codes = { 0, 2 },
+  exit_codes = { 0, 2, 8 },
 }
