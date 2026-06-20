@@ -6,5 +6,5 @@ return {
   },
   command = "mago",
   stdin = false,
-  args = { "lint", "--fix", "--format", "$FILENAME" },
+  args = { "lint", "--fix", "--format-after-fix", "$FILENAME" },
 }
