@@ -32,7 +32,7 @@ return {
     if is_local() then
       return { "csharpier", "format", "--stdin-path", "$FILENAME" }
     else
-      return { "format" }
+      return { "format", "--stdin-path", "$FILENAME" }
     end
   end,
   stdin = true,
