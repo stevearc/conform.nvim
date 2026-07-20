@@ -43,12 +43,11 @@ return {
     description = "Use [Deno](https://deno.com/) to format TypeScript, JavaScript, JSON, Markdown and more.",
   },
   command = "deno",
-  cond = function(_, ctx)
+  cond = function(self, ctx)
     return extensions[vim.bo[ctx.buf].filetype] ~= nil
   end,
-  args = function(_, ctx)
+  args = function(self, ctx)
     local extension = extensions[vim.bo[ctx.buf].filetype]
-
     local formatter_args = {
       "fmt",
       "-",
