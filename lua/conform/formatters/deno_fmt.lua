@@ -1,17 +1,19 @@
 local log = require("conform.log")
 
--- Requires `--unstable-component` flag
+-- Some formats require --unstable-x flags to be passed to the formatter
 -- https://docs.deno.com/runtime/reference/cli/fmt/#supported-file-types
+--
+-- Requires `--unstable-component` flag
 local unstable_component = {
   astro = "astro",
   svelte = "svelte",
   vue = "vue",
 }
 -- Requires `--unstable-sql` flag
--- https://docs.deno.com/runtime/reference/cli/fmt/#supported-file-types
 local unstable_sql = {
   sql = "sql",
 }
+
 local extensions = vim.tbl_extend("keep", {
   -- js
   javascript = "js",
@@ -20,11 +22,13 @@ local extensions = vim.tbl_extend("keep", {
   typescriptreact = "tsx",
   -- css
   css = "css",
-  scss = "scss",
   less = "less",
+  scss = "scss",
   -- markup
   html = "html",
-  -- config
+  svg = "svg",
+  xml = "xml",
+  -- data / config
   json = "json",
   jsonc = "jsonc",
   yaml = "yml",
@@ -36,24 +40,25 @@ local extensions = vim.tbl_extend("keep", {
 return {
   meta = {
     url = "https://docs.deno.com/runtime/reference/cli/fmt/",
-    description = "Use [Deno](https://deno.land/) to format TypeScript, JavaScript, JSON, Markdown and more.",
+    description = "Use [Deno](https://deno.com/) to format TypeScript, JavaScript, JSON, Markdown and more.",
   },
   command = "deno",
-  cond = function(self, ctx)
+  cond = function(_, ctx)
     return extensions[vim.bo[ctx.buf].filetype] ~= nil
   end,
-  args = function(self, ctx)
-    local formatter_args = { "fmt", "-" }
-
+  args = function(_, ctx)
     local extension = extensions[vim.bo[ctx.buf].filetype]
 
-    if extension then
-      formatter_args = vim.list_extend(formatter_args, { "--ext", extension })
-    end
+    local formatter_args = {
+      "fmt",
+      "-",
+      "--ext",
+      extension,
+    }
 
     if unstable_component[extension] then
       log.info(
-        "Adding `--unstable-component` to enable formatting of .%s files. See the Deno documentation for more information: https://docs.deno.com/runtime/reference/cli/fmt/#supported-file-types",
+        "Adding `--unstable-component` to enable formatting of .%s files: https://docs.deno.com/runtime/reference/cli/fmt/#supported-file-types",
         extension
       )
       formatter_args = vim.list_extend(formatter_args, { "--unstable-component" })
@@ -61,7 +66,7 @@ return {
 
     if unstable_sql[extension] then
       log.info(
-        "Adding `--unstable-sql` to enable formatting of .%s files. See the Deno documentation for more information: https://docs.deno.com/runtime/reference/cli/fmt/#supported-file-types",
+        "Adding `--unstable-sql` to enable formatting of .%s files: https://docs.deno.com/runtime/reference/cli/fmt/#supported-file-types",
         extension
       )
       formatter_args = vim.list_extend(formatter_args, { "--unstable-sql" })
