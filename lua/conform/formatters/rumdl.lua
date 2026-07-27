@@ -5,6 +5,6 @@ return {
     description = "Markdown Linter and Formatter written in Rust.",
   },
   command = "rumdl",
-  args = { "fmt", "-" },
+  args = { "fmt", "--stdin-filename", "$FILENAME", "-" },
   stdin = true,
 }
