@@ -425,6 +425,7 @@ FORMATTERS                                                    *conform-formatter
 `liquidsoap-prettier` - A binary to format Liquidsoap scripts
 `llf` - A LaTeX reformatter / beautifier.
 `lua-format` - Code formatter for Lua.
+`luafmt` - The Lua and EmmyLua formatter from EmmyLua Analyzer Rust.
 `mago_format` - Mago is a toolchain for PHP that aims to provide a set of tools
               to help developers write better code.
 `mago_lint` - Mago is a toolchain for PHP that aims to provide a set of tools to
