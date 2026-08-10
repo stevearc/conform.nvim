@@ -6,13 +6,15 @@ return {
   },
   command = "tex-fmt",
   args = function(self, ctx)
+    local spaces = vim.bo[ctx.buf].expandtab
+
     local args = {
       "--stdin",
       "--tabsize",
-      ctx.shiftwidth,
+      spaces and ctx.shiftwidth or 1,
     }
 
-    if not vim.bo[ctx.buf].expandtab then
+    if not spaces then
       table.insert(args, "--usetabs")
     end
 
