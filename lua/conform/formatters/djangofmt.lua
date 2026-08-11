@@ -5,6 +5,6 @@ return {
     description = "A fast, HTML aware, Django template formatter, written in Rust.",
   },
   command = "djangofmt",
-  args = { "$FILENAME" },
-  stdin = false,
+  args = { "--stdin-filename", "$FILENAME" },
+  stdin = true,
 }
