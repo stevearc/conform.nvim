@@ -54,6 +54,14 @@ options = {
     teal = "tl",
     typescript = "ts",
   },
+  interpolation_queries = {
+    nix = "(interpolation) @interp",
+    -- JS/TS template strings contain `${ ... }` substitutions.
+    javascript = "(template_substitution) @interp",
+    typescript = "(template_substitution) @interp",
+    jsx = "(template_substitution) @interp",
+    tsx = "(template_substitution) @interp",
+  },
   -- Map of treesitter language to formatters to use
   -- (defaults to the value from formatters_by_ft)
   lang_to_formatters = {},

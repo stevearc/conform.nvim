@@ -1,0 +1,10 @@
+{ pkgs }:
+let
+  name = "world";
+in
+pkgs.writeShellApplication {
+  name = "hello";
+  text = ''
+    >echo "hello ${name}"<
+  '';
+}

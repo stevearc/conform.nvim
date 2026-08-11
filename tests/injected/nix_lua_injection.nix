@@ -1,0 +1,9 @@
+let
+  y = "hello";
+  x = # lua
+    ''
+      local foo = "bar"
+      local bar = "${y}"
+    '';
+in
+x

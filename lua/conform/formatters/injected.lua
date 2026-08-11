@@ -98,6 +98,24 @@ local function restore_surrounding(lines, surrounding)
   end
 end
 
+---@param placeholders string[]
+---@param indent string?
+local function remove_surrounding_from_placeholders(placeholders, indent)
+  if not indent or #placeholders == 0 then
+    return
+  end
+  local n = #indent
+  for i, placeholder in ipairs(placeholders) do
+    local lines = vim.split(placeholder, "\n", { plain = true, trimempty = false })
+    for j, line in ipairs(lines) do
+      if line ~= "" and line:sub(1, n) == indent then
+        lines[j] = line:sub(n + 1)
+      end
+    end
+    placeholders[i] = table.concat(lines, "\n")
+  end
+end
+
 ---Merge adjacent ranges that have the same language and share a prefix
 ---@param regions LangRange[]
 ---@param bufnr integer
@@ -144,6 +162,346 @@ local function merge_ranges_with_prefix(regions, bufnr, buf_lang)
   return ret
 end
 
+---@type table<string, vim.treesitter.Query|false>
+local interpolation_queries = {}
+
+---@param bufnr integer
+---@param row integer 0-indexed
+---@param col integer 0-indexed
+---@return string
+local function buf_char_at(bufnr, row, col)
+  if col < 0 then
+    return ""
+  end
+  local line = vim.api.nvim_buf_get_lines(bufnr, row, row + 1, true)[1] or ""
+  return line:sub(col + 1, col + 1)
+end
+
+---Some grammars (notably JS/TS) report the substitution node starting at `{` rather than `$`.
+---@param bufnr integer
+---@param row integer 0-indexed
+---@param col integer 0-indexed
+---@return integer
+local function expand_interpolation_start(bufnr, row, col)
+  if col > 0 and buf_char_at(bufnr, row, col - 1) == "$" then
+    return col - 1
+  end
+  return col
+end
+
+---@param interpolation_query_strings table<string>
+---@param lang string
+---@return vim.treesitter.Query?
+local function get_interpolation_query(interpolation_query_strings, lang)
+  local qstr = interpolation_query_strings[lang]
+  if not qstr then
+    return nil
+  end
+  if interpolation_queries[lang] == nil then
+    local ok, q = pcall(vim.treesitter.query.parse, lang, qstr)
+    interpolation_queries[lang] = ok and q or false
+  end
+  return interpolation_queries[lang] or nil
+end
+
+---@param lines string[]?
+---@param placeholders string[]
+---@return string[]?
+local function restore_interpolations(lines, placeholders)
+  if not lines or #placeholders == 0 then
+    return lines
+  end
+  local text = table.concat(lines, "\n")
+  for i, placeholder in ipairs(placeholders) do
+    local token = string.format("__CONFORM_INTERPOLATION_%d__", i)
+    text = text:gsub(token, placeholder)
+  end
+  return vim.split(text, "\n", { plain = true, trimempty = false })
+end
+
+---@class (exact) InterpSpan
+---@field sr integer
+---@field sc integer
+---@field er integer
+---@field ec integer
+
+---@param query vim.treesitter.Query
+---@param root_node TSNode
+---@param bufnr integer
+---@return InterpSpan[]
+local function collect_interpolation_spans(query, root_node, bufnr)
+  local spans = {} ---@type InterpSpan[]
+  for id, node in query:iter_captures(root_node, bufnr, 0, -1) do
+    if query.captures[id] == "interp" then
+      local sr, sc, er, ec = node:range()
+      sc = expand_interpolation_start(bufnr, sr, sc)
+      table.insert(spans, { sr = sr, sc = sc, er = er, ec = ec })
+    end
+  end
+  table.sort(spans, function(a, b)
+    if a.sr ~= b.sr then
+      return a.sr < b.sr
+    end
+    return a.sc < b.sc
+  end)
+  return spans
+end
+
+---@param bufnr integer
+---@param sr integer
+---@param sc integer
+---@param er integer
+---@param ec integer
+---@return string
+local function get_buf_text_between(bufnr, sr, sc, er, ec)
+  if sr == er then
+    local line = vim.api.nvim_buf_get_lines(bufnr, sr, sr + 1, true)[1] or ""
+    return line:sub(sc + 1, ec)
+  end
+  local lines = vim.api.nvim_buf_get_lines(bufnr, sr, er + 1, true)
+  if #lines == 0 then
+    return ""
+  end
+  lines[1] = (lines[1] or ""):sub(sc + 1)
+  lines[#lines] = (lines[#lines] or ""):sub(1, ec)
+  return table.concat(lines, "\n")
+end
+
+---@param bufnr integer
+---@param interp_spans InterpSpan[]
+---@param sr integer
+---@param sc integer
+---@param er integer
+---@param ec integer
+---@return boolean
+local function gap_is_only_interpolations_and_whitespace(bufnr, interp_spans, sr, sc, er, ec)
+  local gap_text = get_buf_text_between(bufnr, sr, sc, er, ec)
+  if gap_text == "" then
+    return false
+  end
+
+  -- Collect interpolation spans fully contained in the gap.
+  ---@type {s: integer, e: integer}[]
+  local contained = {}
+  local gap_lines = vim.split(gap_text, "\n", { plain = true, trimempty = false })
+  local line_offsets = { 0 }
+  for i = 2, #gap_lines do
+    line_offsets[i] = line_offsets[i - 1] + #gap_lines[i - 1] + 1
+  end
+
+  ---@param row integer
+  ---@param col integer
+  ---@return integer
+  local function abs_idx(row, col)
+    local line_idx = (row - sr) + 1
+    if line_idx < 1 then
+      return 1
+    end
+    if line_idx > #gap_lines then
+      return #gap_text + 1
+    end
+    local rel_col = col
+    if row == sr then
+      rel_col = col - sc
+    end
+    return line_offsets[line_idx] + rel_col + 1
+  end
+
+  for _, span in ipairs(interp_spans) do
+    local starts_in = span.sr > sr or (span.sr == sr and span.sc >= sc)
+    local ends_in = span.er < er or (span.er == er and span.ec <= ec)
+    if starts_in and ends_in then
+      table.insert(contained, { s = abs_idx(span.sr, span.sc), e = abs_idx(span.er, span.ec) })
+    end
+  end
+
+  if #contained == 0 then
+    return false
+  end
+
+  table.sort(contained, function(a, b)
+    return a.s > b.s
+  end)
+  for _, span in ipairs(contained) do
+    gap_text = gap_text:sub(1, span.s - 1) .. gap_text:sub(span.e)
+  end
+  return gap_text:match("^%s*$") ~= nil
+end
+
+---@param regions LangRange[]
+---@param bufnr integer
+---@param interp_spans InterpSpan[]
+---@return LangRange[]
+local function merge_ranges_separated_by_interpolations(regions, bufnr, interp_spans)
+  if #interp_spans == 0 then
+    return regions
+  end
+  table.sort(regions, function(a, b)
+    if a[2] ~= b[2] then
+      return a[2] < b[2]
+    end
+    return a[3] < b[3]
+  end)
+
+  local merged = {} ---@type LangRange[]
+  local cur = nil ---@type LangRange?
+  for _, r in ipairs(regions) do
+    if not cur then
+      cur = vim.deepcopy(r)
+    else
+      local same_lang = cur[1] == r[1]
+      local gap_ok = false
+      if same_lang then
+        local sr, sc = cur[4] - 1, cur[5]
+        local er, ec = r[2] - 1, r[3]
+        -- Only consider forward gaps
+        if er > sr or (er == sr and ec >= sc) then
+          gap_ok = gap_is_only_interpolations_and_whitespace(bufnr, interp_spans, sr, sc, er, ec)
+        end
+      end
+      if same_lang and gap_ok then
+        cur[4] = r[4]
+        cur[5] = r[5]
+      else
+        table.insert(merged, cur)
+        cur = vim.deepcopy(r)
+      end
+    end
+  end
+  if cur then
+    table.insert(merged, cur)
+  end
+  return merged
+end
+
+---@param query vim.treesitter.Query
+---@param root_node TSNode
+---@param bufnr integer
+---@param input_lines string[]
+---@param region_start_row integer 0-indexed
+---@param region_start_col integer 0-indexed
+---@param region_end_row integer 0-indexed
+---@param region_end_col integer 0-indexed
+---@return string[] new_lines, string[] placeholders
+local function protect_interpolations(
+  query,
+  root_node,
+  bufnr,
+  input_lines,
+  region_start_row,
+  region_start_col,
+  region_end_row,
+  region_end_col
+)
+  if #input_lines == 0 then
+    return input_lines, {}
+  end
+
+  ---@type {sr: integer, sc: integer, er: integer, ec: integer, text: string}[]
+  local spans = {}
+  for id, node in query:iter_captures(root_node, bufnr, region_start_row, region_end_row + 1) do
+    if query.captures[id] == "interp" then
+      local sr, sc, er, ec = node:range()
+      sc = expand_interpolation_start(bufnr, sr, sc)
+
+      local starts_in = sr > region_start_row or (sr == region_start_row and sc >= region_start_col)
+      local ends_in = er < region_end_row or (er == region_end_row and ec <= region_end_col)
+      if starts_in and ends_in then
+        local parts = vim.api.nvim_buf_get_text(bufnr, sr, sc, er, ec, {})
+        local text = table.concat(parts, "\n")
+        if text ~= "" then
+          table.insert(spans, { sr = sr, sc = sc, er = er, ec = ec, text = text })
+        end
+      end
+    end
+  end
+
+  if #spans == 0 then
+    return input_lines, {}
+  end
+
+  local function starts_before(a, b)
+    if a.sr ~= b.sr then
+      return a.sr < b.sr
+    end
+    return a.sc < b.sc
+  end
+  local function ends_after(a, b)
+    if a.er ~= b.er then
+      return a.er > b.er
+    end
+    return a.ec > b.ec
+  end
+  local function within(a, b)
+    -- a is within b
+    return (a.sr > b.sr or (a.sr == b.sr and a.sc >= b.sc))
+      and (a.er < b.er or (a.er == b.er and a.ec <= b.ec))
+  end
+
+  -- Prefer outermost spans if the query returns nested captures.
+  table.sort(spans, function(a, b)
+    if starts_before(a, b) then
+      return true
+    elseif starts_before(b, a) then
+      return false
+    end
+    return ends_after(a, b)
+  end)
+
+  local filtered = {} ---@type typeof(spans)
+  local cur = nil ---@type {sr: integer, sc: integer, er: integer, ec: integer}?
+  for _, span in ipairs(spans) do
+    if not cur or not within(span, cur) then
+      table.insert(filtered, span)
+      cur = { sr = span.sr, sc = span.sc, er = span.er, ec = span.ec }
+    end
+  end
+
+  -- Replace from the end so earlier positions stay valid.
+  table.sort(filtered, function(a, b)
+    if a.sr ~= b.sr then
+      return a.sr > b.sr
+    end
+    return a.sc > b.sc
+  end)
+
+  local placeholders = {} ---@type string[]
+
+  ---@param row integer 0-indexed
+  ---@param col integer 0-indexed
+  ---@return integer
+  local function rel_col(row, col)
+    if row == region_start_row then
+      return col - region_start_col
+    end
+    return col
+  end
+
+  for _, span in ipairs(filtered) do
+    table.insert(placeholders, span.text)
+    local token = string.format("__CONFORM_INTERPOLATION_%d__", #placeholders)
+
+    local rel_sr = (span.sr - region_start_row) + 1
+    local rel_er = (span.er - region_start_row) + 1
+    local rel_sc = rel_col(span.sr, span.sc)
+    local rel_ec = rel_col(span.er, span.ec)
+
+    local start_line = input_lines[rel_sr] or ""
+    local end_line = input_lines[rel_er] or ""
+    local prefix = start_line:sub(1, rel_sc)
+    local suffix = end_line:sub(rel_ec + 1)
+
+    input_lines[rel_sr] = prefix .. token .. suffix
+    -- Collapse the spanned lines into the start line so restoring the placeholder's
+    -- embedded newlines doesn't duplicate newlines from the lines array.
+    for i = rel_er, rel_sr + 1, -1 do
+      table.remove(input_lines, i)
+    end
+  end
+
+  return input_lines, placeholders
+end
+
 ---@class (exact) LangRange
 ---@field [1] string language
 ---@field [2] integer start lnum
@@ -170,6 +528,7 @@ end
 ---@field lang_to_ext table<string, string>
 ---@field lang_to_ft table<string, string>
 ---@field lang_to_formatters table<string, conform.FiletypeFormatter>
+---@field interpolation_queries table<string, string>
 
 ---@type conform.FileLuaFormatterConfig
 return {
@@ -201,6 +560,15 @@ return {
       rust = "rs",
       teal = "tl",
       typescript = "ts",
+    },
+    interpolation_queries = {
+      -- Nix strings can contain `${ ... }` interpolations.
+      nix = "(interpolation) @interp",
+      -- JS/TS template strings contain `${ ... }` substitutions.
+      javascript = "(template_substitution) @interp",
+      typescript = "(template_substitution) @interp",
+      jsx = "(template_substitution) @interp",
+      tsx = "(template_substitution) @interp",
     },
     -- Map of treesitter language to formatters to use
     -- (defaults to the value from formatters_by_ft)
@@ -240,8 +608,16 @@ return {
     --- This is available on nightly, but not on stable
     --- Stable doesn't have any parameters, so it's safe
     ---@diagnostic disable-next-line: redundant-parameter
-    parser:parse(true)
+    local trees = parser:parse(true)
     local root_lang = parser:lang()
+    local root_tree = trees and trees[1] or nil
+    local root_node = root_tree and root_tree:root() or nil
+    local interpolation_query = root_node
+        and get_interpolation_query(options.interpolation_queries, root_lang)
+      or nil
+    local interpolation_spans = (interpolation_query and root_node)
+        and collect_interpolation_spans(interpolation_query, root_node, ctx.buf)
+      or {}
     ---@type LangRange[]
     local regions = {}
 
@@ -261,6 +637,10 @@ return {
           end
         end
       end
+    end
+
+    if #interpolation_spans > 0 then
+      regions = merge_ranges_separated_by_interpolations(regions, ctx.buf, interpolation_spans)
     end
 
     regions = merge_ranges_with_prefix(regions, ctx.buf, buf_lang)
@@ -385,7 +765,29 @@ return {
         local idx = num_format
         log.debug("Injected format %s:%d:%d: %s", lang, start_lnum, end_lnum, formatter_names)
         log.trace("Injected format lines %s", input_lines)
+
+        -- If the host language supports string interpolations that can appear inside injected
+        -- blocks (e.g. nix `${...}`, JS/TS template substitutions), protect those nodes from the
+        -- injected formatter and restore them afterwards.
+        -- Important: this must run before remove_surrounding() so TreeSitter buffer coordinates
+        -- still line up with the region text.
+        local interpolation_placeholders = {}
+        if interpolation_query and root_node and lang ~= root_lang then
+          local rsr, rsc, rer, rec = start_lnum - 1, region[3], end_lnum - 1, end_col
+          input_lines, interpolation_placeholders = protect_interpolations(
+            interpolation_query,
+            root_node,
+            ctx.buf,
+            input_lines,
+            rsr,
+            rsc,
+            rer,
+            rec
+          )
+        end
+
         local surrounding = remove_surrounding(input_lines, buf_lang)
+        remove_surrounding_from_placeholders(interpolation_placeholders, surrounding.indent)
         -- Create a temporary buffer. This is only needed because some formatters rely on the file
         -- extension to determine a run mode (see https://github.com/stevearc/conform.nvim/issues/194)
         -- This is using lang_to_ext to map the language name to the file extension, and falls back
@@ -398,8 +800,25 @@ return {
         vim.fn.bufload(buf)
         tmp_bufs[buf] = true
         local format_opts = { async = true, bufnr = buf, quiet = true }
+        log.trace(
+          "Injected formatter input for %s (%s): %s",
+          lang,
+          table.concat(formatter_names, ","),
+          table.concat(input_lines, "\\n")
+        )
         conform.format_lines(formatter_names, input_lines, format_opts, function(err, new_lines)
+          if err then
+            log.error(
+              "Error formatting injected language %s:%d:%d with formatters %s: %s",
+              lang,
+              start_lnum,
+              end_lnum,
+              formatter_names,
+              err
+            )
+          end
           log.trace("Injected %s:%d:%d formatted lines %s", lang, start_lnum, end_lnum, new_lines)
+          new_lines = restore_interpolations(new_lines, interpolation_placeholders)
           -- Preserve indentation in case the code block is indented
           restore_surrounding(new_lines, surrounding)
           vim.schedule_wrap(formatter_cb)(err, idx, region, input_lines, new_lines)

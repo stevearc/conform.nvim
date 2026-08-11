@@ -1,0 +1,113 @@
+require("plenary.async").tests.add_to_env()
+local conform = require("conform")
+local injected = require("conform.formatters.injected")
+local runner = require("conform.runner")
+local test_util = require("tests.test_util")
+
+---@param dir string
+---@return string[]
+local function list_test_files(dir)
+  ---@diagnostic disable-next-line: param-type-mismatch
+  local fd = vim.loop.fs_opendir(dir, nil, 32)
+  ---@diagnostic disable-next-line: param-type-mismatch
+  local entries = vim.loop.fs_readdir(fd)
+  local ret = {}
+  while entries do
+    for _, entry in ipairs(entries) do
+      if entry.type == "file" and not vim.endswith(entry.name, ".formatted") then
+        table.insert(ret, entry.name)
+      end
+    end
+    ---@diagnostic disable-next-line: param-type-mismatch
+    entries = vim.loop.fs_readdir(fd)
+  end
+  ---@diagnostic disable-next-line: param-type-mismatch
+  vim.loop.fs_closedir(fd)
+  return ret
+end
+
+describe("injected formatter", function()
+  before_each(function()
+    --require("conform.log").level = vim.log.levels.TRACE
+    conform.formatters_by_ft = {
+      lua = { "stylua" },
+      nix = { "nixfmt" },
+      sh = { "test_mark" },
+    }
+    -- A test formatter that bookends lines with "><" so we can check what was passed in
+
+    conform.formatters.test_mark = {
+      format = function(self, ctx, lines, callback)
+        lines = vim.deepcopy(lines)
+        -- Simulate formatters removing starting newline
+        while #lines > 0 and lines[1] == "" do
+          table.remove(lines, 1)
+        end
+        -- Simulate formatters removing trailing newline
+        while #lines > 0 and lines[#lines] == "" do
+          table.remove(lines)
+        end
+
+        lines[1] = ">" .. lines[1]
+        lines[#lines] = lines[#lines] .. "<"
+        callback(nil, lines)
+      end,
+    }
+    --    conform.formatters.nixfmt = require("conform.formatters.nixfmt")
+    conform.formatters.stylua = require("conform.formatters.stylua")
+    --    conform.formatters.shfmt = require("conform.formatters.shfmt")
+  end)
+
+  after_each(function()
+    test_util.reset_editor()
+  end)
+
+  -- check if stylua and nixfmt are available, if not skip the tests since we can't run them
+  if
+    not conform.get_formatter_info("stylua", 0).available
+    or not conform.get_formatter_info("nixfmt", 0)
+  then
+    return
+  end
+
+  if vim.fn.has("nvim-0.11") == 0 then
+    -- We need treesitter from 0.11 or newer for the injected formatter
+    return
+  end
+  for _, filename in ipairs(list_test_files("tests/injected_integration")) do
+    local filepath = "./tests/injected_integration/" .. filename
+    local formatted_file = filepath .. ".formatted"
+    it(filename, function()
+      local bufnr = vim.fn.bufadd(filepath)
+      vim.fn.bufload(bufnr)
+      local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, true)
+      local config = assert(conform.get_formatter_config("injected", bufnr))
+
+      local ctx = runner.build_context(bufnr, config)
+      local err, done, new_lines
+      injected.format(injected, ctx, lines, function(e, formatted)
+        err = e
+        done = true
+        vim.api.nvim_buf_set_lines(bufnr, 0, -1, true, formatted)
+        conform.format({
+          bufnr = bufnr,
+          async = false,
+          formatter = { "nixfmt" },
+          lines = formatted,
+        }, function(ea, donea)
+          e = ea
+          new_lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, true)
+          done = donea
+        end)
+      end)
+      vim.wait(2000, function()
+        return done
+      end)
+      assert(err == nil, err)
+      local expected_bufnr = vim.fn.bufadd(formatted_file)
+      vim.fn.bufload(expected_bufnr)
+      local expected_lines = vim.api.nvim_buf_get_lines(expected_bufnr, 0, -1, true)
+      assert.are.same(expected_lines, new_lines)
+    end)
+  end
+end)

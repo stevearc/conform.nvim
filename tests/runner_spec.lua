@@ -454,20 +454,12 @@ print("a")
     end)
 
     it("can run the format command in the shell", function()
-      -- Mac echo doesn't seem to support -e, but the linux ci runner apparently doesn't have seq
-      if fs.is_mac then
-        conform.formatters.test = {
-          command = "seq",
-          args = "3 1 | sort",
-        }
-        run_formatter_test("", "1\n2\n3")
-      else
-        conform.formatters.test = {
-          command = "echo",
-          args = '-e "World\nHello" | sort',
-        }
-        run_formatter_test("", "Hello\nWorld")
-      end
+      -- Prefer printf for portability across mac/linux.
+      conform.formatters.test = {
+        command = "printf",
+        args = '"3\\n2\\n1\\n" | sort',
+      }
+      run_formatter_test("", "1\n2\n3")
     end)
   end)
 end)

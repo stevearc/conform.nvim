@@ -1,0 +1,18 @@
+{ pkgs }:
+let
+  y = "hello";
+  z = "world";
+in
+# lua
+''
+  local msg =
+    "${y}:${z}:${y}:${z}"
+    local cmd =
+      -- sh
+    [[
+  echo "${y}"
+  echo "${z}"
+  echo "${y}${z}"
+  ]]
+  local nested = { a = { b = { c = { d = { e = { f = 1 } } } } } }
+''

@@ -32,6 +32,9 @@ describe("injected formatter", function()
     conform.formatters_by_ft = {
       lua = { "test_mark" },
       html = { "test_mark" },
+      rust = { "test_mark" },
+      bash = { "test_mark" },
+      sh = { "test_mark" },
     }
     -- A test formatter that bookends lines with "><" so we can check what was passed in
     conform.formatters.test_mark = {
