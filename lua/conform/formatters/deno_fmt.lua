@@ -1,34 +1,46 @@
 local log = require("conform.log")
 
--- Requires `--unstable-component` flag or
--- `"unstable": ["fmt-component]` config option.
--- https://docs.deno.com/runtime/reference/cli/formatter/#formatting-options-unstable-component
-local unstable_extensions = {
+-- Some formats require --unstable-x flags to be passed to the formatter
+-- https://docs.deno.com/runtime/reference/cli/fmt/#supported-file-types
+--
+-- Requires `--unstable-component` flag
+local unstable_component = {
   astro = "astro",
   svelte = "svelte",
   vue = "vue",
 }
+-- Requires `--unstable-sql` flag
+local unstable_sql = {
+  sql = "sql",
+}
+
 local extensions = vim.tbl_extend("keep", {
-  css = "css",
-  html = "html",
+  -- js
   javascript = "js",
   javascriptreact = "jsx",
-  json = "json",
-  jsonc = "jsonc",
-  less = "less",
-  markdown = "md",
-  sass = "sass",
-  scss = "scss",
   typescript = "ts",
   typescriptreact = "tsx",
+  -- css
+  css = "css",
+  less = "less",
+  scss = "scss",
+  -- markup
+  html = "html",
+  svg = "svg",
+  xml = "xml",
+  -- data / config
+  json = "json",
+  jsonc = "jsonc",
   yaml = "yml",
-}, unstable_extensions)
+  -- other
+  markdown = "md",
+}, unstable_component, unstable_sql)
 
 ---@type conform.FileFormatterConfig
 return {
   meta = {
-    url = "https://deno.land/manual/tools/formatter",
-    description = "Use [Deno](https://deno.land/) to format TypeScript, JavaScript/JSON and markdown.",
+    url = "https://docs.deno.com/runtime/reference/cli/fmt/",
+    description = "Use [Deno](https://deno.com/) to format TypeScript, JavaScript, JSON, Markdown and more.",
   },
   command = "deno",
   cond = function(self, ctx)
@@ -43,12 +55,20 @@ return {
       extension,
     }
 
-    if unstable_extensions[extension] then
+    if unstable_component[extension] then
       log.info(
-        "Adding `--unstable-component` to enable formatting of .%s files. See the Deno documentation for more information: https://docs.deno.com/runtime/reference/cli/formatter/#formatting-options-unstable-component",
+        "Adding `--unstable-component` to enable formatting of .%s files: https://docs.deno.com/runtime/reference/cli/fmt/#supported-file-types",
         extension
       )
       formatter_args = vim.list_extend(formatter_args, { "--unstable-component" })
+    end
+
+    if unstable_sql[extension] then
+      log.info(
+        "Adding `--unstable-sql` to enable formatting of .%s files: https://docs.deno.com/runtime/reference/cli/fmt/#supported-file-types",
+        extension
+      )
+      formatter_args = vim.list_extend(formatter_args, { "--unstable-sql" })
     end
 
     return formatter_args
