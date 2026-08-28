@@ -5,5 +5,5 @@ return {
     description = "The tofu-fmt command rewrites OpenTofu configuration files to a canonical format and style.",
   },
   command = "tofu",
-  args = { "fmt", "-" },
+  args = { "fmt", "-no-color", "-" },
 }
