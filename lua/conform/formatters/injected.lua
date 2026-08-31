@@ -256,6 +256,13 @@ return {
               -- The types are wrong. included_regions should be Range[][] not integer[][]
               ---@diagnostic disable-next-line: param-type-mismatch
               local start_row, start_col, _, end_row, end_col, _ = unpack(region)
+              -- Treesitter reports a region that runs to the end of the file as ending at
+              -- (line count, col 0), one row past the last line. Left alone that overruns
+              -- every buffer index below. Clamp it to the end of the final line.
+              if end_row >= #lines then
+                end_row = #lines - 1
+                end_col = #(lines[#lines] or "")
+              end
               accum_range(regions, { lang, start_row + 1, start_col, end_row + 1, end_col })
             end
           end
