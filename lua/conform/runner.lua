@@ -149,10 +149,19 @@ local function create_text_edit(
     end
   end
   -- If we're inserting text, make sure the text includes a newline at the end.
-  -- The one exception is if we're inserting at the end of the file, in which case the newline is
-  -- implicit
-  if is_insert and start_line < #original_lines then
-    table.insert(replacement, "")
+  if is_insert then
+    if start_line < #original_lines then
+      table.insert(replacement, "")
+    else
+      -- We're inserting past the last line. A zero-width edit on a line that doesn't exist yet is a
+      -- no-op, so anchor the edit to the end of the last line and lead with the newline instead.
+      local last_line = original_lines[#original_lines] or ""
+      start_line = #original_lines - 1
+      end_line = start_line
+      start_char = #last_line
+      end_char = start_char
+      table.insert(replacement, 1, "")
+    end
   end
   local new_text = table.concat(replacement, line_ending)
 
