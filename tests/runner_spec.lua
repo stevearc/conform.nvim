@@ -150,6 +150,19 @@ describe("runner", function()
         assert.truthy(ctx.filename:match(vim.pesc(dirname) .. "/%.%./%.conform%.%d+%.README%.md$"))
       end
     )
+
+    it("sets temp file when the filename contains a percent sign", function()
+      vim.api.nvim_buf_set_name(0, "/tmp/dir%20name/my%20notes.md")
+      conform.formatters.test = {
+        meta = { url = "", description = "" },
+        command = "echo",
+        stdin = false,
+      }
+      local config = assert(conform.get_formatter_config("test"))
+      local ctx = runner.build_context(0, config)
+      assert.equal("/tmp/dir%20name", ctx.dirname)
+      assert.truthy(ctx.filename:match("^/tmp/dir%%20name/%.conform%.%d+%.my%%20notes%.md$"))
+    end)
   end)
 
   describe("build_cmd", function()
@@ -212,6 +225,40 @@ describe("runner", function()
       local ctx = runner.build_context(0, config)
       local cmd = runner.build_cmd("", ctx, config)
       assert.are.same(util.shell_build_argv(vim.fn.exepath("echo") .. " | patch"), cmd)
+    end)
+
+    it("replaces variables in string args when the filename contains a percent sign", function()
+      vim.api.nvim_buf_set_name(0, "/tmp/dir%20name/my%20notes.md")
+      conform.formatters.test = {
+        meta = { url = "", description = "" },
+        command = "echo",
+        args = "$FILENAME $DIRNAME $EXTENSION",
+      }
+      local config = assert(conform.get_formatter_config("test"))
+      local ctx = runner.build_context(0, config)
+      local cmd = runner.build_cmd("", ctx, config)
+      assert.are.same(
+        util.shell_build_argv(
+          vim.fn.exepath("echo") .. " /tmp/dir%20name/my%20notes.md /tmp/dir%20name .md"
+        ),
+        cmd
+      )
+    end)
+
+    it("replaces variables in list args when the filename contains a percent sign", function()
+      vim.api.nvim_buf_set_name(0, "/tmp/dir%20name/my%20notes.md")
+      conform.formatters.test = {
+        meta = { url = "", description = "" },
+        command = "echo",
+        args = { "$FILENAME", "$DIRNAME" },
+      }
+      local config = assert(conform.get_formatter_config("test"))
+      local ctx = runner.build_context(0, config)
+      local cmd = runner.build_cmd("", ctx, config)
+      assert.are.same(
+        { vim.fn.exepath("echo"), "/tmp/dir%20name/my%20notes.md", "/tmp/dir%20name" },
+        cmd
+      )
     end)
   end)
 

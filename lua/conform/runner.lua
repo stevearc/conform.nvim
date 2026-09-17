@@ -48,11 +48,18 @@ M.build_cmd = function(formatter_name, ctx, config)
   end
 
   if type(args) == "string" then
+    -- Use function replacements so that '%' in paths is not treated as a capture reference
     local interpolated = args
-      :gsub("$FILENAME", ctx.filename)
-      :gsub("$DIRNAME", ctx.dirname)
+      :gsub("$FILENAME", function()
+        return ctx.filename
+      end)
+      :gsub("$DIRNAME", function()
+        return ctx.dirname
+      end)
       :gsub("$RELATIVE_FILEPATH", compute_relative_filepath)
-      :gsub("$EXTENSION", ctx.filename:match(".*(%..*)$") or "")
+      :gsub("$EXTENSION", function()
+        return ctx.filename:match(".*(%..*)$") or ""
+      end)
     return util.shell_build_argv(command .. " " .. interpolated)
   else
     local cmd = { command }
@@ -517,8 +524,15 @@ M.build_context = function(bufnr, config, range)
       template = ".conform.$RANDOM.$FILENAME"
     end
     local basename = vim.fs.basename(filename)
-    local tmpname =
-      template:gsub("$RANDOM", tostring(math.random(1000000, 9999999))):gsub("$FILENAME", basename)
+    local random = tostring(math.random(1000000, 9999999))
+    -- Use function replacements so that '%' in the filename is not treated as a capture reference
+    local tmpname = template
+      :gsub("$RANDOM", function()
+        return random
+      end)
+      :gsub("$FILENAME", function()
+        return basename
+      end)
     if fs.is_absolute(tmpname) then
       filename = tmpname
     else
