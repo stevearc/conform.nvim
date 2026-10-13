@@ -16,8 +16,26 @@ return {
     url = "https://github.com/oxc-project/oxc",
     description = "A Prettier-compatible code formatter.",
   },
-  command = util.from_node_modules("oxfmt"),
-  args = { "--stdin-filepath", "$FILENAME" },
+  command = function(self, ctx)
+    local command = util.find_executable(
+      { "node_modules/.bin/oxfmt", "node_modules/.bin/vp" },
+      "oxfmt"
+    )(self, ctx)
+    if vim.fn.executable(command) == 0 and vim.fn.executable("vp") == 1 then
+      return "vp"
+    end
+    return command
+  end,
+  args = function(self, ctx)
+    local command = self.command
+    if type(command) == "function" then
+      command = command(self, ctx)
+    end
+    if vim.fs.basename(command) == "vp" then
+      return { "fmt", "--stdin-filepath", "$FILENAME" }
+    end
+    return { "--stdin-filepath", "$FILENAME" }
+  end,
   stdin = true,
   cwd = require("conform.util").root_file(config_file_names),
 }
