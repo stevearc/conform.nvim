@@ -5,4 +5,5 @@ return {
     description = "The official formatter for Nix code.",
   },
   command = "nixfmt",
+  args = { "-" },
 }
