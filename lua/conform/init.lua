@@ -653,6 +653,19 @@ M.list_formatters_to_run = function(bufnr)
   end
 end
 
+---Get the LSP clients that can format a buffer, after applying the name/id/filter options from
+---formatters_by_ft
+---@private
+---@param bufnr? integer
+---@return vim.lsp.Client[]
+M.list_lsp_format_clients = function(bufnr)
+  if not bufnr or bufnr == 0 then
+    bufnr = vim.api.nvim_get_current_buf()
+  end
+  local opts = vim.tbl_extend("keep", get_opts_from_filetype(bufnr) or {}, { bufnr = bufnr })
+  return require("conform.lsp_format").get_format_clients(opts)
+end
+
 ---List information about all filetype-configured formatters
 ---@return conform.FormatterInfo[]
 M.list_all_formatters = function()
