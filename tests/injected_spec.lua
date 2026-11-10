@@ -32,6 +32,7 @@ describe("injected formatter", function()
     conform.formatters_by_ft = {
       lua = { "test_mark" },
       html = { "test_mark" },
+      typescript = { "injected" },
     }
     -- A test formatter that bookends lines with "><" so we can check what was passed in
     conform.formatters.test_mark = {
