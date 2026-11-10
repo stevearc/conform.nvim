@@ -100,10 +100,11 @@ end
 
 ---Merge adjacent ranges that have the same language and share a prefix
 ---@param regions LangRange[]
----@param bufnr integer
+---@param lines string[]
 ---@param buf_lang? string
 ---@return LangRange[]
-local function merge_ranges_with_prefix(regions, bufnr, buf_lang)
+local function merge_ranges_with_prefix(regions, lines, buf_lang)
+  local util = require("conform.util")
   local ret = {}
 
   local last_range = nil
@@ -113,8 +114,7 @@ local function merge_ranges_with_prefix(regions, bufnr, buf_lang)
     if #accum == 0 then
       return
     end
-    local lines = vim.api.nvim_buf_get_lines(bufnr, accum[1][2] - 1, accum[#accum][4], true)
-    local prefix = get_indent(lines, buf_lang)
+    local prefix = get_indent(util.tbl_slice(lines, accum[1][2], accum[#accum][4]), buf_lang)
     if prefix then
       local new_range = {
         accum[1][1],
@@ -263,7 +263,7 @@ return {
       end
     end
 
-    regions = merge_ranges_with_prefix(regions, ctx.buf, buf_lang)
+    regions = merge_ranges_with_prefix(regions, lines, buf_lang)
 
     if ctx.range then
       regions = vim.tbl_filter(function(region)
