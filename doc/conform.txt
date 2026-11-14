@@ -602,6 +602,7 @@ FORMATTERS                                                    *conform-formatter
           lint them.
 `xmlstarlet` - XMLStarlet is a command-line XML toolkit that can be used to
              format XML files.
+`xq` - Command-line XML and HTML beautifier and content extractor
 `yamlfix` - A configurable YAML formatter that keeps comments.
 `yamlfmt` - yamlfmt is an extensible command line tool or library to format yaml
           files.
