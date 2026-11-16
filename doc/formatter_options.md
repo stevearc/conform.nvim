@@ -5,6 +5,7 @@
 - [injected](#injected)
 - [prettier](#prettier)
 - [rustfmt](#rustfmt)
+- [sqlfluff](#sqlfluff)
 - [yew-fmt](#yew-fmt)
 
 <!-- /TOC -->
@@ -100,6 +101,16 @@ options = {
   -- Set to true to use the nightly version of rustfmt
   nightly = false,
 }
+```
+
+## sqlfluff
+
+```lua
+options = {
+  -- Fallback dialect when no SQLFluff configuration file is found.
+  -- Supported dialects: https://docs.sqlfluff.com/en/stable/reference/dialects/
+  dialect = "",
+},
 ```
 
 ## yew-fmt
