@@ -5,6 +5,7 @@ local config_file_names = {
   ".oxfmtrc.json",
   ".oxfmtrc.jsonc",
   "oxfmt.config.ts",
+  "oxfmt.config.mts",
   -- https://viteplus.dev/guide/fmt#configuration
   "vite.config.ts",
   "vite.config.js",
